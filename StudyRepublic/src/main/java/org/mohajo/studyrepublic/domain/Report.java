@@ -28,7 +28,8 @@ public class Report {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int report_id;
+
+	private int reportId;
 	private String id;
 	
 	@ManyToOne

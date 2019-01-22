@@ -24,7 +24,7 @@ import lombok.Data;
 public class AdminComment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int admin_comment_id;
+	private int adminCommentId;
 	
 	private String id;
 	private String content;

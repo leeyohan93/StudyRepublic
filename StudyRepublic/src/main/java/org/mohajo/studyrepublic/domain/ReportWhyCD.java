@@ -18,10 +18,11 @@ import lombok.Data;
 @Table(name = "report_why_cd", schema="StudyRepublic")
 public class ReportWhyCD {
 	@Id
-	private int REPORT_WHY_CODE;
+	private int reportWhyCode;
 	
-	private String CODE_VALUE_ENGLISH;
-	private String CODE_VALUE_KOREAN;
+	private String codeValueEngilsh;
+	private String codeValueKorean;
+
 
 
 }

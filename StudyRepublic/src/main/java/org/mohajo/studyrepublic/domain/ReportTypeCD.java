@@ -22,9 +22,11 @@ import lombok.Data;
 @Table(name = "report_type_cd", schema="StudyRepublic")
 public class ReportTypeCD {
 	@Id
-	private String REPORT_TYPE_CODE;
+
+	private String reportTypeCode;
 	
-	private String CODE_VALUE;	
+	private String codeValue;	
+
 
 
 }
