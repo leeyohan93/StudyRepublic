@@ -1,5 +1,12 @@
 package org.mohajo.studyrepublic.domain;
-
+/**
+ * @author 김준석
+ * @since 2019.01.23
+ * @version 0.0
+ * -
+ * 
+ * 
+ */
 import java.io.Serializable;
 import java.util.Date;
 

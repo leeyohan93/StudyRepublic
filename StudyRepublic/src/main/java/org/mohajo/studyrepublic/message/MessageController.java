@@ -1,4 +1,12 @@
 package org.mohajo.studyrepublic.message;
+/**
+ * @author 김준석
+ * @since 2019.01.23
+ * @version 0.0
+ * -받은쪽지함 상속된 데이터가져오기 테스트 추가
+ * -기능2 추가
+ * -기능3 추가
+ */
 
 import java.io.Serializable;
 import java.util.List;
