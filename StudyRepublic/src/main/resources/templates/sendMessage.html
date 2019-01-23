@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmls:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<table th:inline = "text" border ="1">
+	<tr>
+		<td>번호</td>
+		<td>보낸사람</td>
+		<td>받은사람</td>
+		<td>내용</td>
+		<td>날짜</td>
+		<td>삭제여부</td>
+	</tr>
+	
+	<tr th:each = "sm : ${smr}">
+		<td th:text=" ${sm.messageSendid}"/>
+		<td th:text="${sm.sendId}"/>
+		<td th:text="${sm.receiveId}"/>
+		<td th:text="${sm.messageContent}"/>
+		<td th:text="${sm.messageDate}"/>
+		<td th:text="${sm.messageDelete}"/>
+	</tr>	
+
+
+
+
+
+
+
+</body>
+</html>
