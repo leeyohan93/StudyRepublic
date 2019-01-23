@@ -2,7 +2,10 @@ package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -21,9 +24,12 @@ public class Tutor implements Serializable {
 
 	
 	@Id 
-	private String tutor_number;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "tutor_number")
+	private int tutorNumber;
 
-	private String EDUCATION_CODE;
+	@Column(name = "EDUCATION_CODE")
+	private String EducationCode;
 	
 	private String introduction;
 	

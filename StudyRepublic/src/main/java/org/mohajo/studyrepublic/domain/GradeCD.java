@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.thymeleaf.spring4.SpringTemplateEngine;
+
+
 
 import lombok.Data;
 

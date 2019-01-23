@@ -7,6 +7,6 @@ package org.mohajo.studyrepublic.admin;
  * -기능2 추가
  * -기능3 추가
  */
-public class demo {
+public class AdminMemberController {
 
 }

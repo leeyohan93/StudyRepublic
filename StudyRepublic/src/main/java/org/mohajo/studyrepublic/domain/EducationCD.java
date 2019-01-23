@@ -15,4 +15,11 @@ public class EducationCD {
 @Id
 @Column(name = "EUCATION_CODE")
 private String educationCode;
+
+@Column(name = "CODE_VALUE_ENGLISH")
+private String codeValueEnglish;
+
+@Column(name = "CODE_VALUE_KOREAN")
+private String codeValueKorean;
+
 }

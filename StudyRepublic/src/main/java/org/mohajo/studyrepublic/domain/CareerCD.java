@@ -16,4 +16,9 @@ public class CareerCD {
 	@Column(name = "CAREER_CODE")
 	private String careerCode;
 	
+	@Column(name = "CODE_VALUE_ENGLISH")
+	private String codeValueEnglish;
+	
+	@Column(name = "CODE_VALUE_KOREAN")
+	private String codeValueKorean;
 }
