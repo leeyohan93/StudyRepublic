@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원정보</title>
+</head>
+<body>
+
+<table th:inline = "text" border = "1">
+<tr>
+<td>아이디</td>
+<td>회원상태</td>
+<td>회원등급</td>
+<td>비밀번호</td>
+<td>이름</td>
+<td>성별</td>
+<td>생년월일</td>
+<td>닉네임</td>
+<td>이메일</td>
+<td>휴대전화번호</td>
+<td>공개여부</td>
+<td>프로필사진 원본명</td>
+<td>프로필사진 저장명</td>
+<td>가입일</td>
+</tr>
+
+<tr th:each="m : ${member}">
+<td th:text = "${m.id}"></td>
+<td th:text = "${member.memberStatusCD.codeValueKorean}"></td>
+<td th:text = "${member.gradeCD.codeValueKorean}"></td>
+<td th:text = "${m.password}"></td>
+<td th:text = "${m.name}"></td>
+<td th:text = "${m.gender}"></td>
+<td th:text = "${m.birth}"></td>
+<td th:text = "${m.nickname}"></td>
+<td th:text = "${m.email}"></td>
+<td th:text = "${m.phonenumber}"></td>
+<td th:text = "${m.visibility}"></td>
+<td th:text = "${m.profile_origin_name}"></td>
+<td th:text = "${m.profile_save_name}"></td>
+<td th:text = "${m.registration_date}"></td>
+</tr>
+</table>
+
+<table>
+<tr th:each="m : ${member}">
+<a th:href="@{'update'(id=${m.id})}">수정하고싶니?</a><br>
+<a th:href="@{'delete'(id=${m.id})}">삭제하고싶니?바로삭제되니 조심.</a>
+</tr>
+</table>
+<br><br>
+
+ 
+
+</form>
+</body>
+</html>

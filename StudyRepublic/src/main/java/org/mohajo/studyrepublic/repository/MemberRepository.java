@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * @author 이요한
+ * @author 윤성호
  * @since 2019.01.22
  * @version
  * - AdminCommentRepository추가

@@ -2843,6 +2843,42 @@ input, select, textarea {
 						text-transform: uppercase;
 			}
 			
+				#header .login
+				{
+					position: absolute; 
+					right: 0em;
+					top: 2.2em;
+					display: inline-block;
+					float: right;
+				}
+			
+					#login > ul > li
+					{
+						float: right;
+						list-style: none;
+					}
+		
+			#logout > ul > li > a
+			{
+				display: block;
+						position: relative;
+						height: 3em;
+						line-height: 3em;
+						padding: 0 0.5em;
+						background-color: rgba(255, 255, 255, 0.5);
+						border-radius: 4px;
+						border: 0;
+						font-size: 0.6em;
+						font-weight: 700;
+						letter-spacing: 0.35em;
+						text-transform: uppercase;
+			}
+								#logout > ul > li
+					{
+						float: right;
+						list-style: none;
+					}
+			
 			
 		#header .logo {
 			display: block;
