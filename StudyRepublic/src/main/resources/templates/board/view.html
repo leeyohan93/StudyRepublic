@@ -1,0 +1,23 @@
+<!-- 
+  @author 윤원식
+  @since 2019. 1. 25.
+  @version
+  -view.html 추가
+ -->
+ 
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/boardLayout}">
+
+	<form action="">
+	<button name="goBeforeFreePage">이전글</button>
+	</form>
+	<form action="">
+	<button name="goAfterFreePage">다음글</button>	
+	</form>
+	
+<p>[[${freeBoard}]]</p>	
+	
+	<p>[[${vo}]]</p>	
+	<p>[[${list}]]</p>	
+	
