@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원정보</title>
+</head>
+<body>
+
+<table th:inline = "text" border = "1">
+<tr>
+<td>아이디</td>
+<td>회원상태</td>
+<td>회원등급</td>
+<td>비밀번호</td>
+<td>이름</td>
+<td>성별</td>
+<td>생년월일</td>
+<td>닉네임</td>
+<td>이메일</td>
+<td>휴대전화번호</td>
+<td>공개여부</td>
+<td>프로필사진 원본명</td>
+<td>프로필사진 저장명</td>
+<td>가입일</td>
+</tr>
+
+<tr th:each="member : ${member}">
+<!-- <td><a th:href="@{'inquery'(id=${member.id})}">${member.id}</a></td> -->
+<!-- <td th:text = "${member.id}"><a th:href="@{'inquery'(id=${member.id})}"></a></td> -->
+<!--  <a th:href="@{'inquery'(id=${member.id})}"><td th:text = "${member.id}"></td></a>  -->
+<td><a th:href="@{'inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td>
+<!-- <td th:text = "${member.member_status_cd.MEMBER_STATUS_CODE}"></td> -->
+<td th:text = "${member.memberStatusCD.codeValueKorean}"></td>
+<td th:text = "${member.gradeCD.codeValueKorean}"></td>
+<td th:text = "${member.password}"></td>
+<td th:text = "${member.name}"></td>
+<td th:text = "${member.gender}"></td>
+<td th:text = "${member.birth}"></td>
+<td th:text = "${member.nickname}"></td>
+<td th:text = "${member.email}"></td>
+<td th:text = "${member.phonenumber}"></td>
+<td th:text = "${member.visibility}"></td>
+<td th:text = "${member.profile_origin_name}"></td>
+<td th:text = "${member.profile_save_name}"></td>
+<td th:text = "${member.registration_date}"></td>
+</tr>
+</table>
+
+
+
+
+</body>
+</html>

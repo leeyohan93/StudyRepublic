@@ -38,66 +38,13 @@ public class StudyController {
 	LeveltestRepository lr;
 	
 	@Autowired
-	ReviewRepository rr;
+	LeveltestResponseRepository lrr;
 	
 	@Autowired
-	LeveltestResponseRepository lrr;
+	ReviewRepository rr;
 	
 	@Autowired
 	PaymentRepository pr;
 	
-	
-	@RequestMapping("/studyTest")
-	public String studyTest(Model model) {
-		
-		List<Study> studyList = sr.findAll();
-		model.addAttribute("studyList", studyList);
-		
-		return "study/AllStudyList";
-	}
-	
-	@RequestMapping("/studyTest2")
-	public String studyTest2(Model model) {
-		
-		List<StudyMember> studyMemberList = smr.findAll();
-		model.addAttribute("studyMemberList", studyMemberList);
-		
-		return "study/AllStudyList2";
-	}
-	
-	@RequestMapping("/studyTest3")
-	public String studyTest3(Model model) {
-		
-		List<Leveltest> leveltestList = lr.findAll();
-		model.addAttribute("leveltestList", leveltestList);
-		
-		return "study/AllStudyList3";
-	}
-
-	@RequestMapping("/studyTest4")
-	public String studyTest4(Model model) {
-		
-		List<Review> reviewList = rr.findAll();
-		model.addAttribute("reviewList", reviewList);
-		
-		return "study/AllStudyList4";
-	}
-	
-	@RequestMapping("/studyTest5")
-	public String studyTest5(Model model) {
-		
-		List<LeveltestResponse> leveltestResponseList = lrr.findAll();
-		model.addAttribute("leveltestResponseList", leveltestResponseList);
-		
-		return "study/AllStudyList5";
-	}
-	
-	@RequestMapping("/studyTest6")
-	public String studyTest6(Model model) {
-		
-		List<Payment> paymentList = pr.findAll();
-		model.addAttribute("paymentList", paymentList);
-		
-		return "study/AllStudyList6";
-	}
 }
+	
