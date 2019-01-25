@@ -45,8 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/admin/**","/signup/**").hasRole("A")
 		.antMatchers("/tutor/**").hasRole("T")
-		.antMatchers("/member/**").hasRole("N")
-		.antMatchers("/").permitAll();
+		.antMatchers("/member/**").hasRole("N");
+/*		.antMatchers("/").permitAll();*/
 		// .antMatchers("/admin/**","/member/**").hasRole("A") 여기서 /member/** 는 동작하지 않음(/member 하위 접근권한 x. *바로 아랫줄 .antMatchers("/member/**").hasRole("N")가 있기 떼문
 		// /member/** 에 대한 권한이 N인 사람의 권한으로 덮어쓰기됨. 이럴 경우 A권한인 사람은 N권한도 중복으로 가져야함. DB에서 등록.
 		
