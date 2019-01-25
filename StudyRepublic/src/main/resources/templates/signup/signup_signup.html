@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+<form id = "member" action = "/insertMember" method = "post">
+<!-- <input type="hidden" name="_csrf" value="{{#_csrf}}token{{/_csrf}}" /> -->
+<!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+아이디 <input type = "text" name = "id"> <br>
+비밀번호 <input type = "text" name = "password"> <br>
+이름 <input type = "text" name = "name"> <br>
+성별 <input type = "text" name = "gender"> <br>
+생년월일 <input type = "text" name = "birth"> <br>
+닉네임 <input type = "text" name = "nickname"> <br>
+이메일<input type = "text" name = "email"> <br>
+휴대전화번호<input type = "text" name = "phonenumber"> <br>
+공개여부 <input type = "text" name = "visibility"> <br>
+
+<!--<input type = "text" name = "profile_origin_name"> <br>
+ <input type = "text" name = "profile_save_name"> <br>
+<input type = "text" name = "registration_date"> <br> -->
+
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+추가: <input type = "submit" value = "추가">
+</form>
+
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+
+<head>
+<title>Thymeleaf3</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+
+<!-- 로그인 여부 체크, 로그인 시 로그아웃버튼 보여주고, 로그인 아닐시 로그인 버튼 보여주고 ㅎ -->
+<div sec:authorize="isAuthenticated()">
+<a href='/logout'>로그아웃</a> 
+</sec:authorize></div>
+
+<div sec:authorize ="isAnonymous()">
+<a href='/login'>로그인</a> 
+</sec:authorize></div>
+
+
+</body>
+  
+</html>
+

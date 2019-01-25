@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>강사신청</title>
+
+<style>
+/* #interest2cd { display : none} */
+#pinterest2cd{ display : none}
+#dinterest2cd{ display : none} 
+#winterest2cd{ display : none}
+#ninterest2cd{ display : none} 
+</style>
+
+</head>
+<body>
+
+<div>
+
+<select name = "educationcd" id = "educationcd"  size = '4' multiple = 'multiple'  onchange = "education(this)">
+<option th:each="e :  ${educationcd}" th:value = "${e.educationCode}" th:text = "${e.codeValueKorean}">
+</option>
+</select>
+
+<select th:field = "*{careercd}"  size = '4' multiple = 'multiple' onchange = "career(this)">
+<option th:each="c :  ${careercd}" th:value = "${c.careerCode}" th:text = "${c.codeValueKorean}">
+</option>
+</select>
+
+</div>
+
+
+<div id = "education" name = "education" >
+<ul id = "sedu"></ul>
+</div>
+
+<div id = "career" name = "career">
+<ul id = "scar"></ul>
+</div>
+
+
+
+
+<select name = "interest1cd" id = "interest1cd"  size = '4' multiple = 'multiple'  onchange = "interest1(this)">
+<option th:each="i1 :  ${interest1cd}" th:value = "${i1.interest1Code}" th:text = "${i1.codeValueKorean}">
+</option>
+</select>
+
+<!-- <span><select name = "interest2cd" id = "interest2cd"  size = '4' multiple = 'multiple'  onchange = "interest2(this)">
+<option th:each="i2 :  ${interest2cd}" th:value = "${i2.interest2Code}" th:text = "${i2.codeValueKorean}">
+</option>
+</select></span> -->
+
+<span class = "dinterest2cd" name = "dinterest2cd" id = "dinterest2cd"><select size = '4' multiple = 'multiple'  onchange = "interest2(this)">
+<option th:each="di2 :  ${dinterest2cd}" th:value = "${di2.interest2Code}" th:text = "${di2.codeValueKorean}">
+</option>
+</select></span>
+
+<span class = "ninterest2cd" name = "ninterest2cd" id = "ninterest2cd">
+<select size = '4' multiple = 'multiple'  onchange = "interest2(this)">
+<option th:each="ni2 :  ${ninterest2cd}" th:value = "${ni2.interest2Code}" th:text = "${ni2.codeValueKorean}">
+</option>
+</select></span>
+
+<span class = "pinterest2cd" name = "pinterest2cd" id = "pinterest2cd"><select size = '4' multiple = 'multiple'  onchange = "interest2(this)">
+<option th:each="pi2 :  ${pinterest2cd}" th:value = "${pi2.interest2Code}" th:text = "${pi2.codeValueKorean}">
+</option>
+</select></span>
+
+<span class = "winterest2cd" name = "winterest2cd" id = "winterest2cd"><select size = '4' multiple = 'multiple'  onchange = "interest2(this)">
+<option th:each="wi2 :  ${winterest2cd}" th:value = "${wi2.interest2Code}" th:text = "${wi2.codeValueKorean}">
+</option>
+</select></span>
+
+
+
+
+<div id = "interest1cd" name = "interest1cd" >
+<ul id = "int1"></ul>
+</div>
+
+<div id = "interest2cd" name = "interest2cd">
+<ul id = "int2"></ul>
+</div>
+
+<script>
+
+var AllselectBox = document.querySelectorAll("span"); 
+
+
+
+ function education(obj) {
+	var educationList = obj.options[obj.selectedIndex].text;
+	var target = document.getElementById("sedu");
+	target.innerHTML ="<li>" +  educationList + "</li>";
+} 
+ 	
+ var careerList = new Array();
+ var selectedCareer = "";
+ function career(obj) {
+		careerList.push(obj.options[obj.selectedIndex].text);
+		var target = document.getElementById("scar");	
+		for(var i = careerList.length-1; i < careerList.length; i++) {
+			selectedCareer += "<li>" + careerList[i] + "</li>";
+			target.innerHTML = selectedCareer;
+		}
+	}
+ 
+ 
+ 
+ 
+ var interestArr = ["데이터베이스", "네트워크&보안", "응용프로그래밍", "웹프로그래밍"];
+ var checkNum = 0;
+ 
+ var sinterest1 = "";
+ var pinterest2cd = document.getElementById("pinterest2cd")
+ 
+ function interest1(obj) {
+		 sinterest1 = obj.options[obj.selectedIndex].text;
+		 for( var i = 0; i < AllselectBox.length; i++) { 
+				 	AllselectBox[i].style.display = 'none'; 
+ 			 if(sinterest1 == interestArr[i]){			 
+				 checkNum = i;
+			 }	  		 	
+	 	 }
+		 		AllselectBox[checkNum].style.display = 'inline-block'; 		 
+	} 
+ 
+ var interest2List = new Array();
+ var selectedinterest2 = "";  
+ var uniqueinterest2List = new Array();
+
+
+ /*  function interest2(obj) {
+	 	interest2List.push(obj.options[obj.selectedIndex].text);
+		var target = document.getElementById("int2");		
+		for(var i = interest2List.length-1; i < interest2List.length; i++) {
+			selectedinterest2 += "<li>" + sinterest1 + " > " + interest2List[i] + "</li>";
+			target.innerHTML = selectedinterest2;
+		}	
+ } */
+ 
+   function interest2(obj) {
+	
+	 var target = document.getElementById("int2");
+	 uniqueinterest2List = interest2List;
+	 interest2List.push(obj.options[obj.selectedIndex].text);
+	 selectedinterest2 += "<li>" + sinterest1 + " > " + interest2List[interest2List.length-1] + "</li>";	 
+	 
+			for ( var x = 0; x < interest2List.length; x++ ) {
+					for ( var y = 0; y < x; y++) {
+						if (selectedinterest2 != "" && interest2List[x] == interest2List[y]) {
+							interest2List.splice(y,1);
+							break;
+						} else {
+							selectedinterest2 += "<li>" + sinterest1 + " > " + interest2List[interest2List.length-1] + "</li>";
+						}
+						
+						}
+						}
+			
+
+						
+					target.innerHTML = selectedinterest2;
+	 		
+			 }	
+	
+	
+	
+
+ 
+
+ 
+
+	
+	
+
+</script>
+
+</body>
+</html>
