@@ -29,7 +29,7 @@ public class Tutor implements Serializable {
 	private int tutorNumber;
 
 	@Column(name = "EDUCATION_CODE")
-	private String EducationCode;
+	private String educationCode;
 	
 	private String introduction;
 	

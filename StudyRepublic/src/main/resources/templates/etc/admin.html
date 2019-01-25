@@ -1,0 +1,74 @@
+
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+
+<head>
+<title>Thymeleaf3</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<sec:authorize access="isAnonymous()">
+
+    <a href="/login" target="_self">Login</a>
+
+</sec:authorize>
+
+<sec:authorize access="isAuthenticated()">
+
+    <a href="/logout" target="_self">Logout</a>
+
+</sec:authorize>
+
+  
+<body>
+
+<div th:if="${id != null}">
+<h2>ㅎㅇㅎㅇ</h2>
+</div>
+
+<form action = "/">
+<input id = "id" th:value = "${id}"></input>
+</form>
+
+  <h1>Admin Page</h1>
+<!-- 	<p th:text="${id} + 님 하이염"  ></p> -->
+  <h3 sec:authentication="name">Spning security username</h3> 님 하이염.
+
+<p sec:authorize-url="/admin/aaa">
+<a href='/admin/aaa'>ADMIN AAA</a>
+</p>
+
+
+<!-- SecurityConfig에서 지정한 경로 (/tutor로 설정한 hasrole만 권한이 뜸. -->
+<p sec:authorize-url = "/tutor/aaa">
+<a href='/tutor/aaa'>TUTOR AAA</a>  
+  </p>
+  
+  <div sec:authorize="hasRole('ROLE_USER')"></div>
+<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')"></div>
+
+<div sec:authorize="hasAuthority('ROLE_USER')"></div>
+<div sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')"></div>
+
+
+
+<!-- 
+<!-- 로그인 여부 체크, 로그인 시 로그아웃버튼 보여주고, 로그인 아닐시 로그인 버튼 보여주고 ㅎ -->
+<div sec:authorize="isAuthenticated()">
+<a href='/tutor/aaa'>TUTOR AAA</a> 
+</sec:authorize></div>
+
+<div sec:authorize ="isAnonymous()">
+<a href='/tutor/aaa'>TUTOR AAA</a> 
+</sec:authorize></div> -->
+
+
+
+
+
+
+</body>
+  
+</html>
+

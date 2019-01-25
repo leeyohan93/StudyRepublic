@@ -25,11 +25,7 @@
 </tr>
 
 <tr th:each="member : ${member}">
-<!-- <td><a th:href="@{'inquery'(id=${member.id})}">${member.id}</a></td> -->
-<!-- <td th:text = "${member.id}"><a th:href="@{'inquery'(id=${member.id})}"></a></td> -->
-<!--  <a th:href="@{'inquery'(id=${member.id})}"><td th:text = "${member.id}"></td></a>  -->
 <td><a th:href="@{'inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td>
-<!-- <td th:text = "${member.member_status_cd.MEMBER_STATUS_CODE}"></td> -->
 <td th:text = "${member.memberStatusCD.codeValueKorean}"></td>
 <td th:text = "${member.gradeCD.codeValueKorean}"></td>
 <td th:text = "${member.password}"></td>
@@ -47,7 +43,7 @@
 </table>
 
 
-
+<a href = "/signup">회원가입</a>
 
 </body>
 </html>
