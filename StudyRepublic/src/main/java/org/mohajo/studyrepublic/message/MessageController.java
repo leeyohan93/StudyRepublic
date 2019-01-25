@@ -30,7 +30,7 @@ public class MessageController {
 		model.addAttribute("smr",sendlist);
 	
 		System.out.println("smr");
-		return "sendMessage";
+		return "MessageTest/sendMessage";
 	}
 	
 	
