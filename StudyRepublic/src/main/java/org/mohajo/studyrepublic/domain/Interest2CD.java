@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "interetst_2_cd", schema = "StudyRepublic")
+@Table(name = "interest_2_cd", schema = "StudyRepublic")
 public class Interest2CD {
 
 	
