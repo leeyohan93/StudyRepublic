@@ -106,9 +106,6 @@ var AllselectBox = document.querySelectorAll("span");
 		}
 	}
  
- 
- 
- 
  var interestArr = ["데이터베이스", "네트워크&보안", "응용프로그래밍", "웹프로그래밍"];
  var checkNum = 0;
  
@@ -126,55 +123,26 @@ var AllselectBox = document.querySelectorAll("span");
 		 		AllselectBox[checkNum].style.display = 'inline-block'; 		 
 	} 
  
+ 
+ 
  var interest2List = new Array();
  var selectedinterest2 = "";  
  var uniqueinterest2List = new Array();
 
-
- /*  function interest2(obj) {
-	 	interest2List.push(obj.options[obj.selectedIndex].text);
-		var target = document.getElementById("int2");		
-		for(var i = interest2List.length-1; i < interest2List.length; i++) {
-			selectedinterest2 += "<li>" + sinterest1 + " > " + interest2List[i] + "</li>";
-			target.innerHTML = selectedinterest2;
-		}	
- } */
- 
-   function interest2(obj) {
-	
+   function interest2(obj) {	
 	 var target = document.getElementById("int2");
 	 uniqueinterest2List = interest2List;
 	 interest2List.push(obj.options[obj.selectedIndex].text);
-	 selectedinterest2 += "<li>" + sinterest1 + " > " + interest2List[interest2List.length-1] + "</li>";	 
+	  
+	if(~selectedinterest2.indexOf(obj.options[obj.selectedIndex].text))	{
+		alert("이미 선택한 분야입니다.");
+	}
+	else {
+		selectedinterest2 += "<li>" + sinterest1 + " > " + interest2List[interest2List.length-1] + "</li>";	 
+	}
+		target.innerHTML = selectedinterest2;
+ } 
 	 
-			for ( var x = 0; x < interest2List.length; x++ ) {
-					for ( var y = 0; y < x; y++) {
-						if (selectedinterest2 != "" && interest2List[x] == interest2List[y]) {
-							interest2List.splice(y,1);
-							break;
-						} else {
-							selectedinterest2 += "<li>" + sinterest1 + " > " + interest2List[interest2List.length-1] + "</li>";
-						}
-						
-						}
-						}
-			
-
-						
-					target.innerHTML = selectedinterest2;
-	 		
-			 }	
-	
-	
-	
-
- 
-
- 
-
-	
-	
-
 </script>
 
 </body>
