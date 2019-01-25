@@ -1,5 +1,6 @@
 package org.mohajo.studyrepublic.domain;
 
+import java.io.Serializable;
 import java.lang.reflect.Member;
 import java.sql.Date;
 
@@ -7,31 +8,30 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
 /**
  * @author	이미연
  * @since	2019. 1. 22.
- * @version	
- * - 기능 설명 1
+ * @version	0.0
+ * - 결제내역 DTO
  */
 @Data
 @Entity
-public class Payment {
+public class Payment implements Serializable {
 
 	@Id
 	private String paymentId;
 	
-//	@OneToMany
-//	@JoinColumn(name = "id")
-//	private Member member;
+	@JoinColumn(name = "id", nullable = false)
+	private String id;
 	
-	@Column
-	private Study study;
+	@JoinColumn(name = "study_id", nullable = false)
+	private String studyId;
 	
-	@Column
+	@Column(nullable = false)
 	private int totalAmount;
 	
 	@Column

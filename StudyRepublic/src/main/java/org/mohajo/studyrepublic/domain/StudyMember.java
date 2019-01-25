@@ -1,31 +1,32 @@
 package org.mohajo.studyrepublic.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-
-import org.mohajo.studyrepublic.domain.code.StudyMemberStatusCD;
-import org.mohajo.studyrepublic.domain.id.StudyMemberId;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 
 import lombok.Data;
 
 /**
  * @author	이미연
  * @since	2019. 1. 22.
- * @version	
- * - 기능 설명 1
+ * @version	0.0
+ * - 스터디원 상세 DTO
  */
 @Data
 @Entity
-public class StudyMember {
+public class StudyMember implements Serializable {
 
 		@EmbeddedId
 		private StudyMemberId studyMemberId;
 		
-		@Column
+		@ManyToOne
 		@JoinColumn(name = "study_member_status_code")
 		private StudyMemberStatusCD studyMemberStatusCode;
 		
@@ -34,5 +35,10 @@ public class StudyMember {
 		
 		@Column
 		private Date exitDate;
-	
+		
+		@MapsId("id")
+		@ManyToOne
+		@JoinColumn(name = "id")
+		private Member member;
+
 }

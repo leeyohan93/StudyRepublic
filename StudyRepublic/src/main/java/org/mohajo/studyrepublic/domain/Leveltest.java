@@ -1,41 +1,39 @@
 package org.mohajo.studyrepublic.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.mohajo.studyrepublic.domain.code.LeveltestTypeCD;
-import org.mohajo.studyrepublic.domain.id.LeveltestId;
 
 import lombok.Data;
 
 /**
  * @author	이미연
  * @since	2019. 1. 22.
- * @version	
- * - 기능 설명 1
+ * @version	0.0
+ * - 레벨테스트 DTO
  */
 @Data
 @Entity
-public class Leveltest {
+public class Leveltest implements Serializable {
 
 	@EmbeddedId
 	private LeveltestId leveltestId;
 	
 	@ManyToOne
-	@JoinColumn(name = "LEVELTEST_TYPE_CODE")
+	@JoinColumn(name = "LEVELTEST_TYPE_CODE", nullable = false)
 	private LeveltestTypeCD leveltestTypeCode;
 	
-	@Column
+	@Column(nullable = false)
 	private String content;
 	
 	@Column
 	private String choice;
 	
-	@Column
-	private String answer;
+	@Column(nullable = false)
+	private String correctAnswer;
 	
 }

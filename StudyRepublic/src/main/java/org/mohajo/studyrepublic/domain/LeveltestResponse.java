@@ -1,24 +1,24 @@
 package org.mohajo.studyrepublic.domain;
 
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-
-import org.mohajo.studyrepublic.domain.code.LeveltestTypeCD;
-import org.mohajo.studyrepublic.domain.id.LeveltestResponseId;
+import javax.persistence.JoinColumn;
 
 import lombok.Data;
 
 /**
  * @author	이미연
  * @since	2019. 1. 22.
- * @version	
- * - 기능 설명 1
+ * @version	0.0
+ * - 레벨테스트 응답 DTO
  */
 @Data
 @Entity
-public class LeveltestResponse {
+public class LeveltestResponse implements Serializable {
 
 	@EmbeddedId
 	private LeveltestResponseId leveltestResponseId;
@@ -28,4 +28,5 @@ public class LeveltestResponse {
 	
 	@Column
 	private int isCorrect;
+	
 }
