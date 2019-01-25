@@ -1,0 +1,30 @@
+<!-- 
+  @author 윤원식
+  @since 2019. 1. 25.
+  @version
+  -write.html 추가
+ -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/boardLayout}">
+
+	<form th:action="@{registerFreeBoard}" method="post">
+	<select name = 'boardType'>
+	 <option>게시판 선택 </option>
+     <option value ='freeBoard'>자유게시판</option>
+	 <option value ='requestBoard'>스터디 요청게시판</option>
+	 <option value ='inquireBoard'>문의게시판</option>
+	
+	</select> <br/>
+	
+	<input name ='title' type='text' placeholder="제목을 입력해주세요"> <input name ='notice' type='checkbox' value="0">공지 <input name ='hide' type='checkbox' value="0">비공개<br/>
+	<textarea name = 'content' rows="20" cols="100" placeholder="내용을 입력해주세요"></textarea> <br/>
+	<input name ='id' type='hidden' value="aaa123"> <br/>
+	
+	<button>취소</button>
+	<button>미리보기</button>
+	<button type="submit">확인</button>
+	
+	
+	</form>
