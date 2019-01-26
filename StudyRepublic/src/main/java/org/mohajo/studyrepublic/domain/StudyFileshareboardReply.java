@@ -1,5 +1,6 @@
 package org.mohajo.studyrepublic.domain;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +23,7 @@ import lombok.Setter;
  * StudyFileshareboardReply domain 클래스 추가
  */
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "study_fileshareboard_reply")
 public class StudyFileshareboardReply extends StudyBoardReply{
