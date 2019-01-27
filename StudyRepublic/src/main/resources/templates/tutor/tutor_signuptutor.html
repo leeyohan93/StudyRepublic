@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
 <head>
 <meta charset="UTF-8">
 <title>강사신청</title>
@@ -14,6 +16,10 @@
 
 </head>
 <body>
+
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 
 <div>
 
@@ -83,6 +89,8 @@
 <ul id = "int2"></ul>
 </div>
 
+
+
 <script>
 
 var AllselectBox = document.querySelectorAll("span"); 
@@ -142,6 +150,8 @@ var AllselectBox = document.querySelectorAll("span");
 	}
 		target.innerHTML = selectedinterest2;
  } 
+   
+
 	 
 </script>
 

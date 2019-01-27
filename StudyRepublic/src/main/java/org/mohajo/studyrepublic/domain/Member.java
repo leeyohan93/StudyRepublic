@@ -71,14 +71,14 @@ public class Member implements Serializable {
 	private int visibility;
 	
 	@Column(nullable = false)
-	private String profile_origin_name;
+	private String profileOriginName;
 	
 	@Column(nullable = false)
-	private String profile_save_name;
+	private String profileSaveName;
 	
 	@Temporal(TemporalType.DATE)	// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
 	@Column(nullable = false)
-	private Date registration_date = new Date();	// 자동으로 현재 날짜로 가입일을 초기화.
+	private Date registrationDate = new Date();	// 자동으로 현재 날짜로 가입일을 초기화.
 /*	private java.sql.Date date2 = new java.sql.Date(visibility, visibility, visibility);*/
 	
 	@ManyToOne
@@ -94,11 +94,21 @@ public class Member implements Serializable {
 	@JoinColumn(name = "member")	
 	private List <MemberRoles> roles;
 	
-	
 	public void setRoles(List<MemberRoles> roles) {		// set메서드 재정의함.N으로 초기값 주기 위함.	// 등급이 업데이트 되면 어떻게될까.. 등급을 업데이트 하는 것인가 같은 아이디에 등급을 하나 더 추가하는 것인가.. securityConfig에서 hasRole을 두 개 다 가질 수 있을 것인가.... 
 		MemberRoles memberroles = new MemberRoles();
 		memberroles.setRoleName("N");
 		this.roles.add(memberroles);
 	}
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name = "id")
+	private List <InterestLocation> interestlocation;
+	
+/*	public void setInterestlocation(String location) {		// set메서드 재정의함.N으로 초기값 주기 위함.	// 등급이 업데이트 되면 어떻게될까.. 등급을 업데이트 하는 것인가 같은 아이디에 등급을 하나 더 추가하는 것인가.. securityConfig에서 hasRole을 두 개 다 가질 수 있을 것인가.... 
+		InterestLocation il = new InterestLocation();
+		il.setInterestLocation(location);
+		this.interestlocation.add(il);
+	}*/
+
 	
 }

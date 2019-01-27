@@ -9,6 +9,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,7 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/admin/**","/signup/**").hasRole("A")
 		.antMatchers("/tutor/**").hasRole("T")
-		.antMatchers("/member/**").hasRole("N");
+		.antMatchers("/").permitAll()
+		.antMatchers("/memberAll/**","/memberUpdate/**","/memberUpdateAction/**","/memberInquery/**","/memberDelete").hasRole("N")
+		.antMatchers("/resources/**").permitAll()
+		.antMatchers("/*.js").permitAll();
 /*		.antMatchers("/").permitAll();*/
 		// .antMatchers("/admin/**","/member/**").hasRole("A") 여기서 /member/** 는 동작하지 않음(/member 하위 접근권한 x. *바로 아랫줄 .antMatchers("/member/**").hasRole("N")가 있기 떼문
 		// /member/** 에 대한 권한이 N인 사람의 권한으로 덮어쓰기됨. 이럴 경우 A권한인 사람은 N권한도 중복으로 가져야함. DB에서 등록.
@@ -81,6 +85,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.userDetailsService(memberservice)
 		.tokenRepository(persistentTokenRepository())
 		.tokenValiditySeconds(60*60*24);
+	}
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/css/**","/js/**");
 	}
 	
 	@Bean		

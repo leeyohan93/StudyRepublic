@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>회원정보</title>
 </head>
 <body>
+
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 
 <table th:inline = "text" border = "1">
 <tr>
@@ -26,7 +32,7 @@
 </table>
 
 
-<form id = "member" action = "/member/updateAction" method = "post">
+<form id = "member" action = "/memberUpdateAction" method = "post">
 <tr th:each="m : ${member}">
 <td><input type = "text" name = "id" th:value = "${m.id}">
 <td th:text = "${member.memberStatusCD.codeValueKorean}"></td>
@@ -39,16 +45,18 @@
 <td th:text = "${m.email}"></td>
 <td th:text = "${m.phonenumber}"></td>
 <td th:text = "${m.visibility}"></td>
-<td th:text = "${m.profile_origin_name}"></td>
-<td th:text = "${m.profile_save_name}"></td>
-<td th:text = "${m.registration_date}"></td>
+<td th:text = "${member.profileOriginName}"></td>
+<td th:text = "${member.profileSaveName}"></td>
+<td th:text = "${registrationDate}"></td>
 </tr>
 <input type = "submit" value = "수정">
 </form>
 
 <br><br>
 
-
+</div>
+</div>
+</div>
 
 </body>
 </html>
