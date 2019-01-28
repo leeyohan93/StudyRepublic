@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Study List View</title>
+    <style type="text/css">
+    	table {
+    		border: 1px;
+    	}
+    </style>
+</head>
+<body>
+    
+	<!-- 스터디 목록 스타일: 게시판형, 카드형 고려중 -->
+	<!-- 게시판형으로 우선 작업 -->
+	
+    <div>
+    	<div class="heading">
+    		<h1 th:if="${typeCode} eq 'p'">프리미엄 스터디</h1>
+    		<h1 th:unless="${typeCode} eq 'p'">일반 스터디</h1>
+    		<hr>
+    		<h1>찾아보기</h1>
+    	</div>
+    	<div class="body">
+	    	<table>
+	    		<tr>
+	    			<th>No.</th>
+	    			<th>스터디명</th>
+	    			<th:block th:if="${typeCode} eq 'p'">
+	    				<th>리더</th>
+	    			</th:block>
+	    			<th>기간</th>
+	    			<th>일시</th>
+	    			<th>인원</th>
+	    		</tr>
+	    		<tr th:each="study:${list}">
+	    			<td><a th:href="@{/detail/${study.studyId}}" th:text="${study.name}">study name</a><i class="tag btn-primary" th:text="${study.studyStatusCode.codeValueKorean}">status</i></td>
+	    			<th:block th:if="${typeCode} eq 'P'">
+	    				<td th:text="${study.member.name}">leader name</td>
+	    			</th:block>
+	    			<td th:text="|${study.startDate}~${study.endDate}|">period</td>
+   					<td th:text="|매주 ${study.dayCode.codeValueKorean}요일  ${study.startTime}~${study.endTime}|">schedule</td>
+	    			<td th:text="${study.enrollActual}/${study.enrollCapacity}">n/m</td>
+	    		</tr>
+	    	</table>
+	    </div>
+    	
+    
+    </div>
+    
+</body>
+</html>

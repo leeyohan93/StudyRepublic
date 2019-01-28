@@ -9,11 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import lombok.Data;
 
@@ -28,6 +27,7 @@ import lombok.Data;
 @Table(name = "study", schema = "StudyRepublic")
 public class Study implements Serializable {
 
+	
 	@Id
 	private String studyId;							//스터디 코드
 	
@@ -95,6 +95,7 @@ public class Study implements Serializable {
 	@JoinColumn(name = "study_id", nullable = false)
 	private List<StudyInterest> studyInterest;			//분야
 	
+
 	///////////	아래는 Study 클래스를 상속하여 분리시킬 수도 있음 //////////////////////
 	
 	@OneToOne
