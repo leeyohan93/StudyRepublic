@@ -39,4 +39,5 @@ public class StudyFileshareboard extends StudyBoard{
 	private List<StudyNoticeboardFile> studyFileshareboardFile;
 	@OneToMany
 	private List<StudyNoticeboardReply> studyFileshareboardReply;
+	
 }

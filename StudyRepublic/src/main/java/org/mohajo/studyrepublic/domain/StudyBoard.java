@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import lombok.Data;
@@ -17,12 +18,15 @@ import lombok.ToString;
  */
 
 @Data
-@MappedSuperclass
 @ToString
+@MappedSuperclass
 public class StudyBoard implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
+	/*@Id
+	private int boardId;*/
+	
 	@Column(name = "study_id")
 	private String studyId;
 	@Column

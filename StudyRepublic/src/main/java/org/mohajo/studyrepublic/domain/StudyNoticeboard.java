@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,11 +48,11 @@ public class StudyNoticeboard extends StudyBoard implements Serializable{
 	@Column
 	private String location;
 	
-	@OneToMany
+	@OneToMany/*(fetch=FetchType.EAGER)*/
 	@JoinColumn(name="study_noticeboard_id")
 	private List<StudyNoticeboardFile> studyNoticeboardFile;
 	
-	@OneToMany
+	@OneToMany/*(fetch=FetchType.EAGER)*/
 	@JoinColumn(name="study_noticeboard_id")
 	private List<StudyNoticeboardReply> studyNoticeboardReply;
 }
