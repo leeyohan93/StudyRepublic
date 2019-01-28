@@ -1,9 +1,10 @@
 package org.mohajo.studyrepublic.study;
 
-import java.security.Principal;
 import java.util.List;
 
+import org.mohajo.studyrepublic.domain.Review;
 import org.mohajo.studyrepublic.domain.Study;
+import org.mohajo.studyrepublic.domain.StudyMemberId;
 import org.mohajo.studyrepublic.domain.TypeCD;
 import org.mohajo.studyrepublic.repository.LeveltestRepository;
 import org.mohajo.studyrepublic.repository.LeveltestResponseRepository;
@@ -48,34 +49,39 @@ public class StudyController {
 	@Autowired
 	PaymentRepository pr;
 	
+	@Autowired
+	TypeCD typeCd;
+	
+	@Autowired
+	StudyMemberId studyMemberId;
+	
 	
 	@RequestMapping("/list/{typeCode}")
 	public String list(@PathVariable("typeCode") String typeCode, Model model) {
 		
-		log.info("-------------------------------------------");
 		log.info("list() called...");
 		log.info("typeCode: "+typeCode);
 		
-		//P/B
+		//P/B --> p, b 로 변함. 왜지.
 		//스터디 리스트 조회 페이지로 이동
 			//분야코드, 스터디 (진행상태, 요일)
 			//완료, 해체 불포함
 		
-		TypeCD typeCd = new TypeCD();
+//		TypeCD typeCd = new TypeCD();	//Component - Autowired 로 분리할 것 --> 분리
 		typeCd.setTypeCode(typeCode);
 		List<Study> list = sr.findValidStudyByTypeCode(typeCd);
 		
 		model.addAttribute("list", list);
 		model.addAttribute("typeCode", typeCode);
-				
+
 		return "study/list";
 	}
 	
 	@RequestMapping("/detail/{studyId}")
-	public String studyDetail(@PathVariable("studyId") String studyId, Principal principal, Model model) {
+	public String detail(@PathVariable("studyId") String studyId, Model model) {
 		
-		System.out.println(principal);
-		
+		log.info("detail() called...");
+				
 		//스터디 상세 조회 페이지로 이동
 			//공통:
 				//스터디 (분야, 지역, 가격, 유형, 진행방식), 리더 
@@ -85,7 +91,13 @@ public class StudyController {
 				//+ tutor, 스터디멤버 (where typeCd = "P") where leaderId = ? 
 			//typeCd != "P" :
 				//+ 스터디멤버 where studyStatusCode in ('LE', 'ME') where id = ?
-		
+
+		Study study = sr.findById(studyId).get();
+		studyMemberId.setStudyId(studyId);
+		List<Review> review = rr.findByStudyId(studyMemberId);
+			
+		model.addAttribute("study", study);
+		model.addAttribute("review", review);
 
 		return "/study/detail";
 	}

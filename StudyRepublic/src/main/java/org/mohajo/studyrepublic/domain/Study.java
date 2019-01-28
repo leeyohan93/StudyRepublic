@@ -1,18 +1,22 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 
@@ -34,7 +38,7 @@ public class Study implements Serializable {
 	@Column(nullable = false)
 	private String name;							//스터디명
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "leader_id", nullable = false)
 	private Member member;
 	
@@ -44,7 +48,7 @@ public class Study implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "ONOFF_CODE", nullable = false)
-	private OnoffCD onOffCode;						//방식코드 (O/F/B)
+	private OnoffCD onoffCode;						//방식코드 (O/F/B)
 	
 	@ManyToOne
 	@JoinColumn(name = "STUDY_STATUS_CODE", nullable = false)
@@ -54,6 +58,7 @@ public class Study implements Serializable {
 	@JoinColumn(name = "LEVEL_CODE", nullable = false)
 	private LevelCD levelCode;						//레벨코드 (L/M/H)
 	
+	@Temporal(TemporalType.DATE)	// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
 	@Column(nullable = false)
 	private Date startDate = new Date();			//시작일
 	
@@ -67,11 +72,13 @@ public class Study implements Serializable {
 	@Column
 	private int studyCount;							//총 회차
 	
+	@Temporal(TemporalType.TIME)
 	@Column(nullable = false)
-	private Date startTime;							//시작시각
+	private Date startTime =  new Date();							//시작시각
 	
+	@Temporal(TemporalType.TIME)
 	@Column(nullable = false)
-	private Date endTime;							//종료시각
+	private Date endTime = new Date();							//종료시각
 	
 	@Column(nullable = false)
 	private int enrollCapacity = 5;						//정원
@@ -86,10 +93,10 @@ public class Study implements Serializable {
 	private int hasLeveltest = 0;						//레벨테스트 유무 (0/1)
 	
 	@Column
-	private Date disbandDate;						//해체일
+	private Timestamp disbandDate;						//해체일
 	
 	@Column(nullable = false)
-	private java.sql.Date postDate = new java.sql.Date(new java.util.Date().getTime());	//게시일
+	private Timestamp postDate = new java.sql.Timestamp(new Date().getTime());	//게시일
 	
 	@OneToMany
 	@JoinColumn(name = "study_id", nullable = false)

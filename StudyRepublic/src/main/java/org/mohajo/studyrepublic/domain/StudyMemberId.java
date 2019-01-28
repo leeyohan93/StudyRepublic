@@ -3,10 +3,8 @@ package org.mohajo.studyrepublic.domain;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 
-import org.mohajo.studyrepublic.domain.Member;
+import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
@@ -18,6 +16,7 @@ import lombok.Data;
  */
 @Data
 @Embeddable
+@Component
 public class StudyMemberId implements Serializable {
 
 	private String studyId;

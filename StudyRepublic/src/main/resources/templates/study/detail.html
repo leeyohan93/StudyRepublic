@@ -1,22 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Study Detail View</title>
+<title>Study Detail View</title>
+<meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+<style type="text/css">
+
+	.sticky {
+		position: -webkit-sticky;
+		position: sticky;
+		bottom: 10%;
+		padding: 5px;
+	}
+
+</style>	
 </head>
 <body>
-    
-    <div>
-    	
-    	
-    
-    </div>
-    <script type="text/javascript">
-//     	1. 탭 메뉴 : 완료된 스터디의 경우에만 리뷰 탭 class=active & 버튼 활성화 
-//     	2. 스터디 가입 : 이미 가입된 스터디인 경우, 거절/탈퇴한 스터디인 경우, 	가입 승인 대기중인 스터디인 경우 --> 메시지
-// 					 정원 초과된 스터디인 경우 --> 버튼 비활성화 
-    </script>
+
+	<div layout:fragment="main">
+		<div class="inner">
+		<h1>스터디 상세</h1>
+		<section class="studyDetail">
+			<section class="basic-info">
+				<div class="essential-info">
+					스터디명	<span th:text="${study.name}">name</span>	
+					기간 개월
+					일시 매주 요일 시간
+				</div>				
+				<div class="box-info">
+					<p th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</p>
+					<i class="tag btn-primary btn-xs" th:text="${study.studyStatusCode.codeValueKorean}">study status</i>
+					<p>레벨: <th:block th:text="${study.levelCode.codeValueKorean}">level</th:block></p> 
+				</div>
+				<div>
+					유형	<i class="tag btn-default" th:text="${study.typeCode.codeValueKorean}">type</i>
+				</div>
+				<div>
+					진행방식	<i class="tag btn-default" th:text="${study.onoffCode.codeValueKorean}">onoff</i>
+				</div>
+				<div>
+					지역
+				</div>
+				<div>
+					분야
+					<i class="tag btn-default" th:each="interest : ${study.studyInterest}" th:text="${interest.interest2code.codeValueKorean}">interest</i>
+				</div>
+				<div>
+					가격
+				</div>
+			</section>
+
+			<section class="introduction">
+				<h2>소개</h2>
+				<div class="member-content">
+					<p th:text="${study.introduction}"></p>
+				</div>
+			</section>
+
+			<section class="additional-info">
+				<div class="tab-head">
+					<button type="button" class="tab-item tab-active">
+						<span class="txt-tab">리더 정보</span>
+					</button>
+					<button type="button" class="tab-item">
+						<span class="txt-tab">강의 후기</span>
+					</button>
+				</div>
+				<div class="tab-content leader-info">
+					<p th:text="${study.member.name}">리더 이름</p>
+					<p th:text="${study.member.memberInterest}">관심 분야</p>
+<!-- 												<p th:text="${leader.}">활동 내역</p> -->
+				</div>
+				<div class="tab-content review invisible">
+					<p th:text="${review}">후기 리스트</p>
+				</div>
+			</section>
+			<button class="btn-primary btn-float sticky">스터디 가입 신청</button>
+		</section>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		//     	1. 탭 메뉴 : 완료된 스터디의 경우에만 리뷰 탭 class=active & 버튼 활성화 
+		//     	2. 스터디 가입 : 이미 가입된 스터디인 경우, 거절/탈퇴한 스터디인 경우, 	가입 승인 대기중인 스터디인 경우 --> 메시지
+		// 					 정원 초과된 스터디인 경우 --> 버튼 비활성화
+	</script>
 </body>
 </html>

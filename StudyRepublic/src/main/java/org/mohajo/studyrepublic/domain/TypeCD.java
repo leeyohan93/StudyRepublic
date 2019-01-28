@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.stereotype.Component;
+
 import lombok.Data;
 
 /**
@@ -18,9 +20,11 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "type_cd")
+@Component
 public class TypeCD implements Serializable {
 
 	@Id
+	@Column(name = "type_code")
 	private String typeCode;
 	
 	private String codeValueEnglish;
