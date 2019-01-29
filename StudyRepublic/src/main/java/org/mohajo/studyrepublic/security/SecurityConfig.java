@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http
 		.authorizeRequests()
+		.antMatchers("/member/signup","/member/insert").permitAll()
 		.antMatchers("/admin/**").hasRole("A")
 		.antMatchers("/tutor/**").hasRole("T")
 		.antMatchers("/member/**" ).hasRole("N")
@@ -56,7 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				
 		http
 		.formLogin()
-		.loginPage("/login").successHandler(new LoginSuccessHandler());
+		.loginPage("/login").
+		successHandler(new LoginSuccessHandler())
+		.permitAll();
 		
 		http
 		.exceptionHandling()

@@ -33,7 +33,7 @@ public class MemberController {
 		return "/member/member_info";	
 	}
 	
-	@RequestMapping("member/signup")
+	@RequestMapping("/member/signup")
 	public String signup (Model model) {
 		return "signup/signup_signup";	
 	}

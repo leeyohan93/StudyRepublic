@@ -3,7 +3,6 @@ package org.mohajo.studyrepublic.studypage;
 import java.util.List;
 
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
-import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardFileRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardReplyRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardRepository;
@@ -16,13 +15,11 @@ import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import groovy.util.logging.Log;
+import lombok.extern.java.Log;
 
 @Log
 @Controller
