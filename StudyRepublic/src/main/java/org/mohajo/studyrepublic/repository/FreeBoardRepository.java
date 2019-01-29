@@ -3,6 +3,7 @@
  */
 package org.mohajo.studyrepublic.repository;
 
+
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.QFreeBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
