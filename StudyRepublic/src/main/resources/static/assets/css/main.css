@@ -65,12 +65,12 @@ input::-moz-focus-inner {
 	padding: 0;
 }
 
-input, select, textarea {
-	-moz-appearance: none;
+/* input, select, textarea {		//checkbox, 체크박스, 안보이게하는문제원인.
+	-moz-appearance: none;		
 	-webkit-appearance: none;
 	-ms-appearance: none;
 	appearance: none;
-}
+} */
 
 /* Basic */
 
@@ -2191,7 +2191,7 @@ input, select, textarea {
 		padding: 0;
 		min-height: 3.75em;
 	}
-
+/* 
 	input[type="checkbox"],
 	input[type="radio"] {
 		-moz-appearance: none;
@@ -2264,7 +2264,7 @@ input, select, textarea {
 
 	input[type="radio"] + label:before {
 		border-radius: 100%;
-	}
+	} */
 
 /* Box */
 

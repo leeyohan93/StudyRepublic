@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8" />
 <title>accessDeniedPage</title>
 </head>
 <body>
 
+
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 <h2>미안하지만 넌 권한 없다?</h2>
 
 로그인페이지로 이동하려면 <a th:href="@{/login}">여기를 클릭하렴</a>
-
+</div>
+</div>
+</div>
 </body>
+
+
 </html>
 

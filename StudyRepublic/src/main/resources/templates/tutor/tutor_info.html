@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>회원정보</title>
@@ -8,7 +9,9 @@
 
 <!-- <p th:text = "${tutor}"></p> -->
 
-
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 
  <table th:inline = "text" border = "1">
 <tr>
@@ -29,6 +32,9 @@
 </tr>
 </table>
 
+</div>
+</div>
+</div>
 
 
 </body>

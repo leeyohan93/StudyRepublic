@@ -7,22 +7,25 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!-- 	<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.w3.org/1999/xhtml"> -->
 <head>
 <title>Study Republic</title>
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="stylesheet" href="assets/css/main.css" />
-<link rel="stylesheet"
-	href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script
-	src="bootstrap/js/bootstrap.min.js"></script>
+	th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 
 </head>
+
+
 <body class="is-preload">
 	<!-- Wrapper -->
 	<div id="wrapper">
@@ -66,7 +69,7 @@
 				<!-- Logo -->
 
 				<a href="index.html" class="logo"> <span class="symbol"><img
-						src="images/logo.svg" alt="" /></span><span>Study Republic</span>
+						th:src="@{/images/logo.svg}" alt="" /></span><span>Study Republic</span>
 				</a>
 
 				<!-- Nav -->
@@ -112,7 +115,7 @@
 					<!-- The slideshow -->
 					<div class="carousel-inner">
 						<div class="carousel-item active">
-							<img src="images/pic01.jpg" alt="first" width="1100" height="300">
+							<img src="/images/pic01.jpg" alt="first" width="1100" height="300">
 						</div>
 						<div class="carousel-item">
 							<img src="images/pic02.jpg" alt="Second" width="1100" height="300">
@@ -145,7 +148,7 @@
 							</div>
 							<div class="col-sm-3">
 								<article class="style1">
-									<span class="image"> <img src="images/logo.svg" alt="" />
+									<span class="image"> <img src="/images/logo.svg" alt="" />
 									</span> <a href="generic.html">
 										<h2>Magna</h2>
 										<div class="content">
@@ -234,11 +237,11 @@
 	</div>
 
 	<!-- Scripts -->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/js/browser.min.js"></script>
-	<script src="assets/js/breakpoints.min.js"></script>
-	<script src="assets/js/util.js"></script>
-	<script src="assets/js/main.js"></script>
+	<script th:src="@{/assets/js/jquery.min.js}"></script>
+	<script th:src="@{/assets/js/browser.min.js}"></script>
+	<script th:src="@{/assets/js/breakpoints.min.js}"></script>
+	<script th:src="@{/assets/js/util.js}"></script>
+	<script th:src="@{/assets/js/main.js}"></script>
 
 </body>
 </html>

@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8" />
 <title>LogoutPage</title>
 </head>
 <body>
+
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 
 <h2>Custom Logout Page</h2>
 <form method = "post">
@@ -17,3 +23,6 @@
 </body>
 </html>
 
+</div>
+</div>
+</div>

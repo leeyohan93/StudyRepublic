@@ -1,17 +1,31 @@
-<!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>회원정보</title>
+
+<style>
+
+tr, td {
+	font-size : 7px;
+}
+
+</style>
+
 </head>
 <body>
+
+
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 
 <table th:inline = "text" border = "1">
 <tr>
 <td>아이디</td>
 <td>회원상태</td>
 <td>회원등급</td>
-<td>비밀번호</td>
 <td>이름</td>
 <td>성별</td>
 <td>생년월일</td>
@@ -19,16 +33,13 @@
 <td>이메일</td>
 <td>휴대전화번호</td>
 <td>공개여부</td>
-<td>프로필사진 원본명</td>
-<td>프로필사진 저장명</td>
 <td>가입일</td>
 </tr>
 
 <tr th:each="member : ${member}">
-<td><a th:href="@{'inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td>
+<td><a th:href="@{'/member/inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td>
 <td th:text = "${member.memberStatusCD.codeValueKorean}"></td>
 <td th:text = "${member.gradeCD.codeValueKorean}"></td>
-<td th:text = "${member.password}"></td>
 <td th:text = "${member.name}"></td>
 <td th:text = "${member.gender}"></td>
 <td th:text = "${member.birth}"></td>
@@ -36,14 +47,23 @@
 <td th:text = "${member.email}"></td>
 <td th:text = "${member.phonenumber}"></td>
 <td th:text = "${member.visibility}"></td>
-<td th:text = "${member.profile_origin_name}"></td>
-<td th:text = "${member.profile_save_name}"></td>
-<td th:text = "${member.registration_date}"></td>
+<td th:text = "${member.registrationDate}"></td>
+
 </tr>
 </table>
 
 
-<a href = "/signup">회원가입</a>
+<a href = "signup">회원가입</a>
+
+</div>
+</div>
+</div>
+
+
+
+
+
+
 
 </body>
 </html>
