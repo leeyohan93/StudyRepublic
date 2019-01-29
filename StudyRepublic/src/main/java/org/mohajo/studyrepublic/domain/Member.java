@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,6 +27,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "member", schema = "StudyRepublic")
+@SecondaryTable(name="recommend_TutorMember")
 public class Member implements Serializable {
 
 

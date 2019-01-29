@@ -14,6 +14,7 @@
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
+
 <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <script
@@ -68,6 +69,7 @@
 
 				<!-- Logo -->
 
+
 				<a href="index.html" class="logo"> <span class="symbol"><img
 						th:src="@{/images/logo.svg}" alt="" /></span><span>Study Republic</span>
 				</a>
@@ -75,10 +77,18 @@
 				<!-- Nav -->
 				<nav>
 					<ul>
-						<li><a href="#menu">Menu</a></li>
-						<li><a href="#">일반 스터디</a></li>
-						<li><a href="#">프리미엄 스터디</a></li>
-						<li><a href="#">커뮤니티</a></li>
+						<li class="nav-item"><a href="#menu" class="nav-link">Menu</a></li>
+						<li class="nav-item"><a href="#" class="nav-link">일반 스터디</a></li>
+						<li class="nav-item"><a href="#" class="nav-link">프리미엄 스터디</a></li>
+						<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown01"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >커뮤니티</a>
+							<div class="dropdown-menu" aria-labelledby="dropdown01">
+								<a class="dropdown-item" href="#">자유 게시판</a> <a
+									class="dropdown-item" href="#">스터디 요청 게시판</a> <a
+									class="dropdown-item" href="#">문의 게시판</a>
+							</div>
+							</li>
 					</ul>
 				</nav>
 
@@ -118,7 +128,8 @@
 							<img src="/images/pic01.jpg" alt="first" width="1100" height="300">
 						</div>
 						<div class="carousel-item">
-							<img src="images/pic02.jpg" alt="Second" width="1100" height="300">
+							<img src="images/pic02.jpg" alt="Second" width="1100"
+								height="300">
 						</div>
 						<div class="carousel-item">
 							<img src="images/pic03.jpg" alt="Third" width="1100" height="300">
@@ -139,13 +150,17 @@
 					<div class="tiles">
 						<div class="row">
 							<div class="col-sm-3">
-								<h3>popular Tags</h3>
-								<ul>
-									<li>인기 언어1</li>
-									<li>인기 언어2</li>
-									<li>인기 언어3</li>
-								</ul>
+								<h5>popular Tags</h5>
+								<div>
+									<a href="#" class="btn btn-outline-primary" role="button">J
+										A V A</a><br> <br> <a href="#"
+										class="btn btn-outline-secondary" role="button">P Y T H O
+										N</a><br> <br> <a href="#"
+										class="btn btn-outline-success" role="button">S P R I N G</a><br>
+									<br>
+								</div>
 							</div>
+
 							<div class="col-sm-3">
 								<article class="style1">
 									<span class="image"> <img src="/images/logo.svg" alt="" />
@@ -170,7 +185,52 @@
 									</a>
 								</article>
 							</div>
+							<div class="col-sm-3">
+								<article>
+									<h5>추천 멤버</h5>
+									<br>
+									<div class="list-group">
+										<a href="#" class="list-group-item disabled">aaa123</a> <a
+											href="#" class="list-group-item disabled">bbb123</a> <a
+											href="#" class="list-group-item">ccc123</a>
+									</div>
+								</article>
+							</div>
 
+						</div>
+					</div>
+				</div>
+
+				<hr>
+
+				<div class="container text-center">
+					<h3 style="margin: 0">일반 스터디</h3>
+					<div class="tiles">
+						<div class="row">
+							<div class="col-sm-3">
+								<h5>popular Tags</h5>
+								<div>
+									<a href="#" class="btn btn-outline-primary" role="button">J
+										A V A</a><br> <br> <a href="#"
+										class="btn btn-outline-secondary" role="button">P Y T H O
+										N</a><br> <br> <a href="#"
+										class="btn btn-outline-success" role="button">S P R I N G</a><br>
+									<br>
+								</div>
+							</div>
+
+							<div class="col-sm-3">
+								<article class="style1">
+									<span class="image"> <img src="images/logo.svg" alt="" />
+									</span> <a href="generic.html">
+										<h2>Magna</h2>
+										<div class="content">
+											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+												veroeros et feugiat.</p>
+										</div>
+									</a>
+								</article>
+							</div>
 							<div class="col-sm-3">
 								<article class="style2">
 									<span class="image"> <img src="images/logo.svg" alt="" />
@@ -181,6 +241,18 @@
 												veroeros et feugiat.</p>
 										</div>
 									</a>
+								</article>
+							</div>
+
+							<div class="col-sm-3">
+								<article>
+									<h5>추천 멤버</h5>
+									<br>
+									<div class="list-group">
+										<a href="#" class="list-group-item disabled">aaa123</a> <a
+											href="#" class="list-group-item disabled">bbb123</a> <a
+											href="#" class="list-group-item">ccc123</a>
+									</div>
 								</article>
 							</div>
 
