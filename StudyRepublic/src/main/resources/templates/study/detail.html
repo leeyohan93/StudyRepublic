@@ -6,73 +6,133 @@ layout:decorate="~{/layout/mainLayout}">
 <title>Study Detail View</title>
 <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
 <style type="text/css">
+	
+	.studyDetail {
+		box-shadow: 0.3em 0.3em 10px 3px silver;
+		/* box-shadow: X오프셋 Y오프셋 블러반경 퍼짐반경 색상; */
+		width: 90%;
+		margin: 0 0;
+	}
+	
+	.basic-info {
+		position: relative;
+
+	}
+	
+	.essential-info-1 {
+		padding: 8px;
+		display: block;
+		margin: 1em 2em;
+	}
+	
+	.essential-info-2 {
+		display: block;
+		margin: 3em;
+	}
+	
+	.box-info {
+		position: absolute;
+		float: right;
+		width: 100px;
+		background-color: gray;
+		font: bold 20px;
+		margin: 0 2em;
+		z-index: 1;
+	}
+	
+	.intro-content {
+		width: calc(100%-100px);
+		border: solid 1px silver;
+		padding: 1em;
+		margin: 0 3em;
+		display: block;
+	}
+	
+	.additional-info {
+		width: calc(100%-100px);
+		display: block;
+		padding: 1em;
+		margin: 0 3em;
+	}
+	
+	.tab-heading {
+		margin: 0;
+	}
+
+	.tab-item {
+		display: inline-block;
+		width: 20%;
+		background-color: gray;
+	}
+	
+	.tab-item.tab-active {
+		background-color: white;
+		border-bottom: white;
+	}
+	
+	.tab-content {
+		border: solid 1px silver;
+	}
 
 	.sticky {
 		position: -webkit-sticky;
 		position: sticky;
 		bottom: 10%;
 		padding: 5px;
+		font: 0.9em white;
+		text-align: center;
+		left: 0.5vm;
 	}
-
-</style>	
+	
+</style>
 </head>
 <body>
 
 	<div layout:fragment="main">
 		<div class="inner">
-		<h1>스터디 상세</h1>
+		<h3>스터디 상세</h3>
 		<section class="studyDetail">
 			<section class="basic-info">
-				<div class="essential-info">
-					스터디명	<span th:text="${study.name}">name</span>	
-					기간 개월
-					일시 매주 요일 시간
-				</div>				
+				<div class="essential-info-1">
+					<div>스터디명	<span th:text="${study.name}">name</span></div>	
+<!-- 					기간	<span th:text="|${#dates.format(study.startDate, 'yyyy-MM-dd')}~${#dates.format(study.endDate, 'yyyy-MM-dd')}|">period</span>(<span th:text="${#utilityClass.getDifferenceInDays(study.startDate-study.endDate)}">n</span>개월) -->
+					<div>기간	<span th:text="|${study.startDate}~${study.endDate}|">period</span>(<span th:text="${dayDiff}">n</span>개월)</div>
+					<div>일시	<span th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</span>(<span th:text="${timeDiff}">n</span>시간)</div>
+				</div>
+				<div class="essential-info-2">
+					<div>유형	<i class="tag btn-default" th:text="${study.typeCode.codeValueKorean}">type</i></div>				
+					<div>진행방식	<i class="tag btn-default" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
+					<div>지역	</div>
+					<div>분야	<th:block th:each="interest : ${study.studyInterest}"><i class="tag btn-primary" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
+					<div>가격	</div>
+				</div>
 				<div class="box-info">
 					<p th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</p>
 					<i class="tag btn-primary btn-xs" th:text="${study.studyStatusCode.codeValueKorean}">study status</i>
 					<p>레벨: <th:block th:text="${study.levelCode.codeValueKorean}">level</th:block></p> 
 				</div>
-				<div>
-					유형	<i class="tag btn-default" th:text="${study.typeCode.codeValueKorean}">type</i>
-				</div>
-				<div>
-					진행방식	<i class="tag btn-default" th:text="${study.onoffCode.codeValueKorean}">onoff</i>
-				</div>
-				<div>
-					지역
-				</div>
-				<div>
-					분야
-					<i class="tag btn-default" th:each="interest : ${study.studyInterest}" th:text="${interest.interest2code.codeValueKorean}">interest</i>
-				</div>
-				<div>
-					가격
-				</div>
 			</section>
-
-			<section class="introduction">
+			<section class="intro">
 				<h2>소개</h2>
-				<div class="member-content">
+				<div class="intro-content">
 					<p th:text="${study.introduction}"></p>
 				</div>
 			</section>
-
 			<section class="additional-info">
 				<div class="tab-head">
-				<ul>
-					<li type="button" class="tab-item tab-active">
-						<span class="txt-tab">리더 정보</span>
-					</li>
-					<li type="button" class="tab-item">
-						<span class="txt-tab">강의 후기</span>
-					</li>
+					<ul class="tab-heading">
+						<li type="button" class="tab-item tab-active">
+							<span class="txt-tab">리더 정보</span>
+						</li>
+						<li type="button" class="tab-item">
+							<span class="txt-tab">강의 후기</span>
+						</li>
 					</ul>
 				</div>
 				<div class="tab-content leader-info">
 					<p th:text="${study.member.name}">리더 이름</p>
 					<p th:text="${study.member.memberInterest}">관심 분야</p>
-<!-- 												<p th:text="${leader.}">활동 내역</p> -->
+					<p th:text="${studyMember}">활동 내역</p>
 				</div>
 				<div class="tab-content review invisible">
 					<p th:text="${review}">후기 리스트</p>
@@ -85,13 +145,7 @@ layout:decorate="~{/layout/mainLayout}">
 
 	<script type="text/javascript">
 		//     	1. 탭 메뉴 : 완료된 스터디의 경우에만 리뷰 탭 class=active & 버튼 활성화
-		function fetchTabContent(e) {
-			
-			fetch('리더 정보').then(function(response){response.text().then(function(text){document.querySelector('').innerHTML = text;})})
-			
-		} 
-		
-		
+
 		//     	2. 스터디 가입 : 이미 가입된 스터디인 경우, 거절/탈퇴한 스터디인 경우, 	가입 승인 대기중인 스터디인 경우 --> 메시지
 		// 					 정원 초과된 스터디인 경우 --> 버튼 비활성화
 	</script>

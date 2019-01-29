@@ -58,10 +58,11 @@ public class Study implements Serializable {
 	@JoinColumn(name = "LEVEL_CODE", nullable = false)
 	private LevelCD levelCode;						//레벨코드 (L/M/H)
 	
-	@Temporal(TemporalType.DATE)	// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
+	@Temporal(TemporalType.DATE)					// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
 	@Column(nullable = false)
 	private Date startDate = new Date();			//시작일
 	
+	@Temporal(TemporalType.DATE)					// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
 	@Column
 	private Date endDate = new Date();				//종료일
 	
