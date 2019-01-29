@@ -21,9 +21,11 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script
-	src="bootstrap/js/bootstrap.min.js"></script>
+	th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 
 </head>
+
+
 <body class="is-preload">
 	<!-- Wrapper -->
 	<div id="wrapper">
@@ -67,7 +69,7 @@
 				<!-- Logo -->
 
 				<a href="index.html" class="logo"> <span class="symbol"><img
-						src="images/logo.svg" alt="" /></span><span>Study Republic</span>
+						th:src="@{/images/logo.svg}" alt="" /></span><span>Study Republic</span>
 				</a>
 
 				<!-- Nav -->
@@ -235,11 +237,11 @@
 	</div>
 
 	<!-- Scripts -->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/js/browser.min.js"></script>
-	<script src="assets/js/breakpoints.min.js"></script>
-	<script src="assets/js/util.js"></script>
-	<script src="assets/js/main.js"></script>
+	<script th:src="@{/assets/js/jquery.min.js}"></script>
+	<script th:src="@{/assets/js/browser.min.js}"></script>
+	<script th:src="@{/assets/js/breakpoints.min.js}"></script>
+	<script th:src="@{/assets/js/util.js}"></script>
+	<script th:src="@{/assets/js/main.js}"></script>
 
 </body>
 </html>

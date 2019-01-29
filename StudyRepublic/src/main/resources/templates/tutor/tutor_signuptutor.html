@@ -21,31 +21,26 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 <div id = "main" layout:fragment = "main">
 <div class = "inner">
 
-<div>
+
+<form action = "#" method = "post">
 
 <select name = "educationcd" id = "educationcd"  size = '4' multiple = 'multiple'  onchange = "education(this)">
 <option th:each="e :  ${educationcd}" th:value = "${e.educationCode}" th:text = "${e.codeValueKorean}">
 </option>
 </select>
 
+<div id = "education" name = "education" >
+<div id = "sedu"></div>
+</div>
+
 <select th:field = "*{careercd}"  size = '4' multiple = 'multiple' onchange = "career(this)">
 <option th:each="c :  ${careercd}" th:value = "${c.careerCode}" th:text = "${c.codeValueKorean}">
 </option>
 </select>
 
-</div>
-
-
-<div id = "education" name = "education" >
-<ul id = "sedu"></ul>
-</div>
-
 <div id = "career" name = "career">
-<ul id = "scar"></ul>
+<div id = "scar"></div>
 </div>
-
-
-
 
 <select name = "interest1cd" id = "interest1cd"  size = '4' multiple = 'multiple'  onchange = "interest1(this)">
 <option th:each="i1 :  ${interest1cd}" th:value = "${i1.interest1Code}" th:text = "${i1.codeValueKorean}">
@@ -82,15 +77,18 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 
 
 <div id = "interest1cd" name = "interest1cd" >
-<ul id = "int1"></ul>
+<div id = "int1"></div>
 </div>
 
 <div id = "interest2cd" name = "interest2cd">
-<ul id = "int2"></ul>
+<div id = "int2"></div>
 </div>
 
 
 
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
 
 var AllselectBox = document.querySelectorAll("span"); 
@@ -100,22 +98,33 @@ var AllselectBox = document.querySelectorAll("span");
  function education(obj) {
 	var educationList = obj.options[obj.selectedIndex].text;
 	var target = document.getElementById("sedu");
-	target.innerHTML ="<li>" +  educationList + "</li>";
+	target.innerHTML ="<input id = 'edu' type = 'text'></input>";
+	document.getElementById('edu').value = educationList;
 } 
  	
+ var careerNum = 0;
  var careerList = new Array();
  var selectedCareer = "";
  function career(obj) {
-		careerList.push(obj.options[obj.selectedIndex].text);
+		
 		var target = document.getElementById("scar");	
-		for(var i = careerList.length-1; i < careerList.length; i++) {
-			selectedCareer += "<li>" + careerList[i] + "</li>";
-			target.innerHTML = selectedCareer;
+					
+		if(~selectedCareer.indexOf(obj.options[obj.selectedIndex].text)) {
+			alert("이미 선택한 직종입니다.");
 		}
+		else {
+			careerList.push(obj.options[obj.selectedIndex].text);
+			selectedCareer += careerList[careerList.length-1];
+			addCareerList = "<input type = 'text' id = 'csel" + careerNum +  "'></input> <input type = 'button' value = '삭제' id = 'cdel" + careerNum + "' onclick = 'deleteCareer(" + careerNum + ")'>";	 
+			$('#scar').append(addCareerList);
+			document.getElementById('csel'+careerNum).value = careerList[careerList.length-1];
+			careerNum++;
+		}
+		
 	}
  
  var interestArr = ["데이터베이스", "네트워크&보안", "응용프로그래밍", "웹프로그래밍"];
- var checkNum = 0;
+ var count = 0;
  
  var sinterest1 = "";
  var pinterest2cd = document.getElementById("pinterest2cd")
@@ -135,23 +144,41 @@ var AllselectBox = document.querySelectorAll("span");
  
  var interest2List = new Array();
  var selectedinterest2 = "";  
- var uniqueinterest2List = new Array();
+ var addInterest2List;
 
-   function interest2(obj) {	
+    function interest2(obj) {	
 	 var target = document.getElementById("int2");
 	 uniqueinterest2List = interest2List;
-	 interest2List.push(obj.options[obj.selectedIndex].text);
+	 
 	  
 	if(~selectedinterest2.indexOf(obj.options[obj.selectedIndex].text))	{
 		alert("이미 선택한 분야입니다.");
 	}
 	else {
-		selectedinterest2 += "<li>" + sinterest1 + " > " + interest2List[interest2List.length-1] + "</li>";	 
+		interest2List.push(obj.options[obj.selectedIndex].text);
+		selectedinterest2 += interest2List[interest2List.length-1];	 
+		 addInterest2List = "<input type = 'text' id = 'isel" + count +  "'></input> <input type = 'button' value = '삭제' id = 'idel" + count + "' onclick = 'deleteInterest(" + count + ")'>";
+		$('#int2').append(addInterest2List);  
+		document.getElementById('isel'+ count).value = interest2List[interest2List.length-1];
+		count++;
 	}
-		target.innerHTML = selectedinterest2;
- } 
+	
+	   
+ }  
    
-
+   function deleteInterest(num) {
+		selectedinterest2 = selectedinterest2.replace(interest2List[num],"")		// 중복금지차원
+		$('#isel' + num).remove(); 
+		$('#idel' + num).remove(); 
+	 	
+   } 
+   
+   function deleteCareer(num) {
+	   selectedCareer = selectedCareer.replace(careerList[num],"")		// 중복금지차원
+		$('#csel' + num).remove(); 
+		$('#cdel' + num).remove(); 
+	 	
+   }
 	 
 </script>
 

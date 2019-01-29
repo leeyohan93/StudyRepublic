@@ -4,9 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.mohajo.studyrepublic.domain.InterestLocation;
 import org.mohajo.studyrepublic.domain.Member;
-import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,7 +25,7 @@ public class MemberController {
 		
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
-	@RequestMapping("/memberAll")
+	@RequestMapping("/member")
 	public String memberInfo (Model model) {
 		List<Member> member = memberrepository.findAll();	// findAll()은 전체 테이블 조회함을 의미.
 		model.addAttribute("member", member);
@@ -35,29 +33,19 @@ public class MemberController {
 		return "/member/member_info";	
 	}
 	
-	@RequestMapping("/signup")
+	@RequestMapping("member/signup")
 	public String signup (Model model) {
 		return "signup/signup_signup";	
 	}
 	
-	@RequestMapping("/insertMember")
+	@RequestMapping("/member/insert")
 	public String insertMember(Model model, HttpServletRequest request, @ModelAttribute Member member) {
-		member.setPassword(bcryptpasswordencoder.encode(member.getPassword()));
-/*		String interestlocation1 = request.getParameter("interestlocation1");*/
-/*		member.setInterestlocation(interestlocation1); */
-/*		member.setInterestlocation(member.getInterestlocation());*/
-		
-/*		public void setIntereslocation(String location) {		// set메서드 재정의함.N으로 초기값 주기 위함.	// 등급이 업데이트 되면 어떻게될까.. 등급을 업데이트 하는 것인가 같은 아이디에 등급을 하나 더 추가하는 것인가.. securityConfig에서 hasRole을 두 개 다 가질 수 있을 것인가.... 
-			InterestLocation il = new InterestLocation();
-			il.setInterestLocation(location);
-			this.interestlocation.add(il);
-		}*/
-		
+		member.setPassword(bcryptpasswordencoder.encode(member.getPassword()));	
 		memberrepository.save(member);	
-		return "redirect:/memberAll/";		
+		return "redirect:/member/";		
 	}
 	
-	@RequestMapping("/memberInquery")					// 회원 한명 한명 조회.
+	@RequestMapping("/member/inquery")					// 회원 한명 한명 조회.
 	public String inquery(Model model, @RequestParam("id") String id) {
 			Member member = memberrepository.findById(id).get();		// findById(id).get() = select * from member where id = id와 동일.	
 			model.addAttribute("member", member);
@@ -65,29 +53,30 @@ public class MemberController {
 			return "member/member_inquery";
 	}
 	
-	@RequestMapping("/memberUpdate")				// 수정할 정보를 뿌려줌. // 현재는 비밀번호만 수정 가능하게 해놓음 ㅎ.
-	public String update(Model model, @RequestParam("id") String id) {		
+	@RequestMapping("/member/update")				// 수정할 정보를 뿌려줌. // 현재는 비밀번호만 수정 가능하게 해놓음 ㅎ.
+	public String update(Model model, @RequestParam("id") String id) {				
 		Member member = memberrepository.findById(id).get();		//findById(id).get() = select * from member where id = id와 동일.	
 		model.addAttribute("member", member);	
 		return "member/member_update";				// 입력한 값을 저장.
 
 	}
 	
-	@RequestMapping("/memberUpdateAction")		// 수정정보를 업데이트함.
-	public String updateAction(@RequestParam("id") String id, @RequestParam("password") String password) {
-		Member member =  memberrepository.findById(id).get(); 	
 	
+	@RequestMapping("/member/updateAction")		// 수정정보를 업데이트함.
+	public String update_action(@RequestParam("id") String id, @RequestParam("password") String password, @ModelAttribute Member member) {
+		member =  memberrepository.findById(id).get(); 	
 		member.setPassword(bcryptpasswordencoder.encode(password));	
 		memberrepository.save(member);
-		return "redirect:/memberAll/";
-
+		return "index";
 	}
 	
-	@RequestMapping("/memberDelete")		// 회원 삭제.
+	
+	
+	@RequestMapping("/member/delete")		// 회원 삭제.
 	public String delete(@RequestParam("id") String id) {	
 		memberrepository.deleteById(id);					// delete from member where id = id와 동일.
 		System.out.println("-------------------- id: " + id + " 삭제 완료. ------------------");
-		return "redirect:/memberAll/";
+		return "redirect:/member/";
 	}
 	
 	@RequestMapping("/admin") 

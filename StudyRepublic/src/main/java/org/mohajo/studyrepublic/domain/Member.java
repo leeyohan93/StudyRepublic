@@ -103,7 +103,6 @@ public class Member implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name = "id")
 	private List <InterestLocation> interestlocation;
-	
 /*	public void setInterestlocation(String location) {		// set메서드 재정의함.N으로 초기값 주기 위함.	// 등급이 업데이트 되면 어떻게될까.. 등급을 업데이트 하는 것인가 같은 아이디에 등급을 하나 더 추가하는 것인가.. securityConfig에서 hasRole을 두 개 다 가질 수 있을 것인가.... 
 		InterestLocation il = new InterestLocation();
 		il.setInterestLocation(location);
