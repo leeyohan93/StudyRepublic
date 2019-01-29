@@ -101,7 +101,7 @@
 	
 <!-- 제목, 공지, 비공개, -->
   <div>
-	<input id ="title" name ="title" type="text" placeholder="제목을 입력해주세요."> 
+	<input id ="title" name ="title" type="text" placeholder="제목을 입력해주세요." th:value="${freeBoard.title}"> 
     <input id ="notice" name ="notice" type="checkbox" value="0">
     <span class ="titleOpt">공지</span> 
     <input id="hide" name ="hide" type="checkbox" value="0">
@@ -114,7 +114,7 @@
   <!-- 다음 에디터 적용 글내용 -->
   <div id = "editor"></div>
     <div>  
-       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;"></textarea>
+       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;" th:text="${freeBoard.content}"></textarea>
 	<input name ='id' type='hidden' value="aaa123"> <br/>
 	</div>
 	

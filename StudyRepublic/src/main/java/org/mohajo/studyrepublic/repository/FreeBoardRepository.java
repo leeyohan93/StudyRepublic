@@ -23,6 +23,7 @@ import com.querydsl.core.types.Predicate;
 
 public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, QuerydslPredicateExecutor<FreeBoard>{
 
+
 	public default Predicate makePredicate(String searchType, String keyword) {
 
 		BooleanBuilder builder = new BooleanBuilder();
@@ -52,9 +53,7 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, 
 		return builder;
 	}
 	
-//	@Modifying
-//	@Query("UPDATE freeboard SET hit=hit+1 where freeBoardId = id")
-//	public void hit(@Param("id")int freeBoardId);
-
+	
+	
 
 }

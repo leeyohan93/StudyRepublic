@@ -6,18 +6,82 @@
  -->
  
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{/layout/boardLayout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
 
-	<form action="">
-	<button name="goBeforeFreePage">이전글</button>
-	</form>
-	<form action="">
-	<button name="goAfterFreePage">다음글</button>	
-	</form>
-	
-<p>[[${freeBoard}]]</p>	
-	
-	<p>[[${vo}]]</p>	
-	<p>[[${list}]]</p>	
-	
+<title>게시판 글목록</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<style>
+
+#content{ 
+   resize :none; 
+   width: 80%; 
+  padding: 12px 13px; 
+  border: 1px solid #ccc; 
+	border-radius: 4px; 
+  font-size:16px; 
+ } 
+
+#comment{
+  display:none;
+}
+</style>
+	<body>
+  
+    <div class= "container">
+      
+      
+      <div class="beforeAfter">
+ 
+       <button class ="btn btn-default" name="goBeforeFreePage" id="goBeforeFreePage" type="submit" formaction="">이전글 ▲</button>
+        <button class ="btn btn-default" name="goBeforeFreePage" id="goBeforeFreePage" type="submit" formaction="">다음글 ▼</button>
+      
+      </div>
+
+      
+      <div class ="row1">
+      <span name ="title" id ="title">[[${freeBoard.title}]]<span> 
+        <span class ="bar">|</span>
+        <span name ="boardName2" id ="boardName">자유게시판</span>
+        </div>
+        
+        
+      <div class ="row2">
+        <span name ="id" id ="id">[[${freeBoard.id}]]</span>
+        <span name ="hit" id ="hit">조회수&nbsp[[${freeBoard.hit}]]</span>
+        <span name ="likeCount" id ="likeCount">추천&nbsp[[${freeBoard.likeCount}]]</span>
+        <spane name ="date" id ="date">[[${#dates.format(freeBoard.date, 'yyyy-MM-dd HH:mm')}]]</span>
+        </div>
+        
+        <div class ="contentArea">
+          <textarea name ="content" id="content" rows="15" readonly >[[${freeBoard.content}]]</textarea>
+        
+          
+            </div>
+        
+        <div class="row3">
+          <span name="replyCount" id="replyCount">댓글수&nbsp[[${freeBoard.replyCount}]]</span>
+          <a class="btn btn-default" role="button" id="likeCount" name="likeCount">추천</a>
+          <a tpye="hidden" th:href="@{'modifyBoard'(freeBoardId=${freeBoard.freeBoardId})}" name="report" id="report">신고</a>
+        </div>
+          
+         <div class= "row4">
+         
+        <a class="btn btn-default" role="button" id="comment" name="comment" href="">답글</a>
+        <a class="btn btn-default" role="button" id="modify" name="modify" th:href= "@{'modifyBoard'(freeBoardId=${freeBoard.freeBoardId})}" >수정</a>
+        <a class="btn btn-default" role="button" id="status" name="status" th:href="@{'deleteFreeBoard'(freeBoardId=${freeBoard.freeBoardId})}">삭제</a>
+        <a class="btn btn-default" role="button" id="list" name="list" th:href="@{listFreeBoard}">목록</a>
+        <a class="btn btn-default" role="button" id="writeBtn" name="writeBtn" th:href="@{writeBoard}">글쓰기</a>
+        
+        </div>
+        
+        
+        
+    </div>
+   </body>
