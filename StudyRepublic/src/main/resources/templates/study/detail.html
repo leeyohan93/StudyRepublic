@@ -8,8 +8,9 @@ layout:decorate="~{/layout/mainLayout}">
 <style type="text/css">
 	
 	.studyDetail {
-		box-shadow: 0.3em 0.3em 10px 3px silver;
 		/* box-shadow: X오프셋 Y오프셋 블러반경 퍼짐반경 색상; */
+/* 		box-shadow: 0.3em 0.3em 10px 3px silver; */
+		box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important;
 		width: 90%;
 		margin: 0 0;
 	}
@@ -55,19 +56,37 @@ layout:decorate="~{/layout/mainLayout}">
 		margin: 0 3em;
 	}
 	
-	.tab-heading {
+	/* .tab-head:after{content:"";display:table;clear:both;*zoom:1} */
+	/* .tab-head .tab-item:disabled{cursor:default;color:#888} */
+	/* .tab-head.one-tab .tab-item{width:100%;margin:0 -1px} */
+	/* .tab-content{display:none;padding-top:30px} */
+	/* .tab-content.on{display:block} */
+	
+	.tab-head {
 		margin: 0;
 	}
 
+	/* .tab-head .tab-item{} */
 	.tab-item {
+		box-sizing:border-box;
+		background-color:#fafafa;
+		border:1px solid #ddd;
+		float:left;
+		height:54px;
+		margin-left:-1px;
+		text-align:center
+	
 		display: inline-block;
 		width: 20%;
 		background-color: gray;
 	}
 	
+	/* .tab-head .tab-item:after{content:"";display:table;clear:both;*zoom:1} */
+	/* .tab-head .tab-item.tab-active{background-color:#fff;border-bottom:1px solid #fff;opacity:1} */
 	.tab-item.tab-active {
 		background-color: white;
-		border-bottom: white;
+		border-bottom:1px solid #fff;
+		opacity:1
 	}
 	
 	.tab-content {
@@ -81,7 +100,8 @@ layout:decorate="~{/layout/mainLayout}">
 		padding: 5px;
 		font: 0.9em white;
 		text-align: center;
-		left: 0.5vm;
+		vertical-align: middle;
+/* 		left: 0.5vm; */
 	}
 	
 </style>
@@ -120,7 +140,7 @@ layout:decorate="~{/layout/mainLayout}">
 			</section>
 			<section class="additional-info">
 				<div class="tab-head">
-					<ul class="tab-heading">
+					<ul class="tab-head">
 						<li type="button" class="tab-item tab-active">
 							<span class="txt-tab">리더 정보</span>
 						</li>
