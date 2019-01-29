@@ -60,12 +60,14 @@ layout:decorate="~{/layout/mainLayout}">
 
 			<section class="additional-info">
 				<div class="tab-head">
-					<button type="button" class="tab-item tab-active">
+				<ul>
+					<li type="button" class="tab-item tab-active">
 						<span class="txt-tab">리더 정보</span>
-					</button>
-					<button type="button" class="tab-item">
+					</li>
+					<li type="button" class="tab-item">
 						<span class="txt-tab">강의 후기</span>
-					</button>
+					</li>
+					</ul>
 				</div>
 				<div class="tab-content leader-info">
 					<p th:text="${study.member.name}">리더 이름</p>
@@ -82,7 +84,14 @@ layout:decorate="~{/layout/mainLayout}">
 	</div>
 
 	<script type="text/javascript">
-		//     	1. 탭 메뉴 : 완료된 스터디의 경우에만 리뷰 탭 class=active & 버튼 활성화 
+		//     	1. 탭 메뉴 : 완료된 스터디의 경우에만 리뷰 탭 class=active & 버튼 활성화
+		function fetchTabContent(e) {
+			
+			fetch('리더 정보').then(function(response){response.text().then(function(text){document.querySelector('').innerHTML = text;})})
+			
+		} 
+		
+		
 		//     	2. 스터디 가입 : 이미 가입된 스터디인 경우, 거절/탈퇴한 스터디인 경우, 	가입 승인 대기중인 스터디인 경우 --> 메시지
 		// 					 정원 초과된 스터디인 경우 --> 버튼 비활성화
 	</script>

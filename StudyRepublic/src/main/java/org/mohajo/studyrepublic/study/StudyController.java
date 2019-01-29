@@ -13,6 +13,8 @@ import org.mohajo.studyrepublic.repository.ReviewRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,9 +69,10 @@ public class StudyController {
 			//분야코드, 스터디 (진행상태, 요일)
 			//완료, 해체 불포함
 		
+		Pageable paging;
 //		TypeCD typeCd = new TypeCD();	//Component - Autowired 로 분리할 것 --> 분리
 		typeCd.setTypeCode(typeCode);
-		List<Study> list = sr.findValidStudyByTypeCode(typeCd);
+		List<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
 		
 		model.addAttribute("list", list);
 		model.addAttribute("typeCode", typeCode);
