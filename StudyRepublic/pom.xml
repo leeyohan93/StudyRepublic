@@ -79,11 +79,11 @@
 
 		<!-- Thymeleaf Layout Dialect -->
 		<!-- https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect -->
-<!-- 		<dependency>
+		<dependency>
 			<groupId>nz.net.ultraq.thymeleaf</groupId>
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>2.3.0</version>
-		</dependency> -->
+		</dependency>
 		
 		 <dependency>
         <groupId>com.github.zhanhb</groupId>
@@ -137,5 +137,3 @@
 	</build>
 
 </project>
-
-
