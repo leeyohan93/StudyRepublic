@@ -3,6 +3,7 @@ package org.mohajo.studyrepublic.domain;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 
 import org.springframework.stereotype.Component;
 

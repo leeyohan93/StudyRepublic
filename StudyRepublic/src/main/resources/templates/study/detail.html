@@ -11,8 +11,13 @@ layout:decorate="~{/layout/mainLayout}">
 		/* box-shadow: X오프셋 Y오프셋 블러반경 퍼짐반경 색상; */
 /* 		box-shadow: 0.3em 0.3em 10px 3px silver; */
 		box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important;
-		width: 90%;
-		margin: 0 0;
+		border:	0.5px solid rgba(0,0,0,0.12);
+		width: 100%;
+		margin: 1em auto;
+		padding: 2em 2em;
+		position:relative;
+		min-width: inherit;
+		
 	}
 	
 	.basic-info {
@@ -21,39 +26,72 @@ layout:decorate="~{/layout/mainLayout}">
 	}
 	
 	.essential-info-1 {
-		padding: 8px;
-		display: block;
-		margin: 1em 2em;
+		margin: 2em 2em;
 	}
 	
 	.essential-info-2 {
-		display: block;
-		margin: 3em;
+		margin: 1em 2.5em;
 	}
 	
 	.box-info {
-		position: absolute;
+		display: inline-block;
+		top: 8px;
+		right: 16px;
 		float: right;
 		width: 100px;
-		background-color: gray;
+		background-color: lightgray;
 		font: bold 20px;
 		margin: 0 2em;
-		z-index: 1;
+		vertical-align: 50%;
+		position: absolute;
+		text-align: center;
+		
+	}
+	
+	.enroll-count {
+		font: bold x-large;
+		padding: 0.5em 0;
+	}
+	
+	.level {
+		background-color: silver;
+		font: white;
+		padding: 0.3em 0;
+	}
+	
+	.row {
+		margin: 0.5em 1em;
+	}
+	
+	.tag {
+		border-radius: 1em;
+		background-color: lightblue;
+		font: white bold;
+		width: translateX(120%);
+		padding: 0 0.8em;
+		margin: 0.2em;
+	}
+	
+	
+	.intro {
+		width: calc(100%-100px);
+		margin: 1.5em 3em 2em;
+		
 	}
 	
 	.intro-content {
 		width: calc(100%-100px);
-		border: solid 1px silver;
+		border: solid 1px #ddd;
 		padding: 1em;
-		margin: 0 3em;
+/* 		margin: 0 3em 2em; */
 		display: block;
 	}
 	
 	.additional-info {
 		width: calc(100%-100px);
-		display: block;
-		padding: 1em;
-		margin: 0 3em;
+/* 		display: block; */
+/* 		padding: 1em; */
+		margin: 0 3em 2em;
 	}
 	
 	/* .tab-head:after{content:"";display:table;clear:both;*zoom:1} */
@@ -62,35 +100,43 @@ layout:decorate="~{/layout/mainLayout}">
 	/* .tab-content{display:none;padding-top:30px} */
 	/* .tab-content.on{display:block} */
 	
-	.tab-head {
+	.tab-head0 {
 		margin: 0;
+/* 		display: block; */
+		display: inline-flex;
+		width: 100%;
+		position: relative;
+/* 		top: 0.5px; */
 	}
 
 	/* .tab-head .tab-item{} */
-	.tab-item {
+	.tab-item0 {
 		box-sizing:border-box;
 		background-color:#fafafa;
 		border:1px solid #ddd;
 		float:left;
-		height:54px;
 		margin-left:-1px;
-		text-align:center
-	
+		margin-bottom:-1px;
+		text-align:center;
+		
 		display: inline-block;
+		height: auto;
 		width: 20%;
-		background-color: gray;
 	}
 	
 	/* .tab-head .tab-item:after{content:"";display:table;clear:both;*zoom:1} */
 	/* .tab-head .tab-item.tab-active{background-color:#fff;border-bottom:1px solid #fff;opacity:1} */
-	.tab-item.tab-active {
+	.tab-item0.tab-active {
 		background-color: white;
 		border-bottom:1px solid #fff;
 		opacity:1
 	}
 	
 	.tab-content {
-		border: solid 1px silver;
+		display: block;
+		border: solid 1px #ddd;
+		width: 100%;
+		padding: 1em;
 	}
 
 	.sticky {
@@ -100,8 +146,14 @@ layout:decorate="~{/layout/mainLayout}">
 		padding: 5px;
 		font: 0.9em white;
 		text-align: center;
-		vertical-align: middle;
-/* 		left: 0.5vm; */
+		margin: 0 auto 2em;
+		left: 50%;
+ 		transform: translateX(-50%);
+		
+	}
+	
+	.invisible {
+		display: none;
 	}
 	
 </style>
@@ -113,23 +165,30 @@ layout:decorate="~{/layout/mainLayout}">
 		<h3>스터디 상세</h3>
 		<section class="studyDetail">
 			<section class="basic-info">
-				<div class="essential-info-1">
-					<div>스터디명	<span th:text="${study.name}">name</span></div>	
-<!-- 					기간	<span th:text="|${#dates.format(study.startDate, 'yyyy-MM-dd')}~${#dates.format(study.endDate, 'yyyy-MM-dd')}|">period</span>(<span th:text="${#utilityClass.getDifferenceInDays(study.startDate-study.endDate)}">n</span>개월) -->
-					<div>기간	<span th:text="|${study.startDate}~${study.endDate}|">period</span>(<span th:text="${dayDiff}">n</span>개월)</div>
-					<div>일시	<span th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</span>(<span th:text="${timeDiff}">n</span>시간)</div>
+				<div class="row essential-info-1">
+					<div class="col-md-2 column-name">스터디명</div>
+					<div class="col-md-10 column-value"><span th:text="${study.name}">name</span></div>	
+					<div class="col-md-2 column-name">기간</div>
+					<div class="col-md-10 column-value"><span th:text="|${study.startDate}~${study.endDate}|">period</span>(<span th:text="${dayDiff}">n</span>개월)</div>
+					<div class="col-md-2 column-name">일시</div>
+					<div class="col-md-10 column-value"><span th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</span>(<span th:text="${timeDiff}">n</span>시간)</div>
 				</div>
-				<div class="essential-info-2">
-					<div>유형	<i class="tag btn-default" th:text="${study.typeCode.codeValueKorean}">type</i></div>				
-					<div>진행방식	<i class="tag btn-default" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
-					<div>지역	</div>
-					<div>분야	<th:block th:each="interest : ${study.studyInterest}"><i class="tag btn-primary" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
-					<div>가격	</div>
+				<div class="row essential-info-2">
+					<div class="col-md-2 column-name">유형</div>
+					<div class="col-md-10 column-value"><i class="tag-primary" th:text="${study.typeCode.codeValueKorean}">type</i></div>
+					<div class="col-md-2 column-name">진행방식</div>
+					<div class="col-md-10 column-value"><i class="tag" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
+					<div class="col-md-2 column-name">지역</div>
+					<div class="col-md-10 column-value"><i class="tag" th:text="${study.studyLocation}">location</i></div>
+					<div class="col-md-2 column-name">분야</div>
+					<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
+					<div class="col-md-2 column-name" th:if="${study.price}">가격</div>
+					<div class="col-md-10 column-value"><th:block th:text="${study.price}">studyPrice</div>
 				</div>
 				<div class="box-info">
-					<p th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</p>
+					<div class="enroll-count" th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</div>
 					<i class="tag btn-primary btn-xs" th:text="${study.studyStatusCode.codeValueKorean}">study status</i>
-					<p>레벨: <th:block th:text="${study.levelCode.codeValueKorean}">level</th:block></p> 
+					<div class="level">레벨: <strong><th:block th:text="${study.levelCode.codeValueKorean}">level</th:block></strong></div> 
 				</div>
 			</section>
 			<section class="intro">
@@ -139,12 +198,12 @@ layout:decorate="~{/layout/mainLayout}">
 				</div>
 			</section>
 			<section class="additional-info">
-				<div class="tab-head">
-					<ul class="tab-head">
-						<li type="button" class="tab-item tab-active">
+				<div class="tab-head0">
+					<ul class="tab-head0">
+						<li type="button0" class="tab-item0 tab-active">
 							<span class="txt-tab">리더 정보</span>
 						</li>
-						<li type="button" class="tab-item">
+						<li type="button0" class="tab-item0">
 							<span class="txt-tab">강의 후기</span>
 						</li>
 					</ul>
@@ -154,11 +213,11 @@ layout:decorate="~{/layout/mainLayout}">
 					<p th:text="${study.member.memberInterest}">관심 분야</p>
 					<p th:text="${studyMember}">활동 내역</p>
 				</div>
-				<div class="tab-content review invisible">
+				<div class="tab-content review">
 					<p th:text="${review}">후기 리스트</p>
 				</div>
 			</section>
-			<button class="btn-primary btn-float sticky">스터디 가입 신청</button>
+			<button class="sticky">스터디 가입 신청</button>
 		</section>
 		</div>
 	</div>

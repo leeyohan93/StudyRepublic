@@ -33,9 +33,9 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 
 	@Query(value = "select s from Study s where s.typeCode = ?1 and s.studyStatusCode not in ('C', 'D')")
 	public List<Study> findValidStudyByTypeCode(TypeCD typeCode, Pageable paging);
-	//@Query(value = "select s from (select s from Study s where s.typeCode = ?1) where s.studyStatusCode in ('C', 'D')")
-	//위 테스트 해보고, 성능 비교
 	//쿼리문 안에는 Study 클래스에 설정한 TypeCD 타입 변수명을 사용한다.
+		//@Query(value = "select s from (select s from Study s where s.typeCode = ?1) where s.studyStatusCode in ('C', 'D')")
+		//위 테스트 해보고, 성능 비교
 	//OrderBy 를 등록일, 시작일로 구분
 	
 }
