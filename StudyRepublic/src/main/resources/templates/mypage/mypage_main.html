@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org">
+<html xmlns:th="http//www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<!-- layout:decorate="~{/layout/mainLayout}" -->
 <head>
 <meta charset="UTF-8">
 <title>회원정보</title>
@@ -112,20 +115,25 @@
 </head>
 <body>
 
-	<div class="left"> 
-  <div class="premium">프리미엄등급신청</div>
-  <div class="tutor">강사페이지</div>
- </div>
 
+<nav>
+	<div class="left"> 
+  		<div class="premium">프리미엄등급신청</div>
+  		<div class="tutor">강사페이지</div>
+	</div>
+</nav>
+<article>
 <div class="top_middle">
   <div class="top_left">
       <div class="status">
-         ...님이 접속중입니다.(강사) <br> 
+        <span sec:authentication="principal.member.nickname"></span>님이 접속중입니다. <br>
          <a href="naver.com">쪽지함</a>
          <a href="naver.com">활동정보</a>
       </div>
+       
+     
    
-    <div class="profile">프로필사진</div>
+     <div class="profile">프로필사진</div>
     <div class="member_info">
     <tr th:each="mbr : ${mbr}">
        ID:<td th:text=${mbr.id}/><br>
@@ -134,35 +142,50 @@
          생년월일:<td th:text=${mbr.birth}/><br>
      E-Mail:<td th:text=${mbr.email}/><br>
          연락처:<td th:text=${mbr.phonenumber}/><br>
-      <tr>       
+      </tr>       
     </div>
-    <button type="button" class="membermodify">수정하기</button>
-   </div>
+    <button type="button" onclick="location.href='modimber'" class="membermodify">수정하기</button>
+   
+ </div> 
+   
+
+
+   
   
   <div class="top_right">
     <button type="button" class="scheduler">MY스케줄러 </button>
-    
+   
     <div class="studystatus">
-      현재진행중인 스터디<br>
+      	현재진행중인 스터디<br>
       <br>일반스터디<br>
-      <li>현재진행중인스터디가 없습니다.</li>
+	 <tr th:each="sr : ${sr}">
+	 	<td>
+	 		<li th:if="${sr.name != null}" th:text="${sr.name}"></li>
+	 		<li th:unless="${sr.name != null}" >현재 진행중인 스터디가없습니다.</li>	 
+	 	</td>
+	 </tr>
 
-     <br> 
-      프리미엄스터디<br>
+
+	
+     <br>프리미엄스터디<br>
       <li>현재진행중인스터디가 없습니다.</li>
-      
+    </div>    
     </div>
-    
-  
-  </div>
-
-  
+   
   
   <div>
+ 
+  
+  
+  
   
   <div class="mid_middle">관심지역</div>
   
   <div class="low_middle">관심분야</div>
+  
+  </div>
+ </article>	 
+ 
 
 
 </body>
