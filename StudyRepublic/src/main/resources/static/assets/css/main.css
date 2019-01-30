@@ -3044,7 +3044,7 @@ input::-moz-focus-inner {
 		height: 100%;
 		-webkit-overflow-scrolling: touch;
 		background: #585858;
-		color: #ffffff;
+		color: black;
 		cursor: default;
 		visibility: hidden;
 		z-index: 10002;

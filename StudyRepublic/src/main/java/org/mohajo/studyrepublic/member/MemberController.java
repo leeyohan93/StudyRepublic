@@ -84,6 +84,8 @@ public class MemberController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		model.addAttribute("id", id);
+		System.out.println(auth);
+		System.out.println(id);
 		return "etc/admin";
 	}
 	
