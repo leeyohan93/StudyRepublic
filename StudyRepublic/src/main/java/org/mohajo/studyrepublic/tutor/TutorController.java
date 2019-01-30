@@ -1,25 +1,40 @@
 package org.mohajo.studyrepublic.tutor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.mohajo.studyrepublic.domain.CareerCD;
 import org.mohajo.studyrepublic.domain.EducationCD;
+import org.mohajo.studyrepublic.domain.GradeCD;
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
+import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.repository.CareerCDRepository;
 import org.mohajo.studyrepublic.repository.EducationCDRepository;
 import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
+import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.MemberRolesRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class TutorController {
-
+	
+	@Autowired
+	MemberRepository memberrepository;
+	@Autowired
+	MemberRolesRepository memberrolesrepository;
 	@Autowired
 	TutorRepository tutorrepository;
 	@Autowired
@@ -42,8 +57,12 @@ public class TutorController {
 		
 	}
 	
-	@RequestMapping("/signupTutor")
+	@RequestMapping("/tutor/signup")
 	public String signupTutor(Model model) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		model.addAttribute("id", id);
 		
 		List <CareerCD> careercd = careerCDRepository.findAll();
 		model.addAttribute("careercd", careercd);
@@ -74,4 +93,32 @@ public class TutorController {
 		
 	}
 	
+	
+	@RequestMapping("/tutor/insert")
+	public String insertTutor(Model model,  @ModelAttribute Tutor tutor) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+				
+		Member member = memberrepository.findById(id).get();
+		List<MemberRoles> roles = memberrolesrepository.findByRole(id);
+		MemberRoles memberroles = new MemberRoles();
+		memberroles.setRoleName("W");
+		roles.add(memberroles);
+		member.setGradeCD(new GradeCD("W"));
+		member.setRoles(roles);	
+		memberrepository.save(member);
+		tutorrepository.save(tutor);
+
+		return "redirect:/";		
+	}
+	
+	@RequestMapping("/tutor/inquery")
+	public String inqueryTutor(Model model, @RequestParam String id) {
+		
+		Tutor tutor = tutorrepository.findByTutor(id);
+		model.addAttribute("tutor", tutor); 
+		
+		return "tutor/tutor_signupinquery";		
+	}	
 }

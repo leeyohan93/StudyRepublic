@@ -23,7 +23,7 @@ public class InterestLocation {
 	@Column(name = "interest_location_id", unique = true, nullable = false)
 	private int interestLocationId;
 	
-	@Column(name = " interest_location")
+	@Column(name = "interest_location")
 	String interestLocation;
 	
 	

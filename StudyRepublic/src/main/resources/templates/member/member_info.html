@@ -36,6 +36,8 @@ tr, td {
 <td>가입일</td>
 </tr>
 
+
+
 <tr th:each="member : ${member}">
 <td><a th:href="@{'/member/inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td>
 <td th:text = "${member.memberStatusCD.codeValueKorean}"></td>
@@ -51,6 +53,7 @@ tr, td {
 
 </tr>
 </table>
+
 
 
 <a href = "/member/signup">회원가입</a>
