@@ -76,8 +76,8 @@ public class TutorController {
 		List <Interest2CD> interest2cd = interest2CDRepository.findAll();
 		model.addAttribute("interest2cd", interest2cd);
 		
-		List <Interest2CD> pinterest2cd = interest2CDRepository.Pinterest2List();
-		model.addAttribute("pinterest2cd", pinterest2cd);
+		List <Interest2CD> Pinterest2cd = interest2CDRepository.Pinterest2List();
+		model.addAttribute("pinterest2cd", Pinterest2cd);
 		
 		List <Interest2CD> Dinterest2cd = interest2CDRepository.Dinterest2List();
 		model.addAttribute("dinterest2cd", Dinterest2cd);
