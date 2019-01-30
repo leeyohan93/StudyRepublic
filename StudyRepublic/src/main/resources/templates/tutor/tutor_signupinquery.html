@@ -18,7 +18,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 </tr> 
 
 <tr th:each="t : ${tutor}">
-<!-- <td><a th:href="@{'inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td> -->
+<td><a th:href="@{'inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td>
 <td th:text = "${t.member.id}"></td>
 <td th:text = "${t.member.name}"></td>
 <td th:text = "${t.tutorNumber}"></td>

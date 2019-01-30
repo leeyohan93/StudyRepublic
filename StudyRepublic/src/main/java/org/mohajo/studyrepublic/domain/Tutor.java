@@ -33,7 +33,7 @@ public class Tutor implements Serializable {
 	@Column(name = "tutor_number")
 	private int tutorNumber;
 
-/*//	@ManyToOne
+/*	@ManyToOne
 	@Column(name = "EDUCATION_CODE")
 	private EducationCD educationCD;*/
 	
