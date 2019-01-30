@@ -1,10 +1,12 @@
 package org.mohajo.studyrepublic.member;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -40,9 +42,10 @@ public class MemberController {
 	
 	@RequestMapping("/member/insert")
 	public String insertMember(Model model, HttpServletRequest request, @ModelAttribute Member member) {
-		member.setPassword(bcryptpasswordencoder.encode(member.getPassword()));	
+		member.setPassword(bcryptpasswordencoder.encode(member.getPassword()));
+				
 		memberrepository.save(member);	
-		return "redirect:/member/";		
+		return "redirect:/";		
 	}
 	
 	@RequestMapping("/member/inquery")					// 회원 한명 한명 조회.
@@ -76,7 +79,7 @@ public class MemberController {
 	public String delete(@RequestParam("id") String id) {	
 		memberrepository.deleteById(id);					// delete from member where id = id와 동일.
 		System.out.println("-------------------- id: " + id + " 삭제 완료. ------------------");
-		return "redirect:/member/";
+		return "redirect: /";
 	}
 	
 	@RequestMapping("/admin") 
