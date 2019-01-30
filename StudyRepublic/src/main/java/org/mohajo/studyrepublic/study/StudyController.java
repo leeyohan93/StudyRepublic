@@ -3,19 +3,22 @@ package org.mohajo.studyrepublic.study;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.Review;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberId;
-import org.mohajo.studyrepublic.domain.StudyNoticeboard;
+import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TypeCD;
 import org.mohajo.studyrepublic.repository.LeveltestRepository;
 import org.mohajo.studyrepublic.repository.LeveltestResponseRepository;
+import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.PaymentRepository;
 import org.mohajo.studyrepublic.repository.ReviewRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
+import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +27,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.java.Log;
 
@@ -58,16 +60,23 @@ public class StudyController {
 	PaymentRepository pr;
 	
 	@Autowired
+	StudyNoticeboardRepository snbr;
+
+	@Autowired
+	MemberRepository mr;
+	
+	@Autowired
+	TutorRepository tr;
+	
+	@Autowired
 	TypeCD typeCd;
 	
 	@Autowired
 	StudyMemberId studyMemberId;
 	
 	@Autowired
-	StudyNoticeboardRepository snbr;
-	
-	@Autowired
 	StudyMember studyMember;
+	
 	
 	
 	@RequestMapping("/list/{typeCode}")
@@ -92,6 +101,15 @@ public class StudyController {
 		return "study/list";
 	}
 	
+	/**
+	 * @author	이미연
+	 * @return	스터디 상세 페이지 (/study/detail.html), 또는 에러 페이지 (/study/404.html)
+	 * - 잘못된 studyId 값이 넘어오는 경우, 에러 페이지로 이동
+	 * - 출력할 데이터는 다음과 같다:
+	 * 	- 공통:			스터디, 리더의 회원 정보 및 활동내역
+	 * 	- 프리미엄 스터디:	튜터 정보 및 활동내역
+	 * 	- 완료된 스터디:		리뷰 정보 (평균별점)
+	 */
 	@RequestMapping("/detail/{studyId}")
 	public String detail(@PathVariable("studyId") String studyId, Model model) {
 		
@@ -108,35 +126,61 @@ public class StudyController {
 				//+ 스터디멤버 where studyStatusCode in ('LE', 'ME') where id = ?
 
 		Study study = sr.findById(studyId).get();		
-		studyMemberId.setStudyId(studyId);
-//		StudyMember sm = new StudyMember();	//org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: org.mohajo.studyrepublic.domain.StudyMember; nested exception is java.lang.IllegalStateException: org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: org.mohajo.studyrepublic.domain.StudyMember
-//		studyMember.setStudyMemberId(studyMemberId);
-//		List<Review> review = rr.findByStudyMemberId(studyId);
-//		List<Review> review = rr.findByStudyMemberId(study);
-//		List<Review> review = rr.findByStudyMemberId(studyMember);
-//		List<Review> review = rr.findByStudyId(studyMember);
-//		List<Review> review = rr.findAllByStudyId(studyId);
-		studyMember.setStudy(study);
-		String str = study.getStudyId();
-//		List<Review> review = rr.findByStudyId2(str);
-		List<Review> review = rr.findByStudyId(studyId, "admin123");
-//		List<Review> review = rr.findAll();
+		log.info(study.toString());
 		
+		if(study == null) {
+			return "/study/404";
+		}
+		
+		// 스터디 진행 시간 및 기간을 계산한다. (추후 자바스크립트로 대체할 수 있음.)
 		long dayDiffMillies = Math.abs(study.getStartDate().getTime() - study.getEndDate().getTime());
 		long dayDiff = TimeUnit.DAYS.convert(dayDiffMillies, TimeUnit.MILLISECONDS);
-		
 		long timeDiffMillies = Math.abs(study.getStartTime().getTime() - study.getEndTime().getTime());
 		long timeDiff = TimeUnit.HOURS.convert(timeDiffMillies, TimeUnit.MILLISECONDS);
 		
-		log.info(review.toString());
-		log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-		log.info(dayDiff+"");
-		log.info(timeDiff+"");
-
+		// 종료된 스터디에 한해 리뷰 정보를 조회한다.
+		if(study.getStudyStatusCode().getStudyStatusCode()=="C") {
+			//		StudyMember sm = new StudyMember();	//org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: org.mohajo.studyrepublic.domain.StudyMember; nested exception is java.lang.IllegalStateException: org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: org.mohajo.studyrepublic.domain.StudyMember
+			log.info("entered if statement");
+			studyMemberId.setStudyId(studyId);
+			studyMemberId.setId("admin123");
+//			List<Review> review = rr.findByStudyId(studyId, "admin123");
+			List<Review> review = rr.findByStudyId(studyMemberId);
+			log.info(review.toString());
+			model.addAttribute("review", review);
+		}
+		
+		// 리더 정보를 조회한다. (회원정보 및 스터디 활동내역)
+		String leaderId = study.getMember().getId();
+		Member leaderInfo = null;
+		Tutor tutorInfo = null;
+		List<StudyMember> studyActivity = null;
+		
+		switch(studyId.substring(0, 1)) {
+			case "B":
+				//리더정보, 참여스터디
+				leaderInfo = mr.findById(leaderId).get();
+				studyMemberId.setId(leaderId);
+				studyMemberId.setStudyId(".");
+				studyActivity = smr.findStudyActivityByStudyMemberId(studyMemberId);
+				break;
+			case "P":
+				//강사정보, 개설스터디
+				tutorInfo = tr.findByIdColumn(leaderId);
+				log.info(leaderInfo.toString());
+				studyMemberId.setId(leaderId);
+				studyMemberId.setStudyId(".");
+//				studyActivity = smr.findTutorStudyActivityByStudyMemberId(studyMemberId);
+				log.info(studyActivity.toString());
+				break;
+		}
+		
 		model.addAttribute("study", study);
-		model.addAttribute("review", review);
-		model.addAttribute(dayDiff);
-		model.addAttribute(timeDiff);
+		model.addAttribute("leaderInfo", leaderInfo);
+		model.addAttribute("tutorInfo", tutorInfo);
+		model.addAttribute("studyActivity", studyActivity);
+		model.addAttribute("dayDiff", dayDiff);
+		model.addAttribute("timeDiff", timeDiff);
 
 		return "/study/detail";
 	}

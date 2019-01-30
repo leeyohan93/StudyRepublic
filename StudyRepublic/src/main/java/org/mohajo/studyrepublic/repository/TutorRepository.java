@@ -3,6 +3,7 @@ package org.mohajo.studyrepublic.repository;
 
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author 이요한
@@ -13,5 +14,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 
 public interface TutorRepository extends JpaRepository<Tutor, Integer>{
+
+	@Query(value = "select t from Tutor t where id = ?1")
+	public Tutor findByIdColumn(String id);
+	
+	
 
 }
