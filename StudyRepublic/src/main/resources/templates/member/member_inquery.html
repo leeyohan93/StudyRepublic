@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{./layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>회원정보</title>
 </head>
 <body>
+
+
+
+<!-- <header layout:fragment = "header"></header> -->
+
+
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 
 <table th:inline = "text" border = "1">
 <tr>
@@ -22,6 +33,7 @@
 <td>프로필사진 원본명</td>
 <td>프로필사진 저장명</td>
 <td>가입일</td>
+<td>관심지역</td>
 </tr>
 
 <tr th:each="m : ${member}">
@@ -36,16 +48,21 @@
 <td th:text = "${m.email}"></td>
 <td th:text = "${m.phonenumber}"></td>
 <td th:text = "${m.visibility}"></td>
-<td th:text = "${m.profile_origin_name}"></td>
-<td th:text = "${m.profile_save_name}"></td>
-<td th:text = "${m.registration_date}"></td>
+<td th:text = "${member.profileOriginName}"></td>
+<td th:text = "${member.profileSaveName}"></td>
+<td th:text = "${member.registrationDate}"></td>
+<td><th:block th:each="location : ${member.interestlocation}">
+	<th:block th:each="innerLocation : ${location}">
+		<th:block th:text = "|${innerLocation.interestLocation}, |">location</th:block>
+	</th:block>
+</th:block></td>
 </tr>
 </table>
 
 <table>
 <tr th:each="m : ${member}">
-<a th:href="@{'update'(id=${m.id})}">수정하고싶니?</a><br>
-<a th:href="@{'delete'(id=${m.id})}">삭제하고싶니?바로삭제되니 조심.</a>
+<a th:href="@{'/member/update'(id=${m.id})}">수정하고싶니?</a><br>
+<a th:href="@{'/member/delete'(id=${m.id})}">삭제하고싶니?바로삭제되니 조심.</a>
 </tr>
 </table>
 <br><br>
@@ -53,5 +70,9 @@
  
 
 </form>
+<!-- <footer layout:fragment = "footer"></footer> -->
+</div>
+</div>
+</div>
 </body>
 </html>

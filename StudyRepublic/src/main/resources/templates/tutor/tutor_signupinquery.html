@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+<meta charset="UTF-8">
+<title>강사신청내역조회</title>
+</head>
+<body>
+
+ <table th:inline = "text" border = "1">
+<tr>
+<td>아이디</td>
+<td>이름</td>
+<td>강사신청번호</td>
+<td>학력</td>
+<td>자기소개</td>
+</tr> 
+
+<tr th:each="t : ${tutor}">
+<td><a th:href="@{'inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td>
+<td th:text = "${t.member.id}"></td>
+<td th:text = "${t.member.name}"></td>
+<td th:text = "${t.tutorNumber}"></td>
+<!-- <td th:text = "${t.educationCD.codeValueKorean}"></td> -->
+<td th:text = "${t.introduction}"></td>
+</tr>
+</table>
+
+</body>
+</html>

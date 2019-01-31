@@ -3,6 +3,7 @@ package org.mohajo.studyrepublic.repository;
 import java.util.List;
 
 import org.mohajo.studyrepublic.domain.QStudy;
+import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.TypeCD;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,10 @@ import com.querydsl.core.types.Predicate;
  * - 기능 설명 1
  */
 public interface StudyRepository extends JpaRepository<Study, String>, QuerydslPredicateExecutor<Study> {
+
+	/**	
+	*	@author	이미연
+	*/
 
 	//페이징
 	public default Predicate makePredicate(String type, String keyword) {
@@ -41,5 +46,21 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 //	/*select avg(score) from review r where study_id = "BO00001";*/
 //	@Query(value = "select avg(score) from Review r where r.studyId = ?1")
 //	public float getAverageScore(String studyId);
+	
+	
+	/**
+	*	@author	이요한
+	*/
+	@Query(value="select * from popular_study where TYPE_CODE='P' order by rand() limit 2",nativeQuery=true)
+	public List<Study> findPrStudyBytypeCode();
+	
+	@Query(value="select * from study natural join study_interest where interest_2_code in ('P02','P08') "
+			+ "and STUDY_STATUS_CODE ='O' order by rand() limit 2",nativeQuery=true)
+	public List<Study> findBsStudyBytypeCode();
+	
+	@Query(value ="select * from (select * from study_member where id= :member AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1"
+			+ " using (study_id) where s1.study_status_code='G'", nativeQuery=true)
+	List<Study> findByMemberId(Member member);
+	
 	
 }

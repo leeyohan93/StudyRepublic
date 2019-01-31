@@ -85,7 +85,6 @@ public class StudyController {
 			//완료, 해체 불포함
 		
 		Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "postDate");
-		//TypeCD typeCd = new TypeCD();	//Component - Autowired 로 분리할 것 --> 분리
 		typeCd.setTypeCode(typeCode);
 		List<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
 		
@@ -152,22 +151,19 @@ public class StudyController {
 		Tutor tutorInfo = null;
 		List<StudyMember> studyActivity = null;
 		
-		switch(studyId.substring(0, 1)) {
-			case "B":
-				//리더정보, 참여스터디
-				leaderInfo = mr.findById(leaderId).get();
-				studyActivity = smr.findStudyActivityById(leaderId);
-				
-				model.addAttribute("leaderInfo", leaderInfo);
-				break;
-				
-			case "P":
-				//강사정보, 개설스터디
-				tutorInfo = tr.findByMemberId(leaderId);
-				studyActivity = smr.findTutorActivityById(leaderId);
-				
-				model.addAttribute("leaderInfo", tutorInfo);
-				break;
+		//리더정보, 참여스터디
+		leaderInfo = mr.findById(leaderId).get();
+		studyActivity = smr.findStudyActivityById(leaderId);
+		
+		model.addAttribute("leaderInfo", leaderInfo);
+		
+		//강사정보, 개설스터디
+		if(studyId.substring(0, 1) == "P") {
+			tutorInfo = tr.findByTutor(leaderId);
+			studyActivity = smr.findTutorActivityById(leaderId);
+			
+			model.addAttribute("tutorInfo", tutorInfo);
+
 		}
 		
 		model.addAttribute("study", study);

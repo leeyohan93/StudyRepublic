@@ -1,12 +1,19 @@
 package org.mohajo.studyrepublic.domain;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = "tutor_interest", schema = "StudyRepublic")
 public class TutorInterest {
 
 	
@@ -15,11 +22,11 @@ public class TutorInterest {
 	@Column(name = "tutor_interest_id")
 	private int tutorInterestId;
 	
-	@ManyToOne
+/*	@ManyToOne
 	@JoinColumn(name = "tutor_number")
-	private Tutor tutor;
+	private Tutor tutor;*/
 	
 	@ManyToOne
-	@JoinColumn(name = "interest_2_cd")
-	private Interest2CD interest2cd;
+	@JoinColumn(name = "INTEREST_2_CODE")
+	private Interest2CD interest2CD;
 }

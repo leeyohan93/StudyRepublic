@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * @author 이요한
+ * @author 윤성호
  * @since 2019.01.22
  * @version
  * - AdminCommentRepository추가
@@ -15,9 +15,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TutorRepository extends JpaRepository<Tutor, Integer>{
 
-	@Query(value = "select t from Tutor t where t.id = ?1")
-	public Tutor findByMemberId(String id);
+	@Query(value = "select * from tutor where id = :id", nativeQuery = true)
+	Tutor findByTutor(String id);
 	
-	
-
 }

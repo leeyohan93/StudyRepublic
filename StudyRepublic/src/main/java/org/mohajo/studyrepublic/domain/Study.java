@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,9 +30,9 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "study", schema = "StudyRepublic")
+@SecondaryTable(name="popular_study")
 public class Study implements Serializable {
 
-	
 	@Id
 	private String studyId;							//스터디 코드
 	
@@ -75,11 +76,11 @@ public class Study implements Serializable {
 	
 	@Temporal(TemporalType.TIME)
 	@Column(nullable = false)
-	private Date startTime =  new Date();							//시작시각
+	private Date startTime;							//시작시각
 	
 	@Temporal(TemporalType.TIME)
 	@Column(nullable = false)
-	private Date endTime = new Date();							//종료시각
+	private Date endTime;							//종료시각
 	
 	@Column(nullable = false)
 	private int enrollCapacity = 5;						//정원
@@ -116,5 +117,16 @@ public class Study implements Serializable {
 	@OneToMany
 	@JoinColumn(name = "study_id")
 	private List<StudyLocation> studyLocation;			//지역
+	
+	/**
+	 * Add sangyong.shin
+	 */
+	/**
+	 * @author	이미연
+	 * - 정상 실행 됐으나, merge 후 에러 남.
+	 */
+	/*@OneToMany(mappedBy="study")
+	private List<StudyMember> studyMember;*/
+	
 	
 }

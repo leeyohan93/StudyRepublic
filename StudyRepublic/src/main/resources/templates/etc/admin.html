@@ -1,12 +1,19 @@
-
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
+
 
 
 <head>
 <title>Thymeleaf3</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
+
+<body>
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 
 <sec:authorize access="isAnonymous()">
 
@@ -21,7 +28,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 </sec:authorize>
 
   
-<body>
+
 
 <div th:if="${id != null}">
 <h2>ㅎㅇㅎㅇ</h2>
@@ -64,7 +71,9 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 </sec:authorize></div> -->
 
 
-
+</div>
+</div>
+</div>
 
 
 

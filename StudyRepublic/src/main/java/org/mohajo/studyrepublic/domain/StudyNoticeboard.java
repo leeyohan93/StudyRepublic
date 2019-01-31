@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -47,11 +48,11 @@ public class StudyNoticeboard extends StudyBoard implements Serializable{
 	@Column
 	private String location;
 	
-	@OneToMany
+	@OneToMany/*(fetch=FetchType.EAGER)*/
 	@JoinColumn(name="study_noticeboard_id")
 	private List<StudyNoticeboardFile> studyNoticeboardFile;
 	
-	@OneToMany
+	@OneToMany/*(fetch=FetchType.EAGER)*/
 	@JoinColumn(name="study_noticeboard_id")
 	private List<StudyNoticeboardReply> studyNoticeboardReply;
 

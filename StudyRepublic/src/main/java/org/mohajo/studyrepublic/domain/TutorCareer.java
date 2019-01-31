@@ -21,9 +21,9 @@ public class TutorCareer {
 	@Column(name = "tutor_career_id")
 	private int tutorCareerId;
 	
-	@ManyToOne
+/*	@ManyToOne
 	@JoinColumn(name = "tutor_number")
-	private Tutor tutor;
+	private Tutor tutor;*/
 	
 	@ManyToOne
 	@JoinColumn(name = "CAREER_CODE")

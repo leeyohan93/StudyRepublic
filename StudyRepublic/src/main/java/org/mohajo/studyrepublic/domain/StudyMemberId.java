@@ -5,8 +5,6 @@ import java.io.Serializable;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 
-import org.springframework.stereotype.Component;
-
 import lombok.Data;
 
 /**
@@ -17,7 +15,6 @@ import lombok.Data;
  */
 @Data
 @Embeddable
-@Component
 public class StudyMemberId implements Serializable {
 
 	private String studyId;

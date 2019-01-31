@@ -181,13 +181,13 @@ layout:decorate="~{/layout/mainLayout}">
 					<div class="col-md-2 column-name">유형</div>
 					<div class="col-md-10 column-value"><i class="tag-primary" th:text="${study.typeCode.codeValueKorean}">type</i></div>
 					<div class="col-md-2 column-name">진행방식</div>
-					<div class="col-md-10 column-value"><i class="tag" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
+					<div class="col-md-10 column-value"><i class="tag-primary" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
 					<div class="col-md-2 column-name">지역</div>
-					<div class="col-md-10 column-value"><i class="tag" th:text="${study.studyLocation}">location</i></div>
+					<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${study.studyLocation.interestLocation}">location</i>&nbsp;</th:block></div>
 					<div class="col-md-2 column-name">분야</div>
 					<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
 					<div class="col-md-2 column-name" th:if="${study.price}">가격</div>
-					<div class="col-md-10 column-value"><th:block th:text="${study.price}">studyPrice</div>
+					<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">studyPrice</div>
 				</div>
 				<div class="box-info">
 					<div class="enroll-count" th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</div>
@@ -213,11 +213,12 @@ layout:decorate="~{/layout/mainLayout}">
 						</li>
 					</ul>
 				</div>
+<!-- 				스터디 타입에 따라 불러오는 데이터 달라진다. (미구현 상태) -->
 				<div class="tab-content leader-info">
 					<div class="profile-container">
 						<div class="profile-image-container">
-							<th:block th:if="${leaderInfo.profile_save_name} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/${leaderInfo.id}/${leaderInfo.profile_save_name}}"></th:block>
-							<th:block th:unless="${leaderInfo.profile_save_name} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/defaultProfile.jpg}"></th:block>
+							<th:block th:if="${leaderInfo.profileSaveName} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/${leaderInfo.id}/${leaderInfo.profile_save_name}}"></th:block>
+							<th:block th:unless="${leaderInfo.profileSaveName} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/defaultProfile.jpg}"></th:block>
 							<span th:text="${leaderInfo.nickname}">리더 이름</span>
 						</div>
 					</div>

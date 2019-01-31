@@ -65,12 +65,12 @@ input::-moz-focus-inner {
 	padding: 0;
 }
 
-input, select, textarea {
-	-moz-appearance: none;
+/* input, select, textarea {		//checkbox, 체크박스, 안보이게하는문제원인.
+	-moz-appearance: none;		
 	-webkit-appearance: none;
 	-ms-appearance: none;
 	appearance: none;
-}
+} */
 
 /* Basic */
 
@@ -2191,7 +2191,7 @@ input, select, textarea {
 		padding: 0;
 		min-height: 3.75em;
 	}
-
+/* 
 	input[type="checkbox"],
 	input[type="radio"] {
 		-moz-appearance: none;
@@ -2264,7 +2264,7 @@ input, select, textarea {
 
 	input[type="radio"] + label:before {
 		border-radius: 100%;
-	}
+	} */
 
 /* Box */
 
@@ -2580,6 +2580,7 @@ input, select, textarea {
 				.tiles article > .image img {
 					display: block;
 					width: 100%;
+					height: 200px;
 				}
 
 				.tiles article > .image:before {
@@ -2682,6 +2683,7 @@ input, select, textarea {
 
 					.tiles article > a .content > :last-child {
 						margin-bottom: 0;
+						font-size: 0.7em;
 					}
 
 			.tiles article.style1 > .image:before {
@@ -2753,7 +2755,7 @@ input, select, textarea {
 			}
 
 				.tiles article {
-					width: calc(33.3333333333% - 1.25em);
+					width: calc(100% - 0.75em);
 					margin: 1.25em 0 0 1.25em;
 				}
 
@@ -2766,7 +2768,7 @@ input, select, textarea {
 			}
 
 				.tiles article {
-					width: calc(50% - 2.5em);
+					width: calc(100% - 1.25em);
 					margin: 2.5em 0 0 2.5em;
 				}
 
@@ -2779,7 +2781,7 @@ input, select, textarea {
 			}
 
 				.tiles article {
-					width: calc(50% - 1.25em);
+					width: calc(100% - 0.65em);
 					margin: 1.25em 0 0 1.25em;
 				}
 
@@ -2839,6 +2841,7 @@ input, select, textarea {
 						border: 0;
 						font-size: 0.6em;
 						font-weight: 700;
+						color:black;
 						letter-spacing: 0.35em;
 						text-transform: uppercase;
 			}
@@ -2935,6 +2938,7 @@ input, select, textarea {
 				}
 
 					#header nav ul li a {
+						
 						display: block;
 						position: relative;
 						height: 3em;
@@ -2945,6 +2949,7 @@ input, select, textarea {
 						border: 0;
 						font-size: 0.8em;
 						font-weight: 900;
+						color : black;
 						letter-spacing: 0.35em;
 						text-transform: uppercase;
 					}
@@ -3024,25 +3029,25 @@ input, select, textarea {
 
 	#menu {
 		-moz-transform: translateX(-22em);
-		-webkit-transform: translateX(-22em);
-		-ms-transform: translateX(-22em);
-		transform: translateX(-22em);
-		-moz-transition: -moz-transform 0.45s ease, visibility 0.45s;
-		-webkit-transition: -webkit-transform 0.45s ease, visibility 0.45s;
-		-ms-transition: -ms-transform 0.45s ease, visibility 0.45s;
-		transition: transform 0.45s ease, visibility 0.45s;
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 22em;
-		max-width: 80%;
-		height: 100%;
-		-webkit-overflow-scrolling: touch;
-		background: #585858;
-		color: #ffffff;
-		cursor: default;
-		visibility: hidden;
-		z-index: 10002;
+	-webkit-transform: translateX(-22em);
+	-ms-transform: translateX(-22em);
+	transform: translateX(-22em);
+	-moz-transition: -moz-transform 0.45s ease, visibility 0.45s;
+	-webkit-transition: -webkit-transform 0.45s ease, visibility 0.45s;
+	-ms-transition: -ms-transform 0.45s ease, visibility 0.45s;
+	transition: transform 0.45s ease, visibility 0.45s;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 22em;
+	max-width: 80%;
+	height: 800px;
+	-webkit-overflow-scrolling: touch;
+	background: rgba(0, 0, 0, 0.36);
+	color: black;
+	cursor: default;
+	visibility: hidden;
+	z-index: 10;
 	}
 
 		#menu > .inner {
@@ -3060,6 +3065,84 @@ input, select, textarea {
 			opacity: 0;
 			overflow-y: auto;
 		}
+		
+		#menu >.interest_element {
+	padding-bottom: 0.7em;
+}
+
+#menu .interest_element_optional {
+	padding-bottom: 0.7em;
+	display: none;
+}
+
+#menu select {
+	background-color: white;
+	width: 11em;
+	font-size: 0.7em
+}
+
+#menu input[type="radio"] {
+	width: 2em;
+}
+
+#menu .interest_element_tag input[type="button"] {
+	display: inline-block;
+	font-family: 'Hind Guntur', sans-serif;
+	font-size: 15px;
+	line-height: 1;
+	color: #fff;
+	letter-spacing: 0.025em;
+	background: #379aff;
+	padding: 18px 0 11px;
+	cursor: pointer;
+	border: 0;
+	border-radius: 2px;
+	min-width: 70px;
+	overflow: hidden;
+	border-radius: 360px;
+	background-color: #e9ecef;
+}
+#menu button{
+	display: inline-block;
+	font-family: 'Hind Guntur', sans-serif;
+	font-size: 11px;
+	color: #fff;
+	letter-spacing: 0.025em;
+	background: white;
+	padding: 0.5px 1px;
+	cursor: pointer;
+	border: 0;
+	border-radius: 2px;
+	min-width: 20px;
+	height: 20px;
+	text-align:center;
+	overflow: hidden;
+	border-radius: 360px;
+	background-color: #e9ecef;
+}
+
+
+
+#menu input[type="text"], input[type="password"], input[type="email"],
+	input[type="tel"], select, textarea {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	background-color: transparent;
+	border: none;
+	border-radius: 0;
+	border-bottom: solid 1px #c9c9c9;
+	color: inherit;
+	display: inline-block;
+	outline: 0;
+	padding: 0;
+	text-decoration: none;
+	width: 13em;
+	height: 2em;
+}
+		
+		
 
 			#menu > .inner > ul {
 				list-style: none;
