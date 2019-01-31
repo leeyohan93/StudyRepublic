@@ -32,25 +32,17 @@ public class Review implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int reviewNumber;
 	
-//	@NotFound(action=NotFoundAction.IGNORE)
-//	@OneToOne
-//	@JoinColumns({
-//		@JoinColumn(name = "study_id"),
-//		@JoinColumn(name = "id")
-//	})
-//	private StudyMember studyMember;
-	
+	@NotFound(action=NotFoundAction.IGNORE)
+	@OneToOne
+	@JoinColumns({
+		@JoinColumn(name = "studyId", updatable=false, insertable=false),
+		@JoinColumn(name = "id", updatable=false, insertable=false)
+	})
+	private StudyMember studyMember;
+
 	private String studyId;
-	
 	private String id;
 	
-	
-//	@JoinColumn
-//	private String studyId;
-//	
-//	private String id;
-//	
-
 	@Column(nullable = false)
 	private String content;
 	

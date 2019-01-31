@@ -15,8 +15,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TutorRepository extends JpaRepository<Tutor, Integer>{
 
-	@Query(value = "select t from Tutor t where id = ?1")
-	public Tutor findByIdColumn(String id);
+	@Query(value = "select t from Tutor t where t.id = ?1")
+	public Tutor findByMemberId(String id);
 	
 	
 

@@ -25,6 +25,10 @@ layout:decorate="~{/layout/mainLayout}">
 
 	}
 	
+	.column-name {
+		font: bold;
+	}
+	
 	.essential-info-1 {
 		margin: 2em 2em;
 	}
@@ -41,10 +45,10 @@ layout:decorate="~{/layout/mainLayout}">
 		width: 100px;
 		background-color: lightgray;
 		font: bold 20px;
-		margin: 0 2em;
 		vertical-align: 50%;
 		position: absolute;
 		text-align: center;
+		padding: 0 0;
 		
 	}
 	
@@ -101,7 +105,7 @@ layout:decorate="~{/layout/mainLayout}">
 	/* .tab-content.on{display:block} */
 	
 	.tab-head0 {
-		margin: 0;
+ 		margin: 0.2em 0 0;
 /* 		display: block; */
 		display: inline-flex;
 		width: 100%;
@@ -164,7 +168,7 @@ layout:decorate="~{/layout/mainLayout}">
 		<div class="inner">
 		<h3>스터디 상세</h3>
 		<section class="studyDetail">
-			<section class="basic-info">
+			<section class="row basic-info">
 				<div class="row essential-info-1">
 					<div class="col-md-2 column-name">스터디명</div>
 					<div class="col-md-10 column-value"><span th:text="${study.name}">name</span></div>	
@@ -190,9 +194,10 @@ layout:decorate="~{/layout/mainLayout}">
 					<i class="tag btn-primary btn-xs" th:text="${study.studyStatusCode.codeValueKorean}">study status</i>
 					<div class="level">레벨: <strong><th:block th:text="${study.levelCode.codeValueKorean}">level</th:block></strong></div> 
 				</div>
+
 			</section>
 			<section class="intro">
-				<h2>소개</h2>
+				<h4>소개</h4>
 				<div class="intro-content">
 					<p th:text="${study.introduction}"></p>
 				</div>
@@ -209,9 +214,37 @@ layout:decorate="~{/layout/mainLayout}">
 					</ul>
 				</div>
 				<div class="tab-content leader-info">
-					<p th:text="${study.member.name}">리더 이름</p>
-					<p th:text="${study.member.memberInterest}">관심 분야</p>
-					<p th:text="${studyMember}">활동 내역</p>
+					<div class="profile-container">
+						<div class="profile-image-container">
+							<th:block th:if="${leaderInfo.profile_save_name} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/${leaderInfo.id}/${leaderInfo.profile_save_name}}"></th:block>
+							<th:block th:unless="${leaderInfo.profile_save_name} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/defaultProfile.jpg}"></th:block>
+							<span th:text="${leaderInfo.nickname}">리더 이름</span>
+						</div>
+					</div>
+					<p th:if="${leaderInfo.memberInterest}!=null" th:text="${leaderInfo.memberInterest}">관심 분야</p>
+					<div class="study-activity">
+						<h4>활동내역</h4>
+						<table>
+							<tr>
+								<th>No.</th>
+								<th>스터디명</th>
+								<th>기간</th>
+								<th>평점</th>
+							</tr>
+							<tr th:each="tempStudyActivity : ${studyActivity}">
+								<th:block th:with="tempStudy = ${tempStudyActivity.study}">
+									<td>no.</td>
+									<td th:text="${tempStudy.name}">studyName&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorea">status</i></td>
+									<td th:text="|${tempStudy.startDate}~${tempStudy.endDate}|">period</td>
+<!-- 									<td th:text="${avgScore}">avgScore</td> -->
+<!-- 스터디 A 의 리뷰의 score, count(*) 검색 -->
+<!-- sum(score)/count(*) = avg  -->
+								</th:block>
+							</tr>
+						</table>
+<!-- 						테스트 -->
+<!-- 						<div th:each="tempStudyActivity : ${studyActivity}" th:text="${tempStudyActivity}"></div> -->
+					</div>
 				</div>
 				<div class="tab-content review">
 					<p th:text="${review}">후기 리스트</p>

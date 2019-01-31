@@ -71,12 +71,6 @@ public class StudyController {
 	@Autowired
 	TypeCD typeCd;
 	
-	@Autowired
-	StudyMemberId studyMemberId;
-	
-	@Autowired
-	StudyMember studyMember;
-	
 	
 	
 	@RequestMapping("/list/{typeCode}")
@@ -101,6 +95,7 @@ public class StudyController {
 		return "study/list";
 	}
 	
+	// 리팩토링 시 아래를 뷰 테이블로 대체해보기
 	/**
 	 * @author	이미연
 	 * @return	스터디 상세 페이지 (/study/detail.html), 또는 에러 페이지 (/study/404.html)
@@ -135,19 +130,20 @@ public class StudyController {
 		// 스터디 진행 시간 및 기간을 계산한다. (추후 자바스크립트로 대체할 수 있음.)
 		long dayDiffMillies = Math.abs(study.getStartDate().getTime() - study.getEndDate().getTime());
 		long dayDiff = TimeUnit.DAYS.convert(dayDiffMillies, TimeUnit.MILLISECONDS);
+		dayDiff = dayDiff/30;
 		long timeDiffMillies = Math.abs(study.getStartTime().getTime() - study.getEndTime().getTime());
 		long timeDiff = TimeUnit.HOURS.convert(timeDiffMillies, TimeUnit.MILLISECONDS);
 		
-		// 종료된 스터디에 한해 리뷰 정보를 조회한다.
-		if(study.getStudyStatusCode().getStudyStatusCode()=="C") {
-			//		StudyMember sm = new StudyMember();	//org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: org.mohajo.studyrepublic.domain.StudyMember; nested exception is java.lang.IllegalStateException: org.hibernate.TransientObjectException: object references an unsaved transient instance - save the transient instance before flushing: org.mohajo.studyrepublic.domain.StudyMember
-			log.info("entered if statement");
-			studyMemberId.setStudyId(studyId);
-			studyMemberId.setId("admin123");
-//			List<Review> review = rr.findByStudyId(studyId, "admin123");
-			List<Review> review = rr.findByStudyId(studyMemberId);
-			log.info(review.toString());
+		model.addAttribute("dayDiff", dayDiff);
+		model.addAttribute("timeDiff", timeDiff);
+		
+		// 종료된 스터디에 한해 리뷰 정보를 조회한다. + 평균 평점을 조회한다.
+		if(study.getStudyStatusCode().getStudyStatusCode().equals("C")) {
+			List<Review> review = rr.findByStudyId(studyId, "admin123");
+//			float avgScore = Math.round(sr.getAverageScore(studyId)*10)/10f;
+			
 			model.addAttribute("review", review);
+//			model.addAttribute("avgScore", avgScore);
 		}
 		
 		// 리더 정보를 조회한다. (회원정보 및 스터디 활동내역)
@@ -160,27 +156,22 @@ public class StudyController {
 			case "B":
 				//리더정보, 참여스터디
 				leaderInfo = mr.findById(leaderId).get();
-				studyMemberId.setId(leaderId);
-				studyMemberId.setStudyId(".");
-				studyActivity = smr.findStudyActivityByStudyMemberId(studyMemberId);
+				studyActivity = smr.findStudyActivityById(leaderId);
+				
+				model.addAttribute("leaderInfo", leaderInfo);
 				break;
+				
 			case "P":
 				//강사정보, 개설스터디
-				tutorInfo = tr.findByIdColumn(leaderId);
-				log.info(leaderInfo.toString());
-				studyMemberId.setId(leaderId);
-				studyMemberId.setStudyId(".");
-//				studyActivity = smr.findTutorStudyActivityByStudyMemberId(studyMemberId);
-				log.info(studyActivity.toString());
+				tutorInfo = tr.findByMemberId(leaderId);
+				studyActivity = smr.findTutorActivityById(leaderId);
+				
+				model.addAttribute("leaderInfo", tutorInfo);
 				break;
 		}
 		
 		model.addAttribute("study", study);
-		model.addAttribute("leaderInfo", leaderInfo);
-		model.addAttribute("tutorInfo", tutorInfo);
 		model.addAttribute("studyActivity", studyActivity);
-		model.addAttribute("dayDiff", dayDiff);
-		model.addAttribute("timeDiff", timeDiff);
 
 		return "/study/detail";
 	}

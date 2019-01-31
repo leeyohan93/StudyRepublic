@@ -38,4 +38,8 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 		//위 테스트 해보고, 성능 비교
 	//OrderBy 를 등록일, 시작일로 구분
 	
+//	/*select avg(score) from review r where study_id = "BO00001";*/
+//	@Query(value = "select avg(score) from Review r where r.studyId = ?1")
+//	public float getAverageScore(String studyId);
+	
 }

@@ -16,10 +16,12 @@ import org.springframework.data.jpa.repository.Query;
 public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyMemberId> {
 
 	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code in ('LE', 'ME')")
-	List<StudyMember> findStudyActivityByStudyMemberId(StudyMemberId studyMemberId);
+	List<StudyMember> findStudyActivityById(String id);
+//	List<StudyMember> findStudyActivityByStudyMemberId(StudyMemberId studyMemberId);
 
 	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code = 'LE'")
-	List<StudyMember> findTutorStudyActivityByStudyMemberId(StudyMemberId studyMemberId);
+	List<StudyMember> findTutorActivityById(String id);
+//	List<StudyMember> findTutorActivityByStudyMemberId(StudyMemberId studyMemberId);
 	
 
 }

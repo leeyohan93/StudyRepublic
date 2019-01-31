@@ -16,10 +16,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
 	@Query(value = "select r from Review r where r.studyId = ?1 and r.id <> ?2")
-	public List<Review> findByStudyId(StudyMemberId studyMemberId);
-//	public List<Review> findByStudyId(String studyId, String id);
+	public List<Review> findByStudyId(String studyId, String id);
 	
-	//상용님 try
-//	@Query(value = "select * from review r where r.studyId = :studyId and r.id not 'admin123'", nativeQuery=true)
-//	public List<Review> findByStudyId2(@Param("studyId") String str);
 }

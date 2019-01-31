@@ -34,8 +34,10 @@ public class Tutor implements Serializable {
 	private String introduction;
 	
 	@OneToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id", insertable=false, updatable=false)
 	private Member member;
+	
+	private String id;
 
 	
 	

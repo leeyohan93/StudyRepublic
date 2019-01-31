@@ -23,20 +23,23 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Component
 public class StudyMember implements Serializable {
 
 		@EmbeddedId
 		private StudyMemberId studyMemberId;
 		
+		@Column(insertable=false, updatable=false)
+		private String id;
+		
+		@Column(insertable=false, updatable=false)
+		private String studyId;
+		
+		
 		@ManyToOne(cascade=CascadeType.ALL) 
 		@JoinColumn(name = "study_member_status_code")
 		private StudyMemberStatusCD studyMemberStatusCode;
 		
-		@Column
 		private Date enrollDate;
-		
-		@Column
 		private Date exitDate;
 		
 		@MapsId("id")

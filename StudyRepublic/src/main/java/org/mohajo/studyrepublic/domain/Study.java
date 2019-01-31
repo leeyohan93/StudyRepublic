@@ -103,7 +103,10 @@ public class Study implements Serializable {
 	@JoinColumn(name = "study_id", nullable = false)
 	private List<StudyInterest> studyInterest;			//분야
 	
-
+	@OneToMany
+	@JoinColumn(name = "studyId")
+	private List<Review> review;
+	
 	///////////	아래는 Study 클래스를 상속하여 분리시킬 수도 있음 //////////////////////
 	
 	@OneToOne
