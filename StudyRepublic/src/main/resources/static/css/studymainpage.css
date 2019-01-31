@@ -25,6 +25,75 @@
     min-width: 30%;
     background-color: pink;
 }
+#content{
+	display: inline-block;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+#left{
+	float:left;
+    display: inlin-block;
+    width: 15%;
+    height: 600px;
+    margin-top: 1%;
+    background-color: black;
+  	padding: 20px;
+}
+#right{
+	float:right;
+    display: inline-block;
+    width: 84%;
+    height: 100%;
+    background-color: white;
+}
+#noticeBoard{
+    width: 95%;
+    height: 30%;
+    background-color: gray;
+    padding: 1px;
+    margin: 1%;
+}
+#joinMember{
+    width: 95%;
+    height: 20%;
+    background-color: white;
+    padding: 1px;
+    border: 1px solid gray;
+    margin: 1%;
+}
+#double{
+    width: 95%;
+    height: 45%;
+    border: 1px solid white;
+    margin: 1%;
+    background-color: white;
+}
+#qnaBoard{
+    display: inline-block;
+    width: 60%;
+    height: 100%;
+    background-color: gray;
+    margin-right: 1%;
+    border: 1px solid gray;
+}
+#ing{
+    display: inline-block;
+    width: 38%;
+    height: 100%;
+    border: 1px solid black;
+    background-color: black;
+}
+/* #main{
+    min-width: 900px;
+    height : 720px;
+    width: 100%;
+}
+.headright{
+    display: inline-block;
+    min-width: 30%;
+    background-color: pink;
+}
 #leftright{
     width: 100%;
     height: 85%;
@@ -79,4 +148,4 @@
     height: 100%;
     border: 1px solid black;
     background-color: black;
-}
+} */

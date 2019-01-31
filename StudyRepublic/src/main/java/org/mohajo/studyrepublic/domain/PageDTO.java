@@ -22,7 +22,7 @@ import org.springframework.data.domain.Sort;
 
 public class PageDTO {
    
-	public static final int DEFAULT_SIZE =5;
+	public static final int DEFAULT_SIZE = 15;
 	public static final int DEFAULT_MAX_SIZE = 50;
 	
 	

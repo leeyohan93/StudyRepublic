@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -37,6 +38,20 @@ public class FreeBoard extends Board{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "freeboard_id")
 	private int freeBoardId;
+	
+	  protected String id;
+	   protected String title;
+	   protected String content;
+	   @CreationTimestamp
+	   protected Timestamp date;
+	   protected int notice;
+	   protected int status;
+	   protected int hit;
+	   @Column(name = "likecount")
+	   protected int likeCount;
+	   @Column(name = "replycount")
+	   protected int replyCount;
+	   
 	
 
 

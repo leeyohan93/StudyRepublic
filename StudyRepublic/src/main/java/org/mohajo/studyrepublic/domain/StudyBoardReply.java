@@ -20,8 +20,8 @@ import lombok.ToString;
  */
 
 @Data
-@MappedSuperclass
 @ToString
+@MappedSuperclass
 public class StudyBoardReply implements Serializable{
 
 	private static final long serialVersionUID = 1L;

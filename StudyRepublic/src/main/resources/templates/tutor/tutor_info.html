@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>회원정보</title>
@@ -8,27 +9,31 @@
 
 <!-- <p th:text = "${tutor}"></p> -->
 
-
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner"> 
 
  <table th:inline = "text" border = "1">
 <tr>
+<td>강사신청번호</td>
 <td>아이디</td>
 <td>이름</td>
-<td>강사신청번호</td>
 <td>학력</td>
 <td>자기소개</td>
 </tr> 
-
+<!-- "@{'/tutor/inquery'(id=${t.member.id})}" -->
 <tr th:each="t : ${tutor}">
-<!-- <td><a th:href="@{'inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td> -->
-<td th:text = "${t.member.id}"></td>
-<td th:text = "${t.member.name}"></td>
 <td th:text = "${t.tutorNumber}"></td>
+<td><a th:href="@{'/tutor/inquery'(id=${t.member.id})}"><p th:text = "${t.member.id}"></p></a></td>
+<td th:text = "${t.member.name}"></td>
 <td th:text = "${t.educationCode}"></td>
 <td th:text = "${t.introduction}"></td>
 </tr>
 </table>
 
+</div>
+</div>
+</div>
 
 
 </body>

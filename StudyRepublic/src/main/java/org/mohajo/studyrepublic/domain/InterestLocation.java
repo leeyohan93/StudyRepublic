@@ -2,10 +2,14 @@ package org.mohajo.studyrepublic.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
 
@@ -15,15 +19,17 @@ import lombok.Data;
 public class InterestLocation {
 
 	@Id
-	@Column(name = "interest_location_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "interest_location_id", unique = true, nullable = false)
 	private int interestLocationId;
 	
-	@Column(name = " interest_location")
+	@Column(name = "interest_location")
 	String interestLocation;
 	
-	@ManyToOne
+	
+/*	@ManyToOne
 	@JoinColumn(name = "id")
-	Member member;
+	Member member;*/
 	
 	
 }

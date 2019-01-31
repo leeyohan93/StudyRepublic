@@ -1,25 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymleaf.org">
+<html xmlns:th="http://www.thymleaf.org"
+ layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>스터디 메인 페이지 입니다.</title>
 <link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
 </head>
 <body>
-	<div id="main">
-        <div id="head">
-            <div class="il2"><br></div>
-            <div class="il">Study Republic</div>
-            <div class="il2">
-                    <div class="headright">페이지 선택</div>
-                    <div class="headright">알림</div>
-                    <div class="headright">프로필 사진</div>
-            </div>
-        </div>
-        <div id="leftright">
-            <div id="left">
-            </div>
-            <div id="right">
+	<div id="main" layout:fragment = "main">
+    </div>
+    <div id="right" layout:fragment="right">
                 <div id="noticeBoard">
                 	<table>
                 		<tr>
@@ -30,40 +20,70 @@
 							<td>내용</td>
 							<td>작성일</td>
 							<td>작성자</td>
-							<td>시작시간</td>
-							<td>종료시간</td>
+							<!-- <td>시작시간</td>
+							<td>종료시간</td> -->
 							<td>진행 날짜</td>
 							<td>위치</td>
-							<td>덧글번호</td>
+							<!-- <td>덧글번호</td>
 							<td>덧글 번호가 속한 스터디 ID</td>
 							<td>덧글 작성 일자</td>
 							<td>group</td>
-							<td>step</td>
+							<td>step</td> -->
 						</tr>
-						<tr th:each="tmp : ${tmp}">
-							<td th:text = "${tmp.studyNoticeboardId}"></td>
-							<td th:text = "${tmp.studyId}"></td>
-							<td th:text = "${tmp.number}"></td>
-							<td th:text = "${tmp.title}"></td>
-							<td th:text = "${tmp.content}"></td>
-							<td th:text = "${tmp.date}"></td>
-							<td th:text = "${tmp.id}"></td>
-							<td th:text = "${tmp.startTime}"></td>
-							<td th:text = "${tmp.endTime}"></td>
-							<td th:text = "${tmp.day}"></td>
-							<td th:text = "${tmp.location}"></td>
-							<td th:text = "${tmp.studyNoticeboardReply}"></td>
+						<tr th:each="snb : ${studynoticeboard3result}">
+							<td th:text = "${snb.studyNoticeboardId}"></td>
+							<td th:text = "${snb.studyId}"></td>
+							<td th:text = "${snb.number}"></td>
+							<td th:text = "${snb.title}"></td>
+							<td th:text = "${snb.content}"></td>
+							<td th:text = "${snb.date}"></td>
+							<td th:text = "${snb.id}"></td>
+							<!-- <td th:text = "${snb.startTime}"></td>
+							<td th:text = "${snb.endTime}"></td> -->
+							<td th:text = "${snb.day}"></td>
+							<td th:text = "${snb.location}"></td>
                 		</tr>
+                		<!-- <tr th:each="snb : ${study}">
+                			<td th:text = "${snb}"></td>
+                		</tr> -->
+                		<!-- <tr th:each="snb : ${studynoticeboard3result}">
+                			<td th:text = "${snb}"></td>
+                		</tr> -->
+                		<tr th:each="snb : ${study}">
+                			<td th:text = "${snb.studyId}"></td>
+                			<!-- <table>
+                				<tr th:each="snb2 : ${snb}">
+                				<td th:text = "${snb2}"></td>
+                			</table> -->
                 	</table>
                 </div>
-               <!--  <div id="joinMember">
-                </div>
+                <div id="joinMember"></div>
                 <div id="double">
-                        <div id="qnaBoard"></div>
-                        <div id="ing"></div>
-                </div> -->
-            </div>
-        </div>
-    </div>
+                        <div id="qnaBoard">
+                       		<table>
+		                		<tr>
+			                		<td>QnA 페이지 고유번호</td>
+									<td>스터디 ID</td>
+									<td>게시글 번호</td>
+									<td>제목</td>
+									<td>내용</td>
+									<td>작성일</td>
+									<td>작성자</td>
+								</tr>
+								<tr th:each="sqb : ${studyqnaboard3result}">
+									<td th:text = "${sqb.studyQnaboardId}"></td>
+									<td th:text = "${sqb.studyId}"></td>
+									<td th:text = "${sqb.number}"></td>
+									<td th:text = "${sqb.title}"></td>
+									<td th:text = "${sqb.content}"></td>
+									<td th:text = "${sqb.date}"></td>
+									<td th:text = "${sqb.id}"></td>
+		                		</tr>
+                			</table>
+                        </div>
+                        <div id="ing">
+                        </div>
+                </div>
+		</div>
 </body>
 </html>

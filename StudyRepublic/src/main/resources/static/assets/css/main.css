@@ -65,12 +65,12 @@ input::-moz-focus-inner {
 	padding: 0;
 }
 
-input, select, textarea {
-	-moz-appearance: none;
+/* input, select, textarea {		//checkbox, 체크박스, 안보이게하는문제원인.
+	-moz-appearance: none;		
 	-webkit-appearance: none;
 	-ms-appearance: none;
 	appearance: none;
-}
+} */
 
 /* Basic */
 
@@ -2191,7 +2191,7 @@ input, select, textarea {
 		padding: 0;
 		min-height: 3.75em;
 	}
-
+/* 
 	input[type="checkbox"],
 	input[type="radio"] {
 		-moz-appearance: none;
@@ -2264,7 +2264,7 @@ input, select, textarea {
 
 	input[type="radio"] + label:before {
 		border-radius: 100%;
-	}
+	} */
 
 /* Box */
 
@@ -2580,6 +2580,7 @@ input, select, textarea {
 				.tiles article > .image img {
 					display: block;
 					width: 100%;
+					height: 200px;
 				}
 
 				.tiles article > .image:before {
@@ -2682,6 +2683,7 @@ input, select, textarea {
 
 					.tiles article > a .content > :last-child {
 						margin-bottom: 0;
+						font-size: 0.7em;
 					}
 
 			.tiles article.style1 > .image:before {
@@ -2753,7 +2755,7 @@ input, select, textarea {
 			}
 
 				.tiles article {
-					width: calc(33.3333333333% - 1.25em);
+					width: calc(100% - 0.75em);
 					margin: 1.25em 0 0 1.25em;
 				}
 
@@ -2766,7 +2768,7 @@ input, select, textarea {
 			}
 
 				.tiles article {
-					width: calc(50% - 2.5em);
+					width: calc(100% - 1.25em);
 					margin: 2.5em 0 0 2.5em;
 				}
 
@@ -2779,7 +2781,7 @@ input, select, textarea {
 			}
 
 				.tiles article {
-					width: calc(50% - 1.25em);
+					width: calc(100% - 0.65em);
 					margin: 1.25em 0 0 1.25em;
 				}
 
@@ -2839,6 +2841,7 @@ input, select, textarea {
 						border: 0;
 						font-size: 0.6em;
 						font-weight: 700;
+						color:black;
 						letter-spacing: 0.35em;
 						text-transform: uppercase;
 			}
@@ -2935,6 +2938,7 @@ input, select, textarea {
 				}
 
 					#header nav ul li a {
+						
 						display: block;
 						position: relative;
 						height: 3em;
@@ -2945,6 +2949,7 @@ input, select, textarea {
 						border: 0;
 						font-size: 0.8em;
 						font-weight: 900;
+						color : black;
 						letter-spacing: 0.35em;
 						text-transform: uppercase;
 					}
@@ -3039,7 +3044,7 @@ input, select, textarea {
 		height: 100%;
 		-webkit-overflow-scrolling: touch;
 		background: #585858;
-		color: #ffffff;
+		color: black;
 		cursor: default;
 		visibility: hidden;
 		z-index: 10002;

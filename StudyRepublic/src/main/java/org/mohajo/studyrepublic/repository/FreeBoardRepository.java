@@ -3,6 +3,7 @@
  */
 package org.mohajo.studyrepublic.repository;
 
+
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.QFreeBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +23,7 @@ import com.querydsl.core.types.Predicate;
  */
 
 public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, QuerydslPredicateExecutor<FreeBoard>{
+
 
 	public default Predicate makePredicate(String searchType, String keyword) {
 
@@ -52,9 +54,7 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, 
 		return builder;
 	}
 	
-//	@Modifying
-//	@Query("UPDATE freeboard SET hit=hit+1 where freeBoardId = id")
-//	public void hit(@Param("id")int freeBoardId);
-
+	
+	
 
 }

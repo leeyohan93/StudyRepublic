@@ -1,57 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymleaf.org">
+<html xmlns:th="http://www.thymleaf.org"
+ layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
 <title>공지사항 게시판 입니다.</title>
+	<style>
+		.board{
+			
+		}
+	</style>
 </head>
 <body>
-	<table>
-		<tr>
-			<td>공지사항 페이지 고유번호</td>
-			<td>스터디 ID</td>
-			<td>게시글 번호</td>
-			<td>제목</td>
-			<td>내용</td>
-			<td>작성일</td>
-			<td>작성자</td>
-			<td>시작시간</td>
-			<td>종료시간</td>
-			<td>진행 날짜</td>
-			<td>위치</td>
-			<td>덧글번호</td>
-			<td>덧글 번호가 속한 스터디 ID</td>
-			<td>덧글 작성 일자</td>
-			<td>group</td>
-			<td>step</td>
-		</tr>
-		<tr th:each="tmp : ${tmp}">
-			<td th:text = "${tmp.studyNoticeboardId}"></td>
-			<td th:text = "${tmp.studyId}"></td>
-			<td th:text = "${tmp.number}"></td>
-			<td th:text = "${tmp.title}"></td>
-			<td th:text = "${tmp.content}"></td>
-			<td th:text = "${tmp.date}"></td>
-			<td th:text = "${tmp.id}"></td>
-			<td th:text = "${tmp.startTime}"></td>
-			<td th:text = "${tmp.endTime}"></td>
-			<td th:text = "${tmp.day}"></td>
-			<td th:text = "${tmp.location}"></td>
-			<td th:text = "${tmp.studyNoticeboardReply}"></td>
-
-			<!-- <tr th:each = "tmp2 : ${tmp.studyNoticeboardReply}">
-				<td th:text = "${tmp2.studyNoticeboardReplyId">}</td>
-				<td th:text = "${tmp2.studyId}"></td>
-				<td th:text = "${tmp2.date}"></td>
-				<td th:text = "${tmp2.replyGroup}"></td>
-				<td th:text = "${tmp2.replyStep}"></td> -->
-				
-				<!-- <td th:text = "${tmp.studyNoticeboardReply.studyNoticeboardReplyId">}</td>
-				<td th:text = "${tmp.studyNoticeboardReply.studyId}"></td>
-				<td th:text = "${tmp.studyNoticeboardReply.date}"></td>
-				<td th:text = "${tmp.studyNoticeboardReply.replyGroup}"></td>
-				<td th:text = "${tmp.studyNoticeboardReply.replyStep}"></td> -->
-			<!-- </tr> -->
-		</tr>
-	</table>
+	
+	<div id="main" layout:fragment = "main">
+		<table>
+			<tr>
+				<td>공지사항 페이지 고유번호</td>
+				<td>스터디 ID</td>
+				<td>게시글 번호</td>
+				<td>제목</td>
+				<!-- <td>내용</td> -->
+				<td>작성일</td>
+				<td>작성자</td>
+				<!-- <td>시작시간</td> -->
+				<!-- <td>종료시간</td> -->
+				<td>진행 날짜</td>
+				<td>위치</td>
+				<!-- <td>덧글번호</td>
+				<td>덧글 번호가 속한 스터디 ID</td>
+				<td>덧글 작성 일자</td>
+				<td>group</td>
+				<td>step</td> -->
+			</tr>
+			<!-- <td th:text = "${tmp}"> -->
+			<tr th:each="fasn : ${findAllStudyNoticeboard}">
+				<td th:text = "${fasn.studyNoticeboardId}"></td>
+				<td th:text = "${fasn.studyId}"></td>
+				<td th:text = "${fasn.number}"></td>
+				<td th:text = "${fasn.title}"></td>
+				<td th:text = "${fasn.date}"></td>
+				<td th:text = "${fasn.id}"></td>
+				<td th:text = "${fasn.day}"></td>
+				<td th:text = "${fasn.location}"></td>
+				<!-- <td th:text = "${tmp.studyNoticeboardReply}"></td> -->
+				<!-- <table> -->
+				<tr:block th:each = "snr : ${fasn.studyNoticeboardReply}">
+						<td th:text = "${snr.studyNoticeboardReplyId}"></td>
+						<td th:text = "${snr.studId}"></td>
+						<td th:text = "${snr.date}"></td>
+						<td th:text = "${snr.content}"></td>
+					<!-- <td th:text = "${snr.studyNoticeboardReplyId}"></td>
+					<td th:text = "${snr.studyId}"></td>
+					<td th:text = "${snr.date}"></td>
+					<td th:text = "${snr.replyGroup}"></td>
+					<td th:text = "${snr.replyStep}"></td>
+					<td th:text = "${snr.studyNoticeboardId"></td> -->
+				</tr:block>
+				</table>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>
