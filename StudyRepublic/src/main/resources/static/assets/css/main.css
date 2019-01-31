@@ -3061,7 +3061,8 @@ input::-moz-focus-inner {
 			left: 0;
 			width: 100%;
 			height: 100%;
-			padding: 2.75em;
+			padding-top: 2em;
+			padding-left:2em;
 			opacity: 0;
 			overflow-y: auto;
 		}

@@ -5,10 +5,6 @@ package org.mohajo.studyrepublic.main;
 
 import java.util.List;
 
-import org.mohajo.studyrepublic.domain.CareerCD;
-import org.mohajo.studyrepublic.domain.EducationCD;
-import org.mohajo.studyrepublic.domain.Interest1CD;
-import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Study;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +26,7 @@ public class MainController {
 	
 	@RequestMapping("/index")
 	public void index(Model model) {
-		
+		System.out.println("index()");
 		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
 		List<Study> basicStudy = mainService.getPopularBasicStudy();
 		
@@ -56,4 +52,6 @@ public class MainController {
 		
 		
 	}
+	
+
 }

@@ -91,7 +91,7 @@
 
 	// Menu.
 		var $menu = $('#menu');
-
+		
 		$menu.wrapInner('<div class="inner"></div>');
 
 		$menu._locked = false;
@@ -132,32 +132,16 @@
 
 		};
 
+		
 		$menu
 			.appendTo($body)
 			.on('click', function(event) {
+				
 				event.stopPropagation();
 			})
-			.on('click', 'a', function(event) {
-
-				var href = $(this).attr('href');
-
-				event.preventDefault();
-				event.stopPropagation();
-
-				// Hide.
-					$menu._hide();
-
-				// Redirect.
-					if (href == '#menu')
-						return;
-
-					window.setTimeout(function() {
-						window.location.href = href;
-					}, 350);
-
-			})
+			
 			.append('<a class="close" href="#menu">Close</a>');
-
+		
 		$body
 			.on('click', 'a[href="#menu"]', function(event) {
 
@@ -170,8 +154,10 @@
 			})
 			.on('click', function(event) {
 
-				// Hide.
+				if(event.pageX>=350){
 					$menu._hide();
+				}
+				// Hide.
 
 			})
 			.on('keydown', function(event) {
