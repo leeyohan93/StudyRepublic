@@ -16,6 +16,7 @@ import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardRepository;
+import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.springframework.data.domain.Page;
@@ -75,7 +76,6 @@ public class StudyPagePridicate {
 			while(iterator.hasNext()) {
 				list.add(iterator.next());
 		}*/
-		
 		return p.getContent();
 	}
 	/**
@@ -117,7 +117,6 @@ public class StudyPagePridicate {
 		builder.and(studyfileshareboard.studyId.like(studyId));
 		Pageable pageable = PageRequest.of(0, 3, Sort.Direction.DESC, "studyId");
 		Page p = sfsb.findAll(builder, pageable);
-		
 		return p.getContent();
 	}
 	

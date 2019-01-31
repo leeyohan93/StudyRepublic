@@ -2,10 +2,13 @@ package org.mohajo.studyrepublic.studypage;
 
 import java.util.List;
 
+import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
+import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardFileRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardReplyRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardRepository;
+import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardFileRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardReplyRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
@@ -15,6 +18,10 @@ import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +45,9 @@ public class StudyPageController {
 	StudyNoticeboardFileRepository studyNoticeboardFileRepository;
 	@Autowired
 	StudyNoticeboardReplyRepository studyNoticeboardReplyRepository;
+	
+	@Autowired
+	StudyMemberRepository smr;
 	
 	/**
 	 * Fileshareboard 관련 Repository
@@ -72,6 +82,7 @@ public class StudyPageController {
 	public String studyPageMain(Model model/*, @RequestParam("studyId") String studyId*/) {
 		//extra varialbe
 		String studyId = "BB00001";
+		String id = "aaa123";
 		
 		/* 이 주석 코드는 로그인 기능이 활성화 된 후 체크할 예정임.
 		 * 
@@ -92,13 +103,18 @@ public class StudyPageController {
 		//studyId를 이용해서 해당 스터디의 해당 스터디의 공지사항 게시판 내용을 3개 가지고 옴.
 		List <StudyNoticeboard> studynoticeboard3result = pridicate.studyNotice3ResultPredicate(studyId, studyNoticeboardRepository);
 		//studyId를 이용해서 해당 스터디의 해당 스터디의 Qna 게시판 내용을 3개 가지고 옴.
-		//List <StudyQnaboard> studyqnaboard3result = pridicate.studyQna3ResultPredicate(studyId, studyQnaboardRepository);
+		List <StudyQnaboard> studyqnaboard3result = pridicate.studyQna3ResultPredicate(studyId, studyQnaboardRepository);
 		
-		System.out.println(studynoticeboard3result.get(0));
+		//System.out.println(studynoticeboard3result.get(0));
 		
+//		List <StudyNoticeboard> studynoticeboard = studyNoticeboardRepository.findAll();
+		
+//		List <StudyMember> smr2 = smr.findAll();
+		
+		
+//		model.addAttribute("study", studynoticeboard/*smr2*/);
 		model.addAttribute("studynoticeboard3result", studynoticeboard3result);
-		//model.addAttribute("studyqnaboard3result", studyqnaboard3result);
-		
+		model.addAttribute("studyqnaboard3result", studyqnaboard3result);		
 		return "studypage/StudyPageMain";
 	}
 	
