@@ -183,11 +183,13 @@ layout:decorate="~{/layout/mainLayout}">
 					<div class="col-md-2 column-name">진행방식</div>
 					<div class="col-md-10 column-value"><i class="tag-primary" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
 					<div class="col-md-2 column-name">지역</div>
-					<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${study.studyLocation.interestLocation}">location</i>&nbsp;</th:block></div>
+					<div class="col-md-10 column-value"><th:block th:each="location : ${study.studyLocation}"><i class="tag" th:text="${location.interestLocation}">location</i>&nbsp;</th:block></div>
 					<div class="col-md-2 column-name">분야</div>
 					<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
-					<div class="col-md-2 column-name" th:if="${study.price}">가격</div>
-					<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">studyPrice</div>
+					<th:block th:if="${study.price}">
+						<div class="col-md-2 column-name">가격</div>
+						<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">studyPrice</div>
+					</th:block>
 				</div>
 				<div class="box-info">
 					<div class="enroll-count" th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</div>
@@ -197,7 +199,7 @@ layout:decorate="~{/layout/mainLayout}">
 
 			</section>
 			<section class="intro">
-				<h4>소개</h4>
+				<h5>소개</h5>
 				<div class="intro-content">
 					<p th:text="${study.introduction}"></p>
 				</div>
@@ -224,7 +226,7 @@ layout:decorate="~{/layout/mainLayout}">
 					</div>
 					<p th:if="${leaderInfo.memberInterest}!=null" th:text="${leaderInfo.memberInterest}">관심 분야</p>
 					<div class="study-activity">
-						<h4>활동내역</h4>
+						<h5>활동내역</h5>
 						<table>
 							<tr>
 								<th>No.</th>
