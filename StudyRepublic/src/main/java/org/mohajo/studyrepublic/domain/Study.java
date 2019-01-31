@@ -46,7 +46,7 @@ public class Study implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "ONOFF_CODE", nullable = false)
-	private OnoffCD onOffCode;						//방식코드 (O/F/B)
+	private OnoffCD onoffCode;						//방식코드 (O/F/B)
 	
 	@ManyToOne
 	@JoinColumn(name = "STUDY_STATUS_CODE", nullable = false)
