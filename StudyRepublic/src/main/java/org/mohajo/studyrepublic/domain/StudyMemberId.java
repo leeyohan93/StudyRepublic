@@ -2,11 +2,8 @@ package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-
-import org.mohajo.studyrepublic.domain.Member;
 
 import lombok.Data;
 
@@ -20,7 +17,9 @@ import lombok.Data;
 @Embeddable
 public class StudyMemberId implements Serializable {
 
+	@Column(name="study_id")
 	private String studyId;
+	@Column(name="id")
 	private String id;
 	
 }

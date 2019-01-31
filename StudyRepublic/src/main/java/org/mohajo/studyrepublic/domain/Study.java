@@ -105,4 +105,13 @@ public class Study implements Serializable {
 	@JoinColumn(name = "study_id")
 	private List<StudyLocation> studyLocation;			//지역
 	
+	/**
+	 * Add sangyong.shin
+	 */
+	/*@OneToMany(mappedBy="study")
+	private List<StudyMember> studyMember;*/
+	
+	@OneToMany
+	private List<StudyMember> studyMember;
+	
 }

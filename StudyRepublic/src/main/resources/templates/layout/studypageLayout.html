@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>Study Republic</title>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet"
+	href="bootstrap/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script
+	src="bootstrap/js/bootstrap.min.js"></script>
+<link rel = "stylesheet" type = "text/css" href = "/css/studymainpage.css">
+
+</head>
+<body class="is-preload">
+	<!-- Wrapper -->
+	<div id="wrapper">
+
+		<!-- Header -->
+		<header id="header" layout:fragment="header">
+			<div class="inner">
+
+				<!-- Login -->
+				<div id="logout" sec:authorize="isAuthenticated()">
+					<ul>
+					<li><a th:href="@{/logout}">로그아웃</a></li>
+		
+					</ul>
+					 </sec:authorize> 
+				</div>
+				
+				<div id="login" sec:authorize ="isAnonymous()">
+					<ul>					
+						<li><a href="/login">로그인</a></li>
+						<li><a href="/signup">회원가입</a></li>
+					</ul>
+					 </sec:authorize>
+				</div>
+
+				<!-- Logo -->
+				<a href="index.html" class="logo"> <span class="symbol"><img
+						src="images/logo.svg" alt="" /></span><span>Study Republic</span>
+                </a>
+			</div>
+		</header><!-- Main
+		--><div id="content"
+			><div id="left" layout:fragment="left">
+				<a href="StudyPageMain">home</a></br>
+				<a href="StudyNoticeboard">공지사항</a></br>
+				<a href="StudyFileshareboard">파일 공유</a></br>
+				<a href="StudyQnaboard">질문 및 답변</a></br>
+			</div
+			><div id="right" layout:fragment="right">
+				<div id="noticeBoard"></div>
+				<div id="joinMember"></div>
+				<div id="double">
+						<div id="qnaBoard"></div>
+						<div id="ing"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+</html>

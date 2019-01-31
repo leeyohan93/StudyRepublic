@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymleaf.org"
- layout:decorate="~{/layout/mainLayout}">
+ layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
 <title>공지사항 게시판 입니다.</title>
@@ -11,6 +11,7 @@
 	</style>
 </head>
 <body>
+	
 	<div id="main" layout:fragment = "main">
 		<table>
 			<tr>
@@ -45,7 +46,7 @@
 				<!-- <table> -->
 				<tr:block th:each = "snr : ${fasn.studyNoticeboardReply}">
 						<td th:text = "${snr.studyNoticeboardReplyId}"></td>
-						<td th:text = "${snr.studyId}"></td>
+						<td th:text = "${snr.studId}"></td>
 						<td th:text = "${snr.date}"></td>
 						<td th:text = "${snr.content}"></td>
 					<!-- <td th:text = "${snr.studyNoticeboardReplyId}"></td>

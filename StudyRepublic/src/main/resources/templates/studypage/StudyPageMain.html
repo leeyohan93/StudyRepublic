@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymleaf.org"
-layout:decorate="~{/layout/mainLayout}">
+ layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
 <title>스터디 메인 페이지 입니다.</title>
@@ -8,14 +8,8 @@ layout:decorate="~{/layout/mainLayout}">
 </head>
 <body>
 	<div id="main" layout:fragment = "main">
-        <div id="leftright">
-            <div id="left">
-            	<a href="StudyPageMain">home</a></br>
-            	<a href="StudyNoticeboard">공지사항</a></br>
-            	<a href="StudyFileshareboard">파일 공유</a></br>
-            	<a href="StudyQnaboard">질문 및 답변</a></br>
-            </div>
-            <div id="right">
+    </div>
+    <div id="right" layout:fragment="right">
                 <div id="noticeBoard">
                 	<table>
                 		<tr>
@@ -44,15 +38,26 @@ layout:decorate="~{/layout/mainLayout}">
 							<td th:text = "${snb.content}"></td>
 							<td th:text = "${snb.date}"></td>
 							<td th:text = "${snb.id}"></td>
-							<!-- <td th:text = "${tmp.startTime}"></td>
-							<td th:text = "${tmp.endTime}"></td> -->
+							<!-- <td th:text = "${snb.startTime}"></td>
+							<td th:text = "${snb.endTime}"></td> -->
 							<td th:text = "${snb.day}"></td>
 							<td th:text = "${snb.location}"></td>
                 		</tr>
+                		<!-- <tr th:each="snb : ${study}">
+                			<td th:text = "${snb}"></td>
+                		</tr> -->
+                		<!-- <tr th:each="snb : ${studynoticeboard3result}">
+                			<td th:text = "${snb}"></td>
+                		</tr> -->
+                		<tr th:each="snb : ${study}">
+                			<td th:text = "${snb.studyId}"></td>
+                			<!-- <table>
+                				<tr th:each="snb2 : ${snb}">
+                				<td th:text = "${snb2}"></td>
+                			</table> -->
                 	</table>
                 </div>
-                <div id="joinMember">
-                </div>
+                <div id="joinMember"></div>
                 <div id="double">
                         <div id="qnaBoard">
                        		<table>
@@ -66,7 +71,7 @@ layout:decorate="~{/layout/mainLayout}">
 									<td>작성자</td>
 								</tr>
 								<tr th:each="sqb : ${studyqnaboard3result}">
-									<td th:text = "${sqb.studyNoticeboardId}"></td>
+									<td th:text = "${sqb.studyQnaboardId}"></td>
 									<td th:text = "${sqb.studyId}"></td>
 									<td th:text = "${sqb.number}"></td>
 									<td th:text = "${sqb.title}"></td>
@@ -79,9 +84,6 @@ layout:decorate="~{/layout/mainLayout}">
                         <div id="ing">
                         </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div id="footer" layout:fragment = "footer"></div>
+		</div>
 </body>
 </html>
