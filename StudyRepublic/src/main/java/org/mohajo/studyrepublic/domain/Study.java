@@ -26,6 +26,7 @@ import lombok.Data;
  * @since	2019. 1. 22.
  * @version	
  * - 스터디 DTO 의 기초 클래스
+ * - 초기값, 제약조건 추가 필요함
  */
 @Data
 @Entity

@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()	
 		.antMatchers("/member/signup","/member/insert","/").permitAll()
 		.antMatchers("/admin/**","/member/inquery","/member").hasRole("A")
-		.antMatchers("/member/**", "/tutor/signup","/tutor/insert" ).hasRole("N")
+		.antMatchers("/member/**", "/tutor/signup","/tutor/insert").hasRole("N")
 	
 		/*.antMatchers("/admin/**").hasAnyRole("A","T")*/	// a나 t  둘 다 된다.
 		.antMatchers("/tutor/**").hasRole("T");
