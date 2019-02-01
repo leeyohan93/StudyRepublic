@@ -115,7 +115,7 @@ var AllselectBox = document.querySelectorAll("span");
    
    var target = document.getElementById("sedu");
    
-   target.innerHTML ="<input type = 'text' id = 'edu' name  = 'educationCode' ></input><li>" +  educationListText + "</li>";
+   target.innerHTML ="<input type = 'text' id = 'edu' name  = 'educationCD' ></input><li>" +  educationListText + "</li>";
    document.getElementById('edu').value = educationListValue; 
       
 } 
@@ -159,6 +159,7 @@ var AllselectBox = document.querySelectorAll("span");
  
  var sinterest1 = "";
  var pinterest2cd = document.getElementById("pinterest2cd")
+ var checkNum = 0;
  
  function interest1(obj) {
        sinterest1 = obj.options[obj.selectedIndex].text;
@@ -190,19 +191,19 @@ var AllselectBox = document.querySelectorAll("span");
    else {
       interest2List.push(obj.options[obj.selectedIndex].text);
       selectedinterest2 += interest2List[interest2List.length-1];    
-      addCareerListValue = "<input type = 'text' id = 'isel" + count +  "' name =  tutorinterest[" + count + "].interest2CD'></input> <input type = 'button' value = '삭제' id = 'idel" + count + "' onclick = 'deleteInsert(" + count + ")'>";    
+     
+      addinterestListValue = "<input type = 'text' id = 'isel" + count +  "' name = 'tutorinterest[" + count + "].interest2CD'></input> <input type = 'button' value = '삭제' id = 'idel" + count + "' onclick = 'deleteInterest(" + count + ")'>";    
+      $('#int2').append(addinterestListValue);  
       
-      $('#int2').append(addCareerListValue);  
-      document.getElementById('isel'+ count).value = interest2List[interest2List.length-1];
+      document.getElementById('isel'+ count).value = obj.options[obj.selectedIndex].value;
       
-      
-       addInterest2List = "<li id = 'liisel" + count +  "'>" + sinterest1 + " > " + interest2List[interest2List.length-1] + "</li> <input type = 'button' value = '삭제' id = 'liidel" + count + "' onclick = 'deleteInterest(" + count + ")'>";
+      addInterest2List = "<li id = 'liisel" + count +  "'>" + sinterest1 + " > " + interest2List[interest2List.length-1] + "</li> <input type = 'button' value = '삭제' id = 'liidel" + count + "' onclick = 'deleteInterest(" + count + ")'>";
        $('#int2').append(addInterest2List); 
          
-          careerInput = document.getElementById('isel'+count);
-         careerInput.style.display = 'none';
-         careerDelete = document.getElementById('idel'+count);
-         careerDelete.style.display = 'none';  
+       	 interestInput = document.getElementById('isel'+count);
+       	 interestInput.style.display = 'none'; 
+       	 interestDelete = document.getElementById('idel'+count);
+       	 interestDelete.style.display = 'none';  
          
        count++;
    }

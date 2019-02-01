@@ -70,7 +70,7 @@ public class Member implements Serializable {
 	private String phonenumber;
 	
 	@Column(nullable = false)
-	private int visibility;
+	private int visibility = 0;
 	
 	@Column(nullable = false)
 	private String profileOriginName;

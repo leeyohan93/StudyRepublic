@@ -24,31 +24,32 @@ import lombok.Data;
 @Table(name = "tutor", schema = "StudyRepublic")
 public class Tutor implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 1L;
 
-	
-	
-	@Id 
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "tutor_number")
-	private int tutorNumber;
+   
+   
+   @Id 
+   @GeneratedValue(strategy=GenerationType.IDENTITY)
+   @Column(name = "tutor_number")
+   private int tutorNumber;
 
-/*	@ManyToOne
-	@Column(name = "EDUCATION_CODE")
-	private EducationCD educationCD;*/
-	
-	private String introduction;
-	
-	@OneToOne
-	@JoinColumn(name = "id")
-	private Member member;
-	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name = "tutor_number")
-	private List <TutorCareer> tutorcareer;
-	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name = "tutor_number")
-	private List <TutorInterest> tutorinterest;	
-	
+   @ManyToOne
+   @JoinColumn(name = "EDUCATION_CODE")
+   private EducationCD educationCD;
+   
+   @Column
+   private String introduction;
+   
+   @OneToOne
+   @JoinColumn(name = "id")
+   private Member member;
+   
+   @OneToMany(cascade=CascadeType.ALL)
+   @JoinColumn(name = "tutor_number")
+   private List <TutorCareer> tutorcareer;
+   
+   @OneToMany(cascade=CascadeType.ALL)
+   @JoinColumn(name = "tutor_number_")
+   private List <TutorInterest> tutorinterest;   
+   
 }

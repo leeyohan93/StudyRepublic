@@ -87,8 +87,7 @@ public class TutorController {
 		
 		List <Interest2CD> Ninterest2cd = interest2CDRepository.Ninterest2List();
 		model.addAttribute("ninterest2cd", Ninterest2cd);
-		
-				
+						
 		return "tutor/tutor_signuptutor";
 		
 	}
@@ -107,6 +106,9 @@ public class TutorController {
 		roles.add(memberroles);
 		member.setGradeCD(new GradeCD("W"));
 		member.setRoles(roles);	
+		
+		
+		
 		memberrepository.save(member);
 		tutorrepository.save(tutor);
 
@@ -120,5 +122,11 @@ public class TutorController {
 		model.addAttribute("tutor", tutor); 
 		
 		return "tutor/tutor_signupinquery";		
+	}	
+	
+	@RequestMapping("/tutor/delete")
+	public String inqueryTutor(@RequestParam int id) {
+		tutorrepository.deleteById(id);
+		return "redirect:/";		
 	}	
 }

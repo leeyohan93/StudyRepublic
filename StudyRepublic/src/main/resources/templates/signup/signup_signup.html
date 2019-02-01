@@ -3,7 +3,10 @@
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>Insert title here</title>
 
 <style>
@@ -19,19 +22,50 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 <div id = "main" layout:fragment = "main">
 <div class = "inner">
 
-<form id = "member" action = "/member/insert" method = "post">
-아이디 <input type = "text" name = "id"> <br>
-비밀번호 <input type = "text" name = "password"> <br>
-이름 <input type = "text" name = "name"> <br>
-성별 <input type = "text" name = "gender"> <br>
-생년월일 <input type = "text" name = "birth"> <br>
-닉네임 <input type = "text" name = "nickname"> <br>
-이메일<input type = "text" name = "email"> <br>
-휴대전화번호<input type = "text" name = "phonenumber"> <br>
-공개여부 <input type = "text" name = "visibility"> <br>
-<input id = "roles" type = "text" name = "roles[0].roleName" value = "N">
-<!-- <input type="text" id="interestlocationstcode" placeholder="우편번호"> -->
-<input type="button" onclick="addInterestLocation()" value="관심지역추가"><br>
+<form id = "memberJoin" action = "/member/insert" method = "post">
+<!-- 아이디    <label>id: <input type="text" class = "memberInsert"id="id" name = "id" onblur = "check_Id()" onkeyup = "remove_Message()" autofocus></label><input type = "button"  id = "checkId"  value = "중복체크"><span class = "member"  id = "enterId"></span>
+-->
+
+ <p><label>id: <input class = "memberInput" type="text" id= "id" name = "id" onblur = "check_Id()" onkeyup = "remove_Message()" autofocus> <input type = "button"  id = "checkId"  value = "중복체크"> <span class = "member" id="enterId"></span></label><p>
+ <p><label>pw: <input class = "memberInput" type="password" id="password" name = "password"  onblur="check_Pw()" onkeyup = "remove_Message()"></label> <span class = "member" id = "enterPw"></span></p> 
+ <p><label>repw: <input class = "memberInput" type="password" id="repassword" name = "repassword"  onblur="check_RePw()" onkeyup = "remove_Message()"></label> <span class = "member" id = "enterRePw"></span></p> 
+ <p><label>이름: <input class = "memberInput" type="text" id="name" name = "name" onblur="check_Name()" onkeyup = "remove_Message()"></label> <span class = "member" id="enterName"></span><p>
+ <p><label>생년월일: <input class = "memberInput" type="date" id="birth" name = "birth" onblur="check_Birth()" onkeyup = "remove_Message()"></label> <span class = "member" id="enterBirth"></span><p>
+ <p><label>닉네임: <input class = "memberInput" type="text" id="nickname" name = "nickname"  onblur="check_Nick()" onkeyup = "remove_Message()"></label> <input type = "button"  id = "checkNick"  value = "중복체크"><span class = "member" id="enterNick"></span><p>
+ 
+<p><label>성별: 
+<input type="radio" name="gender" value="남" /> 남자
+<input type="radio" name="gender" value="여" /> 여자
+</label>
+ </p>
+ 
+<p>이메일:	<input type="text" name="email1" id="email1" value=""  onblur = "emailvalue()" />&nbsp@&nbsp
+	  		<input type="text" name="email2" id="email2" value="" disabled  onblur = "emailvalue()" /> 
+	 		<select name="email3" id="email3" onchange="email_change(this)" onblur = "emailvalue()">
+	  		<option value="0">선택하세요.</option>
+	  		<option value="9">직접입력</option>
+	 		<option value="naver.com">네이버</option>
+	 		<option value="hanmail.net">다음</option>
+	 		<option value="google.co.kr">구글</option>
+	 		</select>		</p>
+ <p><label>이메일완성: <input class = "memberInput" type="text" id="email" name = "email"  onkeyup = "remove_Message()"></label><span class = "member" id="enterEmail"></span></p>
+ 
+ <p><label>휴대전화: <input class = "memberInput" type="text" id="phonenumber" name = "phonenumber" maxlength = "11" onblur="check_Phone()" onkeyup = "remove_Message()"></label> <span class = "member" id="enterPhone"></span><p> 
+ 
+<p><input type="text" id="text" style="width:200px; height:100px; display: none;"></p>
+<p><input id = "roles" type = "text" name = "roles[0].roleName" value = "N"><span class = "member"></p>
+<p><input type="text" id="interestlocationstcode" placeholder="우편번호"></p>
+<p><input type="button" onclick="addInterestLocation()" value="관심지역추가"></p>
+   
+<!--   비밀번호 <input type = "password" class = "memberInsert" name = "password" id = "password"> <span class = "member" id = "enterPw"></span>
+이름 <input type = "text" class = "memberInsert" name = "name" id = "name"> <span class = "member"></span>
+성별 <input type = "text" class = "memberInsert" name = "gender" id = "gender"><span class = "member"></span>
+생년월일 <input type = "date" class = "memberInsert" name = "birth" id = "birth"> <span class = "member"></span>
+닉네임 <input type = "text" class = "memberInsert" name = "nickname" id = "nickname"><span class = "member"></span>
+이메일<input type = "email" class = "memberInsert" name = "email" id = "eamail"><span class = "member"><span class = "member"> </span>
+휴대전화번호<input type = "text" class = "memberInsert" name = "phonenumber" id = "phonenumber"> <span class = "member"></span>
+공개여부 <input type = "text" class = "memberInsert" name = "visibility" id = "visibility"> <span class = "member"></span>   -->
+<!--   -->
 
 <span id = "loc">
 </span>
@@ -39,12 +73,9 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 <div id="guide" style="color:#999;display:none"></div>
 
 
-<!--<input type = "text" name = "profile_origin_name"> <br>
- <input type = "text" name = "profile_save_name"> <br>
-<input type = "text" name = "registration_date"> <br> -->
 
 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-<input type = "submit" value = "회원가입">
+<input type = "button" id = "signup" value = "회원가입">
 </form>
 
 </div>
@@ -53,10 +84,19 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<script>
+<script type="text/javascript">
 var count = 0;
 var allSpan = document.querySelectorAll("span");
-    //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+$(function() {
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+});
+   
+   //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
     function addInterestLocation() {
     	
        
@@ -109,24 +149,316 @@ var allSpan = document.querySelectorAll("span");
             	
             } 
         }).open();
-    }
+    } 
     
-     function deleteLocation(num) {
+    
+      function deleteLocation(num) {
 		alert("dd");
 		var standard = num;
 		$('#selLoc' + standard).remove(); 
-	/* 	count--; */
+		/* 	count--; */
 
-    } 
+  }  
      
+
      
+     var data = {};
+     var idCheck;
      
+     $("#signup").prop("disabled", true);
      
+   	 $('#checkId').on('click', function(){
+   		 var inputedId = $('#id').val();
+		 data.id = $('#id').val();
+		 $.ajax({
+			 type : 'POST',
+			 data : data,
+			 url:'/member/checkid',
+			 
+			 success:function(data){
+					if ( $.trim(inputedId).length == 0 ) {				
+						alert("아이디를 입력해주세요.");
+						$("#signup").prop("disabled", true);
+						idCheck = 0;
+					} else if (data.count > 0) {
+						alert("사용불가");
+						$("#signup").prop("disabled", true);
+						idCheck = 1;
+					}
+					else if ($.trim(inputedId).length != 0 && data.count == 0 && (regex_id.test(uid))){ 
+						alert("사용가능");
+						
+						//$("#password").focus();
+						idCheck = 0;
+					}
+					
+					else if ($.trim(inputedId).length != 0 && data.count == 0 && !(regex_id.test(uid))) {
+						
+						alert("사용불가. 유효하지 않은 형식 입니다.");
+						$("#signup").prop("disabled", false);
+						idCheck = 1;
+					}
+					
+					check_Id();					
+					
+			 },
+			 error:function(error) {
+				 alert("error: " + error)
+			 }
+		 });
+	 }); 
+   	 
+   	 
+   	 var nickdata = {};
+   	 var nickCheck;
+   	 
+   	 $('#checkNick').on('click', function(){
+   		 alert("닉네임1");
+   		 var inputedNick = $('#nickname').val();
+		 data.nickname = $('#nickname').val();
+		 $.ajax({
+			 type : 'POST',
+			 data : data,
+			 url:'/member/checknick',
+			 
+			 success:function(data){
+				 
+				 alert("닉네임2");
+				 alert(data.nickCount);
+					if ( $.trim(inputedNick).length == 0 ) {				
+						alert("닉네임을 입력해주세요.");
+						$("#signup").prop("disabled", true);
+						nickCheck = 0;
+						
+					} else if (data.nickCount > 0) {
+						alert("사용불가");
+						$("#signup").prop("disabled", true);
+						nickCheck = 1;
+						
+					}
+					else if ($.trim(inputedNick).length != 0 && data.nickCount == 0 && regex_nick.test(nickName)){ 
+						alert("사용가능");
+						$("#signup").prop("disabled", false);
+						nickCheck = 0;
+						
+					}
+					else if ($.trim(inputedNick).length != 0  {
+						//&& data.nickCount == 0 && !(regex_nick.test(nickName)) && uid != "" && pw != "" && repw != "" && name != "" && gender != "" && email != "" && phonenumber != "" && birth != "")
+						alert("사용불가. 유효하지 않은 형식 입니다.");
+						$("#signup").prop("disabled", false);
+						nickCheck = 1;
+
+					}
+					
+					if(idCheck == 0 && nickCheck == 0) {
+					$("#signup").prop("disabled", false);
+					}
+					check_Nick();
+					
+					
+			 },
+			 error:function(error) {
+				 alert("error: " + error)
+			 }
+		 });
+	 }); 
+    
      
+ 	   	$('#signup').on('click', function(){
+ 		if (idCheck == 1 || nickCheck == 1) {
+ 			alert('아이디 중복체크를 해주세요.');
+ 		} else {
+ 			$("#repassword").remove(); 	// repassword삭제.
+ 			$("#email1").remove();
+ 			$("#email2").remove();
+ 			alert("회원가입을 축하합니다.");
+ 			$("#memberJoin").submit();
+ 			// input type submit을 button으로 해야함.
+ 		}
+ 		
+   	}); 
      
-     
-     
-   
+ //  	var information = document.getElementsByClassName("memberInsert"); 
+   	
+   	var information = document.getElementsByClassName("memberInput");
+   	var messageBox = document.getElementsByClassName("member");
+   	
+   	
+   		var regex_id="";
+   		var regex_pw="";
+   		var regex_name = "";
+   		var regex_nick ="";
+   		var regex_phone="";
+   		var regexArr = [regex_id, regex_pw, regex_name, regex_nick];
+   	
+   	    var uid;
+   	    var pw;
+   	    var rePw;
+   	    var name;
+   	    var birth;
+   	    var nickName;
+   	    var email;
+   	    var phoneNumber;
+//      var gender = document.getElementById("gender").value;
+   		
+   	    function check_Id() {
+   	   	uid = document.getElementById("id").value;
+   	 	regex_id = /^[A-Za-z0-9+]{4,12}$/  
+ 		
+/*    	    if(idCheck == null && uid !== "") {
+   	    	document.getElementById("enterId").innerHTML = "아이디 중복체크를 해주세요.";
+   	    } */
+   	    if ( uid == "") {
+   	    	//document.getElementById("id").focus();
+   	    	document.getElementById("enterId").innerHTML = "아이디를 입력해주세요."; 	    	
+   	    }  
+   	    if ( !(regex_id.test(uid)) && uid !== "" ) {
+   	    	document.getElementById("enterId").innerHTML = "유효하지 않은 형식 입니다.";
+   	    } else if ( regex_id.test(uid) && idCheck == 1 ) {
+   	    	document.getElementById("enterId").innerHTML="이미 사용되고 있는 아이디 입니다.";
+   	    } else if ( regex_id.test(uid) && idCheck == 0 ) {
+   	    	document.getElementById("enterId").innerHTML = "id ok";
+   	    }
+   	    	
+   	}
+   	    
+   	function check_Pw() {
+   	   	   
+   	    pw = document.getElementById("password").value;
+        regex_pw=/^[a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\-\_\+\=]{10,18}$/
+        
+   	    if(pw===""){
+   	     // document.getElementById("password").focus();
+   	   }
+   	    
+   	    if(regex_pw.test(pw)===true) { document.getElementById("enterPw").innerHTML = "ok"; }
+   	    else{ 
+   	       if((pw ==="" || pw===null) && uid !== ""){document.getElementById("enterPw").innerHTML="비밀번호를 입력하세요";}
+   	       else{  
+   	      if (pw!=""){
+   	          document.getElementById("enterPw").innerHTML = "유효하지 않은 비밀번호입니다.";
+   	      }
+   	           }
+   	    }
+   	}
+   	
+   	function check_RePw() {
+   	   var pw = document.getElementById("password").value;
+   	   var rePw = document.getElementById("repassword").value;
+   	    
+   	    if(pw === rePw && pw.length >= 1) { document.getElementById("enterRePw").innerHTML = "비밀번호가 일치합니다"; }
+   	    else{ 
+   	        if ((rePw == "" || rePw == null) && pw !== "") {
+   						document.getElementById("enterRePw").innerHTML = "비밀번호를 입력하세요";
+   					} 
+   	       else{
+   	           if (rePw !== "") {document.getElementById("enterRePw").innerHTML = "비밀번호가 일치하지 않습니다.";}}
+   	    }
+   	}
+   	
+   	function check_Name() {
+       
+       pw = document.getElementById("password").value;
+       name = document.getElementById("name").value;
+       regex_name = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]$/
+      	    
+      	    
+      	    if(regex_name.test(name)===true) { document.getElementById("enterName").innerHTML = "ok"; }
+      	    else{ 
+      	       if((name==="" || name===null) && pw !== ""){document.getElementById("enterName").innerHTML="이름을 입력하세요";}
+      	       else{  
+      	      if (name!=""){
+      	          document.getElementById("enterName").innerHTML = "한글로 입력해주세요.";
+      	      }
+      	           }
+      	    }
+      	}
+   	
+   	function check_Birth() {
+        
+      	 name = document.getElementById("name").value;
+      	 birth = document.getElementById("birth").value;
+      	    
+          if(birth===""){
+      	 //    document.getElementById("birth").focus();
+      	   }
+      	       	    
+      	       if((birth==="" || birth===null) && name !== ""){
+      	    	   document.getElementById("enterBirth").innerHTML="날짜를 입력하세요";
+      	    	   } 
+      	       else {
+      	    	 document.getElementById("enterBirth").innerHTML="ok";
+      	       }
+      	    }
+   	
+    	function check_Nick() {
+        
+      	 birth = document.getElementById("birth").value;
+       	 nickName = document.getElementById("nickname").value;
+      	 regex_nick = /^[a-z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,21}$/
+      	    
+        	    if ( nickName == "" && birth !== "") {
+           	    	document.getElementById("enterNick").innerHTML = "닉네임을 입력해주세요."; 	    	
+           	    }  
+           	    if ( !(regex_nick.test(nickName)) && nickName !== "" ) {
+           	    	document.getElementById("enterNick").innerHTML = "유효하지 않은 형식 입니다.";
+           	    } else if ( regex_nick.test(nickName) && nickCheck == 1 ) {
+           	    	document.getElementById("enterNick").innerHTML="이미 사용되고 있는 닉네임 입니다.";
+           	    } else if ( regex_nick.test(nickName) && nickCheck == 0 ) {
+           	    	document.getElementById("enterNick").innerHTML = "ok";
+           	    }   
+    	}
+    	
+    	function check_Phone(){
+            
+          	 email = document.getElementById("nickname").value;
+          	 phoneNumber = document.getElementById("phonenumber").value;
+         	 regex_phone = /^[0-9]{10,11}$/
+         	    
+           	    if ( phonenumber == "" && email !== "") {
+              	    	document.getElementById("enterPhone").innerHTML = "핸드폰번호를 입력해주세요."; 	    	
+              	    }  
+                if ( !(regex_phone.test(phoneNumber))) {
+              	    	document.getElementById("enterPhone").innerHTML = "유효하지 않은 형식 입니다.";
+              	    }  else if ( regex_phone.test(phoneNumber)) {
+              	    	document.getElementById("enterPhone").innerHTML = "ok";
+              	    }   
+       	}
+    	
+         	
+   	function remove_Message() {    
+    	    for ( i = 0; i < information.length; i++) {
+   	        if (information[i] === event.target) {
+   	        	messageBox[i].innerHTML = "";
+  	            this.innerHTML = "";               
+   	        }
+   	    } 
+   	} 
+   	
+      	
+      	
+    function email_change(obj){
+    		if(obj.options[obj.selectedIndex].value=='0'){
+				document.getElementById("email2").disabled = true;		
+				document.getElementById("email2").value=""; 
+    		
+    		}else if(obj.options[obj.selectedIndex].value =='9'){
+    			document.getElementById("email2").disabled = false;
+    			document.getElementById("email2").value=""; 
+    			document.getElementById("email2").focus(); 
+    				 
+    		  }else{
+ 
+    		 document.getElementById("email2").disabled = false;
+    		 document.getElementById("email2").value = obj.options[obj.selectedIndex].value;
+	
+    		  }   		
+    	  }
+    	
+    	function emailvalue() {
+    		 document.getElementById("email").value = document.getElementById("email1").value + "@" +document.getElementById("email2").value;
+    	}
+   	
 </script>
 
 

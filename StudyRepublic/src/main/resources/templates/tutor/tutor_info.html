@@ -26,7 +26,7 @@ layout:decorate="~{/layout/mainLayout}">
 <td th:text = "${t.tutorNumber}"></td>
 <td><a th:href="@{'/tutor/inquery'(id=${t.member.id})}"><p th:text = "${t.member.id}"></p></a></td>
 <td th:text = "${t.member.name}"></td>
-<td th:text = "${t.educationCode}"></td>
+<td th:text = "${t.educationCD.codeValueKorean}"></td>
 <td th:text = "${t.introduction}"></td>
 </tr>
 </table>
