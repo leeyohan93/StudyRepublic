@@ -6,13 +6,17 @@
  -->
  
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
 <head>
 
 <title>게시판 글목록</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
@@ -22,10 +26,12 @@
 #content{ 
    resize :none; 
    width: 80%; 
+   height: 400px;
   padding: 12px 13px; 
   border: 1px solid #ccc; 
 	border-radius: 4px; 
   font-size:16px; 
+  overflow:auto;
  } 
 
 #comment{
@@ -33,44 +39,80 @@
 }
 </style>
 	<body>
-  
+	
+	<div id = "main" layout:fragment = "main">
+	<div class="inner">
+   <!-- 게시글내용 시작 -->
     <div class= "container">
       
-      
+   
       <div class="beforeAfter">
  
-       <button class ="btn btn-default" name="goBeforeFreePage" id="goBeforeFreePage" type="submit" formaction="">이전글 ▲</button>
-        <button class ="btn btn-default" name="goBeforeFreePage" id="goBeforeFreePage" type="submit" formaction="">다음글 ▼</button>
-      
+       <a class="btn btn-default"  role="button"  id="goBeforeFreePage" name="goBeforeFreePage" th:href="@{'goBeforeFreePage'(freeBoardId=${freeBoard.freeBoardId})}">이전글 ▲</a>
+       <a class="btn btn-default"  role="button"  id="goAfterFreePage" name="goAfterFreePage" th:href="@{'writeBoard'(freeBoardId=${freeBoard.freeBoardId})}">다음글 ▼</a>
+                                                                                                      
       </div>
 
-      
+      <!-- 게시판명  -->
       <div class ="row1">
-      <span name ="title" id ="title">[[${freeBoard.title}]]<span> 
-        <span class ="bar">|</span>
-        <span name ="boardName2" id ="boardName">자유게시판</span>
+      <span name ="title" id ="title">[[${freeBoard.title}]]</span>  
+        <span class ="bar">|</span> 
+        <span name ="boardName" id ="boardName">자유게시판</span>
         </div>
+       <!--게시판명 끝  -->
         
         
+        <!--아이디 조회수 추천 날짜 -->
       <div class ="row2">
         <span name ="id" id ="id">[[${freeBoard.id}]]</span>
         <span name ="hit" id ="hit">조회수&nbsp[[${freeBoard.hit}]]</span>
         <span name ="likeCount" id ="likeCount">추천&nbsp[[${freeBoard.likeCount}]]</span>
         <spane name ="date" id ="date">[[${#dates.format(freeBoard.date, 'yyyy-MM-dd HH:mm')}]]</span>
         </div>
+        <!--아이디 조호수 추천 날짜 끝  -->
         
+        
+        <!--글내용 -->
         <div class ="contentArea">
-          <textarea name ="content" id="content" rows="15" readonly >[[${freeBoard.content}]]</textarea>
-        
           
-            </div>
-        
-        <div class="row3">
-          <span name="replyCount" id="replyCount">댓글수&nbsp[[${freeBoard.replyCount}]]</span>
-          <a class="btn btn-default" role="button" id="likeCount" name="likeCount">추천</a>
-          <a tpye="hidden" th:href="@{'modifyBoard'(freeBoardId=${freeBoard.freeBoardId})}" name="report" id="report">신고</a>
+          <div name ="content" id="content" th:utext="${freeBoard.content}" readonly></div>
+            
         </div>
-          
+          <!--글내용 끝  -->
+        
+        
+        <!--추천 신고 -->
+        <div class="row3">
+          <a class="btn btn-default" role="button" id="likeCount" name="likeCount">추천[[${freeBoard.likeCount}]]</a>
+          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#reportModal">신고</button>
+        </div>
+         <!--추천 신고 끝  --> 
+         
+         <!-- 신고 modal  -->
+         
+<!--          <div class="modal fade" id="reportModal" role="dialog" aria-labelledby="reportModal"> -->
+<!--           <div class="modal-dialog" role="document"> -->
+<!--            <div class="modal-content"> -->
+<!--             <div class="modal-header"> -->
+<!--               <h5 class="modal-title" >신고하기</h5> -->
+<!--               <button type="button" class="close" data-dispiss="modal" aria-label="Close"> -->
+                
+<!--               </button> -->
+<!--             </div> -->
+<!--             <div class="modal-body"> -->
+<!--               신고자 날짜 신고대상자 신고사유 신고내용 -->
+<!--             </div> -->
+<!--             <div class="modal-footer"> -->
+<!--                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button> -->
+<!--                <button type="button" class="btn btn-default">신고하기</button> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--            </div> -->
+<!--           </div> -->
+<!--          </div> -->
+         
+         <!--신고 modal 끝  -->
+         
          <div class= "row4">
          
         <a class="btn btn-default" role="button" id="comment" name="comment" href="">답글</a>
@@ -81,7 +123,169 @@
         
         </div>
         
-        
-        
+         
+    <!-- 게시글 내용 끝 -->
+    
+    <!--  댓글  -->
+    <div class="container">  
+        <label for="content" >댓글수&nbsp&nbsp<span name="replyCount" id="replyCount"></span></label>
+        <form id="commentInsertForm" name="commentInsertForm">
+            <div class="input-group">
+               <input type="hidden" name=freeBoardId th:value="${freeBoard.freeBoardId}"/>
+               <input type="hidden" name="id" value="aaa123"/>
+               <input type="text" class="form-control" id="registerContent" name="content" placeholder="내용을 입력하세요.">
+               <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="commentInsertBtn" name="commentInsertBtn">등록</button>
+               </span>
+              </div>
+        </form>
     </div>
+    
+    <div class="container">
+        <div class="commentList"></div>
+    </div>
+   
+    <!--댓글끝 -->
+
+</div>
+</div>
+
+
+
+
+
+    
+   
+ <script th:inline="javascript">
+ 
+ //ajax구현하기위한 script
+ var token = $("meta[name='_csrf']").attr("content");
+ var header = $("meta[name='_csrf_header']").attr("content");
+ $(function() {
+     $(document).ajaxSend(function(e, xhr, options) {
+         xhr.setRequestHeader(header, token);
+     });
+ });
+ 
+ 
+ $(document).ready(function(){
+	//페이지 로딩시 댓글 목록 출력 
+	 commentList(); 
+	});
+//게시글 번호
+ var freeBoardId = [[${freeBoard.freeBoardId}]]; 
+ console.log(freeBoardId);
+
+ //댓글 등록 버튼 클릭시
+ $("#commentInsertBtn").click(function(){  
+	
+	 //commentInsertForm의 내용을 가져옴
+	 var insertData = $("#commentInsertForm").serialize(); 
+     console.log(insertData);
+     commentInsert(insertData); //Insert 함수호출(아래)
+ });
+ 
+ //댓글 숫자
+ function commentCount(){
+	 $.ajax({
+		 url:'/comment/commentCount',
+		 type :'get',
+		 data : {'freeBoardId':freeBoardId},
+		 success : function(data){ 
+			 
+			 if(data != 0){
+				 $("#replyCount").text(data);
+			 }
+		 }
+				 
+	 });
+ } 
+ 
+ 
+ 
+  
+ //댓글 목록 
+ function commentList(){
+     $.ajax({
+         url : '/comment/listFreeReply',
+         type : 'get',
+         data : {'freeBoardId':freeBoardId},
+         success : function(data){
+             var a =''; 
+             $.each(data, function(key, value){ 
+                 a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+                 a += '<div class="commentInfo'+value.freeBoardReplyId+'">'+' 작성자 : '+value.id+'&nbsp&nbsp&nbsp'+value.date;
+                 a += '<a onclick="commentUpdate('+value.freeBoardReplyId+',\''+value.content+'\');"> 수정 </a>';
+                 a += '<a onclick="commentDelete('+value.freeBoardReplyId+');"> 삭제 </a> </div>';
+                 a += '<div class="commentContent'+value.freeBoardReplyId+'"> <p> 내용 : '+value.content +'</p>';
+                 a += '</div></div>';
+             });
+             commentCount();
+             $(".commentList").html(a);
+         }
+     });
+ }
+  
+ //댓글 등록
+ function commentInsert(insertData){ alert(insertData);
+     $.ajax({
+         url : '/comment/registerFreeReply',
+         type : 'post',
+         data : insertData,
+         success : function(data){
+             if(data != 0) {
+                 commentList(); 
+                 $("#registerContent").val('');
+             }
+         }
+     });
+ }
+ 
+ 
+//댓글 수정 폼생성 
+ function commentUpdate(freeBoardReplyId, content){ 
+	 console.log("freeBoardReplyId = ", freeBoardReplyId);
+     var a ='';
+     
+     a += '<div class="input-group">';
+     a += '<input type="text" class="form-control" name="content_'+freeBoardReplyId+'" value="'+content+'"/>';
+     a += '<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="commentUpdateProc('+freeBoardReplyId+');">수정</button> </span>';
+     a += '</div>';
+     
+     $('.commentContent'+freeBoardReplyId).html(a);
+     
+ }
+  
+ //댓글 수정
+ function commentUpdateProc(freeBoardReplyId){ 
+     var updateContent = $('[name=content_'+freeBoardReplyId+']').val();
+     
+     $.ajax({
+         url : '/comment/updateFreeReply',
+         type : 'post',
+         data : {'content' : updateContent, 'freeBoardReplyId' : freeBoardReplyId},
+         success : function(data){ 
+        	 console.log("data = ",data);
+             if(data != 0) commentList(freeBoardId);  
+         }
+     });
+ }
+  
+ //댓글 삭제 
+ function commentDelete(freeBoardReplyId){ alert(freeBoardReplyId);
+     $.ajax({
+         url : '/comment/deleteFreeReply/'+freeBoardReplyId,
+         type : 'post',
+         success : function(data){ 
+        	 console.log("data = ",data);
+             if(data !=0) commentList(freeBoardId); 
+         }
+     });
+ }
+
+
+
+
+     </script>
    </body>
+  </html>
