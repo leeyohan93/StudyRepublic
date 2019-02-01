@@ -4,12 +4,15 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,7 +32,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude="freeboard_reply")
 @Entity
 @Table(name = "freeboard")
 public class FreeBoard extends Board{
@@ -51,6 +54,10 @@ public class FreeBoard extends Board{
 	   protected int likeCount;
 	   @Column(name = "replycount")
 	   protected int replyCount;
+	   
+	   @OneToMany
+	   @JoinColumn(name="freeboard_id")
+	   private List<FreeBoardReply> freeBoardReply;
 	   
 	
 

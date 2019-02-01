@@ -54,7 +54,7 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, 
 		return builder;
 	}
 	
-	
-	
+	@Query(value="select f from FreeBoard f where f.freeBoardId=:be")
+	public FreeBoard findByfreeBoardId(@Param("be") int beforeFreeBoard);
 
 }

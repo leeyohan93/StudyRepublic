@@ -22,12 +22,15 @@ import org.springframework.data.domain.Sort;
 
 public class PageDTO {
    
-	public static final int DEFAULT_SIZE = 15;
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public static final int DEFAULT_MAX_SIZE = 50;
 	
 	
 	private int page;
-	private int size;
+	private int size=15;
 	private String keyword;
 	private String searchType;
 //	private String searchPeriod;
@@ -35,7 +38,7 @@ public class PageDTO {
 	
 	public PageDTO( ) {
 		this.page =1;
-		this.size =DEFAULT_SIZE;
+		
 	}
 
 	public Pageable makePageable(int direction, String... props) {
@@ -58,7 +61,7 @@ public class PageDTO {
 	}
 
 	public void setSize(int size) {
-		this.size = size < DEFAULT_SIZE || size > DEFAULT_MAX_SIZE ? DEFAULT_SIZE :size;
+		this.size = size < 15 || size > DEFAULT_MAX_SIZE ? 15 :size;
 	}
 
 
@@ -78,6 +81,10 @@ public class PageDTO {
 		this.searchType = searchType;
 	}
 
+	@Override
+	public String toString() {
+		return "PageDTO [page=" + page + ", size=" + size + ", keyword=" + keyword + ", searchType=" + searchType + "]";
+	}
 
 
 	

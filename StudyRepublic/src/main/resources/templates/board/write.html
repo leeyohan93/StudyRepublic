@@ -4,7 +4,10 @@
   @version
   -write.html 추가
  -->
-
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}"
+>
 <head>
 
 <title></title>
@@ -17,48 +20,38 @@
 <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 
 <style>
-.boardSelect{
-  margin-top:50px;
+.boardSelect {
+	margin-top: 50px;
 }
 
-#boardType{
+#boardType {
 	width: 250px;
 	height: 40px;
 	padding-left: 10px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
-  font-size:16px;
+	font-size: 16px;
 }
 
-#title{
-  width: 50%;
-  height: 40px;
-  padding: 12px 13px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
+#boardTitle {
+	width: 50%;
+	height: 40px;
+	padding: 12px 13px;
+	margin: 10px 0;
+	border: 1px solid #ccc;
 	border-radius: 4px;
-  font-size:16px;
- 
+	font-size: 16px;
 }
 
-#notice, #hide{
-  margin:0 5px 0 20px;
-  transform: scale(1.5);
+#boardNotice, #boardHide {
+	margin: 0 5px 0 20px;
+	transform: scale(1.5);
 }
 
-.titleOpt{
-  font-size:16px;
+.boardTitleOpt {
+	font-size: 16px;
 }
 
-/* #daumeditor{ */
-/*   resize :none; */
-/*   width: 80%; */
-/*   height: 50%; */
-/*   padding: 12px 13px; */
-/*   border: 1px solid #ccc; */
-/* 	border-radius: 4px; */
-/*   font-size:16px; */
-/* } */
 
 /* .cancelBtn{ */
 /*     position:relative; */
@@ -77,18 +70,18 @@
 /*     top: -55px; */
 /*     left: 774px; */
 /* } */
-
-
-
 </style>
 
 </head>
 
 <body>	
 
+
+<div id = "main" layout:fragment = "main">
+<div class="inner">
 <div class="container">
 
-<form  id="writeForm" th:action="@{registerFreeBoard}" method="post">
+<form  id="boardWriteForm" th:action="@{registerFreeBoard}" method="post">
 	 
 	 <div class="boardSelect">
 	 <select id ="boardType" name = "boardType">
@@ -99,29 +92,30 @@
 	</select> 
 	</div>
 	
-<!-- 제목, 공지, 비공개, -->
+<!-- 제목, 공지옵션, 비공개옵션, -->
   <div>
-	<input id ="title" name ="title" type="text" placeholder="제목을 입력해주세요."> 
-    <input id ="notice" name ="notice" type="checkbox" value="0">
-    <span class ="titleOpt">공지</span> 
-    <input id="hide" name ="hide" type="checkbox" value="0">
-    <sapn class ="titleOpt">비공개</span>
+	<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요."> 
+    <input id ="boardNotice" name ="notice" type="checkbox" value="0">
+    <span class ="boardTitleOpt">공지</span> 
+    <input id="boardHide" name ="hide" type="checkbox" value="0">
+    <sapn class ="boardTitleOpt">비공개</span>
   
   </div>
   
-  <!--제목, 공지, 비공개  -->
+  <!--제목, 공지옵션, 비공개옵션 끝 -->
   
-  <!-- 다음 에디터 적용 글내용 -->
-  <div id = "editor"></div>
+  <!-- 스마트 에디터 적용 글내용 -->
+  <div id = "editor">
     <div>  
        <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;"></textarea>
-	<input name ='id' type='hidden' value="aaa123"> <br/>
 	</div>
-	
+  </div>
+	<input name ='id' type='hidden' value="aaa123"> <br/>
+
 	<!--글내용 끝  -->
   
   <span class="cancelBtn">
-    <a class ="btn btn-default" href="" role="button" id="cancel">취소</a> 
+    <a class ="btn btn-default" th:href="@{listFreeBoard}" role="button" id="cancel">취소</a> 
   </span>
   
   <span class="previewBtn">
@@ -129,12 +123,14 @@
    
   </span>
   <span class="registerBtn">
-	 <button name = "registerWrite" id ="registerWrite" class ="btn btn-default" type="submit">확인</button>
+	 <button name = "boardRegister" id ="boardRegister" class ="btn btn-default" type="submit">확인</button>
   </span>
-	 
 	 </form>
   </div>
-  
+ </div>
+
+
+
 <script th:inline="javascript">
 
 $(function(){
@@ -162,7 +158,7 @@ $(function(){
     });
      
     //전송버튼 클릭이벤트
-    $("#registerWrite").click(function(){
+    $("#boardRegister").click(function(){
         //id가 smarteditor인 textarea에 에디터에서 대입
         editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
               
@@ -171,7 +167,7 @@ $(function(){
         //폼 submit
         
            
-        $("#writeForm").submit();
+        $("#boardWriteForm").submit();
             
     });
     
@@ -180,4 +176,5 @@ $(function(){
 })
 
     </script>
-</body>
+    </body>
+</html>

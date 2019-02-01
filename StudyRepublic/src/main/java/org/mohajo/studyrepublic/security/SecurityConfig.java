@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http
 		.authorizeRequests()
-		.antMatchers("/member/signup","/member/insert").permitAll()
+		.antMatchers("/member/signup","/member/insert","/goBeforeFreePage").permitAll()
 		.antMatchers("/admin/**").hasRole("A")
 		.antMatchers("/tutor/**").hasRole("T")
 		.antMatchers("/member/**" ).hasRole("N")
@@ -86,6 +86,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.userDetailsService(memberservice)
 		.tokenRepository(persistentTokenRepository())
 		.tokenValiditySeconds(60*60*24);
+		 
+		//스마트에디터 관련 설정
+		 http.headers().frameOptions().disable();
 	}
 	
 	@Override

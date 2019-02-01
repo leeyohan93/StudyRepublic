@@ -2138,6 +2138,7 @@ input::-moz-focus-inner {
 		text-decoration: none;
 		width: 100%;
 	}
+	
 
 		input[type="text"]:invalid,
 		input[type="password"]:invalid,
