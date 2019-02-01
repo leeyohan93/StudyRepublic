@@ -3,8 +3,11 @@
  */
 package org.mohajo.studyrepublic.repository;
 
+import java.util.List;
+
 import org.mohajo.studyrepublic.domain.RequestBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author 윤원식
@@ -14,5 +17,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 
 public interface RequestBoardRepository extends JpaRepository<RequestBoard, Integer> {
-
+	@Query(value="select * from member m join requestboard r on m.id=r.id where m.id=:id",nativeQuery=true)
+	List<RequestBoard> findRequestBoardById(String id);
 }

@@ -3,8 +3,11 @@
  */
 package org.mohajo.studyrepublic.repository;
 
+import java.util.List;
+
 import org.mohajo.studyrepublic.domain.InquireBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author 윤원식
@@ -14,5 +17,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 
 public interface InquireBoardRepository extends JpaRepository<InquireBoard, Integer> {
-
+	@Query(value = "select * from member m join inquireboard i on m.id=i.id where m.id=:id",nativeQuery=true)
+	List<InquireBoard>findInquireBoard(String id);
 }

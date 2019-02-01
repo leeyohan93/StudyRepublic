@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- 	layout:decorate="~{/layout/mainLayout}"> -->
+<head>
+<meta charset=UTF-8>
+<title>내가쓴 게시판 내역</title>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
+</head>
+	
+
+<body>
+
+	<h3>자유게시판</h3>	
+	<table class="table">
+	
+	<tr>
+	
+		<th>id</th>
+		<th>title</th>
+		<th>date</th>
+		<th>like</th>
+		<th>hit</th>
+	</tr>
+	<tr th:each=" fbr : ${fbr}">
+	    <td th:text=${fbr.id}></td>
+	    <td th:text="${fbr.title}"></td>
+		<td th:text="${fbr.date}"></td>
+		<td th:text="${fbr.likeCount}"></td>
+		<td th:text="${fbr.hit}"></td>
+	</tr>
+	</table>
+	
+		<h3>문의게시판</h3>	
+	<table class="table">
+	
+	<tr>
+	
+		<th>id</th>
+		<th>title</th>
+		<th>date</th>
+		<th>like</th>
+		<th>hit</th>
+	</tr>
+	<tr th:each=" ibr : ${ibr}">
+	    <td th:text=${ibr.id}></td>
+	    <td th:text="${ibr.title}"></td>
+		<td th:text="${ibr.date}"></td>
+		<td th:text="${ibr.likeCount}"></td>
+		<td th:text="${ibr.hit}"></td>
+	</tr>
+	</table>
+	
+		<h3>스터디요청게시판</h3>	
+	<table class="table">
+	
+	<tr>
+	
+		<th>id</th>
+		<th>title</th>
+		<th>date</th>
+		<th>like</th>
+		<th>hit</th>
+	</tr>
+	<tr th:each=" rbr : ${rbr}">
+	    <td th:text=${rbr.id}></td>
+	    <td th:text="${rbr.title}"></td>
+		<td th:text="${rbr.date}"></td>
+		<td th:text="${rbr.likeCount}"></td>
+		<td th:text="${rbr.hit}"></td>
+	</tr>
+	</table>
+		
+	
+		
+		
+</body>
+</html>
