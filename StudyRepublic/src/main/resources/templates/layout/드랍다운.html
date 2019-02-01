@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .menubar {
+        position: relative;
+        display: inline-block;
+        }
+        .menubar li ul{
+            background: rgb(109,109,109);
+            display:none; /*평상시 보이지않게 */
+            height: auto;
+            padding: 0px;
+            margin: 0px;
+            border: 0px;
+            position: absolute;
+            width: 200px;
+            z-index:200px;
+         }
+
+         .menubar li:active .ul{
+            display:block;
+
+         }
+    </style>
+
+</head>
+<body>
+    <div class="menubar">
+        <ul>
+            
+            <li><p id="current">김준석</p>
+                <ul>
+                    <li><a href="#">회원정보</a></li>
+                    <li><a href="#">쪽지보내기</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+
+    
+</body>
+</html>
