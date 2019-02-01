@@ -1,12 +1,12 @@
 package org.mohajo.studyrepublic.member;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.Member;
-import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,11 +14,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+
 public class MemberController {
 
 	
@@ -39,6 +45,51 @@ public class MemberController {
 	public String signup (Model model) {
 		return "signup/signup_signup";	
 	}
+	
+/*	@ResponseBody
+	@PostMapping(value = "/member/checkid", produces="text/plain;charset=UTF-8")
+	public String checkId(@RequestParam String id) {		
+		int checkResult = memberrepository.checkId(id);
+		System.out.println(id);
+		return String.valueOf(checkResult);	
+	}*/
+	
+	
+/*	@PostMapping(value = "/member/checkid")
+	@ResponseBody
+	public int checkId(@RequestParam String id) {		
+		int checkResult = memberrepository.checkId(id);
+		System.out.println(id);
+		return checkResult;	
+	}*/
+	
+	@PostMapping("/member/checkid")
+	@ResponseBody
+	public Map <Object, Object> checkId(@RequestParam String id) {		
+		
+		int count = 0;
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		count = memberrepository.checkId(id);
+		map.put("count", count);
+
+		return map;	
+	}
+	
+	@PostMapping("/member/checknick")
+	@ResponseBody
+	public Map <Object, Object> checkNick(@RequestParam String nickname) {		
+		
+		int nickCount = 0;
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		nickCount = memberrepository.checkNick(nickname);
+		map.put("nickCount", nickCount);
+
+		return map;	
+	}
+	
+	
 	
 	@RequestMapping("/member/insert")
 	public String insertMember(Model model, HttpServletRequest request, @ModelAttribute Member member) {

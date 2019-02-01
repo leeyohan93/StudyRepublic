@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http
 		.authorizeRequests()	
-		.antMatchers("/member/signup","/member/insert","/").permitAll()
+		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick","/").permitAll()
 		.antMatchers("/admin/**","/member/inquery","/member").hasRole("A")
 		.antMatchers("/member/**", "/tutor/signup","/tutor/insert" ).hasRole("N")
 	
@@ -73,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.addLogoutHandler(new TaskImplementingLogoutHandler())
 		.permitAll()
 /*		.invalidateHttpSession(true)*/
-		.logoutSuccessUrl("/");
+		.logoutSuccessUrl("/index");
 /*		.deleteCookies("JSESSIONID","remember-me");*/
 		
 		

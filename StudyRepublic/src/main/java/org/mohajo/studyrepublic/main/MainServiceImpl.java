@@ -33,8 +33,7 @@ public class MainServiceImpl implements MainService{
 	Interest1CDRepository interest1CDRepository;
 	@Autowired
 	Interest2CDRepository interest2CDRepository;
-	
-	
+		
 	@Override
 	public List<Study> getPopularPremiumStudy() {
 		return studyRepository.findPrStudyBytypeCode();
@@ -68,8 +67,6 @@ public class MainServiceImpl implements MainService{
 		return interest2CDRepository.findBasicPopularTag();
 	}
 	
-	
-	
 	@Override
 	public List<Interest1CD> getInterest1Code(){
 		return interest1CDRepository.findAll();
@@ -94,8 +91,4 @@ public class MainServiceImpl implements MainService{
 	public List<Interest2CD> getNInterest2Code(){
 		return interest2CDRepository.Ninterest2List();
 	}
-	
-	
-	
-
 }

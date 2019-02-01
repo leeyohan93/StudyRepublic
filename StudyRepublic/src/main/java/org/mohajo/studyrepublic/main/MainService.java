@@ -1,7 +1,5 @@
 package org.mohajo.studyrepublic.main;
-
 import java.util.List;
-
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
@@ -29,5 +27,7 @@ public interface MainService {
 	public List<Interest2CD> getWInterest2Code();
 	public List<Interest2CD> getNInterest2Code();
 	
-	
 }
+
+
+
