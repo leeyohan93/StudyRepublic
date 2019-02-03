@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberPoint;
+import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,6 +32,9 @@ public class MemberController {
 	
 	@Autowired
 	private MemberRepository memberrepository;
+	
+	@Autowired
+	private MemberPointRepository memberpointrepository;
 		
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
@@ -92,11 +97,18 @@ public class MemberController {
 	
 	
 	@RequestMapping("/member/insert")
-	public String insertMember(Model model, HttpServletRequest request, @ModelAttribute Member member) {
+	public String insertMember(Model model, HttpServletRequest request, @ModelAttribute Member member, @RequestParam String id) {
 		member.setPassword(bcryptpasswordencoder.encode(member.getPassword()));
 				
-		memberrepository.save(member);	
-		return "redirect:/";		
+		memberrepository.save(member);
+		
+		MemberPoint memberpoint = new MemberPoint();
+		memberpoint.setMember(member);
+		memberpoint.setPoint(0);
+		
+		memberpointrepository.save(memberpoint);
+		
+		return "redirect:/index";		
 	}
 	
 	@RequestMapping("/member/inquery")					// 회원 한명 한명 조회.
@@ -121,7 +133,7 @@ public class MemberController {
 		member =  memberrepository.findById(id).get(); 	
 		member.setPassword(bcryptpasswordencoder.encode(password));	
 		memberrepository.save(member);
-		return "index";
+		return "redirect:/index";
 	}
 	
 	
@@ -130,7 +142,7 @@ public class MemberController {
 	public String delete(@RequestParam("id") String id) {	
 		memberrepository.deleteById(id);					// delete from member where id = id와 동일.
 		System.out.println("-------------------- id: " + id + " 삭제 완료. ------------------");
-		return "redirect: /";
+		return "redirect:/index";
 	}
 	
 	@RequestMapping("/admin") 
@@ -159,16 +171,16 @@ public class MemberController {
 		return "etc/accessDenied";
 	}
 	
-	@RequestMapping("/")
+/*	@RequestMapping("/")
 	public String loggedIn() {
 		return "index";
-	}
+	}*/
 	
 	@RequestMapping("/testjido")
 	public String jusoTest() {
 		return "test";
 	}
-	
+
 	
 	
 

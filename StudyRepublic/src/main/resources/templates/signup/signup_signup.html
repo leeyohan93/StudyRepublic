@@ -11,6 +11,8 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 
 <style>
 #roles{ display : none}
+/* #pointid{ display : none} */
+#point{ display : none}
 </style>
 
 
@@ -34,39 +36,31 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  <p><label>닉네임: <input class = "memberInput" type="text" id="nickname" name = "nickname"  onblur="check_Nick()" onkeyup = "remove_Message()"></label> <input type = "button"  id = "checkNick"  value = "중복체크"><span class = "member" id="enterNick"></span><p>
  
 <p><label>성별: 
-<input type="radio" name="gender" value="남" /> 남자
-<input type="radio" name="gender" value="여" /> 여자
+<input type="radio" id = "gender" name="gender" value="남" /> 남자
+<input type="radio" id = "gender" name="gender" value="여" /> 여자
 </label>
  </p>
  
-<p>이메일:	<input type="text" name="email1" id="email1" value=""  onblur = "emailvalue()" />&nbsp@&nbsp
-	  		<input type="text" name="email2" id="email2" value="" disabled  onblur = "emailvalue()" /> 
-	 		<select name="email3" id="email3" onchange="email_change(this)" onblur = "emailvalue()">
-	  		<option value="0">선택하세요.</option>
-	  		<option value="9">직접입력</option>
-	 		<option value="naver.com">네이버</option>
-	 		<option value="hanmail.net">다음</option>
-	 		<option value="google.co.kr">구글</option>
-	 		</select>		</p>
- <p><label>이메일완성: <input class = "memberInput" type="text" id="email" name = "email"  onkeyup = "remove_Message()"></label><span class = "member" id="enterEmail"></span></p>
+<p>이메일:   <input type="text" name="email1" id="email1" value=""  onblur = "emailvalue()" />&nbsp@&nbsp
+           <input type="text" name="email2" id="email2" value="" disabled  onblur = "emailvalue()" /> 
+          <select name="email3" id="email3" onchange="email_change(this)" onblur = "emailvalue()">
+           <option value="0">선택하세요.</option>
+           <option value="9">직접입력</option>
+          <option value="naver.com">네이버</option>
+          <option value="hanmail.net">다음</option>
+          <option value="google.co.kr">구글</option>
+          </select>      </p>
+ <p><label>이메일완성: <input class = "memberInput" type="text" id="email" name = "email"  onkeyup = "remove_Message()" onfocus = "resetIdCheck()"></label><span class = "member" id="enterEmail"></span></p>
  
- <p><label>휴대전화: <input class = "memberInput" type="text" id="phonenumber" name = "phonenumber" maxlength = "11" onblur="check_Phone()" onkeyup = "remove_Message()"></label> <span class = "member" id="enterPhone"></span><p> 
+ <p><label>휴대전화: <input class = "memberInput" type="text" id="phonenumber" name = "phonenumber" maxlength = "11" onblur="check_Phone()" onkeyup = "remove_Message()"></label> <span class = "member" id="enterPhone"></span></p> 
  
 <p><input type="text" id="text" style="width:200px; height:100px; display: none;"></p>
-<p><input id = "roles" type = "text" name = "roles[0].roleName" value = "N"><span class = "member"></p>
+<p><input id = "roles" type = "text" name = "roles[0].roleName" value = "N">
+<!-- <p><input id = "pointid" type = "text" name = "memberpoint.member"> -->
+<!-- <p><input id = "point" type = "number" name = "memberpoint.point" value = 0> -->
 <p><input type="text" id="interestlocationstcode" placeholder="우편번호"></p>
 <p><input type="button" onclick="addInterestLocation()" value="관심지역추가"></p>
-   
-<!--   비밀번호 <input type = "password" class = "memberInsert" name = "password" id = "password"> <span class = "member" id = "enterPw"></span>
-이름 <input type = "text" class = "memberInsert" name = "name" id = "name"> <span class = "member"></span>
-성별 <input type = "text" class = "memberInsert" name = "gender" id = "gender"><span class = "member"></span>
-생년월일 <input type = "date" class = "memberInsert" name = "birth" id = "birth"> <span class = "member"></span>
-닉네임 <input type = "text" class = "memberInsert" name = "nickname" id = "nickname"><span class = "member"></span>
-이메일<input type = "email" class = "memberInsert" name = "email" id = "eamail"><span class = "member"><span class = "member"> </span>
-휴대전화번호<input type = "text" class = "memberInsert" name = "phonenumber" id = "phonenumber"> <span class = "member"></span>
-공개여부 <input type = "text" class = "memberInsert" name = "visibility" id = "visibility"> <span class = "member"></span>   -->
-<!--   -->
-
+  
 <span id = "loc">
 </span>
 
@@ -98,9 +92,9 @@ $(function() {
    
    //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
     function addInterestLocation() {
-    	
        
-    	new daum.Postcode({
+       
+       new daum.Postcode({
             oncomplete: function(data) {
 
                 var roadAddr = data.roadAddress; // 도로명 주소 변수
@@ -115,7 +109,7 @@ $(function() {
                 var doroaddress = sido + sigungu + road;
                 
                 var extraRoadAddr = ''; // 참고 항목 변수
-					
+               
                 if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
                     extraRoadAddr += data.bname;
                 }
@@ -136,27 +130,27 @@ $(function() {
                 } else {
                     guideTextBox.innerHTML = '';
                     guideTextBox.style.display = 'none';
-                   	
+                      
                     var text = "<span id = 'selLoc" + count +  
-                	"'> <input type = 'text' id = 'interestlocation" +count+ 
-                	"' name = 'interestlocation[" + count + 
-                		"].interestLocation'> <input type = 'button' id = 'del1' value = '삭제' onclick = 'deleteLocation(" + count + ")'/> </span>"
-                	$('#loc').append(text);
-                					document.getElementById("interestlocation"+count).value = dongaddress;
-					count++;
-					
+                   "'> <input type = 'text' id = 'interestlocation" +count+ 
+                   "' name = 'interestlocation[" + count + 
+                      "].interestLocation'> <input type = 'button' id = 'del1' value = '삭제' onclick = 'deleteLocation(" + count + ")'/> </span>"
+                   $('#loc').append(text);
+                               document.getElementById("interestlocation"+count).value = dongaddress;
+               count++;
+               
                 }
-            	
+               
             } 
         }).open();
     } 
     
     
       function deleteLocation(num) {
-		alert("dd");
-		var standard = num;
-		$('#selLoc' + standard).remove(); 
-		/* 	count--; */
+      alert("dd");
+      var standard = num;
+      $('#selLoc' + standard).remove(); 
+      /*    count--; */
 
   }  
      
@@ -165,300 +159,330 @@ $(function() {
      var data = {};
      var idCheck;
      
-     $("#signup").prop("disabled", true);
+ 
      
-   	 $('#checkId').on('click', function(){
-   		 var inputedId = $('#id').val();
-		 data.id = $('#id').val();
-		 $.ajax({
-			 type : 'POST',
-			 data : data,
-			 url:'/member/checkid',
-			 
-			 success:function(data){
-					if ( $.trim(inputedId).length == 0 ) {				
-						alert("아이디를 입력해주세요.");
-						$("#signup").prop("disabled", true);
-						idCheck = 0;
-					} else if (data.count > 0) {
-						alert("사용불가");
-						$("#signup").prop("disabled", true);
-						idCheck = 1;
-					}
-					else if ($.trim(inputedId).length != 0 && data.count == 0 && (regex_id.test(uid))){ 
-						alert("사용가능");
-						
-						//$("#password").focus();
-						idCheck = 0;
-					}
-					
-					else if ($.trim(inputedId).length != 0 && data.count == 0 && !(regex_id.test(uid))) {
-						
-						alert("사용불가. 유효하지 않은 형식 입니다.");
-						$("#signup").prop("disabled", false);
-						idCheck = 1;
-					}
-					
-					check_Id();					
-					
-			 },
-			 error:function(error) {
-				 alert("error: " + error)
-			 }
-		 });
-	 }); 
-   	 
-   	 
-   	 var nickdata = {};
-   	 var nickCheck;
-   	 
-   	 $('#checkNick').on('click', function(){
-   		 alert("닉네임1");
-   		 var inputedNick = $('#nickname').val();
-		 data.nickname = $('#nickname').val();
-		 $.ajax({
-			 type : 'POST',
-			 data : data,
-			 url:'/member/checknick',
-			 
-			 success:function(data){
-				 
-				 alert("닉네임2");
-				 alert(data.nickCount);
-					if ( $.trim(inputedNick).length == 0 ) {				
-						alert("닉네임을 입력해주세요.");
-						$("#signup").prop("disabled", true);
-						nickCheck = 0;
-						
-					} else if (data.nickCount > 0) {
-						alert("사용불가");
-						$("#signup").prop("disabled", true);
-						nickCheck = 1;
-						
-					}
-					else if ($.trim(inputedNick).length != 0 && data.nickCount == 0 && regex_nick.test(nickName)){ 
-						alert("사용가능");
-						$("#signup").prop("disabled", false);
-						nickCheck = 0;
-						
-					}
-					else if ($.trim(inputedNick).length != 0  {
-						//&& data.nickCount == 0 && !(regex_nick.test(nickName)) && uid != "" && pw != "" && repw != "" && name != "" && gender != "" && email != "" && phonenumber != "" && birth != "")
-						alert("사용불가. 유효하지 않은 형식 입니다.");
-						$("#signup").prop("disabled", false);
-						nickCheck = 1;
+       $('#checkId').on('click', function(){
+          var inputedId = $('#id').val();
+       data.id = $('#id').val();
+       $.ajax({
+          type : 'POST',
+          data : data,
+          url:'/member/checkid',
+          
+          success:function(data){
+               if ( $.trim(inputedId).length == 0 ) {            
+                  alert("아이디를 입력해주세요.");
 
-					}
-					
-					if(idCheck == 0 && nickCheck == 0) {
-					$("#signup").prop("disabled", false);
-					}
-					check_Nick();
-					
-					
-			 },
-			 error:function(error) {
-				 alert("error: " + error)
-			 }
-		 });
-	 }); 
+                  idCheck = 1;
+               } else if (data.count > 0) {
+                  alert("사용불가");
+
+                  idCheck = 1;
+               }
+               else if ($.trim(inputedId).length != 0 && data.count == 0 && (regex_id.test(uid))){ 
+                  alert("사용가능");
+                  
+               
+                  idCheck = 0;
+               }
+               
+               else if ($.trim(inputedId).length != 0 && data.count == 0 && !(regex_id.test(uid))) {
+                  
+                  alert("사용불가. 유효하지 않은 형식 입니다.");
+
+                  idCheck = 1;
+               }
+               
+               check_Id();               
+               
+          },
+          error:function(error) {
+             alert("error: " + error)
+          }
+       });
+    }); 
+       
+       
+       var nickdata = {};
+       var nickCheck;
+       
+       $('#checkNick').on('click', function(){
+          var inputedNick = $('#nickname').val();
+       data.nickname = $('#nickname').val();
+       $.ajax({
+          type : 'POST',
+          data : data,
+          url:'/member/checknick',
+          
+          success:function(data){
+             
+               if ( $.trim(inputedNick).length == 0 ) {            
+                  alert("닉네임을 입력해주세요.");
+               
+                  nickCheck = 1;
+                  
+               } else if (data.nickCount > 0) {
+                  alert("사용불가");
+               
+                  nickCheck = 1;
+                  
+               }
+               else if ($.trim(inputedNick).length != 0 && data.nickCount == 0 && regex_nick.test(nickName)){ 
+                  alert("사용가능");
+   
+                  nickCheck = 0;
+                  
+               }
+               else if ($.trim(inputedNick).length != 0 && data.nickCount == 0 && !(regex_nick.test(nickName))) {
+                  
+                  alert("사용불가. 유효하지 않은 형식 입니다.");
+               
+                  nickCheck = 1;
+
+               }
+               
+/*                if(idCheck == 0 && nickCheck == 0) {
+               $("#signup").prop("disabled", false);
+               } */
+               check_Nick();
+               
+               
+          },
+          error:function(error) {
+             alert("error: " + error)
+          }
+       });
+    }); 
     
      
- 	   	$('#signup').on('click', function(){
- 		if (idCheck == 1 || nickCheck == 1) {
- 			alert('아이디 중복체크를 해주세요.');
- 		} else {
- 			$("#repassword").remove(); 	// repassword삭제.
- 			$("#email1").remove();
- 			$("#email2").remove();
- 			alert("회원가입을 축하합니다.");
- 			$("#memberJoin").submit();
- 			// input type submit을 button으로 해야함.
- 		}
- 		
-   	}); 
+          $('#signup').on('click', function(){
+          rePw = document.getElementById("repassword").value;
+       if (idCheck == 1) {
+          alert('아이디 중복체크를 해주세요.');
+           document.getElementById("id").focus();
+       } else if(nickCheck == 1) {
+          alert('닉네임 중복체크를 해주세요.');
+          document.getElementById("nickname").focus();
+       }
+       else if (pw != repw) {
+          alert("패스워드를 확인해주세요.");
+          
+          document.getElementById("password").focus();
+          
+       }
+       else if (idCheck ==0 && nickCheck == 0 && (pw == repw) && uid != "" && pw != "" && repw != "" && name != "" && gender != "" && email != "" && phonenumber != "" && birth != "") {
+          $("#repassword").remove();    // repassword삭제.
+          $("#email1").remove();
+          $("#email2").remove();
+          alert("회원가입을 축하합니다.");
+          $("#memberJoin").submit();
+       }
+       
+       else {
+         alert("미입력 부분을 입력하세요.");
+           for(i = 0; i < information.length; i++) {              
+                   if(information[i].value == "") {
+                       information[i].focus();
+                       break;
+               }
+       }
+       }
+       
+      }); 
+          
+ 
      
- //  	var information = document.getElementsByClassName("memberInsert"); 
-   	
-   	var information = document.getElementsByClassName("memberInput");
-   	var messageBox = document.getElementsByClassName("member");
-   	
-   	
-   		var regex_id="";
-   		var regex_pw="";
-   		var regex_name = "";
-   		var regex_nick ="";
-   		var regex_phone="";
-   		var regexArr = [regex_id, regex_pw, regex_name, regex_nick];
-   	
-   	    var uid;
-   	    var pw;
-   	    var rePw;
-   	    var name;
-   	    var birth;
-   	    var nickName;
-   	    var email;
-   	    var phoneNumber;
-//      var gender = document.getElementById("gender").value;
-   		
-   	    function check_Id() {
-   	   	uid = document.getElementById("id").value;
-   	 	regex_id = /^[A-Za-z0-9+]{4,12}$/  
- 		
-/*    	    if(idCheck == null && uid !== "") {
-   	    	document.getElementById("enterId").innerHTML = "아이디 중복체크를 해주세요.";
-   	    } */
-   	    if ( uid == "") {
-   	    	//document.getElementById("id").focus();
-   	    	document.getElementById("enterId").innerHTML = "아이디를 입력해주세요."; 	    	
-   	    }  
-   	    if ( !(regex_id.test(uid)) && uid !== "" ) {
-   	    	document.getElementById("enterId").innerHTML = "유효하지 않은 형식 입니다.";
-   	    } else if ( regex_id.test(uid) && idCheck == 1 ) {
-   	    	document.getElementById("enterId").innerHTML="이미 사용되고 있는 아이디 입니다.";
-   	    } else if ( regex_id.test(uid) && idCheck == 0 ) {
-   	    	document.getElementById("enterId").innerHTML = "id ok";
-   	    }
-   	    	
-   	}
-   	    
-   	function check_Pw() {
-   	   	   
-   	    pw = document.getElementById("password").value;
+ //     var information = document.getElementsByClassName("memberInsert"); 
+      
+      var information = document.getElementsByClassName("memberInput");
+      var messageBox = document.getElementsByClassName("member");
+      
+      
+         var regex_id="";
+         var regex_pw="";
+         var regex_name = "";
+         var regex_nick ="";
+         var regex_phone="";
+         var regexArr = [regex_id, regex_pw, regex_name, regex_nick];
+      
+          var uid;
+          var pw;
+          var rePw;
+          var name;
+          var birth;
+          var nickName;
+          var email;
+          var phoneNumber;
+      var gender = document.getElementById("gender").value;
+         
+          function check_Id() {
+            uid = document.getElementById("id").value;
+          regex_id = /^[A-Za-z0-9+]{4,12}$/  
+       
+/*           if(idCheck == null && uid !== "") {
+             document.getElementById("enterId").innerHTML = "아이디 중복체크를 해주세요.";
+          } */
+          if ( uid == "") {
+             //document.getElementById("id").focus();
+             document.getElementById("enterId").innerHTML = "아이디를 입력해주세요.";           
+          }  
+          if ( !(regex_id.test(uid)) && uid !== "" ) {
+             document.getElementById("enterId").innerHTML = "유효하지 않은 형식 입니다.";
+          } else if ( regex_id.test(uid) && idCheck == 1 ) {
+             document.getElementById("enterId").innerHTML="이미 사용되고 있는 아이디 입니다.";
+          } else if ( regex_id.test(uid) && idCheck == 0 ) {
+             document.getElementById("enterId").innerHTML = "id ok";
+ //            document.getElementById("pointid").value = uid;
+          }
+             
+      }
+          
+      function check_Pw() {
+               
+          pw = document.getElementById("password").value;
         regex_pw=/^[a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\-\_\+\=]{10,18}$/
         
-   	    if(pw===""){
-   	     // document.getElementById("password").focus();
-   	   }
-   	    
-   	    if(regex_pw.test(pw)===true) { document.getElementById("enterPw").innerHTML = "ok"; }
-   	    else{ 
-   	       if((pw ==="" || pw===null) && uid !== ""){document.getElementById("enterPw").innerHTML="비밀번호를 입력하세요";}
-   	       else{  
-   	      if (pw!=""){
-   	          document.getElementById("enterPw").innerHTML = "유효하지 않은 비밀번호입니다.";
-   	      }
-   	           }
-   	    }
-   	}
-   	
-   	function check_RePw() {
-   	   var pw = document.getElementById("password").value;
-   	   var rePw = document.getElementById("repassword").value;
-   	    
-   	    if(pw === rePw && pw.length >= 1) { document.getElementById("enterRePw").innerHTML = "비밀번호가 일치합니다"; }
-   	    else{ 
-   	        if ((rePw == "" || rePw == null) && pw !== "") {
-   						document.getElementById("enterRePw").innerHTML = "비밀번호를 입력하세요";
-   					} 
-   	       else{
-   	           if (rePw !== "") {document.getElementById("enterRePw").innerHTML = "비밀번호가 일치하지 않습니다.";}}
-   	    }
-   	}
-   	
-   	function check_Name() {
+          if(pw===""){
+           // document.getElementById("password").focus();
+         }
+          
+          if(regex_pw.test(pw)===true) { document.getElementById("enterPw").innerHTML = "ok"; }
+          else{ 
+             if((pw ==="" || pw===null) && uid !== ""){document.getElementById("enterPw").innerHTML="비밀번호를 입력하세요";}
+             else{  
+            if (pw!=""){
+                document.getElementById("enterPw").innerHTML = "유효하지 않은 비밀번호입니다.";
+            }
+                 }
+          }
+      }
+      
+      function check_RePw() {
+          pw = document.getElementById("password").value;
+          rePw = document.getElementById("repassword").value;
+          
+          if(pw === rePw && pw.length >= 1) { document.getElementById("enterRePw").innerHTML = "비밀번호가 일치합니다"; }
+          else{ 
+              if ((rePw == "" || rePw == null) && pw !== "") {
+                     document.getElementById("enterRePw").innerHTML = "비밀번호를 입력하세요";
+                  } 
+             else{
+                 if (rePw !== "") {document.getElementById("enterRePw").innerHTML = "비밀번호가 일치하지 않습니다.";}}
+          }
+      }
+      
+      function check_Name() {
        
-       pw = document.getElementById("password").value;
+       repw = document.getElementById("repassword").value;
        name = document.getElementById("name").value;
        regex_name = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]$/
-      	    
-      	    
-      	    if(regex_name.test(name)===true) { document.getElementById("enterName").innerHTML = "ok"; }
-      	    else{ 
-      	       if((name==="" || name===null) && pw !== ""){document.getElementById("enterName").innerHTML="이름을 입력하세요";}
-      	       else{  
-      	      if (name!=""){
-      	          document.getElementById("enterName").innerHTML = "한글로 입력해주세요.";
-      	      }
-      	           }
-      	    }
-      	}
-   	
-   	function check_Birth() {
+             
+             
+             if(regex_name.test(name)===true) { document.getElementById("enterName").innerHTML = "ok"; }
+             else{ 
+                if((name==="" || name===null) && repw !== ""){document.getElementById("enterName").innerHTML="이름을 입력하세요";}
+                else{  
+               if (name!=""){
+                   document.getElementById("enterName").innerHTML = "한글로 입력해주세요.";
+               }
+                    }
+             }
+         }
+      
+      function check_Birth() {
         
-      	 name = document.getElementById("name").value;
-      	 birth = document.getElementById("birth").value;
-      	    
+          name = document.getElementById("name").value;
+          birth = document.getElementById("birth").value;
+             
           if(birth===""){
-      	 //    document.getElementById("birth").focus();
-      	   }
-      	       	    
-      	       if((birth==="" || birth===null) && name !== ""){
-      	    	   document.getElementById("enterBirth").innerHTML="날짜를 입력하세요";
-      	    	   } 
-      	       else {
-      	    	 document.getElementById("enterBirth").innerHTML="ok";
-      	       }
-      	    }
-   	
-    	function check_Nick() {
+          //    document.getElementById("birth").focus();
+            }
+                       
+                if((birth==="" || birth===null) && name !== ""){
+                   document.getElementById("enterBirth").innerHTML="날짜를 입력하세요";
+                   } 
+                else {
+                 document.getElementById("enterBirth").innerHTML="ok";
+                }
+             }
+      
+       function check_Nick() {
         
-      	 birth = document.getElementById("birth").value;
-       	 nickName = document.getElementById("nickname").value;
-      	 regex_nick = /^[a-z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,21}$/
-      	    
-        	    if ( nickName == "" && birth !== "") {
-           	    	document.getElementById("enterNick").innerHTML = "닉네임을 입력해주세요."; 	    	
-           	    }  
-           	    if ( !(regex_nick.test(nickName)) && nickName !== "" ) {
-           	    	document.getElementById("enterNick").innerHTML = "유효하지 않은 형식 입니다.";
-           	    } else if ( regex_nick.test(nickName) && nickCheck == 1 ) {
-           	    	document.getElementById("enterNick").innerHTML="이미 사용되고 있는 닉네임 입니다.";
-           	    } else if ( regex_nick.test(nickName) && nickCheck == 0 ) {
-           	    	document.getElementById("enterNick").innerHTML = "ok";
-           	    }   
-    	}
-    	
-    	function check_Phone(){
+          birth = document.getElementById("birth").value;
+           nickName = document.getElementById("nickname").value;
+          regex_nick = /^[a-z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,21}$/
+             
+               if ( nickName == "" && birth != "") {
+                     document.getElementById("enterNick").innerHTML = "닉네임을 입력해주세요.";           
+                  }  
+                  if ( !(regex_nick.test(nickName)) && nickName !== "" ) {
+                     document.getElementById("enterNick").innerHTML = "유효하지 않은 형식 입니다.";
+                  } else if ( regex_nick.test(nickName) && nickCheck == 1 ) {
+                     document.getElementById("enterNick").innerHTML="이미 사용되고 있는 닉네임 입니다.";
+                  } else if ( regex_nick.test(nickName) && nickCheck == 0 ) {
+                     document.getElementById("enterNick").innerHTML = "ok";
+                  }   
+       }
+       
+       function check_Phone(){
             
-          	 email = document.getElementById("nickname").value;
-          	 phoneNumber = document.getElementById("phonenumber").value;
-         	 regex_phone = /^[0-9]{10,11}$/
-         	    
-           	    if ( phonenumber == "" && email !== "") {
-              	    	document.getElementById("enterPhone").innerHTML = "핸드폰번호를 입력해주세요."; 	    	
-              	    }  
-                if ( !(regex_phone.test(phoneNumber))) {
-              	    	document.getElementById("enterPhone").innerHTML = "유효하지 않은 형식 입니다.";
-              	    }  else if ( regex_phone.test(phoneNumber)) {
-              	    	document.getElementById("enterPhone").innerHTML = "ok";
-              	    }   
-       	}
-    	
-         	
-   	function remove_Message() {    
-    	    for ( i = 0; i < information.length; i++) {
-   	        if (information[i] === event.target) {
-   	        	messageBox[i].innerHTML = "";
-  	            this.innerHTML = "";               
-   	        }
-   	    } 
-   	} 
-   	
-      	
-      	
+              email = document.getElementById("nickname").value;
+              phoneNumber = document.getElementById("phonenumber").value;
+             regex_phone = /^[0-9]{10,11}$/
+                
+                  if ( phonenumber == "" && email != "") {
+                        document.getElementById("enterPhone").innerHTML = "핸드폰번호를 입력해주세요.";           
+                     }  
+                if ( !(regex_phone.test(phoneNumber)) && phonenumber != "") {
+                        document.getElementById("enterPhone").innerHTML = "유효하지 않은 형식 입니다.";
+                     }  else if ( regex_phone.test(phoneNumber)) {
+                        document.getElementById("enterPhone").innerHTML = "ok";
+                     }   
+          }
+       
+            
+      function remove_Message() {    
+           for ( i = 0; i < information.length; i++) {
+              
+
+        	   
+        	   if (information[i] === event.target) {
+                 messageBox[i].innerHTML = "";
+                 this.innerHTML = "";               
+              }
+          } 
+      } 
+      
+      function resetIdCheck() {
+    	  
+		   idCheck == 1;	// 중복체크를 한 후 사용가능 아이디를 받았지만, 사용자가 아이디 변경을 위하여 아이디를 재입력했을 때 또다시 중복체크를 위한 조건문.
+	  
+      }
+      
+         
+         
     function email_change(obj){
-    		if(obj.options[obj.selectedIndex].value=='0'){
-				document.getElementById("email2").disabled = true;		
-				document.getElementById("email2").value=""; 
-    		
-    		}else if(obj.options[obj.selectedIndex].value =='9'){
-    			document.getElementById("email2").disabled = false;
-    			document.getElementById("email2").value=""; 
-    			document.getElementById("email2").focus(); 
-    				 
-    		  }else{
+          if(obj.options[obj.selectedIndex].value=='0'){
+            document.getElementById("email2").disabled = true;      
+            document.getElementById("email2").value=""; 
+          
+          }else if(obj.options[obj.selectedIndex].value =='9'){
+             document.getElementById("email2").disabled = false;
+             document.getElementById("email2").value=""; 
+             document.getElementById("email2").focus(); 
+                 
+            }else{
  
-    		 document.getElementById("email2").disabled = false;
-    		 document.getElementById("email2").value = obj.options[obj.selectedIndex].value;
-	
-    		  }   		
-    	  }
-    	
-    	function emailvalue() {
-    		 document.getElementById("email").value = document.getElementById("email1").value + "@" +document.getElementById("email2").value;
-    	}
-   	
+           document.getElementById("email2").disabled = false;
+           document.getElementById("email2").value = obj.options[obj.selectedIndex].value;
+   
+            }         
+         }
+       
+       function emailvalue() {
+           document.getElementById("email").value = document.getElementById("email1").value + "@" +document.getElementById("email2").value;
+       }
+      
 </script>
 
 

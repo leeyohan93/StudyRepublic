@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
@@ -45,9 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http
 		.authorizeRequests()	
-		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick","/").permitAll()
+		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/" ).permitAll()
 		.antMatchers("/admin/**","/member/inquery","/member").hasRole("A")
-		.antMatchers("/member/**", "/tutor/signup","/tutor/insert" ).hasRole("N")
+		.antMatchers("/member/**", "/tutor/signup","/tutor/insert","/pay"  ).hasRole("N")
 	
 		/*.antMatchers("/admin/**").hasAnyRole("A","T")*/	// a나 t  둘 다 된다.
 		.antMatchers("/tutor/**").hasRole("T");
@@ -89,9 +90,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.userDetailsService(memberservice)
 		.tokenRepository(persistentTokenRepository())
 		.tokenValiditySeconds(60*60*24);
+
 		 
 		//스마트에디터 관련 설정
 		 http.headers().frameOptions().disable();
+
+		
+		http.addFilterAfter(new ExceptionHandlerFilter(), SecurityContextHolderAwareRequestFilter.class);
+		
+
 	}
 	
 	@Override
