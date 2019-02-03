@@ -3,20 +3,15 @@
  */
 package org.mohajo.studyrepublic.studypage;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.mohajo.studyrepublic.domain.QStudyBoard;
 import org.mohajo.studyrepublic.domain.QStudyFileshareboard;
 import org.mohajo.studyrepublic.domain.QStudyNoticeboard;
 import org.mohajo.studyrepublic.domain.QStudyQnaboard;
-import org.mohajo.studyrepublic.domain.StudyBoard;
 import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardRepository;
-import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.springframework.data.domain.Page;

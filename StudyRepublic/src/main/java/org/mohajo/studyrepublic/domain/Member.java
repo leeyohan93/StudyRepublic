@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -91,6 +92,11 @@ public class Member implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name = "id")
 	private List <InterestLocation> interestlocation;
+	
+	
+/*	@OneToOne(cascade=CascadeType.ALL) //, mappedBy = "member"
+	@JoinColumn(name = "id")
+	private MemberPoint memberpoint;*/
 
 
 	

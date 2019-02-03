@@ -24,7 +24,7 @@ public class InterestLocation {
 	private int interestLocationId;
 	
 	@Column(name = "interest_location")
-	String interestLocation;
+	private String interestLocation;
 	
 	
 /*	@ManyToOne

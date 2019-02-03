@@ -1,0 +1,112 @@
+
+<html html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+<title>Insert title here</title>
+
+</head>
+
+<body>
+
+
+
+<input id = "id" type = "text" th:value = '${memberpoint.member.id}' style = "display:none">
+<input id = "nowpoint" type = "text" th:value = '${memberpoint.point}' style = "display:none">
+충전하실 금액을 입력해주세요. <input type = "number" id = "point"> <input type="button" value="충전" onclick="pay()" />
+
+
+<div id = "memberPoint">
+<div th:text = '${memberpoint.member.id} + 님'></div>
+<div th:text = '${memberpoint.point} + 보유포인트'></div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+	<script>
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$(function() {
+	    $(document).ajaxSend(function(e, xhr, options) {
+	        xhr.setRequestHeader(header, token);
+	    });
+	});
+	
+		var IMP = window.IMP;
+		IMP.init("imp18113186");
+		var data = {};
+		var afterPoint = "";
+
+		function pay() {
+			
+			
+			IMP.request_pay({
+				pg : 'kakaopay', // version 1.1.0부터 지원.
+				pay_method : 'card',
+				merchant_uid : 'merchant_' + new Date().getTime(),
+				name : 'StudyRepublic 포인트 결제',
+				amount : $('#point').val(),
+				id : id,
+//				buyer_email : '${member.email}',
+//				buyer_name : '${member.id}',
+//				buyer_tel : '',
+//				buyer_addr : '서울특별시 강남구 삼성동',
+//				buyer_postcode : '123-456',
+				
+				
+			}, function(rsp) {
+				if (rsp.success) {
+					
+					data.id = $('#id').val();
+					data.plusPoint = $('#point').val();
+					
+					$.ajax({
+						type : 'POST',
+						data : data,
+						url : '/kakaopay',
+					
+					success:function(data) {
+						alert(data);
+						alert(data.chargingPoint + "원 충전완료");
+
+						
+				
+				
+					},
+					error:function(error) {
+						alert("error: " + error);
+					}
+					});
+					
+					
+					
+					
+					
+					var msg = '결제가 완료되었습니다.';
+					msg += '고유ID : ' + rsp.imp_uid;
+					msg += '상점 거래ID : ' + rsp.merchant_uid;
+					msg += '결제 금액 : ' + rsp.paid_amount;
+					msg += '카드 승인번호 : ' + rsp.apply_num;
+					
+				} else {
+					var msg = '결제에 실패하였습니다.';
+					msg += '에러내용 : ' + rsp.error_msg;
+				}
+
+				alert(msg);
+				window.location.href = '/pay';
+				// redirect 처리
+				// response.sendRedirect("/List");
+			});
+		
+		}
+	</script>
+</body>
+</html>
