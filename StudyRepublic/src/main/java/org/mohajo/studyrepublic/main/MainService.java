@@ -26,6 +26,14 @@ public interface MainService {
 	public List<Interest2CD> getDInterest2Code();
 	public List<Interest2CD> getWInterest2Code();
 	public List<Interest2CD> getNInterest2Code();
+	/**
+	 * @param studyInfo
+	 * @param searchDate
+	 * @param location
+	 * @param interest
+	 * @return
+	 */
+	public List<Study> search(Study studyInfo, String searchDate, String[] location, String[] interest);
 	
 }
 
