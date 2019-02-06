@@ -4,14 +4,18 @@
 package org.mohajo.studyrepublic.studypage;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.mohajo.studyrepublic.domain.QStudyFileshareboard;
+import org.mohajo.studyrepublic.domain.QStudyMember;
 import org.mohajo.studyrepublic.domain.QStudyNoticeboard;
 import org.mohajo.studyrepublic.domain.QStudyQnaboard;
 import org.mohajo.studyrepublic.domain.StudyFileshareboard;
+import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardRepository;
+import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.springframework.data.domain.Page;
@@ -27,7 +31,7 @@ import com.querydsl.core.BooleanBuilder;
  * @version 0.0
  * - 기능설명
  */
-public class StudyPagePridicate {
+public class StudyPagePredicate {
 	/**
 	 * 동적 쿼리 메서드
 	 * 해당 쿼리를 이용해서 공지사항의 글을 내림차순으로 3개만 가지고 온다.
@@ -44,7 +48,7 @@ public class StudyPagePridicate {
 	 * @version 1.1	lastEdit 2019.01.29 03:16
 	 *
 	 */
-	public List<StudyNoticeboard> studyNotice3ResultPredicate(String studyId, StudyNoticeboardRepository snb) {
+	public List<StudyNoticeboard> studyNoticeResultPredicate(String studyId, int listCount, StudyNoticeboardRepository snb) {
 				
 		BooleanBuilder builder = new BooleanBuilder();
 		
@@ -55,7 +59,7 @@ public class StudyPagePridicate {
 		/*
 		 * Pageable 변수를 선언하고 PageRequest.of를 통해서 PageRequest객체를 생성과 동시에 초기화 시켜준다.
 		 */
-		Pageable pageable = PageRequest.of(0, 3, Sort.Direction.DESC, "number");
+		Pageable pageable = PageRequest.of(0, listCount, Sort.Direction.DESC, "number");
 		
 		/*
 		 * 그리고  QuerydslPredicateExecutor를 상속 받은 repository를 통해서 findAll()을 실행해주고.
@@ -84,12 +88,12 @@ public class StudyPagePridicate {
 	 * @since 2019.01.29 03:16
 	 * @version 1.0	lastEdit 2019.01.29 03:16
 	 */
-	public List<StudyQnaboard> studyQna3ResultPredicate(String studyId, StudyQnaboardRepository sqb) {
+	public List<StudyQnaboard> studyQnaResultPredicate(String studyId, int listCount, StudyQnaboardRepository sqb) {
 		
 		BooleanBuilder builder = new BooleanBuilder();
 		QStudyQnaboard studyqnaboard = QStudyQnaboard.studyQnaboard;
 		builder.and(studyqnaboard.studyId.like(studyId));
-		Pageable pageable = PageRequest.of(0, 3, Sort.Direction.DESC, "studyId");
+		Pageable pageable = PageRequest.of(0, listCount, Sort.Direction.DESC, "studyId");
 		Page p = sqb.findAll(builder, pageable);
 		
 		return p.getContent();
@@ -105,31 +109,34 @@ public class StudyPagePridicate {
 	 * @since 2019.01.29 03:16
 	 * @version 1.0	lastEdit 2019.01.29 03:16
 	 */
-	public List<StudyFileshareboard> studyFileshare3ResultPredicate(String studyId, StudyFileshareboardRepository sfsb) {
+	public List<StudyFileshareboard> studyFileshareResultPredicate(String studyId, int listCount, StudyFileshareboardRepository sfsb) {
 		
 		BooleanBuilder builder = new BooleanBuilder();
 		QStudyFileshareboard studyfileshareboard = QStudyFileshareboard.studyFileshareboard;
 		builder.and(studyfileshareboard.studyId.like(studyId));
-		Pageable pageable = PageRequest.of(0, 3, Sort.Direction.DESC, "studyId");
+		Pageable pageable = PageRequest.of(0, listCount, Sort.Direction.DESC, "studyId");
 		Page p = sfsb.findAll(builder, pageable);
 		return p.getContent();
 	}
 	
-	/*public List<T extends StudyBoard> studyNoticeIdPredicate(String studyId, T sb) {
-		
+	public List<StudyMember> findByThisStudyMemberPredicate(String studyId, StudyMemberRepository smr) {
 		BooleanBuilder builder = new BooleanBuilder();
-		QStudyBoard	 studyBoard = QStudyBoard.studyBoard;
+		QStudyMember studymember = QStudyMember.studyMember;
+		builder.and(studymember.studyId.like(studyId))
+			.and(studymember.studyMemberStatusCode.codeValueEnglish.eq("LEADER")
+					.or(studymember.studyMemberStatusCode.codeValueEnglish.eq("MEMBER")));
+		Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "enrollDate");
+		Page p = smr.findAll(builder, pageable);
 		
-		builder.and(studyBoard.studyId.like(studyId));
+		return p.getContent();
+	}
+	
+	public Optional<StudyNoticeboard> findByNoticeboardNumberAndStudyId(StudyNoticeboard studyNoticeboard, StudyNoticeboardRepository snr) {
+		BooleanBuilder builder = new BooleanBuilder();
+		QStudyNoticeboard noticeboard = QStudyNoticeboard.studyNoticeboard;
+		builder.and(noticeboard.studyId.eq(studyNoticeboard.getStudyId()))
+		.and(noticeboard.number.eq(studyNoticeboard.getNumber()));
 		
-		Iterable<StudyNoticeboard> result = sb.findAll(builder);
-		Iterator<StudyNoticeboard> iterator = result.iterator();
-		List<StudyNoticeboard> list = new ArrayList<StudyNoticeboard>();
-		
-		while(iterator.hasNext()) {
-			list.add(iterator.next());
-		}
-		
-		return list;
-	}*/
+		return snr.findOne(builder);
+	}
 }

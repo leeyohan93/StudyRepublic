@@ -13,8 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author	이미연
@@ -24,6 +26,7 @@ import lombok.Data;
  */
 @Data
 @Entity
+@Table(name = "study_member")
 public class StudyMember implements Serializable {
 
 		@EmbeddedId
@@ -47,14 +50,10 @@ public class StudyMember implements Serializable {
 		@JoinColumn(name = "id")
 		private Member member;
 		
-		/**
-		 * Add by sangyong.shin
-		 * study 클래스와 관계 형성
-		 */
-		/*@MapsId("studyId")
+		@MapsId("studyId")
 		@ManyToOne
-		@JoinColumn(name = "study_id")
-		private Study studyId;*/
+		@JoinColumn(name = "studyId")
+		private Study study;
 		
 		@OneToMany(mappedBy="studyMember")
 		private List<StudyNoticeboard> studyNoticeboard;
@@ -71,8 +70,13 @@ public class StudyMember implements Serializable {
 		//급하게 추가한 코드. 에러 나면 주석 처리하기.
 		//duplicate field name 에러 없이 처리하는 방법 확인할 것
 //		@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-		@MapsId("studyId")
+
+		/**
+		 * @author 신상용
+		 * 변수명 중복으로 인한 에러 발생으로 주석 처리함.
+		 */
+		/*		@MapsId("studyId")
 		@ManyToOne 
 		@JoinColumn(name="studyId")
-		private Study study;
+		private Study study;*/
 }

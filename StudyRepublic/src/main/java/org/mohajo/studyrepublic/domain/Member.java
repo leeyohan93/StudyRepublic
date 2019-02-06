@@ -95,7 +95,10 @@ public class Member implements Serializable {
 	
 	
 
-
-
+	/**
+	 * Add sangyong.shin
+	 */
+	/*@OneToMany(mappedBy="member")
+	private List<StudyMember> studyMember;*/
 	
 }

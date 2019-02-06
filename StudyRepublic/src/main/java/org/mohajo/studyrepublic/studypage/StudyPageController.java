@@ -1,10 +1,15 @@
 package org.mohajo.studyrepublic.studypage;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
-import org.mohajo.studyrepublic.domain.StudyQnaboard;
+import org.mohajo.studyrepublic.domain.StudyNoticeboardReply;
+import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardFileRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardReplyRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardRepository;
@@ -18,22 +23,24 @@ import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.java.Log;
 
 @Log
 @Controller
 public class StudyPageController {
-	
 
-	
+	static private StudyPagePredicate predicate = new StudyPagePredicate();
+
 	private static final Logger log = LoggerFactory.getLogger(StudyPageController.class);
 
 	/**
@@ -45,10 +52,12 @@ public class StudyPageController {
 	StudyNoticeboardFileRepository studyNoticeboardFileRepository;
 	@Autowired
 	StudyNoticeboardReplyRepository studyNoticeboardReplyRepository;
-	
+
 	@Autowired
 	StudyMemberRepository smr;
-	
+	@Autowired
+	MemberRepository mr;
+
 	/**
 	 * Fileshareboard 관련 Repository
 	 */
@@ -58,7 +67,7 @@ public class StudyPageController {
 	StudyFileshareboardFileRepository studyFileshareboardFileRepository;
 	@Autowired
 	StudyFileshareboardReplyRepository studyFileshareboardReplyRepository;
-	
+
 	/**
 	 * Qnaboard 관련 Repository
 	 */
@@ -68,55 +77,111 @@ public class StudyPageController {
 	StudyQnaboardFileRepository studyQnaboardFileRepository;
 	@Autowired
 	StudyQnaboardReplyRepository studyQnaboardReplyRepository;
-	
-	@RequestMapping("/StudyNoticeboard")
-	public String test3(Model model) {
-		
-		List <StudyNoticeboard> findAllStudyNoticeboard = studyNoticeboardRepository.findAll();
-		model.addAttribute("findAllStudyNoticeboard", findAllStudyNoticeboard);
 
-		return "studypage/StudyNoticeboard";
-	}
-	
-	@RequestMapping("/studypagemain")
-	public String studyPageMain(Model model/*, @RequestParam("studyId") String studyId*/) {
-		//extra varialbe
+	@RequestMapping("/StudyPage/Main")
+	public String studyPageMain(Model model/* , @RequestParam("studyId") String studyId */) {
+		// extra varialbe
 		String studyId = "BB00001";
 		String id = "aaa123";
-		
-		/* 이 주석 코드는 로그인 기능이 활성화 된 후 체크할 예정임.
+
+		/*
+		 * 이 주석 코드는 로그인 기능이 활성화 된 후 체크할 예정임.
 		 * 
 		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String userId = auth.getName();
-		
-		log.info(userId);
-		if(userId.isEmpty()|| userId.equals("")|| userId.equals("anonymousUser")) {
-			return "studypage/Error";
-		}*/
+		 * String userId = auth.getName();
+		 * 
+		 * log.info(userId); if(userId.isEmpty()|| userId.equals("")||
+		 * userId.equals("anonymousUser")) { return "studypage/Error"; }
+		 */
 
-		if(studyId.isEmpty()||studyId.equals("")) {
+		if (studyId.isEmpty() || studyId.equals("")) {
 			log.info(studyId.isEmpty() + "/" + studyId);
 			return "studypage/Error";
 		}
-		
-		StudyPagePridicate pridicate = new StudyPagePridicate();
-		//studyId를 이용해서 해당 스터디의 해당 스터디의 공지사항 게시판 내용을 3개 가지고 옴.
-		List <StudyNoticeboard> studynoticeboard3result = pridicate.studyNotice3ResultPredicate(studyId, studyNoticeboardRepository);
-		//studyId를 이용해서 해당 스터디의 해당 스터디의 Qna 게시판 내용을 3개 가지고 옴.
-		List <StudyQnaboard> studyqnaboard3result = pridicate.studyQna3ResultPredicate(studyId, studyQnaboardRepository);
-		
-		//System.out.println(studynoticeboard3result.get(0));
-		
-//		List <StudyNoticeboard> studynoticeboard = studyNoticeboardRepository.findAll();
-		
-//		List <StudyMember> smr2 = smr.findAll();
-		
-		
-//		model.addAttribute("study", studynoticeboard/*smr2*/);
-		model.addAttribute("studynoticeboard3result", studynoticeboard3result);
-		model.addAttribute("studyqnaboard3result", studyqnaboard3result);		
-		return "studypage/StudyPageMain";
+
+		// StudyPagePredicate pridicate = new StudyPagePredicate();
+
+		try {
+			model.addAttribute("findbystudymember", predicate.findByThisStudyMemberPredicate(studyId, smr));
+			model.addAttribute("studynoticeboard3result",
+					predicate.studyNoticeResultPredicate(studyId, 3, studyNoticeboardRepository));
+			model.addAttribute("studyqnaboard3result",
+					predicate.studyQnaResultPredicate(studyId, 3, studyQnaboardRepository));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		return "studypage/studypage_main";
+	}
+
+	@RequestMapping("/StudyPage/Noticeboard")
+	public String studyNoticeboard(Model model) {
+		String studyId = "BB00001";
+		String id = "aaa123";
+
+		model.addAttribute("findAllStudyNoticeboard", studyNoticeboardRepository.findNoticeboardListByStudyId(studyId));
+		return "studypage/studypage_notice";
+	}
+
+	@RequestMapping("/StudyPage/Qnaboard")
+	public String studyQnaboard(Model model) {
+		String studyId = "BB00001";
+		String id = "aaa123";
+
+		/*model.addAttribute("findAllStudyQnaboard",
+				predicate.studyQnaResultPredicate(studyId, 10, studyQnaboardRepository));*/
+		model.addAttribute("findQnaboardInfoByStudyId", smr.findQnaboardInfoByStudyId(studyId));
+		return "studypage/studypage_qna";
+	}
+
+	@RequestMapping("/StudyPage/Fileshareboard")
+	public String studyFileshareboard(Model model) {
+		String studyId = "BB00001";
+		String id = "aaa123";
+
+		model.addAttribute("findAllStudyFileshareboard",
+				predicate.studyFileshareResultPredicate(studyId, 10, studyFileshareboardRepository));
+		return "studypage/studypage_fileshare";
 	}
 	
+	@RequestMapping("/StudyPage/Management")
+	public String studyManagement(Model model) {
+		String studyId = "BB00001";
+		String id = "aaa123";
+
+		return "studypage/studypage_management";
+	}
 	
+	@RequestMapping("/StudyPage/VideoCalling")
+	public String studyVideoCalling(Model model) {
+		String studyId = "BB00001";
+		String id = "aaa123";
+
+		return "video_calling/video_calling";
+	}
+
+	@ResponseBody
+	@RequestMapping(value="/StudyPage/Noticeboard/show", method = RequestMethod.POST)
+	public StudyNoticeboard showStudyNoticeboard(/*@RequestBody String studyId*/@RequestBody StudyNoticeboard readBoardContent){
+		log.info("시행됨1");
+		/*log.info(studyId);
+		
+		StudyNoticeboard readBoardContent = new StudyNoticeboard();*/
+	/*	Optional<StudyNoticeboard> studyNoticeboardVO = predicate.findByNoticeboardNumberAndStudyId(readBoardContent, studyNoticeboardRepository);
+		System.out.println(studyNoticeboardVO);
+		return studyNoticeboardVO;*/
+		StudyNoticeboard s = studyNoticeboardRepository.findNoticeboardByStudyIdANDNumber(readBoardContent.getStudyId(), readBoardContent.getNumber());
+		log.info(s.getStudyNoticeboardReply().toString());
+		return s;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/StudyPage/Noticeboard/replyshow", method = RequestMethod.POST)
+	public List<StudyNoticeboardReply> showStudyNoticeboardReply(/*@RequestBody String studyId*/@RequestBody StudyNoticeboard readBoardContent){
+		log.info("시행됨2");
+		
+		return studyNoticeboardReplyRepository.findNoticeboardReplyByStudyIdANDNumber(readBoardContent.getStudyId(), readBoardContent.getNumber());
+	}
+
 }
