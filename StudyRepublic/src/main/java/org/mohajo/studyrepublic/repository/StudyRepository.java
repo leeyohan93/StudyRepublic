@@ -6,13 +6,7 @@ import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.TypeCD;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 
 /**
  * @author	이미연

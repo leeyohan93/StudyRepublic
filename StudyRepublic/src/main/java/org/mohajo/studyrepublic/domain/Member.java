@@ -94,9 +94,7 @@ public class Member implements Serializable {
 	private List <InterestLocation> interestlocation;
 	
 	
-/*	@OneToOne(cascade=CascadeType.ALL) //, mappedBy = "member"
-	@JoinColumn(name = "id")
-	private MemberPoint memberpoint;*/
+
 
 
 	

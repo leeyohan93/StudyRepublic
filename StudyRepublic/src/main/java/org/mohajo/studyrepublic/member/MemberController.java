@@ -160,6 +160,11 @@ public class MemberController {
 		return "member/login";
 	}
 	
+	@RequestMapping("/login2")
+	public String login2() {
+		return "member/login2";
+	}
+	
 	@RequestMapping ("/logout")
 	public void logout() {
 	}
@@ -181,6 +186,10 @@ public class MemberController {
 		return "test";
 	}
 
+	@RequestMapping("/signup")
+	public String signupTest() {
+		return "sign_up";
+	}
 	
 	
 

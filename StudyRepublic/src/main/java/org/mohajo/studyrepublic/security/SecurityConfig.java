@@ -1,6 +1,11 @@
 package org.mohajo.studyrepublic.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +24,10 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+ 
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 
 
@@ -28,6 +35,7 @@ import lombok.extern.java.Log;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true) 
+@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -46,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http
 		.authorizeRequests()	
-		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/" ).permitAll()
+		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup" ).permitAll()
 		.antMatchers("/admin/**","/member/inquery","/member").hasRole("A")
 		.antMatchers("/member/**", "/tutor/signup","/tutor/insert","/pay"  ).hasRole("N")
 	
@@ -136,6 +144,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
     
+    
+/*    private Filter ssoFilter() {
+    	CompositeFilter filter = new CompositeFilter();
+    	List <Filter> filters = new ArrayList<>();
+    	filters.add(ssoFilter(facebook(), new Face))
+    }*/
 
 	
 	
