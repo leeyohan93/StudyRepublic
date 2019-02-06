@@ -2,8 +2,8 @@ package org.mohajo.studyrepublic.repository;
 
 import java.util.List;
 
-import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.TypeCD;
 import org.springframework.data.domain.Pageable;

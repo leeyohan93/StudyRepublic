@@ -45,6 +45,7 @@ var allSpan = document.querySelectorAll("span");
                 	"' name = 'location'> <button id = 'del1' value = '삭제' onclick = 'deleteLocation(" + count + ")'>X</button> </span>"
                 	$('#loc').append(text);
                 					document.getElementById("interestlocation"+count).value = dongaddress;
+                					
 					count++;
 					
                 }

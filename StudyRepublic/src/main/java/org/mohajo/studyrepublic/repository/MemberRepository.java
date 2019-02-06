@@ -3,7 +3,6 @@ package org.mohajo.studyrepublic.repository;
 
 
 import java.util.List;
-import java.util.Map;
 
 import org.mohajo.studyrepublic.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,6 +29,8 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 
 	@Query(value = "select * from recommend_tutor_member",nativeQuery=true)
 	List<Member> getRecommendTutorMember();
+	
+	//Member findBySocial(UserConnection userConnection);
 
 }
 
