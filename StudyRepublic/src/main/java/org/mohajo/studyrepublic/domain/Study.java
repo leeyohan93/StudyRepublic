@@ -113,7 +113,7 @@ public class Study implements Serializable {
 	/*@OneToMany(mappedBy="study")
 	private List<StudyMember> studyMember;*/
 	
-	@OneToMany
-	private List<StudyMember> studyMember;
+	/*@OneToMany
+	private List<StudyMember> studyMember;*/
 	
 }

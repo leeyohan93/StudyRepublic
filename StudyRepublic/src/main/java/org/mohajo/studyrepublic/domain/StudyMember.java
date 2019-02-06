@@ -12,8 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author	이미연
@@ -23,34 +25,34 @@ import lombok.Data;
  */
 @Data
 @Entity
+@Table(name = "study_member")
 public class StudyMember implements Serializable {
 
 		@EmbeddedId
 		private StudyMemberId studyMemberId;
 		
+		@Column(insertable=false, updatable=false)
+		private String id;
+	      
+		@Column(insertable=false, updatable=false)
+		private String studyId;
+		
 		@ManyToOne
 		@JoinColumn(name = "study_member_status_code")
 		private StudyMemberStatusCD studyMemberStatusCode;
 		
-		@Column
 		private Date enrollDate;
-		
-		@Column
 		private Date exitDate;
 		
 		@MapsId("id")
 		@ManyToOne
 		@JoinColumn(name = "id")
-		private Member id;
+		private Member member;
 		
-		/**
-		 * Add by sangyong.shin
-		 * study 클래스와 관계 형성
-		 */
-		/*@MapsId("studyId")
+		@MapsId("studyId")
 		@ManyToOne
-		@JoinColumn(name = "study_id")
-		private Study studyId;*/
+		@JoinColumn(name = "studyId")
+		private Study study;
 		
 		@OneToMany(mappedBy="studyMember")
 		private List<StudyNoticeboard> studyNoticeboard;

@@ -3,6 +3,9 @@
  layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>스터디 메인 페이지 입니다.</title>
 <link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
 </head>
@@ -34,7 +37,7 @@
 							<td th:text = "${snb.studyNoticeboardId}"></td>
 							<td th:text = "${snb.studyId}"></td>
 							<td th:text = "${snb.number}"></td>
-							<td th:text = "${snb.title}"></td>
+							<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${snb.title}"></a></td>
 							<td th:text = "${snb.content}"></td>
 							<td th:text = "${snb.date}"></td>
 							<td th:text = "${snb.id}"></td>
@@ -57,7 +60,22 @@
                 			</table> -->
                 	</table>
                 </div>
-                <div id="joinMember"></div>
+                <div id="joinMember">
+                	<div>
+                		<div:inline-block th:each="fbsm : ${findbystudymember}">
+                				<span th:each="member : ${fbsm.Member}">
+	                					<tr><th th:text="${member.profileSaveName}"></th></tr>
+	                			</span>
+                		</div:inline-block>
+                	</div>
+                	<div>
+                		<div:inline-block th:each="fbsm : ${findbystudymember}">
+                				<span th:each="member : ${fbsm.Member}">
+	                					<tr><th th:text="${member.nickname}"></th></tr>
+	                			</span>
+                		</div:inline-block>
+                	</div>
+                </div>
                 <div id="double">
                         <div id="qnaBoard">
                        		<table>
@@ -74,7 +92,7 @@
 									<td th:text = "${sqb.studyQnaboardId}"></td>
 									<td th:text = "${sqb.studyId}"></td>
 									<td th:text = "${sqb.number}"></td>
-									<td th:text = "${sqb.title}"></td>
+									<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${sqb.title}"></a></td>
 									<td th:text = "${sqb.content}"></td>
 									<td th:text = "${sqb.date}"></td>
 									<td th:text = "${sqb.id}"></td>

@@ -3,29 +3,25 @@
  layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
-<title>공지사항 게시판 입니다.</title>
-	<style>
-		.board{
-			
-		}
-	</style>
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+<title>스터디 파일공유 게시판 입니다.</title>
+<link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
 </head>
 <body>
-	
 	<div id="main" layout:fragment = "main">
+	</div>
+	<div id="right" layout:fragment="right">
 		<table>
 			<tr>
-				<td>공지사항 페이지 고유번호</td>
+				<td>파일공유 고유번호</td>
 				<td>스터디 ID</td>
 				<td>게시글 번호</td>
 				<td>제목</td>
 				<!-- <td>내용</td> -->
 				<td>작성일</td>
 				<td>작성자</td>
-				<!-- <td>시작시간</td> -->
-				<!-- <td>종료시간</td> -->
-				<td>진행 날짜</td>
-				<td>위치</td>
 				<!-- <td>덧글번호</td>
 				<td>덧글 번호가 속한 스터디 ID</td>
 				<td>덧글 작성 일자</td>
@@ -33,31 +29,28 @@
 				<td>step</td> -->
 			</tr>
 			<!-- <td th:text = "${tmp}"> -->
-			<tr th:each="fasn : ${findAllStudyNoticeboard}">
-				<td th:text = "${fasn.studyNoticeboardId}"></td>
-				<td th:text = "${fasn.studyId}"></td>
-				<td th:text = "${fasn.number}"></td>
-				<td th:text = "${fasn.title}"></td>
-				<td th:text = "${fasn.date}"></td>
-				<td th:text = "${fasn.id}"></td>
-				<td th:text = "${fasn.day}"></td>
-				<td th:text = "${fasn.location}"></td>
+			<tr th:each="fasf : ${findAllStudyFileshareboard}">
+				<td th:text = "${fasf.studyNoticeboardId}"></td>
+				<td th:text = "${fasf.studyId}"></td>
+				<td th:text = "${fasf.number}"></td>
+				<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${fasf.title}"></a></td>
+				<td th:text = "${fasf.date}"></td>
+				<td th:text = "${fasf.id}"></td>
 				<!-- <td th:text = "${tmp.studyNoticeboardReply}"></td> -->
 				<!-- <table> -->
-				<tr:block th:each = "snr : ${fasn.studyNoticeboardReply}">
+				<!-- <tr:block th:each = "snr : ${fasn.studyNoticeboardReply}">
 						<td th:text = "${snr.studyNoticeboardReplyId}"></td>
 						<td th:text = "${snr.studId}"></td>
 						<td th:text = "${snr.date}"></td>
-						<td th:text = "${snr.content}"></td>
+						<td th:text = "${snr.content}"></td> -->
 					<!-- <td th:text = "${snr.studyNoticeboardReplyId}"></td>
 					<td th:text = "${snr.studyId}"></td>
 					<td th:text = "${snr.date}"></td>
 					<td th:text = "${snr.replyGroup}"></td>
 					<td th:text = "${snr.replyStep}"></td>
 					<td th:text = "${snr.studyNoticeboardId"></td> -->
-				</tr:block>
+				</tr>
 				</table>
-			</tr>
 		</table>
 	</div>
 </body>

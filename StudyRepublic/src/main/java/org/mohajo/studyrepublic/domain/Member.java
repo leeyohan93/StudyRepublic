@@ -100,6 +100,10 @@ public class Member implements Serializable {
 	@JoinColumn(name = "id")
 	private List <InterestLocation> interestlocation;
 
-
+	/**
+	 * Add sangyong.shin
+	 */
+	/*@OneToMany(mappedBy="member")
+	private List<StudyMember> studyMember;*/
 	
 }
