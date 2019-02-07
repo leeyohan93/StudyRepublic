@@ -1,8 +1,8 @@
 <!-- 
   @author 윤원식
-  @since 2019. 1. 25.
+  @since 2019. 2. 2.
   @version
-  -write.html 추가
+  -modifyFreeBoard.html 으로 이름변경
  -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -11,7 +11,7 @@
 <head>
 
 <title></title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
@@ -85,19 +85,15 @@
 
 <form  id="writeForm" th:action="@{modifyRegister}" method="post">
 	 
-	 <div class="boardSelect">
-	 <select id ="boardType" name = "boardType">
-	 <option>게시판 선택 </option>
-     <option value ='freeBoardRepository'>자유게시판</option>
-	 <option value ='requestBoard'>스터디 요청게시판</option>
-	 <option value ='inquireBoard'>문의게시판</option>
-	</select> 
-	</div>
 	
 <!-- 제목, 공지옵션 비공개옵션 -->
   <div>
-	<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요." th:value="${freeBoard.title}"> 
-    <input id ="boardNotice" name ="notice" type="checkbox" value="0">
+    <input id="boardType" name="boardType" type="text" value="자유게시판" readonly> 
+	<input id="boardTitle" name="title" type="text" placeholder="제목을 입력해주세요." th:value="${board.title}"> 
+    <input id="boardNotice" name="notice" type="checkbox" value="0">
+	<input id="freeBoardId" name="freeBoardId" type="hidden" th:value="${board.freeBoardId}">
+	<input type="hidden" name="boardType" value="freeBoard"> 
+	 <br/>
     <span class ="boardTitleOpt">공지</span> 
     <input id="boardHide" name ="hide" type="checkbox" value="0">
     <sapn class ="boardTitleOpt">비공개</span>
@@ -109,10 +105,9 @@
   <!-- 다음 에디터 적용 글내용 -->
   <div id = "editor"></div>
     <div>  
-       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;" th:text="${freeBoard.content}"></textarea>
+       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;" th:text="${board.content}"></textarea>
 	</div>
 	<input name ='id' type='hidden' value="aaa123"> <br/>
-	<input name ='freeBoardId' type='hidden' th:value="${freeBoard.freeBoardId}"> <br/>
 
 	<!--글내용 끝  -->
   
@@ -135,7 +130,7 @@
  
 <script th:inline="javascript">
 
-$(function(){
+$(document).ready(function(){
     //전역변수선언
     var editor_object = [];
      
@@ -163,17 +158,14 @@ $(function(){
     $("#boardRegister").click(function(){
         //id가 smarteditor인 textarea에 에디터에서 대입
         editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
-              
-        // 이부분에 에디터 validation 검증
-         
+       
         //폼 submit
-        
-           
+         
         $("#boardWriteForm").submit();
             
     });
     
-    
+  
     
 })
 

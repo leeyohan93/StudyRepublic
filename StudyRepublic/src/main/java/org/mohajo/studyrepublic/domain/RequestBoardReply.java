@@ -6,12 +6,16 @@ package org.mohajo.studyrepublic.domain;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Getter;
 
@@ -33,6 +37,16 @@ public class RequestBoardReply extends Reply{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "requestboard_reply_id")
 	private int requestBoardReplyId;
+	
+	protected String id;
+	protected String content;
+	@CreationTimestamp
+	protected Timestamp date;
+	@Column(name = "replygroup")
+	protected int replyGroup;
+	@Column(name = "replystep")
+	protected int replyStep;
+	
 
 	@Column(name = "requestboard_id")
 	private int requestBoardId;

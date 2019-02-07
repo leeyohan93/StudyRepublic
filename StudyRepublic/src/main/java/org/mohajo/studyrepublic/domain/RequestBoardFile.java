@@ -33,5 +33,14 @@ public class RequestBoardFile extends File{
 	private int requestBoardFileId;
 	@Column(name ="requestboard_id")
 	private int requestBoardId;
+	
+	@Column(name = "filenumber")
+	protected int fileNumber;
+	@Column(name = "originname")
+	protected String originName;
+	@Column(name = "savename")
+	protected String saveName;
+	
+
 
 }

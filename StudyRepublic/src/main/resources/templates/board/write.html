@@ -11,7 +11,7 @@
 <head>
 
 <title></title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
@@ -81,12 +81,12 @@
 <div class="inner">
 <div class="container">
 
-<form  id="boardWriteForm" th:action="@{registerFreeBoard}" method="post">
+<form id="boardWriteForm" th:action="@{registerBoard}" method="post">
 	 
 	 <div class="boardSelect">
 	 <select id ="boardType" name = "boardType">
 	 <option>게시판 선택 </option>
-     <option value ='freeBoardRepository'>자유게시판</option>
+     <option value ='freeBoard'>자유게시판</option>
 	 <option value ='requestBoard'>스터디 요청게시판</option>
 	 <option value ='inquireBoard'>문의게시판</option>
 	</select> 
@@ -94,7 +94,8 @@
 	
 <!-- 제목, 공지옵션, 비공개옵션, -->
   <div>
-	<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요."> 
+	<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
+	<input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/>
     <input id ="boardNotice" name ="notice" type="checkbox" value="0">
     <span class ="boardTitleOpt">공지</span> 
     <input id="boardHide" name ="hide" type="checkbox" value="0">
@@ -107,23 +108,22 @@
   <!-- 스마트 에디터 적용 글내용 -->
   <div id = "editor">
     <div>  
-       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;"></textarea>
+       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:700px; height:1000px;"></textarea>
 	</div>
   </div>
-	<input name ='id' type='hidden' value="aaa123"> <br/>
 
-	<!--글내용 끝  -->
+	<!--스마트 에디터 적용 글내용 끝  -->
   
   <span class="cancelBtn">
     <a class ="btn btn-default" th:href="@{listFreeBoard}" role="button" id="cancel">취소</a> 
   </span>
   
   <span class="previewBtn">
-    <a class ="btn btn-default" href="" role="button" id="preview">미리보기</a> 
+    <button class="btn btn-default" name="writePreview" id="writePreview" type="button">미리보기</button> 
    
   </span>
   <span class="registerBtn">
-	 <button name = "boardRegister" id ="boardRegister" class ="btn btn-default" type="submit">확인</button>
+	 <button class="btn btn-default" name="boardRegister" id="boardRegister"  type="submit">확인</button>
   </span>
 	 </form>
   </div>
@@ -133,9 +133,10 @@
 
 <script th:inline="javascript">
 
-$(function(){
+$(document).ready(function(){
     //전역변수선언
     var editor_object = [];
+    
      
     nhn.husky.EZCreator.createInIFrame({
         oAppRef: editor_object,
@@ -162,17 +163,20 @@ $(function(){
         //id가 smarteditor인 textarea에 에디터에서 대입
         editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
               
-        // 이부분에 에디터 validation 검증
-         
-        //폼 submit
-        
-           
         $("#boardWriteForm").submit();
             
     });
     
     
-    
+    //미리보기
+    $('#writePreview').click(function(){
+
+    	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+        window.open("preview","자식창","writh=400,height=300,left=300,top=50");
+
+
+    });
+  
 })
 
     </script>

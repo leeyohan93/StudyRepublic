@@ -6,6 +6,7 @@ package org.mohajo.studyrepublic.domain;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,25 +42,31 @@ public class FreeBoard extends Board{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "freeboard_id")
 	private int freeBoardId;
-	
-	  protected String id;
-	   protected String title;
-	   protected String content;
-	   @CreationTimestamp
-	   protected Timestamp date;
-	   protected int notice;
-	   protected int status;
-	   protected int hit;
-	   @Column(name = "likecount")
-	   protected int likeCount;
-	   @Column(name = "replycount")
-	   protected int replyCount;
-	   
-	   @OneToMany
-	   @JoinColumn(name="freeboard_id")
-	   private List<FreeBoardReply> freeBoardReply;
-	   
-	
+
+	protected String id;
+	protected String title;
+	protected String content;
+	@CreationTimestamp
+	protected Timestamp date;
+	protected int notice;
+	protected int status;
+	protected int hit;
+	@Column(name = "likecount")
+	protected int likeCount;
+	@Column(name = "replycount")
+	protected int replyCount;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="freeboard_id")
+	private List<FreeBoardReply> freeBoardReply;
+
+	@OneToMany
+	@JoinColumn(name="freeboard_id")
+	private List<FreeBoardFile> freeBoardFile;
+
+
+
+
 
 
 
