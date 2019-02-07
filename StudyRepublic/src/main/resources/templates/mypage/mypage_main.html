@@ -1,191 +1,215 @@
 <!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
 <!-- layout:decorate="~{/layout/mainLayout}" -->
 <head>
 <meta charset="UTF-8">
 <title>회원정보</title>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
-	<style>
-.left{
-  float:left;
-  background-color:green;
-  width:10%;
-  height:300px;
-  padding:3px 3px;
+<style>
+li {
+	list-style: none;
 }
 
-.premium{
-  
-  margin-bottom:50px;
-  background-color:orange;
-  padding-bottom:50px solid;
-  width:100%;
-  height:45px;
-}
-.tutor{
-  background-color:yellow;
-  padding-bottom:50px solid;
-  width:100%;
-  height:45px;
-  
-}
-  
-
-
-.top_middle{
-  background-color:white;
-  float:left;
-  width:40%;
-  height:200px;
-  padding:6px 20px;
+.left {
+	float: left;
+	background-color: green;
+	width: 10%;
+	height: 300px;
+	padding: 3px 3px;
 }
 
-.top_right{
- 
-  background-color:pink;
-  border:solid;
-  float:right;
-  height:250px;
-  width:300px;
-  }
-.scheduler{
-  float:right;
-  border:solid;
-  width:100%;
-  height:40px;
-  background-color:orange;
+.premium {
+	margin-bottom: 50px;
+	background-color: orange;
+	padding-bottom: 50px solid;
+	width: 100%;
+	height: 45px;
 }
 
-.top_left{
-  float:left;
-  height:200px;
-  width:300px;;
-  //background-color:yellowgreen;
-  }
-
-.status{
-  width:294px;
-  height:70px;
-  background-color:whitesmoke;
-  margin:3px 3px;
-  border:solid;
+.tutor {
+	background-color: yellow;
+	padding-bottom: 50px solid;
+	width: 100%;
+	height: 45px;
 }
 
-.profile{
-  float:left;
-  width:45px;;
-  height:65%;
-  background-color:white;
-  border:solid;
+.top_middle {
+	background-color: white;
+	float: left;
+	width: 40%;
+	height: 200px;
+	padding: 6px 20px;
 }
 
-.member_info{
-  float:right;
-  background-color:white;
-  width:240px;;
-  height:65%;
-  border:solid;
+.top_right {
+	background-color: pink;
+	border: solid;
+	float: right;
+	height: 250px;
+	width: 300px;
 }
 
-.membermodify{
-  float:right;
-  width:100px;
-  height:45px;
-  
+.scheduler {
+	float: right;
+	border: solid;
+	width: 100%;
+	height: 40px;
+	background-color: orange;
 }
 
-.mid_middle{
-  margin-top:280px;
-  background-color:blue;
-  width:90%;
-  height:200px;
+.top_left {
+	float: left;
+	height: 200px;
+	width: 300px;; //
+	background-color: yellowgreen;
 }
-.low_middle{
-  margin-top:30px;
-  background-color:yellow;
-  width:90%;
-  height:150px;
-  
-} 
 
+.status {
+	width: 294px;
+	height: 70px;
+	background-color: whitesmoke;
+	margin: 3px 3px;
+	border: solid;
+}
+
+.profile {
+	float: left;
+	width: 45px;;
+	height: 65%;
+	background-color: white;
+	border: solid;
+}
+
+.member_info {
+	float: right;
+	background-color: white;
+	width: 240px;;
+	height: 65%;
+	border: solid;
+}
+
+.membermodify {
+	float: right;
+	width: 100px;
+	height: 45px;
+}
+
+.mid_middle {
+	margin-top: 280px;
+	background-color: blue;
+	width: 90%;
+	height: 200px;
+}
+
+.low_middle {
+	margin-top: 30px;
+	background-color: yellow;
+	width: 90%;
+	height: 150px;
+}
 </style>
 
 </head>
 <body>
 
+	<div id="main" layout:fragment="main">
+		<div class="inner">
+		
+			<nav>
+				<div class="left">
+					<div class="premium">프리미엄등급신청</div>
+					<li><a>신청하기</a></li>
+					<li><a>신청현황</a></li>
+					<div class="tutor">강사페이지</div>
+					<li><a>강사 프로필</a></li>
+					<li><a>프리미엄스터디 개설내역</a></li>
+				</div>
+			</nav>
+			
+			<article>
+			
+				<div class="membermodify">
+							<a class="btn btn-primary" id="modifybut" th:href="@{modimember}"
+								role="button">수정하기</a>
+				</div>
+				<div class="top_middle">
+					<div class="top_left">
+						<div class="status">
+							<span sec:authentication="principal.member.nickname"></span>님이 접속중입니다.<br> 
+							<a href="naver.com">쪽지함</a> 
+							<a href="activityinfo">활동정보</a>
+						</div>
 
-<nav>
-	<div class="left"> 
-  		<div class="premium">프리미엄등급신청</div>
-  		<div class="tutor">강사페이지</div>
+
+
+						<div class="profile">프로필사진</div>
+						<div class="member_info" th:each="mbr : ${mbr}">
+							ID:
+							<td th:text=${mbr.id} />
+							<br> 이름:
+							<td th:text=${mbr.name} />
+							<br> 성별:
+							<td th:text=${mbr.gender} />
+							<br> 생년월일:
+							<td th:text=${mbr.birth} />
+							<br> E-Mail:
+							<td th:text=${mbr.email} />
+							<br> 연락처:
+							<td th:text=${mbr.phonenumber} />
+							<br>
+
+						</div>
+					</div>
+						
+
+					
+
+
+
+
+
+					<div class="top_right">
+						<button type="button" class="scheduler">MY스케줄러</button>
+
+						<div class="studystatus">
+							현재진행중인 스터디<br> <br>일반스터디<br>
+							<tr th:each="sr : ${sr}">
+								<td>
+									<li th:if="${sr.name != null}" th:text="${sr.name}"></li>
+									<li th:unless="${sr.name != null}">현재 진행중인 스터디가없습니다.</li>
+								</td>
+							</tr>
+
+
+
+							<br>프리미엄스터디<br>
+							<li>현재진행중인스터디가 없습니다.</li>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
+
+					<div class="mid_middle">관심지역</div>
+
+					<div class="low_middle">관심분야</div>
+			</article>
+		</div>
+		<!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
 	</div>
-</nav>
-<article>
-<div class="top_middle">
-  <div class="top_left">
-      <div class="status">
-        <span sec:authentication="principal.member.nickname"></span>님이 접속중입니다. <br>
-         <a href="naver.com">쪽지함</a>
-         <a href="naver.com">활동정보</a>
-      </div>
-       
-     
-   
-     <div class="profile">프로필사진</div>
-    <div class="member_info">
-    <tr th:each="mbr : ${mbr}">
-       ID:<td th:text=${mbr.id}/><br>
-            이름:<td th:text=${mbr.name}/><br>
-            성별:<td th:text=${mbr.gender}/><br>
-         생년월일:<td th:text=${mbr.birth}/><br>
-     E-Mail:<td th:text=${mbr.email}/><br>
-         연락처:<td th:text=${mbr.phonenumber}/><br>
-      </tr>       
-    </div>
-    <button type="button" onclick="location.href='modimber'" class="membermodify">수정하기</button>
-   
- </div> 
-   
-
-
-   
-  
-  <div class="top_right">
-    <button type="button" class="scheduler">MY스케줄러 </button>
-   
-    <div class="studystatus">
-      	현재진행중인 스터디<br>
-      <br>일반스터디<br>
-	 <tr th:each="sr : ${sr}">
-	 	<td>
-	 		<li th:if="${sr.name != null}" th:text="${sr.name}"></li>
-	 		<li th:unless="${sr.name != null}" >현재 진행중인 스터디가없습니다.</li>	 
-	 	</td>
-	 </tr>
-
-
-	
-     <br>프리미엄스터디<br>
-      <li>현재진행중인스터디가 없습니다.</li>
-    </div>    
-    </div>
-   
-  
-  <div>
- 
-  
-  
-  
-  
-  <div class="mid_middle">관심지역</div>
-  
-  <div class="low_middle">관심분야</div>
-  
-  </div>
- </article>	 
- 
+	<!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
 
 
 </body>

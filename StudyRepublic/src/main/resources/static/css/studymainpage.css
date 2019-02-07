@@ -50,7 +50,7 @@
 #noticeBoard{
     width: 95%;
     height: 30%;
-    background-color: gray;
+    background-color: white;
     padding: 1px;
     margin: 1%;
 }
@@ -73,7 +73,7 @@
     display: inline-block;
     width: 60%;
     height: 100%;
-    background-color: gray;
+    background-color: white;
     margin-right: 1%;
     border: 1px solid gray;
 }

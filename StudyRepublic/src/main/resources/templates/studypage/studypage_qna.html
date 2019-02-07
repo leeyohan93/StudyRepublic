@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org"
+ layout:decorate="~{/layout/studypageLayout}">
+<head>
+<meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+<title>스터디 질문&답변 게시판 입니다.</title>
+<link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
+</head>
+<body>
+	<div id="main" layout:fragment = "main">
+	</div>
+	<div id="right" layout:fragment="right">
+		<table>
+			<tr>
+				<td>프로필 사진</td>
+				<td>닉네임</td>
+				<td>제목</td>
+				<td>작성일시</td>
+			</tr>
+			<tr th:each="fasq : ${findQnaboardInfoByStudyId}">
+				<table th:each="fasqsqb : fasq.studyQnaboard">
+					<td th:text = "${fasqsqb}"></td>
+				</table>
+				<td th:text = "${fasq}"></td>
+				<td th:text = "${fasq.member.profileSaveName}"></td>
+				<td th:text = "${fasq.member.nickname}"></td>
+				<!-- <input type="hidden" th:value="${fasq.notice}" name="number" />
+				<td th:text = "${fasq.member.profileSaveName}"></td>
+				<td th:text = "${fasq.member.nickname}"></td>
+				<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${fasq.title}"></a></td>
+				<td th:text = "${fasq.date}"></td>
+				<td th:text = "${fasq.id}"></td> -->
+			</tr>
+		</table>
+	</div>
+<script>
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$(function() {
+		    $(document).ajaxSend(function(e, xhr, options) {
+		        xhr.setRequestHeader(header, token);
+		    });
+		});
+		
+		$(".boardList").on("click", function(){
+			
+			var StudyNoticeboard = {
+					studyId : "BB00001",
+					id : "aaa123",
+					number : this.title
+				}
+			
+			extra = this;
+			
+			$.ajax({
+				type:"POST",
+				contentType: "application/json; charset=UTF-8",
+				url:"/StudyPage/Noticeboard/show",
+				data: JSON.stringify(StudyNoticeboard),
+				dataType: "json",
+				success: function(data){
+						console.log(StudyNoticeboard.number)
+						console.log(data);
+						console.log("success");
+						/**
+						*설명 : 덧글만 따로 뽑아내기 위한 Ajax
+						*주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
+						*/
+						$.ajax({
+							type:"POST",
+							contentType: "application/json; charset=UTF-8",
+							url:"/StudyPage/Noticeboard/replyshow",
+							data: JSON.stringify(StudyNoticeboard),
+							dataType: "json",
+							success: function(data){
+									data.forEach(function(list){
+										console.log(list);
+									});
+									console.log("success");
+							},error: function() {
+								alert("error");
+							}
+						});
+				},error: function() {
+					alert("error");
+				}
+			});
+		});
+</script>
+</body>
+</html>

@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html html xmlns:th="http://www.thymeleaf.org"
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>강사신청내역조회</title>
 </head>
 <body>
+
+<div id = "wrapper">
+<div id = "main" layout:fragment = "main">
+<div class = "inner">
 
  <table th:inline = "text" border = "1">
 <tr>
@@ -18,14 +22,24 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 </tr> 
 
 <tr th:each="t : ${tutor}">
-<td><a th:href="@{'inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td>
 <td th:text = "${t.member.id}"></td>
 <td th:text = "${t.member.name}"></td>
 <td th:text = "${t.tutorNumber}"></td>
-<!-- <td th:text = "${t.educationCD.codeValueKorean}"></td> -->
+<td th:text = "${t.educationCD.codeValueKorean}"></td>
 <td th:text = "${t.introduction}"></td>
 </tr>
 </table>
+
+<table>
+<tr th:each="t : ${tutor}">
+<td><a th:href="@{'/tutor/delete'(id=${t.tutorNumber})}">삭제하고싶니?바로삭제되니 조심.</a></td>
+</tr>
+
+</table>
+
+</div>
+</div>
+</div>
 
 </body>
 </html>

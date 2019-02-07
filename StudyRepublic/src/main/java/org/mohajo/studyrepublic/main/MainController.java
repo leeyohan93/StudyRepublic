@@ -5,10 +5,6 @@ package org.mohajo.studyrepublic.main;
 
 import java.util.List;
 
-import org.mohajo.studyrepublic.domain.CareerCD;
-import org.mohajo.studyrepublic.domain.EducationCD;
-import org.mohajo.studyrepublic.domain.Interest1CD;
-import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Study;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2019. 1. 23.
  * @version 0.0
  * -MainController 생성
+ * -index 메인페이지 추가
+ * -saerch 검색기능 추가
  */
 @Controller 
 public class MainController {
@@ -30,7 +28,7 @@ public class MainController {
 	
 	@RequestMapping("/index")
 	public void index(Model model) {
-		
+		System.out.println("index()");
 		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
 		List<Study> basicStudy = mainService.getPopularBasicStudy();
 		
@@ -52,8 +50,18 @@ public class MainController {
 		model.addAttribute("dinterest2cd", mainService.getDInterest2Code());
 		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
 		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
-		
-		
-		
 	}
+	
+	@RequestMapping("/search")
+	public String search(Study studyInfo,String searchDate,String[] location, String[] interest, Model model){
+		
+		List<Study> searchList = mainService.search(studyInfo, searchDate, location, interest);
+		model.addAttribute("list", searchList);
+		model.addAttribute("typeCode", studyInfo.getTypeCode().getTypeCode());
+
+		return "study/list";
+	}
+	
+	
+
 }

@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import javax.persistence.OneToOne;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -19,22 +21,13 @@ import javax.persistence.TemporalType;
 
 /*import org.springframework.security.core.authority.SimpleGrantedAuthority;*/
 
-
 import lombok.Data;
-
-
 
 @Data
 @Entity
 @Table(name = "member", schema = "StudyRepublic")
 @SecondaryTable(name="recommend_TutorMember")
 public class Member implements Serializable {
-
-
-
-/*	public Member(String username, String string, List<SimpleGrantedAuthority> asList) {
-
-	}*/
 
 	private static final long serialVersionUID = 1L;
 	
@@ -70,7 +63,7 @@ public class Member implements Serializable {
 	private String phonenumber;
 	
 	@Column(nullable = false)
-	private int visibility;
+	private int visibility = 0;
 	
 	@Column(nullable = false)
 	private String profileOriginName;
@@ -103,5 +96,11 @@ public class Member implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name = "id")
 	private List <InterestLocation> interestlocation;
+
+	/**
+	 * Add sangyong.shin
+	 */
+	/*@OneToMany(mappedBy="member")
+	private List<StudyMember> studyMember;*/
 	
 }

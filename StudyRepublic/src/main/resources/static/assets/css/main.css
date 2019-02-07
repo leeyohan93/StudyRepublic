@@ -2130,14 +2130,15 @@ input::-moz-focus-inner {
 		background-color: transparent;
 		border: none;
 		border-radius: 0;
-		border-bottom: solid 1px #c9c9c9;
+/* 		border-bottom: solid 1px #c9c9c9; */
 		color: inherit;
 		display: block;
 		outline: 0;
-		padding: 0;
+/* 		padding: 0; */
 		text-decoration: none;
-		width: 100%;
+/* 		width: 100%; */
 	}
+	
 
 		input[type="text"]:invalid,
 		input[type="password"]:invalid,
@@ -2155,7 +2156,7 @@ input::-moz-focus-inner {
 		select:focus,
 		textarea:focus {
 			border-bottom-color: #f2849e;
-			box-shadow: inset 0 -1px 0 0 #f2849e;
+
 		}
 
 	select {
@@ -2430,11 +2431,10 @@ input::-moz-focus-inner {
 		-moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 		-webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 		-ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-		transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-		background-color: transparent;
+		transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;		
 		border-radius: 4px;
 		border: 0;
-		box-shadow: inset 0 0 0 2px #585858;
+/* 		box-shadow: inset 0 0 0 2px #585858; */
 		color: #585858 !important;
 		cursor: pointer;
 		display: inline-block;
@@ -3029,25 +3029,25 @@ input::-moz-focus-inner {
 
 	#menu {
 		-moz-transform: translateX(-22em);
-		-webkit-transform: translateX(-22em);
-		-ms-transform: translateX(-22em);
-		transform: translateX(-22em);
-		-moz-transition: -moz-transform 0.45s ease, visibility 0.45s;
-		-webkit-transition: -webkit-transform 0.45s ease, visibility 0.45s;
-		-ms-transition: -ms-transform 0.45s ease, visibility 0.45s;
-		transition: transform 0.45s ease, visibility 0.45s;
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 22em;
-		max-width: 80%;
-		height: 100%;
-		-webkit-overflow-scrolling: touch;
-		background: #585858;
-		color: black;
-		cursor: default;
-		visibility: hidden;
-		z-index: 10002;
+	-webkit-transform: translateX(-22em);
+	-ms-transform: translateX(-22em);
+	transform: translateX(-22em);
+	-moz-transition: -moz-transform 0.45s ease, visibility 0.45s;
+	-webkit-transition: -webkit-transform 0.45s ease, visibility 0.45s;
+	-ms-transition: -ms-transform 0.45s ease, visibility 0.45s;
+	transition: transform 0.45s ease, visibility 0.45s;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 22em;
+	max-width: 80%;
+	height: 800px;
+	-webkit-overflow-scrolling: touch;
+	background: rgba(0, 0, 0, 0.36);
+	color: black;
+	cursor: default;
+	visibility: hidden;
+	z-index: 10;
 	}
 
 		#menu > .inner {
@@ -3061,10 +3061,89 @@ input::-moz-focus-inner {
 			left: 0;
 			width: 100%;
 			height: 100%;
-			padding: 2.75em;
+			padding-top: 2em;
+			padding-left:2em;
 			opacity: 0;
 			overflow-y: auto;
 		}
+		
+		#menu >.interest_element {
+	padding-bottom: 0.7em;
+}
+
+#menu .interest_element_optional {
+	padding-bottom: 0.7em;
+	display: none;
+}
+
+#menu select {
+	background-color: white;
+	width: 11em;
+	font-size: 0.7em
+}
+
+#menu input[type="radio"] {
+	width: 2em;
+}
+
+#menu .interest_element_tag input[type="button"] {
+	display: inline-block;
+	font-family: 'Hind Guntur', sans-serif;
+	font-size: 15px;
+	line-height: 1;
+	color: #fff;
+	letter-spacing: 0.025em;
+	background: #379aff;
+	padding: 18px 0 11px;
+	cursor: pointer;
+	border: 0;
+	border-radius: 2px;
+	min-width: 70px;
+	overflow: hidden;
+	border-radius: 360px;
+	background-color: #e9ecef;
+}
+#menu button{
+	display: inline-block;
+	font-family: 'Hind Guntur', sans-serif;
+	font-size: 11px;
+	color: #fff;
+	letter-spacing: 0.025em;
+	background: white;
+	padding: 0.5px 1px;
+	cursor: pointer;
+	border: 0;
+	border-radius: 2px;
+	min-width: 20px;
+	height: 20px;
+	text-align:center;
+	overflow: hidden;
+	border-radius: 360px;
+	background-color: #e9ecef;
+}
+
+
+
+#menu input[type="text"], input[type="password"], input[type="email"],
+	input[type="tel"], select, textarea {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	background-color: transparent;
+	border: none;
+	border-radius: 0;
+/* 	border-bottom: solid 1px #c9c9c9; */
+	color: inherit;
+	display: inline-block;
+	outline: 0;
+	padding: 0;
+	text-decoration: none;
+	width: 13em;
+	height: 2em;
+}
+		
+		
 
 			#menu > .inner > ul {
 				list-style: none;

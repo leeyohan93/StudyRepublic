@@ -1,13 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org">
-
-
-
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- 	layout:decorate="~{/layout/mainLayout}"> -->
 <head>
 <meta charset="UTF-8">
 <title>회원정보 수정페이지</title>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 </head>
 <body>
+
+
+ <span sec:authentication="principal.member.nickname"></span>님 회원정보 수정페이지  <br>
+ 
+ <span>	<a class="btn btn-primary" id="modifypwd" th:href="@{passwordmodi}" role="button">비밀번호 변경</a></span>
+ 
+ 
+ <div th:each="md : ${mdu}">
+ 	ID&nbsp&nbsp<span th:text="${md.id}"></span></br>
+ 	비밀빈호&nbsp&nbsp<span><input type="text" name="password" th:value="${md.password}"/></span></br>
+ 	이름&nbsp&nbsp<span th:text="${md.name}"></span></br>
+ 	성별&nbsp&nbsp<span th:text="${md.gender}"></span></br>
+ 	생년월일&nbsp&nbsp<span th:text="${md.birth}"></span></br>
+	닉네임&nbsp&nbsp<span th:text="${md.nickname}"></span></br>
+	이메일&nbsp&nbsp<span><input type="text" name="email" th:value="${md.email}"/></span>&nbsp&nbsp
+	<button type="button" class="button" onclick="check()">중복체크</button></br>
+	휴대폰번호&nbsp&nbsp<span><input type="text" name="phonenumber" th:value="${md.phonenumber}"/></span>
+	<button type="button" class="button" onclick="check()">인증번호</button></br>
+	인증번호&nbsp&nbsp&nbsp<span><input type="text" name="phonenumber2"/></span>
+	<button type="button" class="button" onclick="check()">완료</button></br>
+	공개여부&nbsp&nbsp&nbsp<span><input type="radio" name="visibility"/>공개&nbsp&nbsp<input type="radio" name="visibility"/>비공개</span>
+</div>
+<br>
+<span>	<a class="btn btn-primary" id="memberexit" th:href="@{memberexit}" role="button">탈퇴하기</a></span>
+<span>	<a class="btn btn-primary" id="complate" th:href="@{complate}" role="button">완료</a></span>
+	 
+
+	
+
+</body>
+</html>
+
+
 
 <!-- 	<article>
 		<h3> <span sec:authentication="principal.member.nickname"></span>님이 접속중입니다. </h3><br>
@@ -71,11 +106,9 @@
 
 	</article>
 	
-	 -->
+	
+ -->
 
 
 
 
-
-</body>
-</html>

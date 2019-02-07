@@ -47,14 +47,10 @@ public class StudyMember implements Serializable {
 		@JoinColumn(name = "id")
 		private Member member;
 		
-		/**
-		 * Add by sangyong.shin
-		 * study 클래스와 관계 형성
-		 */
-		/*@MapsId("studyId")
-		@ManyToOne
-		@JoinColumn(name = "study_id")
-		private Study studyId;*/
+		@MapsId("studyId")
+		@ManyToOne 	
+		@JoinColumn(name="study_id")
+		private Study study;
 		
 		@OneToMany(mappedBy="studyMember")
 		private List<StudyNoticeboard> studyNoticeboard;
@@ -65,14 +61,5 @@ public class StudyMember implements Serializable {
 		@OneToMany(mappedBy="studyMember")
 		private List<StudyQnaboard> studyQnaboard;
 		
-		/**
-		 * @author 이미연
-		 */
-		//급하게 추가한 코드. 에러 나면 주석 처리하기.
-		//duplicate field name 에러 없이 처리하는 방법 확인할 것
-//		@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-		@MapsId("studyId")
-		@ManyToOne 
-		@JoinColumn(name="studyId")
-		private Study study;
+
 }

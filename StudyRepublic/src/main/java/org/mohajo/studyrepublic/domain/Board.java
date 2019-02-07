@@ -27,6 +27,7 @@ import lombok.ToString;
 @ToString
 @MappedSuperclass
 public class Board {
+
    protected String id;
    protected String title;
    protected String content;

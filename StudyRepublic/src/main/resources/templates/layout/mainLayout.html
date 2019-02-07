@@ -1,9 +1,4 @@
 <!DOCTYPE HTML>
-<!--
-   Phantom by HTML5 UP
-   html5up.net | @ajlkn
-   Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
@@ -16,28 +11,54 @@
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
+	type="text/css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 
+<style>
+#pinterest2cd {
+	display: none
+}
+
+#dinterest2cd {
+	display: block-inline
+}
+
+#winterest2cd {
+	display: none
+}
+
+#ninterest2cd {
+	display: none
+}
+
+#edu {
+	display: none
+}
+</style>
+
 </head>
+
+
 <body class="is-preload">
-   <!-- Wrapper -->
-   <div id="wrapper">
+	<!-- Wrapper -->
+	<div id="wrapper">
 
-      <!-- Header -->
+		<!-- Header -->
 
-      <header id="header" layout:fragment="header">
-         <div class="inner">
+		<header id="header" layout:fragment="header">
+			<div class="inner">
 
 
 				<!-- Login -->
 				<div id="logout" sec:authorize="isAuthenticated()">
 					<ul>
-					<li><a th:href="@{/logout}">로그아웃</a></li>
-					<li><a th:href="@{/mypage}">마이페이지</a></li>
+						<li><a th:href="@{/logout}">로그아웃</a></li>
+						<li><a th:href="@{/mypage}">마이페이지</a></li>
 					</ul>
 					</sec:authorize>
 				</div>
@@ -54,7 +75,7 @@
 				<!-- Logo -->
 
 
-				<a href="index.html" class="logo"> <span class="symbol"><img
+				<a href="/index" class="logo"> <span class="symbol"><img
 						th:src="@{/images/logo.svg}" alt="" /></span><span>Study Republic</span>
 				</a>
 
@@ -63,14 +84,15 @@
 				<nav>
 					<ul>
 						<li class="nav-item"><a href="#menu" class="nav-link">Menu</a></li>
-						<li class="nav-item"><a href="/study/list/b" class="nav-link">일반 스터디</a></li>
+						<li class="nav-item"><a href="/study/list/b" class="nav-link">일반
+								스터디</a></li>
 						<li class="nav-item"><a href="/study/list/p" class="nav-link">프리미엄
 								스터디</a></li>
 						<li class="nav-item dropdown"><a
 							class="nav-link dropdown-toggle" href="#" id="dropdown01"
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">커뮤니티</a>
 							<div class="dropdown-menu" aria-labelledby="dropdown01">
-								<a class="dropdown-item" href="#">자유 게시판</a> <a
+								<a class="dropdown-item" th:href="@{/board/listFreeBoard}">자유 게시판</a> <a
 									class="dropdown-item" href="#">스터디 요청 게시판</a> <a
 									class="dropdown-item" href="#">문의 게시판</a>
 							</div></li>
@@ -81,43 +103,73 @@
 
 		</header>
 
-		<!--menu -->
+		<!--Search -->
 		<nav id="menu" layout:fragment="menu">
-			<h2>Menu</h2>
-			<form id="tutor" action="/tutor/insert" method="post">
+			<h2>검색</h2>
+			<br>
+			<form id="search" action="/search" method="get">
+				<!-- 스터디명, 검색버튼  -->
+				<div class="interest_element">
+					<label class="mr-sm-2" for="inlineFormCustomSelect">스터디명</label><br>
+					<input type="text" name="name"> <input type="submit"
+						value="검색">
+				</div>
+				<!-- 스터디 종류(라디오버튼)  -->
+				<div class="interest_element">
+					<label class="mr-sm-2" for="inlineFormCustomSelect">스터디유형</label><br>
+					<label><input type="radio" name="typeCode.typeCode"
+						value="All" checked>전체</label> <label><input type="radio"
+						name="typeCode.typeCode" value="B"> 일반</label> <label><input
+						type="radio" name="typeCode.typeCode" value="P"> 프리미엄</label>
+				</div>
+				<!-- 스터디 유형(라디오버튼)  -->
+				<div class="interest_element">
+					<label class="mr-sm-2" for="inlineFormCustomSelect">On/Off</label><br>
+					<label><input type="radio" name="onoffCode.onoffCode"
+						value="All" checked>전체</label> <label><input type="radio"
+						name="onoffCode.onoffCode" value="O"> On</label> <label><input
+						type="radio" name="onoffCode.onoffCode" value="F"> Off </label> <label><input
+						type="radio" name="onoffCode.onoffCode" value="B"> OnOff </label>
+				</div>
+				<!-- 지역정보, 스터디 유헹에서 on,onoff일때 display  -->
+				<div class="interest_element_optional">
+					<label class="mr-sm-2" for="inlineFormCustomSelect">지역</label><br>
+					<input type="button" onclick="addInterestLocation()"
+						value="interestLocation"><br>
 
-					<select name="interest1cd" id="interest1cd" size='4'
-						multiple='multiple' onchange="interest1(this)">
+					<div id="guide" style="color: #999; display: none"></div>
+				</div>
+				<!-- 관심분야 추가  -->
+				<div class="interest_element">
+					<label class="mr-sm-2" for="inlineFormCustomSelect">관심분야</label><br>
+					<select class="custom-select mr-sm-2" id="interest1cd" size='1'
+						onchange="interest1(this)">
 						<option th:each="i1 :  ${interest1cd}"
 							th:value="${i1.interest1Code}" th:text="${i1.codeValueKorean}">
 						</option>
-					</select>
-
-					<span class="dinterest2cd" name="dinterest2cd" id="dinterest2cd"><select
-						size='4' multiple='multiple' onchange="interest2(this)">
+					</select> <span class="interestClass" name="dinterest2cd" id="dinterest2cd"><select
+						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
 							<option th:each="di2 :  ${dinterest2cd}"
 								th:value="${di2.interest2Code}" th:text="${di2.codeValueKorean}">
 							</option>
-					</select></span> <span class="ninterest2cd" name="ninterest2cd" id="ninterest2cd">
-						<select size='4' multiple='multiple' onchange="interest2(this)">
+					</select></span> <span class="interestClass" name="ninterest2cd" id="ninterest2cd">
+						<select class="custom-select mr-sm-2" size='1'
+						onchange="interest2(this)">
 							<option th:each="ni2 :  ${ninterest2cd}"
 								th:value="${ni2.interest2Code}" th:text="${ni2.codeValueKorean}">
 							</option>
 					</select>
-					</span> <span class="pinterest2cd" name="pinterest2cd" id="pinterest2cd"><select
-						size='4' multiple='multiple' onchange="interest2(this)">
+					</span> <span class="interestClass" name="pinterest2cd" id="pinterest2cd"><select
+						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
 							<option th:each="pi2 :  ${pinterest2cd}"
 								th:value="${pi2.interest2Code}" th:text="${pi2.codeValueKorean}">
 							</option>
-					</select></span> <span class="winterest2cd" name="winterest2cd" id="winterest2cd"><select
-						size='4' multiple='multiple' onchange="interest2(this)">
+					</select></span> <span class="interestClass" name="winterest2cd" id="winterest2cd"><select
+						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
 							<option th:each="wi2 :  ${winterest2cd}"
 								th:value="${wi2.interest2Code}" th:text="${wi2.codeValueKorean}">
 							</option>
 					</select></span>
-
-
-
 
 					<div id="interest1cd" name="interest1cd">
 						<div id="int1"></div>
@@ -126,93 +178,31 @@
 					<div id="interest2cd" name="interest2cd">
 						<div id="int2"></div>
 					</div>
-
-					<input type="submit" value="강사신청"> <input type="hidden"
-						th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-				</form>
-
-				<script
-					src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-				<script>
-					var AllselectBox = document.querySelectorAll("span");
-
-					var interestArr = [ "데이터베이스", "네트워크&보안", "응용프로그래밍",
-							"웹프로그래밍" ];
-					var count = 0;
-
-					var sinterest1 = "";
-					var pinterest2cd = document.getElementById("pinterest2cd")
-
-					function interest1(obj) {
-						sinterest1 = obj.options[obj.selectedIndex].text;
-						for (var i = 0; i < AllselectBox.length; i++) {
-							AllselectBox[i].style.display = 'none';
-							if (sinterest1 == interestArr[i]) {
-								checkNum = i;
-							}
-						}
-						AllselectBox[checkNum].style.display = 'inline-block';
-					}
-
-					var interest2List = new Array();
-					var selectedinterest2 = "";
-					var addInterest2List;
-					var interestInput = "";
-					var interestDelete = "";
-
-					function interest2(obj) {
-						var target = document.getElementById("int2");
-						uniqueinterest2List = interest2List;
-
-						if (~selectedinterest2
-								.indexOf(obj.options[obj.selectedIndex].text)) {
-							alert("이미 선택한 분야입니다.");
-						} else {
-							interest2List
-									.push(obj.options[obj.selectedIndex].text);
-							selectedinterest2 += interest2List[interest2List.length - 1];
-							addCareerListValue = "<input type = 'text' id = 'isel" + count +  "' name =  tutorinterest[" + count + "].interest2CD'></input> <input type = 'button' value = '삭제' id = 'idel"
-									+ count
-									+ "' onclick = 'deleteInsert("
-									+ count + ")'>";
-
-							$('#int2').append(addCareerListValue);
-							document.getElementById('isel' + count).value = interest2List[interest2List.length - 1];
-
-							addInterest2List = "<li id = 'liisel" + count +  "'>"
-									+ sinterest1
-									+ " > "
-									+ interest2List[interest2List.length - 1]
-									+ "</li> <input type = 'button' value = '삭제' id = 'liidel"
-									+ count
-									+ "' onclick = 'deleteInterest("
-									+ count + ")'>";
-							$('#int2').append(addInterest2List);
-
-							careerInput = document.getElementById('isel'
-									+ count);
-							careerInput.style.display = 'none';
-							careerDelete = document.getElementById('idel'
-									+ count);
-							careerDelete.style.display = 'none';
-
-							count++;
-						}
-
-					}
-
-					function deleteInterest(num) {
-						selectedinterest2 = selectedinterest2.replace(
-								interest2List[num], "") // 중복금지차원
-						$('#isel' + num).remove();
-						$('#idel' + num).remove();
-						$('#liisel' + num).remove();
-						$('#liidel' + num).remove();
-
-					}
-				</script>
+				</div>
+				<!-- 날짜 정보, datepicker 사용  -->
+				<div class="interest_element">
+					<label class="mr-sm-2" for="inlineFormCustomSelect">날짜</label><br>
+					<input type="text" data-range="true"
+						data-multiple-dates-separator=" - " data-language="en"
+						class="datepicker-here" name="searchDate" readonly="readonly" />
+				</div>
+				<!-- 레벨 코드 -->
+				<div class="interest_element">
+					<label class="mr-sm-2" for="inlineFormCustomSelect">레벨</label><br>
+					<select class="custom-select mr-sm-2" name="levelCode.levelCode">
+						<option value="All">전체</option>
+						<option value="H">상</option>
+						<option value="M">중</option>
+						<option value="L">하</option>
+					</select>
+				</div>
+				<!-- 지역정보와 관심분야의 태그 -->
+				<div class="interest_element_tag">
+					<span id="loc"> </span>
+				</div>
+			</form>
 		</nav>
-
+		<!-- Search End -->
 		<hr>
 		<!-- Main -->
 		<div id="main" layout:fragment="main">
@@ -262,11 +252,19 @@
 	</div>
 
 	<!-- Scripts -->
+	<script th:src="@{/searchInterest.js}"></script>
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+	<script th:src="@{/map.js}"></script>
 	<script th:src="@{/assets/js/jquery.min.js}"></script>
 	<script th:src="@{/assets/js/browser.min.js}"></script>
 	<script th:src="@{/assets/js/breakpoints.min.js}"></script>
 	<script th:src="@{/assets/js/util.js}"></script>
 	<script th:src="@{/assets/js/main.js}"></script>
+	<script th:src="@{/datepicker/js/datepicker.js}"></script>
+	<script th:src="@{/datepicker/js/i18n/datepicker.en.js}"></script>
+
+
+
 
 </body>
 </html>

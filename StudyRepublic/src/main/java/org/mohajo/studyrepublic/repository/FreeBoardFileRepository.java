@@ -3,8 +3,13 @@
  */
 package org.mohajo.studyrepublic.repository;
 
+import java.util.List;
+
+import org.mohajo.studyrepublic.domain.Board;
 import org.mohajo.studyrepublic.domain.FreeBoardFile;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * @author 윤원식
@@ -14,5 +19,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 
 public interface FreeBoardFileRepository extends JpaRepository<FreeBoardFile, Integer> {
-
+	
 }

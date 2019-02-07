@@ -4,10 +4,11 @@
 package org.mohajo.studyrepublic.repository;
 
 
+import java.util.List;
+
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.QFreeBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
@@ -54,7 +55,12 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, 
 		return builder;
 	}
 	
+	@Query(value = "select * from member m join freeboard f on m.id=f.id where m.id=:id", nativeQuery=true)
+	List<FreeBoard> findFreeBoardById(String id);
 	
 	
+	@Query(value="select f from FreeBoard f where f.freeBoardId=:be")
+	public FreeBoard findByfreeBoardId(@Param("be") int beforeFreeBoard);
+
 
 }

@@ -20,5 +20,8 @@ public interface MemberRolesRepository extends JpaRepository<MemberRoles, String
 	
 		@Query(value = "select * from member_roles where member = :id", nativeQuery = true)
 		List<MemberRoles> findByRole(String id);
-	
+		
+		
+		@Query(value = "delete from member_roles where member = :id && role_name = 'W'", nativeQuery = true)
+		MemberRoles deleteTutorWait(String id);
 }

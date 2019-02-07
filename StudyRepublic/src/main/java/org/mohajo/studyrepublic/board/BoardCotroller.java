@@ -35,20 +35,21 @@ public class BoardCotroller {
 	@Autowired
 	FreeBoardRepository freeBoardRepository;
 
-	//자유게시판 글목록 받아오는 메소드
+	//자유게시판 글목록
 	@RequestMapping("/listFreeBoard")
 	public String listFreeBoard(@ModelAttribute("pageDTO") PageDTO pageDTO, Model model) {
-
+       	       
+		log.info(pageDTO.toString());
 		Pageable page = pageDTO.makePageable(0, "freeBoardId");
 		Page<FreeBoard> list = freeBoardRepository.findAll(freeBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword()),page);
-
+       
 		model.addAttribute("list", new PageMaker<>(list));
         model.addAttribute("boardName", "자유게시판");
 		return "board/list";
 
 	}
 
-	//글쓰기 폼으로 이동 메소드
+	//글쓰기 폼으로 이동
 	@GetMapping("/writeBoard")
 	public String writeBoard() {
 		
@@ -56,8 +57,8 @@ public class BoardCotroller {
 	
 	}
 	
-	
-	//자유게시판 글등록 메소드
+
+	//자유게시판 글등록
 	@PostMapping("/registerFreeBoard")
 	public String registerFreeBoard(@ModelAttribute("freeBoard")FreeBoard freeBoard,String boardType) {
 		
@@ -69,7 +70,7 @@ public class BoardCotroller {
 		
 	}
 
-	//글확인 조회수 메소드 
+	//글확인 및 조회수
 	@GetMapping("/viewFreeBoard")
     public String viewFreeBoard(int freeBoardId, @ModelAttribute("freeBoard")FreeBoard freeBoard, Model model) {
 		
@@ -77,33 +78,83 @@ public class BoardCotroller {
 		FreeBoard freeBoardHit = freeBoardRepository.findById(freeBoardId).get();
 		freeBoardHit.setHit(freeBoardHit.getHit() + 1);
 		freeBoardRepository.save(freeBoardHit);
-		
 		freeBoardRepository.findById(freeBoardId).ifPresent(board-> model.addAttribute("freeBoard", board));
 		
 		return "board/view";
 	}
 	
 	
-	//수정 메소드
+	//수정
 	@GetMapping("/modifyBoard")
     public String modifyBoard(int freeBoardId, @ModelAttribute("freeBoard")FreeBoard freeBoard, Model model) {
     	
-    	
+//    	log.info(freeBoard.toString());
     	freeBoardRepository.findById(freeBoardId).ifPresent(board-> model.addAttribute("freeBoard", board));
     	
     	return "board/modify";
-    }
+    } 
 	
-    //삭제 메소드
+	//수정 등록 
+	@PostMapping("/modifyRegister")
+	public String modifyRegister(int freeBoardId,FreeBoard freeBoard, Model model) {
+		
+		log.info(freeBoard.toString());
+		
+	    FreeBoard freeBoardModify = freeBoardRepository.findById(freeBoardId).get();
+		freeBoardModify.setTitle(freeBoard.getTitle());
+		freeBoardModify.setContent(freeBoard.getContent());
+		freeBoardRepository.save(freeBoardModify);
+	    
+		
+		return "redirect:/board/listFreeBoard";
+	}
+    //삭제
 	@GetMapping("/deleteFreeBoard")
 	public String deleteFreeBoard(int freeBoardId) {
 		
-		
+	
 		freeBoardRepository.deleteById(freeBoardId);
 		
 		return "redirect:/board/listFreeBoard";
 	}
 	
+	//이전글로 이동
+	@GetMapping("/goBeforeFreePage")
+	public String goBeforeFreePage(int freeBoardId, @ModelAttribute("freeBoard")FreeBoard freeBoard, Model model) {
+		
+		int beforeFreeBoard = freeBoardId -1 ;
+		log.info(beforeFreeBoard+"");
+		
+		log.info(freeBoardId+"");
+		FreeBoard board = freeBoardRepository.findByfreeBoardId(beforeFreeBoard);
+		log.info(board.toString());
+//		freeBoardRepository.findById(freeBoardId).ifPresent(board-> model.addAttribute("freeBoard", board));
+		
+		
+		return "redirect:/board/view";
+	}
+	
+	//글목록 갯수
+	@GetMapping("/listWriteOption")
+	public String listWriteOption(String listCount, PageDTO pageDTO, Model model) {
+		
+		log.info(listCount+"");
+		
+		pageDTO.setSize(Integer.parseInt(listCount));
+		
+		log.info(pageDTO.toString());
+		
+		Pageable page = pageDTO.makePageable(0, "freeBoardId");
+		Page<FreeBoard> list = freeBoardRepository.findAll(freeBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword()),page);
+       
+		model.addAttribute("list", new PageMaker<>(list));
+        model.addAttribute("boardName", "자유게시판");
+		return "board/list";
+		
+		
+		
+		
+	}
 	
 }
 	

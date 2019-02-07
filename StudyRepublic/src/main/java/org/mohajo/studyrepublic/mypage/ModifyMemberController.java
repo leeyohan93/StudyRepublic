@@ -21,20 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ModifyMemberController {
 
-/*	@Autowired
-	private MemberRepository mbr;
+@RequestMapping("/passwordmodi")
+public String pwdmodi(Model model) {
+	Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 	
-	@RequestMapping("/modimember")
-	public String modifyMember(Model model) {
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
-		Member modifyuser = mbr.findById(id).get();
-		
-		model.addAttribute("mdu",modifyuser);
-		
-		
-		return "mypage/member_modify";
-		
-	}*/
+	
+	return "mypage/password_modify";
+	
+}
+
+
 
 }

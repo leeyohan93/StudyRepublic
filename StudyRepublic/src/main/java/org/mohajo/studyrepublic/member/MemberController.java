@@ -1,12 +1,14 @@
 package org.mohajo.studyrepublic.member;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.Member;
-import org.mohajo.studyrepublic.domain.MemberRoles;
+import org.mohajo.studyrepublic.domain.MemberPoint;
+import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,16 +16,25 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+
 public class MemberController {
 
 	
 	@Autowired
 	private MemberRepository memberrepository;
+	
+	@Autowired
+	private MemberPointRepository memberpointrepository;
 		
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
@@ -40,12 +51,64 @@ public class MemberController {
 		return "signup/signup_signup";	
 	}
 	
+/*	@ResponseBody
+	@PostMapping(value = "/member/checkid", produces="text/plain;charset=UTF-8")
+	public String checkId(@RequestParam String id) {		
+		int checkResult = memberrepository.checkId(id);
+		System.out.println(id);
+		return String.valueOf(checkResult);	
+	}*/
+	
+	
+/*	@PostMapping(value = "/member/checkid")
+	@ResponseBody
+	public int checkId(@RequestParam String id) {		
+		int checkResult = memberrepository.checkId(id);
+		System.out.println(id);
+		return checkResult;	
+	}*/
+	
+	@PostMapping("/member/checkid")
+	@ResponseBody
+	public Map <Object, Object> checkId(@RequestParam String id) {		
+		
+		int count = 0;
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		count = memberrepository.checkId(id);
+		map.put("count", count);
+
+		return map;	
+	}
+	
+	@PostMapping("/member/checknick")
+	@ResponseBody
+	public Map <Object, Object> checkNick(@RequestParam String nickname) {		
+		
+		int nickCount = 0;
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		nickCount = memberrepository.checkNick(nickname);
+		map.put("nickCount", nickCount);
+
+		return map;	
+	}
+	
+	
+	
 	@RequestMapping("/member/insert")
-	public String insertMember(Model model, HttpServletRequest request, @ModelAttribute Member member) {
+	public String insertMember(Model model, HttpServletRequest request, @ModelAttribute Member member, @RequestParam String id) {
 		member.setPassword(bcryptpasswordencoder.encode(member.getPassword()));
 				
-		memberrepository.save(member);	
-		return "redirect:/";		
+		memberrepository.save(member);
+		
+		MemberPoint memberpoint = new MemberPoint();
+		memberpoint.setMember(member);
+		memberpoint.setPoint(0);
+		
+		memberpointrepository.save(memberpoint);
+		
+		return "redirect:/index";		
 	}
 	
 	@RequestMapping("/member/inquery")					// 회원 한명 한명 조회.
@@ -70,7 +133,7 @@ public class MemberController {
 		member =  memberrepository.findById(id).get(); 	
 		member.setPassword(bcryptpasswordencoder.encode(password));	
 		memberrepository.save(member);
-		return "index";
+		return "redirect:/index";
 	}
 	
 	
@@ -79,7 +142,7 @@ public class MemberController {
 	public String delete(@RequestParam("id") String id) {	
 		memberrepository.deleteById(id);					// delete from member where id = id와 동일.
 		System.out.println("-------------------- id: " + id + " 삭제 완료. ------------------");
-		return "redirect: /";
+		return "redirect:/index";
 	}
 	
 	@RequestMapping("/admin") 
@@ -97,6 +160,11 @@ public class MemberController {
 		return "member/login";
 	}
 	
+	@RequestMapping("/login2")
+	public String login2() {
+		return "member/login2";
+	}
+	
 	@RequestMapping ("/logout")
 	public void logout() {
 	}
@@ -108,16 +176,20 @@ public class MemberController {
 		return "etc/accessDenied";
 	}
 	
-	@RequestMapping("/")
+/*	@RequestMapping("/")
 	public String loggedIn() {
 		return "index";
-	}
+	}*/
 	
 	@RequestMapping("/testjido")
 	public String jusoTest() {
 		return "test";
 	}
-	
+
+	@RequestMapping("/signup")
+	public String signupTest() {
+		return "sign_up";
+	}
 	
 	
 
