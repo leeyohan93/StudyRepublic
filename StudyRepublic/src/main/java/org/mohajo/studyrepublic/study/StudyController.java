@@ -3,24 +3,33 @@ package org.mohajo.studyrepublic.study;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.mohajo.studyrepublic.domain.DayCD;
+import org.mohajo.studyrepublic.domain.LevelCD;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.Review;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TypeCD;
+import org.mohajo.studyrepublic.repository.DayCDRepository;
+import org.mohajo.studyrepublic.repository.LevelCDRepository;
 import org.mohajo.studyrepublic.repository.LeveltestRepository;
 import org.mohajo.studyrepublic.repository.LeveltestResponseRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.OnoffCDRepository;
 import org.mohajo.studyrepublic.repository.PaymentRepository;
 import org.mohajo.studyrepublic.repository.ReviewRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
+import org.mohajo.studyrepublic.repository.TypeCDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +74,19 @@ public class StudyController {
 	
 	@Autowired
 	TutorRepository tr;
+	
+	@Autowired
+	LevelCDRepository lcr;
+	
+	@Autowired
+	TypeCDRepository tcr;
+	
+	@Autowired
+	DayCDRepository dcr;
+	
+	@Autowired
+	OnoffCDRepository ocr;
+	
 	
 	@Autowired
 	TypeCD typeCd;
@@ -179,10 +201,28 @@ public class StudyController {
 	 */
 	@RequestMapping("/open/basic")
 	public String open(Model model) {
+
+		log.info("open() called...");
+
+//		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+//		String id = auth.getName();
+//		Member user = mr.findById(id).get();
 		
-		//type, onoff, day, level
+		//테스트용
+		Member user = mr.findById("aaa123").get();
+		
+		log.info("user is ... " + user);
 		
 		
+		List<TypeCD> typeCode = tcr.findAll();
+		List<OnoffCD> onoffCode = ocr.findAll();
+		List<LevelCD> levelCode = lcr.findAll();
+		List<DayCD> dayCode = dcr.findAll();
+		
+		model.addAttribute("typeCode", typeCode);
+		model.addAttribute("onoffCode", onoffCode);
+		model.addAttribute("levelCode", levelCode);
+		model.addAttribute("dayCode", dayCode);
 		
 		return "/study/openBasic";
 	}
@@ -194,7 +234,7 @@ public class StudyController {
 	 * @return	스터디 가입 페이지
 	 */
 	@RequestMapping("/join/{studyId}")
-	public String studyJoin() {
+	public String join() {
 		
 		//hasLeveltest == 1 && referer != ...leveltest
 			//return "레벨테스트 페이지";
@@ -207,7 +247,7 @@ public class StudyController {
 	@RequestMapping("")
 	public String pay() {
 		
-		//결제 api 테스트 후 추가
+		//결제 api 테스트 후 추가 --> 포인트 결제 or 포인트 충전 창으로 연결
 		
 		return "";
 	}
@@ -223,16 +263,16 @@ public class StudyController {
 //		
 //		return "/study/test";
 //	}
-
-//StudyMember 테스트용
-@RequestMapping("/test")
-public String test(Model model) {
 	
-	List<StudyMember> sm = smr.findAll();
-	model.addAttribute("studyMember", sm);
-	
-	return "/study/studyMemberList";
-}
+	//StudyMember 테스트용
+	@RequestMapping("/test")
+	public String test(Model model) {
+		
+		List<StudyMember> sm = smr.findAll();
+		model.addAttribute("studyMember", sm);
+		
+		return "/study/studyMemberList";
+	}
 	
 
 }

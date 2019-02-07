@@ -1,0 +1,179 @@
+<!-- 
+  @author 윤원식
+  @since 2019. 2. 3.
+  @version
+  -comment.html 추가
+ -->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}"
+>
+<head>
+
+<title></title>
+<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+
+<style>
+.boardSelect {
+	margin-top: 50px;
+}
+
+#boardType {
+	width: 250px;
+	height: 40px;
+	padding-left: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+#boardTitle {
+	width: 50%;
+	height: 40px;
+	padding: 12px 13px;
+	margin: 10px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+#boardNotice, #boardHide {
+	margin: 0 5px 0 20px;
+	transform: scale(1.5);
+}
+
+.boardTitleOpt {
+	font-size: 16px;
+}
+
+/* .cancelBtn{ */
+/*     position:relative; */
+/*     top: -22px; */
+/*     left: -543px; */
+/* } */
+/* .previewBtn{ */
+
+/*    position:relative; */
+/*     top: -55px; */
+/*     left: 772px; */
+/* } */
+
+/* .registerBtn{ */
+/*     position:relative; */
+/*     top: -55px; */
+/*     left: 774px; */
+/* } */
+
+
+
+</style>
+
+</head>
+
+<body>	
+
+<div id = "main" layout:fragment = "main">
+<div class="container">
+<div class="inner">
+
+
+<form  id="writeForm" th:action="@{registerInquireComment}" method="post">
+	 
+	
+<!-- 제목, 공지옵션 비공개옵션 -->
+  <div>
+    <input id="boardType" name="boardType" type="text" value="문의게시판" readonly> 
+	<input id="boardTitle" name="title" type="text" placeholder="제목을 입력해주세요."></input>
+    <input id="boardNotice" name="notice" type="checkbox" value="0">
+	<input id="commentGroup" name="commentGroup" type="hidden" th:value="${board.commentGroup}">
+	<input id="commentStep" name="commentStep" type="hidden" th:value="${board.commentStep}">
+	
+	 <br/>
+    <span class ="boardTitleOpt">공지</span> 
+    <input id="boardHide" name ="hide" type="checkbox" value="0">
+    <sapn class ="boardTitleOpt">비공개</span>
+  
+  </div>
+  
+  <!--제목, 공지옵션, 비공개 옵션 끝 -->
+  
+  <!-- 다음 에디터 적용 글내용 -->
+  <div id = "editor"></div>
+    <div>  
+       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;"></textarea>
+	</div>
+	<input name ='id' type='hidden' value="aaa123"> <br/>
+
+	<!--글내용 끝  -->
+  
+  <span class="cancelBtn">
+    <a class ="btn btn-default" th:href="@{listInquireBoard}" role="button" id="cancel">취소</a> 
+  </span>
+  
+  <span class="previewBtn">
+    <a class ="btn btn-default" href="" role="button" id="preview">미리보기</a> 
+   
+  </span>
+  <span class="registerBtn">
+	 <button name = "boardRegister" id ="boardRegister" class ="btn btn-default" type="submit">등록</button>
+  </span>
+
+	 </form>
+  </div>
+  
+ </div>
+ 
+<script th:inline="javascript">
+
+$(document).ready(function(){
+    //전역변수선언
+    var editor_object = [];
+     
+    nhn.husky.EZCreator.createInIFrame({
+        oAppRef: editor_object,
+        elPlaceHolder: "smarteditor",
+        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+        htParams : {
+            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+            bUseToolbar : true,            
+            // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+            bUseVerticalResizer : true,    
+            // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+            bUseModeChanger : true,
+            // 기본 글꼴 설정
+            SE2M_FontName: {
+    			htMainFont: {'id': '굴림','name': '굴림','size': '14','url': '','cssUrl': ''} 
+    		}
+        }
+    
+
+    });
+     
+    //전송버튼 클릭이벤트
+    $("#boardRegister").click(function(){
+        //id가 smarteditor인 textarea에 에디터에서 대입
+        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+             
+        //폼 submit
+         
+        $("#boardWriteForm").submit();
+            
+    });
+    
+    
+    var boardCommentTitle = " ㄴ 답변 : "+[[${board.title}]]
+    $("#boardTitle").val(boardCommentTitle)
+    
+  
+    
+})
+
+    </script>
+</body>
+</html>

@@ -52,6 +52,40 @@ layout:decorate="~{/layout/mainLayout}">
         #next-btn {
             float: right;
         }
+        
+        .btn-enrollCapacity {
+            font: 400 13.3333px Arial white;
+            background-color: skyblue;
+            cursor: pointer !important;
+		    border-radius: 50% !important;
+		    text-align: center !important;
+		    line-height: 1 !important;
+/* 		    height: 1em; */
+/* 		  	width: 1em; */
+		  	display: block;
+		  	margin: 0 0;
+        }
+        
+        .btn-radio {
+       	    background-color: #e6e6e6;
+        	color: #ffffff;
+        	float: left;
+		    cursor: pointer;
+		    display: inline-block;
+	        border: 1px solid #ccc;
+			text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    		color: #333;    
+        }
+        
+        .btn-radio:checked {
+        	background-color: #0073aa !important;
+        }
+        
+        input {
+        	border: 1px solid silver;
+        }
+        
+        
     </style>
 </head>
 <body>
@@ -70,9 +104,7 @@ layout:decorate="~{/layout/mainLayout}">
 	            <div class="row input input-field-type">
 	                <div class="col-md-2 input-title">유형</div>
 	                <div class="col-md-10 input-content">
-	                    <label><input type="radio" name="typeCode.typeCode" th:each="typeCode : ${typeCode}" th:value="${typeCode.typeCode}" th:text="${typeCode.codeValueKorean}"></label>
-	                    <label><input type="radio" name="typeCode.typeCode" value="B">일반(test)</label>
-	                    <label><input type="radio" name="typeCode.typeCode" value="P">프리미엄(test)</label><br/>
+	                    <label th:each="typeCode : ${typeCode}"><input type="radio" class="btn-radio" name="typeCode.typeCode" th:value="${typeCode.typeCode}" th:text="${typeCode.codeValueKorean}">&nbsp;</label>
 	                    <span class="input-study-type-alert" style="display:none">알림!
 	                        프리미엄 스터디는 유료로 진행되는 강의형 스터디로, 인증 절차를 <br/>
 	                        완료한 강사 등급의 회원만 개설할 수 있습니다.<br/>
@@ -83,8 +115,7 @@ layout:decorate="~{/layout/mainLayout}">
 	            <div class="row input input-field-onoff">
 	                <div class="col-md-2 input-title">진행방식</div>
 	                <div class="col-md-10 input-content">
-	                    <label><input type="radio" name="onoffCode.onoffCode" th:each="onoffCode : ${onoffCode}" th:value="${onoffCode.onoffCode}" th:text="${onoffCode.codeValueKorean}"></label>
-	                    <label><input type="radio" name="onoffCode.onoffCode" value="O">온라인(test)</label>
+	                    <label th:each="onoffCode : ${onoffCode}"><input type="radio" name="onoffCode.onoffCode" th:value="${onoffCode.onoffCode}" th:text="${onoffCode.codeValueKorean}"></label>
 	                </div>
 	            </div>
 	            <div class="row input input-field-location">
@@ -193,7 +224,6 @@ layout:decorate="~{/layout/mainLayout}">
 	                <div class="col-md-10 input-content">
 	                    <select name="levelCode.levelCode">
 	                        <option th:each="levelCode : ${levelCode}" th:value="${levelCode.levelCode}" th:text="${levelCode.codeValueKorean}"></option>
-	                        <option value="H">상</option>
 	                    </select>
 	                </div>
 	            </div>

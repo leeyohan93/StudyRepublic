@@ -33,5 +33,14 @@ public class InquireBoardFile extends File{
 	private int inquireBoardFileId;
 	@Column(name ="inquireboard_id")
 	private int inquireBoardId;
+	
+	@Column(name = "filenumber")
+	protected int fileNumber;
+	@Column(name = "originname")
+	protected String originName;
+	@Column(name = "savename")
+	protected String saveName;
+	
+
 
 }
