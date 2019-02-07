@@ -237,11 +237,10 @@ layout:decorate="~{/layout/mainLayout}">
 							<tr th:each="tempStudyActivity : ${studyActivity}">
 								<th:block th:with="tempStudy = ${tempStudyActivity.study}">
 									<td>no.</td>
-									<td th:text="${tempStudy.name}">studyName&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorea">status</i></td>
+									<td><a th:href="@{'/study/detail/' + ${tempStudy.studyId}}" th:text="${tempStudy.name}">studyName</a>&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorean}">status</i></td>
 									<td th:text="|${tempStudy.startDate}~${tempStudy.endDate}|">period</td>
-<!-- 									<td th:text="${avgScore}">avgScore</td> -->
-<!-- 스터디 A 의 리뷰의 score, count(*) 검색 -->
-<!-- sum(score)/count(*) = avg  -->
+									<td th:if="${tempStudy.averageScore}!=-1" th:text="${tempStudy.averageScore}">avgScore</td>
+									<td th:if="${tempStudy.averageScore}==-1">-</td>
 								</th:block>
 							</tr>
 						</table>

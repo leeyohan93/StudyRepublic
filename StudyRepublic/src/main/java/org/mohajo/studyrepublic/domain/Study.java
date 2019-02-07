@@ -1,7 +1,6 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,7 +33,10 @@ import lombok.ToString;
 @ToString(exclude = "review")
 @Entity
 @Table(name = "study", schema = "StudyRepublic")
-@SecondaryTable(name="popular_study")
+@SecondaryTables({
+	@SecondaryTable(name="popular_study"),
+	@SecondaryTable(name="study_view")
+})
 public class Study implements Serializable {
 
 	@Id
@@ -129,7 +132,24 @@ public class Study implements Serializable {
 	 * - 정상 실행 됐으나, merge 후 에러 남.
 	 */
 	/*@OneToMany(mappedBy="study")
+	 * 
+	 * 
 	private List<StudyMember> studyMember;*/
 	
+	/**
+	 * @author	이미연
+	 * - 뷰 테이블 연결
+	 */
+	@Column(name="date_diff", table="study_view")
+	private int dateDiff;
 	
+	@Temporal(TemporalType.TIME)
+	@Column(name="time_diff", table="study_view")
+	private Date timeDiff;
+	
+	@Column(name="review_count", table="study_view")
+	private int reviewCount;
+
+	@Column(name="average_score", table="study_view")
+	private float averageScore;
 }

@@ -24,12 +24,11 @@ import org.mohajo.studyrepublic.repository.ReviewRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
+//import org.mohajo.studyrepublic.repository.StudyViewRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.mohajo.studyrepublic.repository.TypeCDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,6 +85,9 @@ public class StudyController {
 	
 	@Autowired
 	OnoffCDRepository ocr;
+	
+//	@Autowired
+//	StudyViewRepository svr;
 	
 	
 	@Autowired
@@ -162,10 +164,8 @@ public class StudyController {
 		// 종료된 스터디에 한해 리뷰 정보를 조회한다. + 평균 평점을 조회한다.
 		if(study.getStudyStatusCode().getStudyStatusCode().equals("C")) {
 			List<Review> review = rr.findByStudyId(studyId, "admin123");
-//			float avgScore = Math.round(sr.getAverageScore(studyId)*10)/10f;
 			
 			model.addAttribute("review", review);
-//			model.addAttribute("avgScore", avgScore);
 		}
 		
 		// 리더 정보를 조회한다. (회원정보 및 스터디 활동내역)
@@ -274,6 +274,14 @@ public class StudyController {
 		return "/study/studyMemberList";
 	}
 	
+	@RequestMapping("/test2")
+	public String test2(Model model) {
+		
+//		StudyView studyView = svr.findById("BB00001").get();
+//		model.addAttribute("studyView", studyView);
+		
+		return "/study/studyViewTest";
+	}
 
 }
 	
