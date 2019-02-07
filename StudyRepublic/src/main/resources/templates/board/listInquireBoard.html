@@ -1,0 +1,327 @@
+<!-- 
+  @author 윤원식
+  @since 2019. 2. 2.
+  @version
+  -listInquireBoard.html 추가
+ -->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+
+<title>게시판 글목록</title>
+<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
+<style>
+.boardName {
+	margin: 100px 0px 50px 50px;
+}
+
+.boardNotice {
+	font-size: 18px;
+	margin-bottom: 20px;
+	text-align: right;
+}
+
+#boardNoticeCheckbox {
+	margin-right: 10px;
+	transform: scale(1.5);
+}
+
+#boardNoticeName {
+	margin-right: 20px;
+}
+
+#wrtieCountOption {
+	width: 100px;
+	height: 30px;
+	padding-left: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	display: inline-block;
+	padding-right: 0;
+}
+
+.boardTableTh, .boardTableTd, .boardSearch {
+	text-align: center;
+}
+
+
+.boardWriteBtn {
+	text-align: right;
+}
+
+#boardSearchType, #boardSearchPeriod {
+	width: 150px;
+	height: 38px;
+	padding-left: 25px;
+	margin: 10px 10px 50px 0px;
+	font-size: 16px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	display: inline-block;
+}
+
+#boardSearchKeyword {
+	width: 300px;
+	height: 40px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 16px;
+	padding: 12px 10px 12px 10px;
+	display: inline-block;
+}
+
+#boardSearchBtn {
+	width: 50px;
+	height: 40px;
+	font-weight: bold;
+	font-siez: 16px;
+	background: white;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	cursor: pointer;
+	display: inline-block;
+}
+
+span.listReplyCount {
+	color: red;
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<div id="main" layout:fragment="main">
+			<div class="inner">
+				<div class="container">
+					<!--게시판 타이틀  -->
+					<div class="boardName">
+						<h1>
+							<strong th:text="${boardName}"></strong>
+						</h1>
+					</div>
+					<!--게시판 타이틀 끝  -->
+
+					<!--공지 숨기기, 한페이지 갯수  -->
+					<div class="boardNotice">
+						<input id="boardNoticeCheckbox" type="checkbox" name="notice"><span
+							id="boardNoticeName">공지 숨기기</span> 
+							<select id="listOption" name="listOption" style="text-align: center" class="text-center">
+							<option value="15" th:selected="${pageDTO.size} == '15'">15개씩</option>							             
+							<option value="30" th:selected="${pageDTO.size} == '30'">30개씩</option>
+							<option value="50" th:selected="${pageDTO.size} == '50'">50개씩</option>
+						</select>
+					</div>
+					<!--공지 숨기기, 한페이지 갯수 끝  -->
+
+					<!--테이블  -->
+					<div th:with="result=${list.list}">
+						<div class="table">
+							<table
+								class="boardTable table table-bordered table-hover table-responsive">
+								<thead>
+									<tr>
+										<th class="boardTableTh col-sm-1">번호</th>
+										<th class="boardTableTh col-sm-5">제목</th>
+										<th class="boardTableTh col-sm-2">작성자</th>
+										<th class="boardTableTh col-sm-2">작성일</th>
+										<th class="boardTableTh col-sm-1">조회수</th>
+										<th class="boardTableTh col-sm-1">추천</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr th:each="board:${result.content}">
+										<td class="boardTableTd col-sm-1">[[${board.inquireBoardId}]]</td>
+										<td class="text-left col-sm-5"><a
+											th:href='${board.inquireBoardId}' class="boardLink" >[[${board.title}]]</a>
+											<a th:href='${board.inquireBoardId}' class="boardLink">
+											<span class="listReplyCount">([[${board.inquireBoardReply.size()}]])</span></a>
+											</td>
+										<td class="boardTableTd col-sm-2">[[${board.id}]]</td>
+										<td class="boardTableTd col-sm-2">[[${#dates.format(board.date,'yyyy-MM-dd
+											HH:mm')}]]</td>
+										<td class="boardTableTd col-sm-1">[[${board.hit}]]</td>
+										<td class="boardTableTd col-sm-1">[[${board.likeCount}]]</td>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!--테이블 끝  -->
+
+
+						<div class="boardWriteBtn">
+							<a class="btn btn-primary" id="writeBtn" th:href="@{writeBoard}"
+								role="button">글쓰기</a>
+						</div>
+
+
+						<!-- 페이징   -->
+
+						<nav>
+							<div class="text-center">
+								<ul class="pagination">
+
+									<li th:if="${list.prevPage}"><a
+										th:href="${list.prevPage.pageNumber}+ 1"> 〈&nbsp&nbsp이전 </a>
+									<li th:each="p:${list.pageList}"
+										th:classappend="${p.pageNumber == list.currentPageNum -1}?active: '' "><a
+										th:href="${p.pageNumber} +1">[[${p.pageNumber} + 1]]</a></li>
+
+									<li th:if="${list.nextPage}"><a
+										th:href="${list.nextPage.pageNumber}+ 1"> 다음&nbsp&nbsp〉 </a>
+								</ul>
+							</div>
+						</nav>
+
+						<!--페이징 끝  -->
+
+
+						<!--검색기능  -->
+						<div class="boardSearch">
+
+							<select id="boardSearchPeriod">
+								<option value="allDay">전체기간</option>
+								<option value="weak">1주</option>
+								<option value="month">1개월</option>
+								<option value="sMonth">6개월</option>
+							</select> <select id="boardSearchType">
+								<option value="all" th:selected="${pageDTO.searchType} =='all'">제목+내용</option>
+								<option value="title"
+									th:selected="${pageDTO.searchType} =='title'">제목</option>
+								<option value="content"
+									th:selected="${pageDTO.searchType} =='content'">내용</option>
+								<option value="writer"
+									th:selected="${pageDTO.searchType} =='writer'">작성자</option>
+							</select> <input type="text" id="boardSearchKeyword"
+								th:value="${pageDTO.keyword}" placeholder="검색어를 입력해주세요.">
+
+							<button id="boardSearchBtn">검색</button>
+
+
+						</div>
+						<!--검색기능 끝 -->
+
+
+
+
+						<form id="f1" th:action="@{listInquireBoard}" method="get">
+							<input type="hidden" name="page" th:value=${list.currentPageNum}>
+							<input type="hidden" name="size"
+								th:value=${list.currentPage.pageSize}> <input
+								type="hidden" name="searchType" th:value=${pageDTO.searchType}>
+							<input type="hidden" name="keyword" th:value=${pageDTO.keyword}>
+							<input type="hidden" name="boardType" value="inquireBoard"> 
+						</form>
+						
+						<form id="f2" th:action="@{listWriteOption}" method="get">						
+						    <input type="hidden" name="listCount" id="listCount">
+						    <input type="hidden" name="boardType" value="inquireBoard"> 
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+<script th:inline="javascript">
+
+     $(document).ready(function() {
+		var formObj = $("#f1");
+		var formLpt = $("#f2");
+        
+		//페이징
+		$(".pagination a").click(function(e) {
+
+			e.preventDefault();
+      
+			formObj.find('[name="page"]').val($(this).attr('href'));
+
+			formObj.submit();
+
+		});
+		 
+		//게시글 제목 클릭
+		$(".boardLink").click(function(e){
+			
+			e.preventDefault();
+			
+			var boardNo = $(this).attr("href");
+			
+			formObj.attr("action",[[@{'/board/viewBoard'}]]);
+			formObj.append("<input type='hidden' name='inquireBoardId' value='"+ boardNo + "'>");
+			
+			formObj.submit();
+		});
+		
+		
+		
+		//검색기능
+		$("#boardSearchBtn").click(function(e){
+			
+			var typeStr = $("#boardSearchType").find(":selected").val();
+			var keywordStr = $("#boardSearchKeyword").val();
+			
+			formObj.find("[name='searchType']").val(typeStr);
+			formObj.find("[name='keyword']").val(keywordStr);
+			formObj.find("[name='page']").val("1");
+			formObj.submit();
+		});
+		
+		//검색창에서 엔터
+		$("#boardSearchKeyword").keyup(function(e){
+			if(e.keyCode == 13)  {
+				
+				var typeStr = $("#boardSearchType").find(":selected").val();
+				var keywordStr = $("#boardSearchKeyword").val();
+				
+				formObj.find("[name='searchType']").val(typeStr);
+				formObj.find("[name='keyword']").val(keywordStr);
+				formObj.find("[name='page']").val("1");
+				formObj.submit();
+			}
+				
+			
+		});
+		
+		//게시글 갯수
+		$("#listOption").change(function(e){
+			
+		    var listOpt = $("#listOption").val();
+			formLpt.find("[name='listCount']").val(listOpt);
+			formLpt.submit(); 
+		
+		});
+
+		
+		
+	
+	});
+	
+	
+</script>
+
+</body>
+
+</html>

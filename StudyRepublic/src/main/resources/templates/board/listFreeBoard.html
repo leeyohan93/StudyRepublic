@@ -3,13 +3,14 @@
   @since 2019. 1. 24.
   @version
   -list.html 추가
+  -2.2 listFreeBoard.html 으로 이름변경
  -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 
 <title>게시판 글목록</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
@@ -55,6 +56,7 @@
 	text-align: center;
 }
 
+
 .boardWriteBtn {
 	text-align: right;
 }
@@ -91,6 +93,12 @@
 	cursor: pointer;
 	display: inline-block;
 }
+
+span.listReplyCount {
+	color: red;
+}
+
+
 </style>
 
 </head>
@@ -141,7 +149,10 @@
 									<tr th:each="board:${result.content}">
 										<td class="boardTableTd col-sm-1">[[${board.freeBoardId}]]</td>
 										<td class="text-left col-sm-5"><a
-											th:href='${board.freeBoardId}' class="boardLink">[[${board.title}]]</a></td>
+											th:href='${board.freeBoardId}' class="boardLink" >[[${board.title}]]</a>
+											<a th:href='${board.freeBoardId}' class="boardLink">
+											<span class="listReplyCount">([[${board.freeBoardReply.size()}]])</span></a>
+											</td>
 										<td class="boardTableTd col-sm-2">[[${board.id}]]</td>
 										<td class="boardTableTd col-sm-2">[[${#dates.format(board.date,'yyyy-MM-dd
 											HH:mm')}]]</td>
@@ -206,8 +217,8 @@
 
 						</div>
 						<!--검색기능 끝 -->
-
-
+                         
+                       
 
 
 						<form id="f1" th:action="@{listFreeBoard}" method="get">
@@ -216,12 +227,12 @@
 								th:value=${list.currentPage.pageSize}> <input
 								type="hidden" name="searchType" th:value=${pageDTO.searchType}>
 							<input type="hidden" name="keyword" th:value=${pageDTO.keyword}> 
+							<input type="hidden" name="boardType" value="freeBoard">
 						</form>
 						
-						<form id="f2" th:action="@{listWriteOption}" method="get">
-						
+						<form id="f2" th:action="@{listWriteOption}" method="get">						
 						    <input type="hidden" name="listCount" id="listCount">
-						
+						    <input type="hidden" name="boardType" value="freeBoard">  
 						</form>
 
 					</div>
@@ -259,7 +270,7 @@
 			
 			var boardNo = $(this).attr("href");
 			
-			formObj.attr("action",[[@{'/board/viewFreeBoard'}]]);
+			formObj.attr("action",[[@{'/board/viewBoard'}]]);
 			formObj.append("<input type='hidden' name='freeBoardId' value='"+ boardNo + "'>");
 			
 			formObj.submit();
@@ -300,7 +311,6 @@
 			
 		    var listOpt = $("#listOption").val();
 			formLpt.find("[name='listCount']").val(listOpt);
-			var listoptt =$("#listCount").val();
 			formLpt.submit(); 
 		
 		});

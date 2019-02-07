@@ -1,8 +1,8 @@
 <!-- 
   @author 윤원식
-  @since 2019. 1. 25.
+  @since 2019. 2. 2.
   @version
-  -write.html 추가
+  -modifyRequestBoard.html 추가
  -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -52,7 +52,6 @@
 	font-size: 16px;
 }
 
-
 /* .cancelBtn{ */
 /*     position:relative; */
 /*     top: -22px; */
@@ -70,73 +69,70 @@
 /*     top: -55px; */
 /*     left: 774px; */
 /* } */
+
+
+
 </style>
 
 </head>
 
 <body>	
 
-
 <div id = "main" layout:fragment = "main">
-<div class="inner">
 <div class="container">
+<div class="inner">
 
-<form id="boardWriteForm" th:action="@{registerBoard}" method="post">
+
+<form  id="writeForm" th:action="@{modifyRegister}" method="post">
 	 
-	 <div class="boardSelect">
-	 <select id ="boardType" name = "boardType">
-	 <option>게시판 선택 </option>
-     <option value ='freeBoard'>자유게시판</option>
-	 <option value ='requestBoard'>스터디 요청게시판</option>
-	 <option value ='inquireBoard'>문의게시판</option>
-	</select> 
-	</div>
 	
-<!-- 제목, 공지옵션, 비공개옵션, -->
+<!-- 제목, 공지옵션 비공개옵션 -->
   <div>
-	<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
-	<input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/>
-    <input id ="boardNotice" name ="notice" type="checkbox" value="0">
+    <input id="boardType" name="boardName" type="text" value="스터디 요청게시판" readonly> 
+	<input id="boardTitle" name="title" type="text" placeholder="제목을 입력해주세요." th:value="${board.title}"> 
+    <input id="boardNotice" name="notice" type="checkbox" value="0">
+	<input id="requestBoardId" name="requestBoardId" type="hidden" th:value="${board.requestBoardId}">
+	<input type="hidden" name="boardType" value="requestBoard"> 
+	 <br/>
     <span class ="boardTitleOpt">공지</span> 
     <input id="boardHide" name ="hide" type="checkbox" value="0">
     <sapn class ="boardTitleOpt">비공개</span>
   
   </div>
   
-  <!--제목, 공지옵션, 비공개옵션 끝 -->
+  <!--제목, 공지옵션, 비공개 옵션 끝 -->
   
-  <!-- 스마트 에디터 적용 글내용 -->
-  <div id = "editor">
+  <!-- 다음 에디터 적용 글내용 -->
+  <div id = "editor"></div>
     <div>  
-       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:700px; height:1000px;"></textarea>
+       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;" th:text="${board.content}"></textarea>
 	</div>
-  </div>
+	<input name ='id' type='hidden' value="aaa123"> <br/>
 
-	<!--스마트 에디터 적용 글내용 끝  -->
+	<!--글내용 끝  -->
   
   <span class="cancelBtn">
-    <a class ="btn btn-default" th:href="@{listFreeBoard}" role="button" id="cancel">취소</a> 
+    <a class ="btn btn-default" th:href="@{listRequestBoard}" role="button" id="cancel">취소</a> 
   </span>
   
   <span class="previewBtn">
-    <button class="btn btn-default" name="writePreview" id="writePreview" type="button">미리보기</button> 
+    <a class ="btn btn-default" href="" role="button" id="preview">미리보기</a> 
    
   </span>
   <span class="registerBtn">
-	 <button class="btn btn-default" name="boardRegister" id="boardRegister"  type="submit">확인</button>
+	 <button name = "boardRegister" id ="boardRegister" class ="btn btn-default" type="submit">수정</button>
   </span>
+
 	 </form>
   </div>
+  
  </div>
-
-
-
+ 
 <script th:inline="javascript">
 
 $(document).ready(function(){
     //전역변수선언
     var editor_object = [];
-    
      
     nhn.husky.EZCreator.createInIFrame({
         oAppRef: editor_object,
@@ -163,22 +159,16 @@ $(document).ready(function(){
         //id가 smarteditor인 textarea에 에디터에서 대입
         editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
               
+        //폼 submit
+   
         $("#boardWriteForm").submit();
             
     });
     
-    
-    //미리보기
-    $('#writePreview').click(function(){
-
-    	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
-        window.open("preview","자식창","writh=400,height=300,left=300,top=50");
-
-
-    });
   
+    
 })
 
     </script>
-    </body>
+</body>
 </html>
