@@ -1,0 +1,83 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/adminLayout}">
+
+<head>
+<title>Memeber</title>
+<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+</head>
+<body>
+<h3 layout:fragment="title">Member</h3>
+<!-- Static Table Start -->
+        <div class="data-table-area mg-b-15" layout:fragment="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="sparkline13-list">
+                            <div class="sparkline13-hd">
+                                <div class="main-sparkline13-hd">
+                                    <h1>Member Data Table</h1>
+                                </div>
+                            </div>
+                            <div class="sparkline13-graph">
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <div id="toolbar">
+                                        <select class="form-control dt-tb">
+											<option value="">Export Basic</option>
+											<option value="all">Export All</option>
+											<option value="selected">Export Selected</option>
+										</select>
+                                    </div>
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                        data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                        <thead>
+                                            <tr>
+                                                <th data-field="static" data-checkbox="true"></th>
+                                                <th data-field="No">No</th>
+                                                <th data-field="ID">ID</th>
+                                                <th data-field="이름" data-editable="false">이름</th>
+                                                <th data-field="닉네임" data-editable="false">닉네임</th>
+                                                <th data-field="등급" data-editable="false">등급</th>
+                                                <th data-field="상태" data-editable="false">상태</th>
+                                                <th data-field="가입일">가입일</th>
+                                                <th data-field="관리">관리</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="member : ${memberList}">
+                                                <td></td>
+                                                <td th:text="${memberStat.index}"></td>
+                                                <td th:text="${member.id}"></td>
+                                                <td th:text="${member.name}"></td>
+                                                <td th:text="${member.nickname}"></td>
+                                                <td th:text="${member.gradeCD.codeValueKorean}"></td>
+                                                <td th:text="${member.memberStatusCD.codeValueKorean}"></td>
+                                                <td th:text="${member.registrationDate}"></td>
+                                                <td class="datatable-ct">
+                                                <button>비번</button>&nbsp;
+                                                <button>쪽지</button>&nbsp;
+                                                <button>등급</button>&nbsp;
+                                                <button>정지</button>&nbsp;
+                                                <button>탈퇴</button>&nbsp;
+                                                <button>상세</button>&nbsp;
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Static Table End -->
+        <div layout:fragment="indexScript"></div>
+        
+</body>
+
+
+
+
+
+</html>
