@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- for Datepicker, jQuery UI -->
+    <link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <!-- for Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <style>
+        .inner {
+            width: 90%;
+            min-width: 400px;
+            margin: auto;
+        }
+
+        .ui-datepicker {
+            font-size: 12px;
+            width: auto;
+        }
+    
+        .ui-datepicker select.ui-datepicker-month {
+            width: 30%;
+            font-size: 11px;
+        }
+    
+        .ui-datepicker select.ui-datepicker-year {
+            width: 40%;
+            font-size: 11px;
+        }
+
+        .input-title {
+            font-weight: bold;
+        }
+
+        .hour-picker, .minute-picker {
+            width: 30px;
+        }
+
+        #prev-btn {
+            float: left;
+        }
+
+        #next-btn {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+	<div id="studyList" layout:fragment="main">
+	    <div class="inner">
+	        <h3>스터디 개설하기</h3>
+	        <div class="nav-bar">
+	            <ul class="nav-title">
+	                <li class="nav-item">기본정보</li>
+	                <li class="nav-item">스터디소개</li>
+	                <li class="nav-item">레벨테스트</li>
+	                <li class="nav-item">개설완료</li>
+	            </ul>
+	        </div>
+	        <form action="/index">
+	            <div class="row input input-field-type">
+	                <div class="col-md-2 input-title">유형</div>
+	                <div class="col-md-10 input-content">
+	                    <label><input type="radio" name="typeCode.typeCode" th:each="typeCode : ${typeCode}" th:value="${typeCode.typeCode}" th:text="${typeCode.codeValueKorean}"></label>
+	                    <label><input type="radio" name="typeCode.typeCode" value="B">일반(test)</label>
+	                    <label><input type="radio" name="typeCode.typeCode" value="P">프리미엄(test)</label><br/>
+	                    <span class="input-study-type-alert" style="display:none">알림!
+	                        프리미엄 스터디는 유료로 진행되는 강의형 스터디로, 인증 절차를 <br/>
+	                        완료한 강사 등급의 회원만 개설할 수 있습니다.<br/>
+	                        <a href="#">강사 등급 신청하기</a>
+	                    </span>
+	                </div>
+	            </div>
+	            <div class="row input input-field-onoff">
+	                <div class="col-md-2 input-title">진행방식</div>
+	                <div class="col-md-10 input-content">
+	                    <label><input type="radio" name="onoffCode.onoffCode" th:each="onoffCode : ${onoffCode}" th:value="${onoffCode.onoffCode}" th:text="${onoffCode.codeValueKorean}"></label>
+	                    <label><input type="radio" name="onoffCode.onoffCode" value="O">온라인(test)</label>
+	                </div>
+	            </div>
+	            <div class="row input input-field-location">
+	                <div class="col-md-2 input-title">지역</div>
+	                <div class="col-md-10 input-content">
+	                    <div>태그</div>
+	                    <div>셀렉트박스</div>
+	                </div>
+	            </div>
+	            <div class="row input input-field-period">
+	                <div class="col-md-2 input-title">기간</div>
+	                <div class="col-md-10 input-content">
+	                    <input type="text" name="startDate" id="input-study-startDate" class="input-date">부터 
+	                    <input type="text" name="endDate" id="input-study-endDate" class="input-date">까지 
+	                    (총 <input type="text" name="studyCount" id="input-study-studyCount" value="0">회)
+	                </div>
+	            </div>
+	            <div class="row input input-field-schedule">
+	                <div class="col-md-2 input-title">일시</div>
+	                <div class="col-md-10 input-content">
+	                    매주 <select name="dayCode.dayCode">
+	                            <option th:each="dayCode : ${dayCode}" th:value="${dayCode.dayCode}" th:text="${dayCode.codeValueKorean}"></option>
+	                            <option value="0">일(test)</option>
+	                        </select>요일 
+	                    <input type="text" name="startTime" id="input-study-startTime">
+	                    <select class="apm-picker input-time" id="start-apm-picker">
+	                        <option value="AM">AM</option>
+	                        <option value="PM" selected>PM</option>
+	                    </select>
+	                    <select class="input-time" id="start-hour-picker">
+	                        <option value="0" hidden>00</option>
+	                        <option value="12">12</option>
+	                        <option value="1" selected>01</option>
+	                        <option value="2">02</option>
+	                        <option value="3">03</option>
+	                        <option value="4">04</option>
+	                        <option value="5">05</option>
+	                        <option value="6">06</option>
+	                        <option value="7">07</option>
+	                        <option value="8">08</option>
+	                        <option value="9">09</option>
+	                        <option value="10">10</option>
+	                        <option value="11">11</option>
+	                    </select>
+	                    <select class="input-time" id="start-minute-picker">
+	                        <option value="00">00</option>
+	                        <option value="10">10</option>
+	                        <option value="20">20</option>
+	                        <option value="30">30</option>
+	                        <option value="40">40</option>
+	                        <option value="50">50</option>
+	                    </select>
+	                    부터 
+	                    <input type="text" name="endTime" id="input-study-endTime">
+	                    <select class="apm-picker input-time" id="end-apm-picker">
+	                        <option value="AM">AM</option>
+	                        <option value="PM" selected>PM</option>
+	                    </select>
+	                    <select class="input-time" id="end-hour-picker">
+	                        <option value="0" hidden>00</option>
+	                        <option value="12">12</option>
+	                        <option value="1">01</option>
+	                        <option value="2" selected>02</option>
+	                        <option value="3">03</option>
+	                        <option value="4">04</option>
+	                        <option value="5">05</option>
+	                        <option value="6">06</option>
+	                        <option value="7">07</option>
+	                        <option value="8">08</option>
+	                        <option value="9">09</option>
+	                        <option value="10">10</option>
+	                        <option value="11">11</option>
+	                    </select>
+	                    <select class="input-time" id="end-minute-picker">
+	                        <option value="00">00</option>
+	                        <option value="10">10</option>
+	                        <option value="20">20</option>
+	                        <option value="30">30</option>
+	                        <option value="40">40</option>
+	                        <option value="50">50</option>
+	                    </select>까지 
+	                    (<input type="text" name="timeDiff" id="input-study-timeDiff" value="60">분)
+	                </div>
+	            </div>
+	            <div class="row input input-field-enrollCapacity">
+	                <div class="col-md-2 input-title">모집인원</div>
+	                <div class="col-md-10 input-content">
+	                    <button id="btn-enrollCapacity-minus" class="btn-enrollCapacity">
+	                        &lt;
+	                    </button>
+	                    <input type="text" name="enrollCapacity" id="input-study-enrollCapacity" value="5">
+	                    <button id="btn-enrollCapacity-plus" class="btn-enrollCapacity">
+	                        &gt;
+	                    </button>
+	                </div>
+	            </div>
+	            <div class="row input input-field-interest">
+	                <div class="col-md-2 input-title">분야</div>
+	                <div class="col-md-10 input-content">
+	                    <div>태그</div>
+	                    <div>셀렉트박스</div>
+	                </div>
+	            </div>
+	            <div class="row input input-field-level">
+	                <div class="col-md-2 input-title">레벨</div>
+	                <div class="col-md-10 input-content">
+	                    <select name="levelCode.levelCode">
+	                        <option th:each="levelCode : ${levelCode}" th:value="${levelCode.levelCode}" th:text="${levelCode.codeValueKorean}"></option>
+	                        <option value="H">상</option>
+	                    </select>
+	                </div>
+	            </div>
+	            <div class="row input input-field-price">
+	                <div class="col-md-2 input-title">가격</div>
+	                <div class="col-md-10 input-content">
+	                    회차 당 <input type="number" id="input-study-unitPrice">원<br/>
+	                    총 <input type="number" name="price.price" id="input-study-totalPrice">원
+	                </div>
+	            </div>
+	            <div class="row input input-field-hidden">
+	                리더 아이디 <input type="text" name="member.leaderId" id="input-study-member" th:value="${loginMember.id}"><br/>
+	                스터디 상태코드 <input type="text" name="studyStatusCode.studyStatusCode" id="input-study-studyStatusCode" value="O">
+	            </div>
+	
+	        </form>
+	        <div class="nav-btn">
+	            <ul>
+	                <li><a href="" id="prev-btn">이전</a></li>
+	                <li><a href="" id="next-btn">다음</a></li>
+	            </ul>
+	        </div>
+	    </div>
+
+
+		
+	</div>
+
+    <script>
+
+        $(document).ready(function() {
+
+            calcStudyCount();
+            calcTimeDiff();
+            setEnrollCapacityByButton();
+            setEnrollCapacityByInput();
+            enableTimeInput();
+            showInputField();
+        });
+
+        // type, onoff 선택에 따라, 입력 폼의 상태를 visible 로 바꾸는 함수
+        function showInputField() {
+            $('.input:not(.input-field-type)').hide();
+
+            $('.input-field-type input').on('click', function() {
+                if(this.value == "P") {
+                    if("${loginMember.gradeCode}" != "T") {
+                        $('.input-study-type-alert').css("display", "block");
+                        $("input[value='P'").attr("disabled", "disabled");
+                        $('.input:not(.input-field-type)').hide();
+                        return;
+                    }
+                    $('.input-study-type-alert').css("display", "none");
+                    $('.input-field-price').removeAttr("blinded");
+                } else {
+                    $('.input-study-type-alert').css("display", "none");
+                    $('.input-field-price').attr("blinded", "");
+                }
+                if($('.input-field-onoff input:checked').val()){
+                    $('[blinded]').hide();
+                    $('.input:not([blinded])').show();
+                } else {
+                    $('.input-field-onoff').show();
+                }
+            });
+
+            $('.input-field-onoff input').on('click', function() {
+                if(this.value == "O") {
+                    $('.input-field-location').attr("blinded", "");
+                } else {
+                    $('.input-field-location').removeAttr("blinded");
+                }
+                $('[blinded]').hide();
+                $('.input:not([blinded])').show();
+            });
+        }        
+
+        // (작성 예정) 1차 셀렉트박스의 선택에 따라, 2차 셀렉트 박스의 옵션을 출력하는 함수
+
+
+        // datepicker 기능 시작. ////////////////////////////////////////////////////////////////////////////////////////////////
+        $.datepicker.setDefaults($.datepicker.regional['ko']);
+
+        $('#input-study-startDate').datepicker({
+            showOn: 'both',
+            buttonTest: '날짜 선택',
+            dateFormat: 'yy-mm-dd',
+            monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+            // dayNamesShort: ['일','월','화','수','목','금','토'],
+            dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+            showMonthAfterYear: true,
+            // changeYear: true,
+            // changeMonth: true,
+            yearSuffix: '년',
+            onClose: function (chosenDate) {
+                $('#input-study-endDate').datepicker('option', 'minDate', chosenDate);
+            }
+        });
+
+        $('#input-study-endDate').datepicker({
+            showOn: 'both',
+            buttonTest: '날짜 선택',
+            dateFormat: 'yy-mm-dd',
+            monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+            dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+            showMonthAfterYear: true,
+            yearSuffix: '년',
+            beforeShowDay: disableNonMatchingDays
+        })
+
+        function disableNonMatchingDays(date) {
+            //  new Date() 사용해서 날짜로 변환하지 않으면 .getDay() 함수를 쓸 수 없다:
+            // Uncaught TypeError: $(...).val(...).getDay is not a function
+            var chosenDay = new Date($('#input-study-startDate').val()).getDay();
+            var day = date.getDay();
+            if (day != chosenDay) {
+                return [false];
+            } else return [true];
+            // else문 미작성 시 발생하는 에러:
+            // jquery-ui.js:9323 Uncaught TypeError: Cannot read property '0' of undefined
+        }
+        // datepicker 기능 끝. ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // studyCount 를 계산해서 hidden input 태그에 입력하는 함수 
+        function calcStudyCount() {
+            $('.input-date').on('change', function() {
+            var startDate = new Date($('#input-study-startDate').val());
+            var endDate = new Date($('#input-study-endDate').val());
+            var dayDiff = (endDate - startDate) /1000 /60 /60 /24;
+            var studyCount = (dayDiff / 7) + 1;
+            
+            if(isNaN(studyCount)) {
+                $('#input-study-studyCount').val(0);
+            } else {
+                $('#input-study-studyCount').val(studyCount);
+            }
+            });
+        }
+
+        // 시간 입력폼 구현
+        function enableTimeInput() {
+            // Hour 선택 제한 1 (AM: 00~11, PM: 12~11)
+            $('.apm-picker').on("change", function() {
+
+                var idArr = this.id.split('-');
+                var hour = $('#' + idArr[0] + '-hour-picker')[0];
+                console.log('hour = ' + hour);
+                console.log("$('#' + this.id).val() = " + $('#' + this.id).val());
+
+                if($('#' + this.id).val() == 'AM') {
+                    hour[0].removeAttribute("hidden");
+                    hour[1].setAttribute("hidden", "");
+                    if(hour[1].selected == true) {
+                        hour[0].setAttribute("selected", "");
+                        hour.value = hour[0].value;
+                    }
+                } else {
+                    hour[1].removeAttribute("hidden");
+                    hour[0].setAttribute("hidden", "");
+                    if(hour[0].selected) {
+                        hour[1].setAttribute("selected", "");
+                        hour.value = hour[1].value;
+                    }
+                }
+                
+            });
+            // Hour 선택 제한 2 (startTime 이후의 시간만 endTime 에서 선택 가능)
+            
+        }
+
+        // timeDiff 를 계산해서 hidden input 태그에 입력하는 함수
+        function calcTimeDiff() {
+            $('.input-time').on('change', function() {
+                var startApm = $('#start-apm-picker').val();
+                var startHour = $('#start-hour-picker').val();
+                var startMinute = $('#start-minute-picker').val();
+                var startTime = new Date('1900/01/01 ' + startHour + ":" + startMinute + " " + startApm);
+
+                var endApm = $('#end-apm-picker').val();
+                var endHour = $('#end-hour-picker').val();
+                var endMinute = $('#end-minute-picker').val();
+                var endTime = new Date('1900/01/01 ' + endHour + ":" + endMinute + " " + endApm);
+
+                var timeDiff = (endTime - startTime)/1000/60;
+
+                $('#input-study-timeDiff').val(timeDiff);
+            });
+        }
+
+        // 모집인원 설정 기능 시작. ////////////////////////////////////////////////////////////////////////////////////////////////
+        // <, > 을 클릭하여 모집인원을 설정할 수 있는 함수
+        function setEnrollCapacityByButton() {
+            $('.btn-enrollCapacity').on('click', function (event) {
+                event.preventDefault();
+                var enrollCapacity = $('#input-study-enrollCapacity').val() - 0;
+                switch ($(this).attr('id')) {
+                    case "btn-enrollCapacity-plus":
+                        if(enrollCapacity < 50) {
+                            enrollCapacity += 1;
+                        }
+                        break;
+                    case "btn-enrollCapacity-minus":
+                        if(enrollCapacity > 2) {
+                            enrollCapacity -= 1;
+                        }
+                        break;
+                }
+                $('#input-study-enrollCapacity').val(enrollCapacity);
+            })
+        }
+        // 태그에 직접 입력하여 모집인원을 설정할 수 있는 함수
+        function setEnrollCapacityByInput() {
+            $('#input-study-enrollCapacity').on({
+                // input 태그에서 엔터 입력 시 < 버튼을 클릭하는 문제를 제어
+                keypress: function(event) {
+                    if(event.keyCode == 13) {
+                        event.preventDefault();
+                        this.blur();
+                    }
+                },
+                // 인원 수 입력 제한 (min ~ max : 2 ~ 50)
+                change: function() {
+                    if(this.value < 2) {
+                        this.value = 2;
+                    } else if(this.value > 50){
+                        this.value = 50;
+                    }
+                }
+            })
+        }
+        // 모집인원 설정 기능 끝. ////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // (작성 예정) 가격 계산하는 함수
+
+    </script>
+</body>
+</html>

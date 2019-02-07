@@ -20,14 +20,17 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author	이미연
  * @since	2019. 1. 22.
  * @version	
  * - 스터디 DTO 의 기초 클래스
+ * - 초기값, 제약조건 추가 필요함
  */
 @Data
+@ToString(exclude = "review")
 @Entity
 @Table(name = "study", schema = "StudyRepublic")
 @SecondaryTable(name="popular_study")

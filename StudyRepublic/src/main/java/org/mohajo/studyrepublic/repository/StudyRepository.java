@@ -1,9 +1,10 @@
 package org.mohajo.studyrepublic.repository;
 
+import java.util.Date;
 import java.util.List;
 
-import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.TypeCD;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,9 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 //	/*select avg(score) from review r where study_id = "BO00001";*/
 //	@Query(value = "select avg(score) from Review r where r.studyId = ?1")
 //	public float getAverageScore(String studyId);
+	
+	@Query(value = "select s from Study s where s.startDate between ?1 and ?2")
+	public List<Study> getByStartDates(Date s1, Date s2);
 	
 	
 	/**
