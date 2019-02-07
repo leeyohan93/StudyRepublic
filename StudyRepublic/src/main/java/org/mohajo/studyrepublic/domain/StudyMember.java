@@ -49,7 +49,7 @@ public class StudyMember implements Serializable {
 		
 		@MapsId("studyId")
 		@ManyToOne 	
-		@JoinColumn(name="study_id")
+		@JoinColumn(name="studyId")
 		private Study study;
 		
 		@OneToMany(mappedBy="studyMember")

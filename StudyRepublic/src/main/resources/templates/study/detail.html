@@ -183,7 +183,7 @@ layout:decorate="~{/layout/mainLayout}">
 					<div class="col-md-2 column-name">진행방식</div>
 					<div class="col-md-10 column-value"><i class="tag-primary" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
 					<div class="col-md-2 column-name">지역</div>
-					<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${study.studyLocation.interestLocation}">location</i>&nbsp;</th:block></div>
+					<div class="col-md-10 column-value"><th:block th:each="location : ${study.studyLocation}"><i class="tag" th:text="${location.interestLocation}">location</i>&nbsp;</th:block></div>
 					<div class="col-md-2 column-name">분야</div>
 					<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
 					<div class="col-md-2 column-name" th:if="${study.price}">가격</div>
