@@ -42,7 +42,7 @@ public class PageMaker<T> {
 
 		this.currentPage = list.getPageable();
 
-		this.currentPageNum = currentPage.getPageNumber() + 1;
+		this.currentPageNum = currentPage.getPageNumber() + 1;	//Pageable 객체는 페이지 카운트를 0부터 시작. 뷰에서 제대로 된 값을 출력하기 위해 +1 처리.
 
 		this.totalPageNum = list.getTotalPages();
 
@@ -53,9 +53,9 @@ public class PageMaker<T> {
 
 	private void calcPages() {
 
-		int tempEndNum = (int)(Math.ceil(this.currentPageNum/10.0)*10);
+		int tempEndNum = (int)(Math.ceil(this.currentPageNum/10.0)*10);	//현재 페이지가 18 일 때, tempEndNum 은 20
 
-		int startNum = tempEndNum -9;
+		int startNum = tempEndNum -9;	//tempEndNum 이 20 일 때, startNum 은 11. 즉 ~Num 식 변수는 현재 페이지에서 11~20 까지의 페이지 번호를 출력하기 위한 요소임. 
 
 		Pageable startPage = this.currentPage;
 

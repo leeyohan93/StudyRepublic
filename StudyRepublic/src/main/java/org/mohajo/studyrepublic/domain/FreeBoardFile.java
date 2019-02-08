@@ -33,5 +33,14 @@ public class FreeBoardFile extends File{
 	private int freeBoardFileId;
 	@Column(name ="freeboard_id")
 	private int freeBoardId;
+	
+	@Column(name = "filenumber")
+	protected int fileNumber;
+	@Column(name = "originname")
+	protected String originName;
+	@Column(name = "savename")
+	protected String saveName;
+	
+
 
 }

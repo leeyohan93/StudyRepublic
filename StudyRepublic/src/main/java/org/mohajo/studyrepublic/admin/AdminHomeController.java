@@ -10,15 +10,17 @@ import lombok.extern.java.Log;
  * @since 2019.01.22
  * @version
  * - AdminHomeCotnroller 추가
+ * - index페이지 데모버전 완성
  */
 @Log
 @Controller
-@RequestMapping("/index")
+@RequestMapping("/adminPage")
 public class AdminHomeController {
 	
 	@RequestMapping("/index")
-	public void admin_index() {
-		
+	public String index() {
+		return "/adminPage/index";
 	}
-
 }
+	
+

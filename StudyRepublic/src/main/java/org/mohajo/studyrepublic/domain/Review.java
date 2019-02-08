@@ -35,8 +35,8 @@ public class Review implements Serializable {
 	@NotFound(action=NotFoundAction.IGNORE)
 	@OneToOne
 	@JoinColumns({
-		@JoinColumn(name = "studyId", updatable=false, insertable=false),
-		@JoinColumn(name = "id", updatable=false, insertable=false)
+		@JoinColumn(name = "studyId", referencedColumnName = "studyId", updatable=false, insertable=false),
+		@JoinColumn(name = "id", referencedColumnName = "id", updatable=false, insertable=false)
 	})
 	private StudyMember studyMember;
 

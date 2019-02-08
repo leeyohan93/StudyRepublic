@@ -9,8 +9,16 @@ import javax.transaction.Transactional;
 
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.FreeBoardReply;
+import org.mohajo.studyrepublic.domain.InquireBoard;
+import org.mohajo.studyrepublic.domain.InquireBoardReply;
+import org.mohajo.studyrepublic.domain.RequestBoard;
+import org.mohajo.studyrepublic.domain.RequestBoardReply;
 import org.mohajo.studyrepublic.repository.FreeBoardReplyRepository;
 import org.mohajo.studyrepublic.repository.FreeBoardRepository;
+import org.mohajo.studyrepublic.repository.InquireBoardReplyRepository;
+import org.mohajo.studyrepublic.repository.InquireBoardRepository;
+import org.mohajo.studyrepublic.repository.RequestBoardReplyRepository;
+import org.mohajo.studyrepublic.repository.RequestBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,14 +45,22 @@ import lombok.extern.java.Log;
 @RequestMapping("/comment")
 public class ReplyController {
 
+	@Autowired
+	FreeBoardRepository freeBoardRepository;
+	@Autowired
+	RequestBoardRepository requestBoardRepository;
+    @Autowired
+    InquireBoardRepository inquireBoardRepository;
 	
 	@Autowired
 	FreeBoardReplyRepository freeBoardReplyRepository;
-	
 	@Autowired
-	FreeBoardRepository freeBoardRepository;
+	RequestBoardReplyRepository requestBoardReplyRepository;
+	@Autowired
+	InquireBoardReplyRepository inquireBoardReplyRepository;
 	
-	//댓글 리스트 출력
+	
+	//자유게시판 댓글 리스트 출력
 	@GetMapping("/listFreeReply")
 	@ResponseBody
 	public List<FreeBoardReply> listFreeReply(Model model, int freeBoardId){
@@ -53,8 +69,26 @@ public class ReplyController {
 		return freeBoard.getFreeBoardReply(); 
 	}
 	
+	//스터디 요청게시판 댓글 리스트 출력
+	@GetMapping("/listRequestReply")
+	@ResponseBody
+	public List<RequestBoardReply> listRequestReply(Model model, int requestBoardId){
 	
-	//댓글 등록
+	    RequestBoard requestBoard = requestBoardRepository.findById(requestBoardId).get();
+		return requestBoard.getRequestBoardReply(); 
+	}
+	
+	//문의게시판 댓글 리스트 출력
+	@GetMapping("/listInquireReply")
+	@ResponseBody
+	public List<InquireBoardReply> listInquireReply(Model model, int inquireBoardId){
+	
+		InquireBoard inquireBoard = inquireBoardRepository.findById(inquireBoardId).get();
+		return inquireBoard.getInquireBoardReply(); 
+	}
+	
+	
+	//자유게시판 댓글 등록
 	@PostMapping("/registerFreeReply")
 	@ResponseBody
 	public FreeBoardReply registerFreeReply(int freeBoardId, String content, String id) {
@@ -62,14 +96,36 @@ public class ReplyController {
 		FreeBoardReply freeBoardReply = new FreeBoardReply();
 		freeBoardReply.setFreeBoardId(freeBoardId);
 		freeBoardReply.setContent(content);
-		freeBoardReply.setId(id);
-		
-		log.info(freeBoardReplyRepository.save(freeBoardReply)+"1");
-		   
+		freeBoardReply.setId(id);	   
 		return freeBoardReplyRepository.save(freeBoardReply);
 	}
 	
-	//댓글수정
+	//스터디 요청게시판 댓글 등록
+	@PostMapping("/registerRequestReply")
+	@ResponseBody
+	public RequestBoardReply registerRequestReply(int requestBoardId, String content, String id) {
+		
+		RequestBoardReply requestBoardReply = new RequestBoardReply();
+		requestBoardReply.setRequestBoardId(requestBoardId);
+		requestBoardReply.setContent(content);
+		requestBoardReply.setId(id);	   
+		return requestBoardReplyRepository.save(requestBoardReply);
+	}
+	
+	//문의게시판 댓글 등록
+	@PostMapping("/registerInquireReply")
+	@ResponseBody
+	public InquireBoardReply registerInquireReply(int inquireBoardId, String content, String id) {
+
+		InquireBoardReply inquireBoardReply = new InquireBoardReply();
+		inquireBoardReply.setInquireBoardId(inquireBoardId);
+		inquireBoardReply.setContent(content);
+		inquireBoardReply.setId(id);	   
+		return inquireBoardReplyRepository.save(inquireBoardReply);
+	}
+	
+	
+	//자유게시판 댓글수정
 	@PostMapping("/updateFreeReply")
 	@ResponseBody
 	public FreeBoardReply updateFreeReply(int freeBoardReplyId, String content) {
@@ -78,11 +134,35 @@ public class ReplyController {
 
 		FreeBoardReply freeBoardReply = freeBoardReplyRepository.findById(freeBoardReplyId).get();
 		freeBoardReply.setContent(content);
-
 		return freeBoardReplyRepository.save(freeBoardReply);
 	}
+	
+	//스터디 요청게시판 댓글수정
+	@PostMapping("/updateRequestReply")
+	@ResponseBody
+	public RequestBoardReply updateRequestReply(int requestBoardReplyId, String content) {
 
-	//댓글삭제
+		log.info(requestBoardReplyId+"");
+
+		RequestBoardReply requestBoardReply = requestBoardReplyRepository.findById(requestBoardReplyId).get();
+		requestBoardReply.setContent(content);
+		return requestBoardReplyRepository.save(requestBoardReply);
+	}
+	
+	//문의게시판 댓글수정
+	@PostMapping("/updateInquireReply")
+	@ResponseBody
+	public InquireBoardReply updateInquireReply(int inquireBoardReplyId, String content) {
+
+		log.info(inquireBoardReplyId+"");
+
+		InquireBoardReply inquireBoardReply = inquireBoardReplyRepository.findById(inquireBoardReplyId).get();
+		inquireBoardReply.setContent(content);
+		return inquireBoardReplyRepository.save(inquireBoardReply);
+	}
+	
+
+	//자유게시판 댓글삭제
 	@PostMapping("/deleteFreeReply/{freeBoardReplyId}")
 	@ResponseBody
 	public int deleteFreeReply(@PathVariable int freeBoardReplyId) {
@@ -92,15 +172,58 @@ public class ReplyController {
 		return freeBoardReplyId;
 	}
 	
-	//댓글 카운트
-	@GetMapping("/commentCount")
+	//스터디 요청게시판 댓글삭제
+	@PostMapping("/deleteRequestReply/{requestBoardReplyId}")
 	@ResponseBody
-	public int commentCount(int freeBoardId) {
+	public int deleteRequestReply(@PathVariable int requestBoardReplyId) {
+
+		log.info(requestBoardReplyId+"");
+		requestBoardReplyRepository.deleteById(requestBoardReplyId);
+		return requestBoardReplyId;
+	}
+	
+	//문의게시판 댓글삭제
+	@PostMapping("/deleteInquireReply/{inquireBoardReplyId}")
+	@ResponseBody
+	public int deleteInquireReply(@PathVariable int inquireBoardReplyId) {
+
+		log.info(inquireBoardReplyId+"");
+		inquireBoardReplyRepository.deleteById(inquireBoardReplyId);
+		return inquireBoardReplyId;
+	}
+	
+	
+	//자유게시판 댓글 카운트
+	@GetMapping("/commentFreeCount")
+	@ResponseBody
+	public int commentFreeCount(int freeBoardId) {
 		
 		log.info(freeBoardId+"");
 		int freeCount =freeBoardReplyRepository.replyCount(freeBoardId);
 		log.info(freeCount+"");
 		return freeCount;
+	}
+	
+	//스터디 요청게시판 댓글 카운트
+	@GetMapping("/commentRequestCount")
+	@ResponseBody
+	public int commentRequestCount(int requestBoardId) {
+
+		log.info(requestBoardId+"");
+		int requestCount =requestBoardReplyRepository.replyCount(requestBoardId);
+		log.info(requestCount+"");
+		return requestCount;
+	}
+	
+	//문의게시판 댓글 카운트
+	@GetMapping("/commentInquireCount")
+	@ResponseBody
+	public int commentInquireCount(int inquireBoardId) {
+		
+		log.info(inquireBoardId+"");
+		int inquireCount =inquireBoardReplyRepository.replyCount(inquireBoardId);
+		log.info(inquireCount+"");
+		return inquireCount;
 	}
 
 }

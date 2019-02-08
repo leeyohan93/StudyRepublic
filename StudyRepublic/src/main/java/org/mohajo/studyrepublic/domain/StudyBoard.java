@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -31,7 +32,7 @@ public class StudyBoard implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "study_id")
+	@Column(name = "study_id", insertable=false, updatable=false)
 	private String studyId;
 	@Column
 	private int number;
@@ -41,7 +42,7 @@ public class StudyBoard implements Serializable{
 	private String content;
 	@Column
 	private Date date;
-	@Column
+	@Column(insertable=false, updatable=false)
 	private String id;
 	@Column
 	private int status;

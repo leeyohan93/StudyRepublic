@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+
+</head>
+<body>
+
+
+<form id = "form1" action = "uploadFile" method = "post" enctype = "multipart/form-data">
+<input type = "file" name = "file">
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<input type = "submit" value = "제출">
+</form>
+
+
+	
+
+</body>
+</html>

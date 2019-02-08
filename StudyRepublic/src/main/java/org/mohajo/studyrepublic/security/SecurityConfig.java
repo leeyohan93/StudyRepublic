@@ -1,11 +1,10 @@
+
 package org.mohajo.studyrepublic.security;
+
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +23,6 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
- 
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 import lombok.AllArgsConstructor;
@@ -54,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http
 		.authorizeRequests()	
-		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/uploadForm" ).permitAll()
+		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/StudyPage/**").permitAll()
 		.antMatchers("/admin/**","/member/inquery","/member").hasRole("A")
 		.antMatchers("/member/**", "/tutor/signup","/tutor/insert","/pay"  ).hasRole("N")
 	
@@ -109,10 +107,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	}
 	
-	@Override
+/*	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/css/**","/js/**");
-	}
+	}*/
 	
 	@Bean		
 	public SpringSecurityDialect springSecurityDialect() {

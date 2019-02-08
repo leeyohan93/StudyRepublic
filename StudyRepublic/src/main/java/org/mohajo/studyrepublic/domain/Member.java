@@ -1,4 +1,3 @@
-
 package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
@@ -13,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
 import javax.persistence.OneToOne;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
@@ -88,14 +88,19 @@ public class Member implements Serializable {
 	@JoinColumn(name = "member")	
 	private List <MemberRoles> roles;
 	
+	@OneToMany
+	@JoinColumn(name = "member_interest_id")
+	private List<MemberInterest> memberInterest;
+	
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name = "id")
 	private List <InterestLocation> interestlocation;
-	
-	
 
-
-
+	/**
+	 * Add sangyong.shin
+	 */
+	/*@OneToMany(mappedBy="member")
+	private List<StudyMember> studyMember;*/
 	
 }
