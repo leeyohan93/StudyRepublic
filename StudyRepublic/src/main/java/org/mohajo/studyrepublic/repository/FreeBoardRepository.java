@@ -9,7 +9,9 @@ import java.util.List;
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.QFreeBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;

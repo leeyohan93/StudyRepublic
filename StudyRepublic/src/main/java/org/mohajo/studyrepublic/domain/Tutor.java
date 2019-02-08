@@ -44,6 +44,10 @@ public class Tutor implements Serializable {
    @OneToMany(cascade=CascadeType.ALL)
    @JoinColumn(name = "tutor_number_")
    private List <TutorInterest> tutorinterest;   
+  
+/*   @OneToMany(cascade=CascadeType.ALL)
+   @JoinColumn(name = "tutorNum")
+   private List <TutorUploadFile> tutoruploadfile;*/
    
 }
 

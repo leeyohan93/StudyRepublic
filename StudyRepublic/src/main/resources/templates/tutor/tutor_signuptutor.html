@@ -28,7 +28,8 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 <div class = "inner">
 
 
-<form id = "tutor" action = "/tutor/insert" method = "post">
+<form id = "tutor" action = "/tutor/insert" method = "post" enctype = "multipart/form-data">
+
 
 <div>
 <input id = "id" name = "member" th:value = "${id}" readonly = "readonly">
@@ -97,6 +98,19 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 <div>
 <textarea name = "introduction" form = "tutor" cols = "40" rows = "10" autofocus required wrap = "hard" placeholder ="자기소개를 입력해주세요."></textarea>
 </div>
+
+
+<div>
+<input type="file" name="files" size="50" /> 
+<!-- tutoruploadfile[0].fileName -->
+</div>
+
+<!-- <div>
+<input type="file" name="fileUpload" size="50" />
+</div> -->
+
+
+
 
 <input type = "submit" value ="강사신청">
 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
@@ -229,6 +243,9 @@ var AllselectBox = document.querySelectorAll("span");
       $('#licdel' + num).remove(); 
        
    }
+   
+   
+   
     
 </script>
 
