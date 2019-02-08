@@ -24,6 +24,7 @@ import com.querydsl.core.types.Predicate;
  * -InquireBoardRepository 클래스 추가
  */
 
+
 public interface InquireBoardRepository extends JpaRepository<InquireBoard, Integer>, QuerydslPredicateExecutor<InquireBoard> {
 	
 	public default Predicate makePredicate(String searchType, String keyword) {
@@ -55,13 +56,11 @@ public interface InquireBoardRepository extends JpaRepository<InquireBoard, Inte
 		return builder;
 	}
 	
-	@Query(value = "select * from member m join inquireboard f on m.id=f.id where m.id=:id", nativeQuery=true)
-	List<InquireBoard> findInquireBoardById(String id);
-	
-	
 	@Query(value="select f from InquireBoard f where f.inquireBoardId=:be")
 	InquireBoard findByinquireBoardId(@Param("be") int beforeInquireBoard);
 
 
+	@Query(value = "select * from member m join inquireboard i on m.id=i.id where m.id=:id",nativeQuery=true)
+	List<InquireBoard>findInquireBoardById(String id);
 
 }
