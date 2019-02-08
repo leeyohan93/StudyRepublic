@@ -28,9 +28,9 @@ public class MainController {
 	
 	@RequestMapping("/index")
 	public void index(Model model) {
-		System.out.println("index()");
 		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
 		List<Study> basicStudy = mainService.getPopularBasicStudy();
+		
 		
 		for(int i=0; i<premiumStudy.size(); i++) {
 			model.addAttribute("popularPremiumStudy"+i,premiumStudy.get(i));
@@ -56,6 +56,7 @@ public class MainController {
 	public String search(Study studyInfo,String searchDate,String[] location, String[] interest, Model model){
 		
 		List<Study> searchList = mainService.search(studyInfo, searchDate, location, interest);
+		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());
 		model.addAttribute("list", searchList);
 		model.addAttribute("typeCode", studyInfo.getTypeCode().getTypeCode());
 

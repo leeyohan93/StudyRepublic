@@ -4,12 +4,13 @@ package org.mohajo.studyrepublic.repository;
 
 import java.util.List;
 
-import org.mohajo.studyrepublic.domain.Board;
-import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+
 
 /**
  * @author 윤성호
@@ -33,7 +34,29 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 	@Query(value = "select * from recommend_tutor_member",nativeQuery=true)
 	List<Member> getRecommendTutorMember();
 	
+	/*@Query(value = "select m.id, f.title,f.date,f.likecount, f.hit from (select * from member where id=:id)m, freeboard f where m.id=f.id", nativeQuery=true)
+	List<FreeBoard> findAllBoardById(String id);*/
+	
+	/*@Query(value="select m.id, f.title,f.date,f.likecount, f.hit from (select * from member where id=:id) m, freeboard f where m.id=f.id ;"+"union select m.id, q.title,q.date,q.likecount, q.hit from (select * from member where id=:id) m, inquireboard q where m.id=q.id " + "union select m.id, r.title,r.date,r.likecount, r.hit from (select * from member where id=:id) m, requestboard r where m.id=r.id",nativeQuery=true)
+	List<Board> findAllBoardById(String id);
+*/
+	
+	@Query(value = "select count(*) from member where email=:email", nativeQuery = true)
+	int checkemail(String email);
+	
+	@Query(value="select count(*) from member where id=:id and password = :password", nativeQuery = true)
+	int checkpassword(String id,String password);
+	
+	/*회원탈퇴 버튼 클릭시 회원상태코드 변경*/
+	@Transactional
+	@Modifying
+	@Query(value="update member set member_status_code='E' where id = :id", nativeQuery = true)
+	int memberExit(String id);
 
+	@Modifying
+	@Query(value="update member set password = :password where id = :id", nativeQuery = true)
+	void saveById(String password);
+	
 
 }
 
