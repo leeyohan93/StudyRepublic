@@ -1,0 +1,241 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/adminLayout}">
+
+<head>
+<title>Memeber</title>
+<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+</head>
+<body>
+	<h3 layout:fragment="title">Member</h3>
+	<!-- Static Table Start -->
+	<div class="data-table-area mg-b-15" layout:fragment="main">
+		<div class="container-fluid" style="padding-bottom: 0;">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="sparkline13-list">
+						<div class="sparkline13-hd">
+							<div class="main-sparkline13-hd">
+								<h1>Member Data Table</h1>
+							</div>
+						</div>
+						<div class="sparkline13-graph">
+							<div class="datatable-dashv1-list custom-datatable-overright">
+								<div id="toolbar">
+									<select class="form-control dt-tb">
+										<option value="">Export Basic</option>
+										<option value="all">Export All</option>
+										<option value="selected">Export Selected</option>
+									</select>
+								</div>
+								<table id="table" data-toggle="table" data-pagination="true"
+									data-search="true" data-show-columns="true"
+									data-show-pagination-switch="true" data-show-refresh="true"
+									data-key-events="true" data-show-toggle="true"
+									data-resizable="true" data-cookie="true"
+									data-cookie-id-table="saveId" data-show-export="true"
+									data-click-to-select="true" data-toolbar="#toolbar">
+									<thead>
+										<tr>
+											<th data-field="static" data-checkbox="true"></th>
+											<th data-field="No">No</th>
+											<th data-field="ID">ID</th>
+											<th data-field="이름" data-editable="false">이름</th>
+											<th data-field="닉네임" data-editable="false">닉네임</th>
+											<th data-field="등급" data-editable="false">등급</th>
+											<th data-field="상태" data-editable="false">상태</th>
+											<th data-field="가입일">가입일</th>
+											<th data-field="관리">관리</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="member : ${memberList}">
+											<td></td>
+											<td th:text="${memberStat.index}"></td>
+											<td th:text="${member.id}"></td>
+											<td th:text="${member.name}"></td>
+											<td th:text="${member.nickname}"></td>
+											<td th:text="${member.gradeCD.codeValueKorean}"></td>
+											<td th:text="${member.memberStatusCD.codeValueKorean}"></td>
+											<td th:text="${member.registrationDate}"></td>
+											<td class="datatable-ct">
+												<div class="modal-area-button" style="margin-top: 0;">
+													<a class="Primary mg-b-10" href="#" data-toggle="modal"
+														data-target="#ChangePwd"
+														style="color: white; margin-top: 0; padding: 3px 15px;">비밀번호
+														변경</a>
+												</div>
+												<div id="ChangePwd"
+													class="modal modal-edu-general default-popup-PrimaryModal fade"
+													role="dialog">
+													<div class="modal-dialog">
+														<div class="modal-content">
+															<div class="modal-close-area modal-close-df">
+																<a class="close" data-dismiss="modal" href="#"><i
+																	class="fa fa-close"></i></a>
+															</div>
+															<div class="modal-body">
+																<i class="educate-icon educate-checked modal-check-pro"></i>
+																<h2>Awesome!</h2>
+																<p>The Modal plugin is a dialog box/popup window
+																	that is displayed on top of the current page</p>
+															</div>
+															<div class="modal-footer">
+																<a data-dismiss="modal" href="#">Cancel</a> <a href="#">Process</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="padding-top: 0;">
+			<div class="modal-bootstrap shadow-inner mg-tb-30 responsive-mg-b-0"
+				style="padding-top: 0; margin: 0;">
+				<div class="modal-area-button">
+					<a class="Primary mg-b-10" href="#" data-toggle="modal"
+						data-target="#Message">쪽지</a> <a
+						class="Information Information-color mg-b-10" href="#"
+						onclick="myFunction()" data-toggle="modal" data-target="#Grade">등급변경</a> <a
+						class="Warning Warning-color mg-b-10" href="#" data-toggle="modal"
+						data-target="#Pause">정지처리</a> <a class="Danger danger-color"
+						href="#" data-toggle="modal" data-target="#Exit">탈퇴처리</a>
+				</div>
+			</div>
+			<div id="Message"
+				class="modal modal-edu-general default-popup-PrimaryModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<div class="modal-body">
+							<i class="educate-icon educate-checked modal-check-pro"></i>
+							<h2>Awesome!</h2>
+							<p>The Modal plugin is a dialog box/popup window that is
+								displayed on top of the current page</p>
+						</div>
+						<div class="modal-footer">
+							<a data-dismiss="modal" href="#">Cancel</a> <a href="#">Process</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="Grade"
+				class="modal modal-edu-general fullwidth-popup-InformationproModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<div class="modal-body">
+							<span
+								class="educate-icon educate-info modal-check-pro information-icon-pro">
+							</span>
+							<h2>등급 변경</h2>
+							<p>변경하실 등급을 선택해 주세요</p>
+							<form>
+							<select class="form-control custom-select-value" name="Member.gradeCD.gradeCode">
+								<option value="A">관리자</option>
+								<option value="N">일반</option>
+								<option value="T">강사</option>
+								<option value="W">강사대기</option>
+							</select>
+							<div id="optional">
+							</div>
+							</form>
+							<script>
+							var optionalElement = document.getElementById("optional");
+							var inputCommand;
+
+							function myFunction(){
+							    var selectedObject = document.getElementsByClassName("selected");
+							    inputCommand = "";
+							    if(selectedObject.length===0){
+							        
+							    }
+							    else{
+							        for(var i=0;i<selectedObject.length;i++){
+							            inputCommand += "<input type='text' name='Member.id' value="+selectedObject[i].cells[2].innerText+">"
+							            optionalElement.innerHTML = inputCommand;
+							        }
+							    }
+							    
+							}
+							</script>
+							
+						</div>
+						<div class="modal-footer info-md">
+							<a data-dismiss="modal" href="#">Cancel</a> <a href="#">Process</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="Pause"
+				class="modal modal-edu-general Customwidth-popup-WarningModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<div class="modal-body">
+							<span
+								class="educate-icon educate-warning modal-check-pro information-icon-pro"></span>
+							<h2>Warning!</h2>
+							<p>The Modal plugin is a dialog box/popup window that is
+								displayed on top of the current page</p>
+						</div>
+						<div class="modal-footer warning-md">
+							<a data-dismiss="modal" href="#">Cancel</a> <a href="#">Process</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="Exit"
+				class="modal modal-edu-general FullColor-popup-DangerModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<div class="modal-body">
+							<span
+								class="educate-icon educate-danger modal-check-pro information-icon-pro"></span>
+							<h2>Danger!</h2>
+							<p>The Modal plugin is a dialog box/popup window that is
+								displayed on top of the current page</p>
+						</div>
+						<div class="modal-footer danger-md">
+							<a data-dismiss="modal" href="#">Cancel</a> <a href="#">Process</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- Static Table End -->
+	<div layout:fragment="indexScript"></div>
+
+</body>
+
+
+
+
+
+</html>

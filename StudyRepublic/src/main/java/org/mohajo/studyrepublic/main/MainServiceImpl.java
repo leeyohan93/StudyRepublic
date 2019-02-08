@@ -109,11 +109,11 @@ public class MainServiceImpl implements MainService{
 		Page<Study> searchResult = studyRepository.findAll(MainPredicate.searchStudy(studyInfo,searchDate,location,interest),paging);
 		
 		List<Study> searchList = searchResult.getContent();
-		for(Study list:searchList) {
+/*		for(Study list:searchList) {
 			System.out.println("list = ");
 			System.out.println(list);
 		}
-		return searchList;
+*/		return searchList;
 		
 	}
 	

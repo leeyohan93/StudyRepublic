@@ -36,8 +36,9 @@ layout:decorate="~{/layout/mainLayout}">
 	<div id="studyList" layout:fragment="main">
 		<div class="inner">
     	<div class="heading">
-    		<h3 th:if="${typeCode} eq 'p'">프리미엄 스터디</h3>
-    		<h3 th:unless="${typeCode} eq 'p'">일반 스터디</h3>
+    		<h3 th:if="${typeCode} eq 'p'">프리미엄스터디</h3>
+    		<h3 th:if="${typeCode} eq 'b'">일반 스터디</h3>
+    		<h3 th:if="${typeCode} eq 'All'">전체 스터디</h3>
     		<hr>
     		<h3>찾아보기</h3>
     	</div>
@@ -74,6 +75,5 @@ layout:decorate="~{/layout/mainLayout}">
     	</div>
     
     </div>
-    
 </body>
 </html>

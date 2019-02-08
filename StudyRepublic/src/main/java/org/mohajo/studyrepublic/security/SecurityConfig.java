@@ -1,7 +1,5 @@
 package org.mohajo.studyrepublic.security;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 
 
@@ -31,7 +27,6 @@ import lombok.extern.java.Log;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true) 
-@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -49,10 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 	
 		http
-		.authorizeRequests()	
-		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/StudyPage/**").permitAll()
+		.authorizeRequests()
+		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick","/","/passwordAuth").permitAll()
 		.antMatchers("/admin/**","/member/inquery","/member").hasRole("A")
-		.antMatchers("/member/**", "/tutor/signup","/tutor/insert","/pay"  ).hasRole("N")
+		.antMatchers("/member/**", "/tutor/signup","/tutor/insert" ).hasRole("N")
 	
 		/*.antMatchers("/admin/**").hasAnyRole("A","T")*/	// a나 t  둘 다 된다.
 		.antMatchers("/tutor/**").hasRole("T");
@@ -94,15 +89,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.userDetailsService(memberservice)
 		.tokenRepository(persistentTokenRepository())
 		.tokenValiditySeconds(60*60*24);
-
-		 
-		//스마트에디터 관련 설정
-		 http.headers().frameOptions().disable();
-
-		
-		http.addFilterAfter(new ExceptionHandlerFilter(), SecurityContextHolderAwareRequestFilter.class);
-		
-
 	}
 	
 	@Override
@@ -140,13 +126,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
     
-    
-/*    private Filter ssoFilter() {
-    	CompositeFilter filter = new CompositeFilter();
-    	List <Filter> filters = new ArrayList<>();
-    	filters.add(ssoFilter(facebook(), new Face))
-    }*/
 
 	
 	
 }
+
