@@ -8,6 +8,7 @@ import org.mohajo.studyrepublic.domain.LevelCD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
+import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.Review;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
@@ -28,6 +29,7 @@ import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.mohajo.studyrepublic.repository.TypeCDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -111,9 +113,11 @@ public class StudyController {
 //		Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "postDate");
 		Pageable paging = pageDto.makePageable(0, "postDate");
 		typeCd.setTypeCode(typeCode);
-		List<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
+//		List<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
+		Page<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
 		
-		model.addAttribute("list", list);
+//		model.addAttribute("list", list);
+		model.addAttribute("list", new PageMaker(list));
 		model.addAttribute("typeCode", typeCode);
 
 		return "study/list";
