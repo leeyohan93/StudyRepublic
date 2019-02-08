@@ -50,9 +50,9 @@ li {
 }
 
 .top_right {
-	background-color: pink;
+	background-color: white;
 	border: solid;
-	float: right;
+	float: left;
 	height: 250px;
 	width: 300px;
 }
@@ -68,7 +68,7 @@ li {
 .top_left {
 	float: left;
 	height: 200px;
-	width: 300px;; //
+	width: 300px;
 	background-color: yellowgreen;
 }
 
@@ -91,7 +91,7 @@ li {
 .member_info {
 	float: right;
 	background-color: white;
-	width: 240px;;
+	width: 240px;
 	height: 65%;
 	border: solid;
 }
@@ -103,7 +103,7 @@ li {
 }
 
 .mid_middle {
-	margin-top: 280px;
+	
 	background-color: blue;
 	width: 90%;
 	height: 200px;
@@ -122,7 +122,7 @@ li {
 
 	<div id="main" layout:fragment="main">
 		<div class="inner">
-		
+			
 			<nav>
 				<div class="left">
 					<div class="premium">프리미엄등급신청</div>
@@ -134,6 +134,7 @@ li {
 				</div>
 			</nav>
 			
+			
 			<article>
 			
 				<div class="membermodify">
@@ -144,12 +145,13 @@ li {
 					<div class="top_left">
 						<div class="status">
 							<span sec:authentication="principal.member.nickname"></span>님이 접속중입니다.<br> 
-							<a href="naver.com">쪽지함</a> 
+							<a href="Message">쪽지함</a> 
 							<a href="activityinfo">활동정보</a>
 						</div>
 
 
-
+						
+					
 						<div class="profile">프로필사진</div>
 						<div class="member_info" th:each="mbr : ${mbr}">
 							ID:
@@ -167,6 +169,7 @@ li {
 							<br>
 
 						</div>
+					
 					</div>
 						
 
@@ -175,7 +178,7 @@ li {
 
 
 
-
+					
 					<div class="top_right">
 						<button type="button" class="scheduler">MY스케줄러</button>
 
@@ -183,16 +186,18 @@ li {
 							현재진행중인 스터디<br> <br>일반스터디<br>
 							<tr th:each="sr : ${sr}">
 								<td>
-									<li th:if="${sr.name != null}" th:text="${sr.name}"></li>
-									<li th:unless="${sr.name != null}">현재 진행중인 스터디가없습니다.</li>
+									<li th:if="${sr.typeCode != P}" th:text="${sr.name}"></li>
+									<li th:unless="${sr.typeCode != P}">현재 진행중인 스터디가없습니다.</li>
 								</td>
 							</tr>
 
 
-
+							
 							<br>프리미엄스터디<br>
-							<li>현재진행중인스터디가 없습니다.</li>
+							<li>현재 진행중인 스터디가 없습니다.</li>
+						
 						</div>
+					
 					</div>
 				</div>
 
@@ -200,9 +205,9 @@ li {
 
 
 
-
-
+					
 					<div class="mid_middle">관심지역</div>
+					
 
 					<div class="low_middle">관심분야</div>
 			</article>

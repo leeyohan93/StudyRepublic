@@ -18,5 +18,5 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface InquireBoardRepository extends JpaRepository<InquireBoard, Integer> {
 	@Query(value = "select * from member m join inquireboard i on m.id=i.id where m.id=:id",nativeQuery=true)
-	List<InquireBoard>findInquireBoard(String id);
+	List<InquireBoard>findInquireBoardById(String id);
 }

@@ -123,7 +123,7 @@ public class MypageController {
 		List<RequestBoard> myrequestboard = rbr.findRequestBoardById(id);
 		model.addAttribute("rbr", myrequestboard);
 		
-		List<InquireBoard> myinquireboard = ibr.findInquireBoard(id);
+		List<InquireBoard> myinquireboard = ibr.findInquireBoardById(id);
 		model.addAttribute("ibr", myinquireboard);
 		
 		return "mypage/allboard";
