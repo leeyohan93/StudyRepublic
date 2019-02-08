@@ -31,6 +31,7 @@ public class MainController {
 		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
 		List<Study> basicStudy = mainService.getPopularBasicStudy();
 		
+		
 		for(int i=0; i<premiumStudy.size(); i++) {
 			model.addAttribute("popularPremiumStudy"+i,premiumStudy.get(i));
 		}

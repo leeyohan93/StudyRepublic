@@ -13,6 +13,7 @@
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
 	type="text/css">
+<div layout:fragment="customCss"></div>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
@@ -53,7 +54,7 @@
 		<header id="header" layout:fragment="header">
 			<div class="inner">
 
-
+				<div>
 				<!-- Login -->
 				<div id="logout" sec:authorize="isAuthenticated()">
 					<ul>
@@ -79,9 +80,9 @@
 						th:src="@{/images/logo.svg}" alt="" /></span><span>Study Republic</span>
 				</a>
 
-
+			
 				<!-- Nav -->
-				<nav>
+				<nav layout:fragment="header-nav">
 					<ul>
 						<li class="nav-item"><a href="#menu" class="nav-link">Menu</a></li>
 						<li class="nav-item"><a href="/study/list/b" class="nav-link">일반
@@ -264,7 +265,7 @@
 	<script th:src="@{/assets/js/main.js}"></script>
 	<script th:src="@{/datepicker/js/datepicker.js}"></script>
 	<script th:src="@{/datepicker/js/i18n/datepicker.en.js}"></script>
-
+	<div layout:fragment="customScript"></div>
 
 
 
