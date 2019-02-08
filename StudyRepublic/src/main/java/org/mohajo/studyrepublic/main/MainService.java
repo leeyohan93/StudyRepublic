@@ -1,10 +1,11 @@
 package org.mohajo.studyrepublic.main;
 import java.util.List;
+
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.PopularStudy;
 import org.mohajo.studyrepublic.domain.Study;
-import org.mohajo.studyrepublic.domain.StudyInterest;
 
 /**
  * @author 이요한
@@ -13,9 +14,11 @@ import org.mohajo.studyrepublic.domain.StudyInterest;
  * -MainService 인터페이스 작성
  */
 public interface MainService {
-	public List<Study> getPopularPremiumStudy();
+//	public List<Study> getPopularPremiumStudy();
+	public List<PopularStudy> getPopularPremiumStudy();
 	public List<Member> getRecommendTutorMember();
-	public List<Study> getPopularBasicStudy();
+//	public List<Study> getPopularBasicStudy();
+	public List<PopularStudy> getPopularBasicStudy();
 	public void getRecommendNomalMember();
 	public List<Interest2CD> getPremiumPopularTag();
 	public List<Interest2CD> getBasicPopularTag();

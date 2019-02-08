@@ -5,6 +5,7 @@ package org.mohajo.studyrepublic.main;
 
 import java.util.List;
 
+import org.mohajo.studyrepublic.domain.PopularStudy;
 import org.mohajo.studyrepublic.domain.Study;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,9 +29,10 @@ public class MainController {
 	
 	@RequestMapping("/index")
 	public void index(Model model) {
-		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
-		List<Study> basicStudy = mainService.getPopularBasicStudy();
-		
+//		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
+		List<PopularStudy> premiumStudy = mainService.getPopularPremiumStudy();
+//		List<Study> basicStudy = mainService.getPopularBasicStudy();
+		List<PopularStudy> basicStudy = mainService.getPopularBasicStudy();
 		
 		for(int i=0; i<premiumStudy.size(); i++) {
 			model.addAttribute("popularPremiumStudy"+i,premiumStudy.get(i));

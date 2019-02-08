@@ -5,12 +5,11 @@ import java.util.List;
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.PopularStudy;
 import org.mohajo.studyrepublic.domain.Study;
-import org.mohajo.studyrepublic.domain.StudyInterest;
 import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
-import org.mohajo.studyrepublic.repository.StudyInterestRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 /**
  * @author 이요한
@@ -40,7 +38,8 @@ public class MainServiceImpl implements MainService{
 	Interest2CDRepository interest2CDRepository;
 		
 	@Override
-	public List<Study> getPopularPremiumStudy() {
+//	public List<Study> getPopularPremiumStudy() {
+	public List<PopularStudy> getPopularPremiumStudy() {
 		return studyRepository.findPrStudyBytypeCode();
 		
 	}
@@ -51,7 +50,8 @@ public class MainServiceImpl implements MainService{
 		
 	}
 	@Override
-	public List<Study> getPopularBasicStudy() {
+//	public List<Study> getPopularBasicStudy() {
+	public List<PopularStudy> getPopularBasicStudy() {
 		return studyRepository.findBsStudyBytypeCode();
 		
 	}

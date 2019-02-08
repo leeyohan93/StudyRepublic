@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -32,11 +35,13 @@ import lombok.ToString;
 @Data
 @ToString(exclude = "review")
 @Entity
-@Table(name = "study", schema = "StudyRepublic")
-@SecondaryTables({
-	@SecondaryTable(name="popular_study"),
-	@SecondaryTable(name="study_view")
-})
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "study"/*, schema = "StudyRepublic"*/)
+//@SecondaryTables({
+//	@SecondaryTable(name="popular_study"),
+//	@SecondaryTable(name="study_view")
+//})
+@DiscriminatorValue("STUDY")
 public class Study implements Serializable {
 
 	@Id
@@ -136,20 +141,5 @@ public class Study implements Serializable {
 	 * 
 	private List<StudyMember> studyMember;*/
 	
-	/**
-	 * @author	이미연
-	 * - 뷰 테이블 연결
-	 */
-	@Column(name="date_diff", table="study_view")
-	private int dateDiff;
-	
-	@Temporal(TemporalType.TIME)
-	@Column(name="time_diff", table="study_view")
-	private Date timeDiff;
-	
-	@Column(name="review_count", table="study_view")
-	private int reviewCount;
 
-	@Column(name="average_score", table="study_view")
-	private float averageScore;
 }

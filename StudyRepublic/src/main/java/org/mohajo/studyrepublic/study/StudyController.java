@@ -12,6 +12,7 @@ import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.Review;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
+import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TypeCD;
 import org.mohajo.studyrepublic.repository.DayCDRepository;
@@ -25,6 +26,7 @@ import org.mohajo.studyrepublic.repository.ReviewRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
+import org.mohajo.studyrepublic.repository.StudyViewRepository;
 //import org.mohajo.studyrepublic.repository.StudyViewRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.mohajo.studyrepublic.repository.TypeCDRepository;
@@ -88,8 +90,8 @@ public class StudyController {
 	@Autowired
 	OnoffCDRepository ocr;
 	
-//	@Autowired
-//	StudyViewRepository svr;
+	@Autowired
+	StudyViewRepository svr;
 	
 	
 	@Autowired
@@ -111,10 +113,13 @@ public class StudyController {
 			//완료, 해체 불포함
 		
 //		Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "postDate");
-		Pageable paging = pageDto.makePageable(0, "postDate");
-		typeCd.setTypeCode(typeCode);
-//		List<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
-		Page<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
+		Pageable paging = pageDto.makePageable(0, "post_date");
+//		typeCd.setTypeCode(typeCode);
+//////		List<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
+//////		Page<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
+////		Page<StudyView> list = sr.findValidStudyByTypeCode(typeCd, paging);
+//		Page<StudyView> list = svr.selectValidStudyViewByTypeCode(typeCd, paging);
+		Page<StudyView> list = svr.selectValidStudyViewByTypeCode(typeCode, paging);
 		
 //		model.addAttribute("list", list);
 		model.addAttribute("list", new PageMaker(list));
@@ -148,22 +153,22 @@ public class StudyController {
 			//typeCd != "P" :
 				//+ 스터디멤버 where studyStatusCode in ('LE', 'ME') where id = ?
 
-		Study study = sr.findById(studyId).get();		
+		StudyView study = svr.selectStudyViewByStudyId(studyId);		
 		log.info(study.toString());
 		
 		if(study == null) {
 			return "/study/404";
 		}
 		
-		// 스터디 진행 시간 및 기간을 계산한다. (추후 자바스크립트로 대체할 수 있음.)
-		long dayDiffMillies = Math.abs(study.getStartDate().getTime() - study.getEndDate().getTime());
-		long dayDiff = TimeUnit.DAYS.convert(dayDiffMillies, TimeUnit.MILLISECONDS);
-		dayDiff = dayDiff/30;
-		long timeDiffMillies = Math.abs(study.getStartTime().getTime() - study.getEndTime().getTime());
-		long timeDiff = TimeUnit.HOURS.convert(timeDiffMillies, TimeUnit.MILLISECONDS);
-		
-		model.addAttribute("dayDiff", dayDiff);
-		model.addAttribute("timeDiff", timeDiff);
+//		// 스터디 진행 시간 및 기간을 계산한다. (추후 자바스크립트로 대체할 수 있음.)
+//		long dayDiffMillies = Math.abs(study.getStartDate().getTime() - study.getEndDate().getTime());
+//		long dayDiff = TimeUnit.DAYS.convert(dayDiffMillies, TimeUnit.MILLISECONDS);
+//		dayDiff = dayDiff/30;
+//		long timeDiffMillies = Math.abs(study.getStartTime().getTime() - study.getEndTime().getTime());
+//		long timeDiff = TimeUnit.HOURS.convert(timeDiffMillies, TimeUnit.MILLISECONDS);
+//		
+//		model.addAttribute("dayDiff", dayDiff);
+//		model.addAttribute("timeDiff", timeDiff);
 		
 		// 종료된 스터디에 한해 리뷰 정보를 조회한다. + 평균 평점을 조회한다.
 		if(study.getStudyStatusCode().getStudyStatusCode().equals("C")) {
@@ -171,18 +176,19 @@ public class StudyController {
 			
 			model.addAttribute("review", review);
 		}
-		
-		// 리더 정보를 조회한다. (회원정보 및 스터디 활동내역)
+
 		String leaderId = study.getMember().getId();
 		Member leaderInfo = null;
 		Tutor tutorInfo = null;
 		List<StudyMember> studyActivity = null;
 		
-		//리더정보, 참여스터디
 		leaderInfo = mr.findById(leaderId).get();
-		studyActivity = smr.findStudyActivityById(leaderId);
-		
 		model.addAttribute("leaderInfo", leaderInfo);
+			
+		// 리더 정보를 조회한다. (회원정보 및 스터디 활동내역)
+		
+		//리더정보, 참여스터디
+		studyActivity = smr.findStudyActivityById(leaderId);
 		
 		//강사정보, 개설스터디
 		if(studyId.substring(0, 1) == "P") {
