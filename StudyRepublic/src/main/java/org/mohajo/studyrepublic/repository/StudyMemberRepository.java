@@ -59,4 +59,14 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 			"left join member using (id)\r\n" + 
 			"order by study_qnaboard_id desc", nativeQuery=true)
 	List<StudyMember> findQnaboardInfoByStudyId(@Param(value="studyId") String studyId);
+	
+	@Query(value="select *\r\n" + 
+			"from study_member left join member using (id)\r\n" + 
+			"where (study_member_status_code = :code1 or study_member_status_code = :code2) and study_id = :studyId", nativeQuery=true)
+	List<StudyMember> findStudyMemberLEMEbyStudyIdANDStudyStatusCode(@Param(value="studyId") String studyId, @Param(value="code1") String code1, @Param(value="code2") String code2);
+
+	@Query(value="select *\r\n" + 
+			"from study_member left join member using (id)\r\n" + 
+			"where study_member_status_code = :code1 and study_id = :studyId", nativeQuery=true)
+	List<StudyMember> finStudyMemberWAbyStudyIdANDStudyStatusCode(@Param(value="studyId") String studyId, @Param(value="code1") String code1);
 }

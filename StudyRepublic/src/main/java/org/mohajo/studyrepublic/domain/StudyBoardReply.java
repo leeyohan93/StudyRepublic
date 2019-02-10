@@ -5,7 +5,13 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import lombok.Data;
 import lombok.Getter;
@@ -20,15 +26,15 @@ import lombok.ToString;
  */
 
 @Data
-@ToString
+@ToString(exclude="studyReplyMember")
 @MappedSuperclass
 public class StudyBoardReply implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "study_id")
+	@Column(name = "study_id", insertable=false, updatable=false)
 	private String studyId;
-	@Column
+	@Column(name = "id", insertable=false, updatable=false)
 	private String id;
 	@Column
 	private String content;
@@ -38,4 +44,12 @@ public class StudyBoardReply implements Serializable{
 	private int replyGroup;
 	@Column(name = "replystep")
 	private int replyStep;
+	
+	@NotFound(action=NotFoundAction.IGNORE)
+	@ManyToOne(optional=false)
+	@JoinColumns({
+		@JoinColumn(name="study_id", referencedColumnName="studyId", insertable=false, updatable=false),
+		@JoinColumn(name="id", referencedColumnName="id", insertable=false, updatable=false)
+	})
+	private StudyMember studyReplyMember;
 }

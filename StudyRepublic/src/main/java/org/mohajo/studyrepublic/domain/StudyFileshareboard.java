@@ -1,6 +1,5 @@
 package org.mohajo.studyrepublic.domain;
 
-import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,13 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author 신상용
@@ -28,7 +25,6 @@ import lombok.Setter;
 @Table(name = "study_fileshareboard")
 public class StudyFileshareboard extends StudyBoard{
 
-	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Column(name = "study_fileshareboard_id")
@@ -36,8 +32,11 @@ public class StudyFileshareboard extends StudyBoard{
 	private int studyFileshareboardId;
 	
 	@OneToMany
-	private List<StudyNoticeboardFile> studyFileshareboardFile;
+	@JoinColumn(name="study_fileshareboard_id")
+	private List<StudyFileshareboardFile> studyFileshareboardFile;
+	
 	@OneToMany
-	private List<StudyNoticeboardReply> studyFileshareboardReply;
+	@JoinColumn(name="study_fileshareboard_id")
+	private List<StudyFileshareboardReply> studyFileshareboardReply;
 	
 }

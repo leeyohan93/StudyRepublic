@@ -28,6 +28,7 @@ import lombok.ToString;
 
 @Data
 @MappedSuperclass
+@ToString(exclude="studyMember")
 public class StudyBoard implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -50,8 +51,8 @@ public class StudyBoard implements Serializable{
 	@NotFound(action=NotFoundAction.IGNORE)
 	@ManyToOne(optional=false)
 	@JoinColumns({
-		@JoinColumn(name="study_id", insertable=false, updatable=false),
-		@JoinColumn(name="id", insertable=false, updatable=false)
+		@JoinColumn(name="study_id", referencedColumnName="studyId", insertable=false, updatable=false),
+		@JoinColumn(name="id", referencedColumnName="id", insertable=false, updatable=false)
 	})
 	private StudyMember studyMember;
 }

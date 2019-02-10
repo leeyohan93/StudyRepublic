@@ -10,8 +10,54 @@
 	<div id="main" layout:fragment = "main">
     </div>
     <div id="right" layout:fragment="right">
-                <div id="noticeBoard">
+                <div id="management">
+	                <div class="card text-center">
+					  <div class="card-header">
+					    <ul class="nav nav-tabs card-header-tabs">
+					      <li class="nav-item">
+					        <a class="nav-link active" href="#">스터디원 관리</a>
+					      </li>
+					      <li class="nav-item">
+					        <a class="nav-link" href="#">가입 신청 관리</a>
+					      </li>
+					      <li class="nav-item">
+					        <a class="nav-link" href="#">스터디 해체</a>
+					      </li>
+					    </ul>
+					  </div>
+					  <div class="card-body">
+					    <table>
+				        	<tr th:each="findStudyMemberLEME : ${findStudyMemberLEMEbyStudyIdANDStudyStatusCode}">
+				        		<!-- <td th:text="${findStudyMember}"></td> -->
+				        		<td th:text="${findStudyMemberLEME.member.profileSaveName}"></td>
+				        		<td th:text="${findStudyMemberLEME.member.nickname}"></td>
+				        	</tr>
+					    </table>
+					    <table>
+					    	<tr th:each="findStudyMemberWA : ${findStudyMemberWAbyStudyIdANDStudyStatusCode}">
+					    		<td th:text="${findStudyMemberWA.member.profileSaveName}"></td>
+					    		<td th:text="${findStudyMemberWA.member.nickname}"></td>
+					    		<td th:text="${findStudyMemberWA}"></td>
+					    	</tr>
+					    </table>
+					  </div>
+					</div>
 				</div>
+				<script>
+            //탭 변경시 포커스 바뀌도록 함
+            $(document).ready(function(e){
+                $(".nav-item").on("click", function(){
+                    var value = this;
+                    var thisClassName = value.children[0].className;
+                    if(thisClassName=="nav-link"){
+                        for(var len = 0; len<value.parentNode.children.length; len++){
+                          value.parentNode.children[len].children[0].className="nav-link";
+                        }
+                        this.children[0].className="nav-link active";
+                    }
+                })
+            });
+        </script>
 	</div>
 </body>
 </html>

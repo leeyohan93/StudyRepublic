@@ -14,6 +14,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author	이미연
@@ -23,6 +24,7 @@ import lombok.Data;
  */
 @Data
 @Entity
+@ToString(exclude="studyNoticeboard, studyNoticeboardReply")
 public class StudyMember implements Serializable {
 
 		@EmbeddedId
@@ -51,14 +53,18 @@ public class StudyMember implements Serializable {
 		@JoinColumn(name="studyId")
 		private Study study;
 		
-		@OneToMany(mappedBy="studyMember")
-		private List<StudyNoticeboard> studyNoticeboard;
-		
-		@OneToMany(mappedBy="studyMember")
+		/*@OneToMany(mappedBy="studyMember")
+		private List<StudyNoticeboard> studyNoticeboard;*/
+		/*@OneToMany(mappedBy="studyMember")
 		private List<StudyFileshareboard> studyFileshareboard;
-		
 		@OneToMany(mappedBy="studyMember")
-		private List<StudyQnaboard> studyQnaboard;
+		private List<StudyQnaboard> studyQnaboard;*/
 		
+		/*@OneToMany(mappedBy="studyReplyMember")
+		private List<StudyNoticeboardReply> studyNoticeboardReply;*/
+		/*@OneToMany(mappedBy="studyReplyMember")
+		private List<StudyFileshareboardReply> studyFileshareboardReply;
+		@OneToMany(mappedBy="studyReplyMember")
+		private List<StudyQnaboardReply> studyQnaboardReply;*/
 
 }

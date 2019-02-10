@@ -25,12 +25,10 @@ import lombok.Setter;
 @Table(name = "study_qnaboard_file")
 public class StudyQnaboardFile extends StudyBoardFile{
 
-	private static final long serialVersionUID = 1L;
-	
 	@Id
 	@Column(name = "study_qnaboard_file_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyQnaboardFileId;
+	
 	@Column(name = "study_qnaboard_id")
 	private int studyQnaboardId;
 }
