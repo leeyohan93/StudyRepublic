@@ -31,13 +31,7 @@ public class StudyNoticeboardReply extends StudyBoardReply implements Serializab
 	@Column(name = "study_noticeboard_reply_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyNoticeboardReplyId;
+	
 	@Column(name = "study_noticeboard_id")
 	private int studyNoticeboardId;
-	
-	public String toString() {
-		String str = getStudyNoticeboardReplyId() + ", " + getStudyNoticeboardId() + ", " + super.toString() + "\n";
-		
-		return str;
-	}
-
 }

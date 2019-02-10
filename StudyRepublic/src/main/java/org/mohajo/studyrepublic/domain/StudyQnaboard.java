@@ -8,12 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author 신상용
@@ -27,7 +26,6 @@ import lombok.Setter;
 @Table(name = "study_qnaboard")
 public class StudyQnaboard extends StudyBoard{
 
-	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Column(name = "study_qnaboard_id")
@@ -35,7 +33,10 @@ public class StudyQnaboard extends StudyBoard{
 	private int studyQnaboardId;
 	
 	@OneToMany
-	private List<StudyNoticeboardFile> studyQnaboardFile;
+	@JoinColumn(name="study_qnaboard_id")
+	private List<StudyQnaboardFile> studyQnaboardFile;
+	
 	@OneToMany
-	private List<StudyNoticeboardReply> studyQnaboardReply;
+	@JoinColumn(name="study_qnaboard_id")
+	private List<StudyQnaboardReply> studyQnaboardReply;
 }

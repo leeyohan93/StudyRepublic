@@ -20,10 +20,7 @@ import lombok.ToString;
 
 @Data
 @MappedSuperclass
-@ToString
 public class StudyBoardFile implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
 	
 	@Column(name = "filenumber")
 	private int fileNumber;

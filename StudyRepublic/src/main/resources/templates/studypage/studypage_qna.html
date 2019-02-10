@@ -7,7 +7,7 @@
 <!-- default header name is X-CSRF-TOKEN -->
 <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>스터디 질문&답변 게시판 입니다.</title>
-<link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
+<link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}"/>
 </head>
 <body>
 	<div id="main" layout:fragment = "main">
@@ -16,23 +16,15 @@
 		<table>
 			<tr>
 				<td>프로필 사진</td>
-				<td>닉네임</td>
+				<td>작성자</td>
 				<td>제목</td>
 				<td>작성일시</td>
 			</tr>
 			<tr th:each="fasq : ${findQnaboardInfoByStudyId}">
-				<table th:each="fasqsqb : fasq.studyQnaboard">
-					<td th:text = "${fasqsqb}"></td>
-				</table>
-				<td th:text = "${fasq}"></td>
-				<td th:text = "${fasq.member.profileSaveName}"></td>
-				<td th:text = "${fasq.member.nickname}"></td>
-				<!-- <input type="hidden" th:value="${fasq.notice}" name="number" />
-				<td th:text = "${fasq.member.profileSaveName}"></td>
-				<td th:text = "${fasq.member.nickname}"></td>
-				<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${fasq.title}"></a></td>
-				<td th:text = "${fasq.date}"></td>
-				<td th:text = "${fasq.id}"></td> -->
+				<td th:text = "${fasq.studyMember.member.profileSaveName}"></td>
+				<td th:text = "${fasq.studyMember.member.nickname}"></td>
+				<td th:text = "${fasq.title}"></td>
+				<td th:text = "${#dates.format(fasq.date, 'yyyy/MM/dd HH:mm:ss')}"></td>
 			</tr>
 		</table>
 	</div>

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tomcat.util.json.JSONParser;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboardReply;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import lombok.extern.java.Log;
 
@@ -129,9 +132,9 @@ public class StudyPageController {
 		String studyId = "BB00001";
 		String id = "aaa123";
 
-		/*model.addAttribute("findAllStudyQnaboard",
-				predicate.studyQnaResultPredicate(studyId, 10, studyQnaboardRepository));*/
-		model.addAttribute("findQnaboardInfoByStudyId", smr.findQnaboardInfoByStudyId(studyId));
+		model.addAttribute("findQnaboardInfoByStudyId",
+				predicate.studyQnaResultPredicate(studyId, 10, studyQnaboardRepository));
+		//model.addAttribute("findQnaboardInfoByStudyId", studyQnaboardRepository.findQnaboardInfoByStudyId(studyId));
 		return "studypage/studypage_qna";
 	}
 
@@ -149,7 +152,9 @@ public class StudyPageController {
 	public String studyManagement(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
-
+		
+		model.addAttribute("findStudyMemberLEMEbyStudyIdANDStudyStatusCode", smr.findStudyMemberLEMEbyStudyIdANDStudyStatusCode(studyId, "LE", "ME"));
+		model.addAttribute("findStudyMemberWAbyStudyIdANDStudyStatusCode", smr.finStudyMemberWAbyStudyIdANDStudyStatusCode(studyId, "WA"));
 		return "studypage/studypage_management";
 	}
 	
@@ -171,8 +176,12 @@ public class StudyPageController {
 	/*	Optional<StudyNoticeboard> studyNoticeboardVO = predicate.findByNoticeboardNumberAndStudyId(readBoardContent, studyNoticeboardRepository);
 		System.out.println(studyNoticeboardVO);
 		return studyNoticeboardVO;*/
+		
 		StudyNoticeboard s = studyNoticeboardRepository.findNoticeboardByStudyIdANDNumber(readBoardContent.getStudyId(), readBoardContent.getNumber());
-		log.info(s.getStudyNoticeboardReply().toString());
+	
+		log.info("내역 :" + s.toString());
+		//log.info("내역2 :" + s.getStudyMember().toString());
+
 		return s;
 	}
 	
