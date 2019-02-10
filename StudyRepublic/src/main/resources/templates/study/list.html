@@ -61,15 +61,17 @@
 				
 				<!-- 페이지 번호 출력 -->
 				<nav>
-					<ul class="pagination">
-						<li class="page-item" th:if="${list.prevPage}"><a th:href="${list.prevPage.pageNumber}">[[${list.prevPage}]]</a></li>
-						<li th:classappend="${page.pageNumber == list.currentPageNum -1}? active: ''" th:each="page : ${list.pageList}"><a th:href="${page.pageNumber}+1">[[${page.pageNumber}+1]]</a></li>
-						<li class="page-item" th:if="${list.nextPage}"><a th:href="${list.nextPage.pageNumber}">[[${list.nextPage}]]</a></li>
-					</ul>
+					<div>
+						<ul class="pagination">
+							<li class="page-item" th:if="${list.prevPage}"><a th:href="${list.prevPage.pageNumber}">[[${list.prevPage}]]</a></li>
+							<li class="page-item" th:classappend="${page.pageNumber == list.currentPageNum -1}? active: ''" th:each="page : ${list.pageList}"><a th:href="${page.pageNumber}+1">[[${page.pageNumber}+1]]</a></li>
+							<li class="page-item" th:if="${list.nextPage}"><a th:href="${list.nextPage.pageNumber}">[[${list.nextPage}]]</a></li>
+						</ul>
+					</div>
 				</nav>
 				
 				<!-- 페이지 번호를 통해 이동 1 -->
-				<form id="pageForm" th:action="@{/study/list/${typeCode}}" method="get">
+				<form id="pageForm" th:action="@{'/study/list/' + ${typeCode}}" method="get">
 					<input type="hidden" name="page" th:value="${list.currentPageNum}">
 					<input type="hidden" name="size" th:value="${list.currentPage.pageSize}">
 				</form>

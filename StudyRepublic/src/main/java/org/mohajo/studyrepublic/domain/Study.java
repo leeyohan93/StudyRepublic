@@ -41,7 +41,7 @@ import lombok.ToString;
 //	@SecondaryTable(name="popular_study"),
 //	@SecondaryTable(name="study_view")
 //})
-@DiscriminatorValue("STUDY")
+//@DiscriminatorValue("STUDY")
 public class Study implements Serializable {
 
 	@Id

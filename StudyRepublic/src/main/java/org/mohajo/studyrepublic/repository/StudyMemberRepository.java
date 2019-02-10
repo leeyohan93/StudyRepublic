@@ -17,7 +17,7 @@ import org.springframework.data.repository.query.Param;
  */
 public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyMemberId>, QuerydslPredicateExecutor<StudyMember>{
 	
-	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code in ('LE', 'ME') order by studyView.endDate DESC")
+	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code in ('LE', 'ME') order by study.endDate DESC")
 	List<StudyMember> findStudyActivityById(String id);
 //	List<StudyMember> findStudyActivityByStudyMemberId(StudyMemberId studyMemberId);
 
@@ -59,4 +59,6 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 			"left join member using (id)\r\n" + 
 			"order by study_qnaboard_id desc", nativeQuery=true)
 	List<StudyMember> findQnaboardInfoByStudyId(@Param(value="studyId") String studyId);
+
+	StudyMember findByStudyIdAndId(String studyId, String userId);
 }

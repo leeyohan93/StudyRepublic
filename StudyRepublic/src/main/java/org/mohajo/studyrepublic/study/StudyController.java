@@ -1,7 +1,9 @@
 package org.mohajo.studyrepublic.study;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.mohajo.studyrepublic.domain.DayCD;
 import org.mohajo.studyrepublic.domain.LevelCD;
@@ -10,7 +12,6 @@ import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.Review;
-import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
@@ -33,10 +34,16 @@ import org.mohajo.studyrepublic.repository.TypeCDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.java.Log;
 
@@ -142,7 +149,11 @@ public class StudyController {
 	public String detail(@PathVariable("studyId") String studyId, Model model) {
 		
 		log.info("detail() called...");
-				
+		
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		model.addAttribute("loggedInUserId", id);
+		
 		//스터디 상세 조회 페이지로 이동
 			//공통:
 				//스터디 (분야, 지역, 가격, 유형, 진행방식), 리더 
@@ -196,7 +207,6 @@ public class StudyController {
 			studyActivity = smr.findTutorActivityById(leaderId);
 			
 			model.addAttribute("tutorInfo", tutorInfo);
-
 		}
 		
 		model.addAttribute("study", study);
@@ -204,6 +214,28 @@ public class StudyController {
 
 		return "/study/detail";
 	}
+	
+	@RequestMapping("/prejoin")
+	public void prejoin( @RequestParam("studyId") String studyId,  @RequestParam("userId") String userId, HttpServletResponse response) {
+
+		log.info("studyId = " + studyId);
+		log.info("userId = " + userId);
+		
+		StudyMember history = smr.findByStudyIdAndId(studyId, userId);
+		ObjectMapper objMapper = new ObjectMapper();
+		
+		try {
+			response.getWriter().print(objMapper.writeValueAsString(history));
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 	/**
 	 * @author	이미연
@@ -219,9 +251,9 @@ public class StudyController {
 //		Member user = mr.findById(id).get();
 		
 		//테스트용
-		Member user = mr.findById("aaa123").get();
+		Member member = mr.findById("aaa123").get();
 		
-		log.info("user is ... " + user);
+		log.info("logged in user: " + member);
 		
 		
 		List<TypeCD> typeCode = tcr.findAll();
@@ -229,6 +261,7 @@ public class StudyController {
 		List<LevelCD> levelCode = lcr.findAll();
 		List<DayCD> dayCode = dcr.findAll();
 		
+		model.addAttribute("loggedInUser", member);
 		model.addAttribute("typeCode", typeCode);
 		model.addAttribute("onoffCode", onoffCode);
 		model.addAttribute("levelCode", levelCode);
@@ -261,6 +294,17 @@ public class StudyController {
 		
 		return "";
 	}
+	
+	@RequestMapping("/review")
+	public String review() {
+		
+		
+		
+		return "/study/review";
+	}
+	
+	
+	
 	
 ////	StudyNoticeboard 테스트용
 //	@RequestMapping("/test/{noticeId}")

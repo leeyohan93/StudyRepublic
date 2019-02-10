@@ -46,11 +46,15 @@ public class StudyMember implements Serializable {
 		@JoinColumn(name = "id")
 		private Member member;
 		
+//		@MapsId("studyId")
+//		@ManyToOne 	
+//		@JoinColumn(name="studyId")
+//		private StudyView studyView;
+		
 		@MapsId("studyId")
 		@ManyToOne 	
 		@JoinColumn(name="studyId")
-		private StudyView studyView;
-//		private Study study;
+		private Study study;
 		
 		@OneToMany(mappedBy="studyMember")
 		private List<StudyNoticeboard> studyNoticeboard;

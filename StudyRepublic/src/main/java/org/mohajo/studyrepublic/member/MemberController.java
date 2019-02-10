@@ -156,7 +156,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/login")
-	public String login() {
+	public String login(HttpServletRequest request) {
 		return "member/login";
 	}
 	
@@ -190,8 +190,5 @@ public class MemberController {
 	public String signupTest() {
 		return "sign_up";
 	}
-	
-	
-
 	
 }
