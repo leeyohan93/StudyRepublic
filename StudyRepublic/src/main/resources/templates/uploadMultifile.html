@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+
+<style type = "text/css">
+
+img{ 
+ 
+    height : 400px; 
+ 
+    width: 300px; 
+ 
+}
+</style>
+
+
+</head>
+<body>
+
+
+      <th:block th:include="/_menu"></th:block>
+      <h3>Upload Multiple File:</h3>
+       
+         MyUploadForm
+    	<form th:object="${myUploadForm}" method="POST"
+         action="" enctype="multipart/form-data">
+         Description:
+         <br>
+         <input th:field="*{description}" style="width:300px;"/>                
+         <br/><br/>      
+         
+         <div>           
+         File to upload (1): 
+         <input class = "img" th:field="*{fileDatas}" type="file" name = "" set-to="div1"/><br />  
+         <img class="image" id="div1" src="#" alt="image 1" /> 
+         </div>
+         
+         <div>    
+         File to upload (2): 
+         <input class = "img" th:field="*{fileDatas}" type="file" set-to="div2"/><br />  
+         <img class="image" id="div2" src="#" alt="image 2" />   
+         </div>
+         
+         <div>
+         File to upload (3): 
+         <input class = "img" th:field="*{fileDatas}" type="file" set-to="div3"/><br /> 
+         <img class="image" id="div3" src="#" alt="image 3" />    
+         </div>
+         
+         <div>
+         File to upload (4): 
+         <input class = "img" th:field="*{fileDatas}" type="file" set-to="div4" /><br /> 
+         <img class="image" id="div4" src="#" alt="image 4" />    
+         </div>
+         
+         <div>
+         File to upload (5): 
+         <input class = "img" th:field="*{fileDatas}" type="file" set-to="div5" /><br />    
+         <img class="image" id="div5" src="#" alt="image 5" /> 
+         </div>
+         
+         <input type="submit" value="Upload">
+         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+     	 </form>
+      
+      
+	  
+	
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+ <script type = "text/javascript">
+	
+
+	
+	
+	
+	 function readURL(input) { 
+		    if (input.files && input.files[0]) { 
+		     var reader = new FileReader(); 
+		     var div_id = $(input).attr('set-to');  
+		     reader.onload = function (e) { 	 
+		      $('#'+div_id).attr('src', e.target.result); 
+		 
+		     }  
+		     reader.readAsDataURL(input.files[0]);  
+		    }  
+		} 
+		 	 
+		$(".img").change(function(){ 	 
+		    readURL(this); 		 
+		});
+	
+
+	
+	</script>
+	
+
+</body>
+</html>

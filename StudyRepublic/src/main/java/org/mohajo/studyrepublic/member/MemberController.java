@@ -152,7 +152,7 @@ public class MemberController {
 		model.addAttribute("id", id);
 		System.out.println(auth);
 		System.out.println(id);
-		return "etc/admin";
+		return "etc/admin2";
 	}
 	
 	@RequestMapping("/login")

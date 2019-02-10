@@ -12,12 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-
-
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-
-
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 

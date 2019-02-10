@@ -52,12 +52,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http
 		.authorizeRequests()	
-		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/StudyPage/**").permitAll()
-		.antMatchers("/admin/**","/member/inquery","/member").hasRole("A")
-		.antMatchers("/member/**", "/tutor/signup","/tutor/insert","/pay"  ).hasRole("N")
-	
+		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**","/tutor/**").permitAll()
+		.antMatchers().hasRole("A")
+		.antMatchers("/tutor/signup","/tutor/insert","/pay"  ).hasRole("N")
+		.antMatchers("/tutor/inquery").hasRole("N")
+/*		.antMatchers("/tutor/**","/tutor/file/**").hasRole("W")*/
 		/*.antMatchers("/admin/**").hasAnyRole("A","T")*/	// a나 t  둘 다 된다.
-		.antMatchers("/tutor/**").hasRole("T");
+/*		.antMatchers("/tutor/**").hasRole("T")*/;
 
 /*		.antMatchers("/").permitAll();*/
 		// .antMatchers("/admin/**","/member/**").hasRole("A") 여기서 /member/** 는 동작하지 않음(/member 하위 접근권한 x. *바로 아랫줄 .antMatchers("/member/**").hasRole("N")가 있기 떼문

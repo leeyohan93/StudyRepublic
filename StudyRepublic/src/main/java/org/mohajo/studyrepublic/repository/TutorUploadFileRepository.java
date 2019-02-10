@@ -1,10 +1,13 @@
 package org.mohajo.studyrepublic.repository;
 
 
-import org.mohajo.studyrepublic.domain.Tutor;
+
+import java.util.List;
+
 import org.mohajo.studyrepublic.domain.TutorUploadFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 
 /**
  * @author 윤성호
@@ -16,5 +19,11 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TutorUploadFileRepository extends JpaRepository<TutorUploadFile, Integer>{
 
+	@Query(value = "select * from tutor_uploadfile where id = :id", nativeQuery = true)
+	List<TutorUploadFile> findByTutorUploadFile(String id);
+	
+	@Query(value = "select * from tutor_uploadfile where tutorfile_Url = :tutorfileUrl", nativeQuery = true)
+	TutorUploadFile findByTutorUploadPreviewFile(String tutorfileUrl);
+	
 	
 }

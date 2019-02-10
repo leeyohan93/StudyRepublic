@@ -12,34 +12,62 @@ layout:decorate="~{/layout/mainLayout}">
 <div id = "main" layout:fragment = "main">
 <div class = "inner">
 
- <table th:inline = "text" border = "1">
+<!--  <table th:inline = "text" border = "1">
 <tr>
 <td>아이디</td>
 <td>이름</td>
 <td>강사신청번호</td>
 <td>학력</td>
 <td>자기소개</td>
-</tr> 
+</tr>  -->
 
-<tr th:each="t : ${tutor}">
+<!-- <tr th:each="t : ${tutor}">
 <td th:text = "${t.member.id}"></td>
 <td th:text = "${t.member.name}"></td>
 <td th:text = "${t.tutorNumber}"></td>
 <td th:text = "${t.educationCD.codeValueKorean}"></td>
 <td th:text = "${t.introduction}"></td>
 </tr>
-</table>
+</table> -->
+<div>
+이건나오고?
+</div>
 
-<table>
-<tr th:each="t : ${tutor}">
-<td><a th:href="@{'/tutor/delete'(id=${t.tutorNumber})}">삭제하고싶니?바로삭제되니 조심.</a></td>
-</tr>
 
-</table>
+
+
+<div class = "wharthehell" th:each = "tf : ${tutoruploadfile}">
+왜안나옴??
+<input type = "text" th:value = "${tf.tutorfileOriginname}">
+<input id = "fileUrl" type = "text" th:value = "${tf.tutorfileUrl}">
+
+<a th:href = "${tf.tutorfileUrl}">파일미리보기</a> <!-- 파일미리보기 -->
+ <a th:href = "@{'/tutor/file'(tutorfileUrl=${tf.tutorfileUrl})}">파일다운로드</a> 
+
+</div>
+
+
+<!-- <form method = "post" action = "file">
+<div class = "wharthehell" th:each = "tf : ${tutoruploadfile}">
+왜안나옴??
+<input type = "text" th:value = "${tf.tutorfileOriginname}">
+<input id = "fileUrl" type = "text" th:value = "${tf.tutorfileUrl}">
+
+<a th:href = "${tf.tutorfileUrl}">파일미리보기</a> 파일미리보기
+<a th:href = "@{'/tutor/file'(fileUrl=${tf.tutorfileUrl})}">파일다운로드</a> 파일다운로드
+<a th:href="@{'/tutor/file'(id=${member.id})}"><p th:text = "${member.id}"></p></a>
+<input type = "text" name = "tutorfileUrl" th:value = "${tf.tutorfileUrl}">
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+<input type = "submit" value = "다운">
+</div>
+</form> -->
+
 
 </div>
 </div>
 </div>
+
+
 
 </body>
 </html>

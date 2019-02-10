@@ -24,7 +24,6 @@ public class Tutor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "tutor_number")
@@ -47,6 +46,12 @@ public class Tutor implements Serializable {
    
    @OneToMany(cascade=CascadeType.ALL)
    @JoinColumn(name = "tutor_number_")
-   private List <TutorInterest> tutorinterest;   
+   private List <TutorInterest> tutorinterest;
+   
+/*   @OneToMany(cascade=CascadeType.ALL)
+   @JoinColumn(name = "tutor_number__")
+   private List <TutorUploadFile> tutoruploadfile;
+*/
+   
    
 }
