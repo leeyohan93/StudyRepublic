@@ -1,108 +1,120 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymleaf.org"
- layout:decorate="~{/layout/studypageLayout}">
+	layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
-<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
 <!-- default header name is X-CSRF-TOKEN -->
-<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
 <title>스터디 공지사항 게시판 입니다.</title>
-<link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
 </head>
 <body>
-	<div id="main" layout:fragment = "main">
-	</div>
 	<div id="right" layout:fragment="right">
-		<table>
-			<tr>
-				<td>진행 날짜</td>
-				<td>제목</td>
-				<td>위치</td>
-			</tr>
-			<!-- <td th:text = "${tmp}"> -->
-			<tr th:each="fasn : ${findAllStudyNoticeboard}">
-				<div>
-				<input type="hidden" th:value="${fasn.number}" name="number" />
-				<td th:text = "${#dates.format(fasn.day, 'MM월dd일')}"></td>
-				<td><a th:href="@{#}" class="boardList" th:text="${fasn.title}" th:title="${fasn.number}"></a></td>
-				<td th:text = "${fasn.location}"></td>
-				</div>
-				
-				
-				<!-- <td th:text = "${tmp.studyNoticeboardReply}"></td> -->
-				<!-- <table> -->
-				<!-- <tr:block th:each = "snr : ${fasn.studyNoticeboardReply}">
-						<td th:text = "${snr.studyNoticeboardReplyId}"></td>
-						<td th:text = "${snr.studId}"></td>
-						<td th:text = "${snr.date}"></td>
-						<td th:text = "${snr.content}"></td> -->
-					<!-- <td th:text = "${snr.studyNoticeboardReplyId}"></td>
-					<td th:text = "${snr.studyId}"></td>
-					<td th:text = "${snr.date}"></td>
-					<td th:text = "${snr.replyGroup}"></td>
-					<td th:text = "${snr.replyStep}"></td>
-					<td th:text = "${snr.studyNoticeboardId"></td> -->
-			</tr>
-		</table>
-		<script>
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-		$(function() {
-		    $(document).ajaxSend(function(e, xhr, options) {
-		        xhr.setRequestHeader(header, token);
-		    });
-		});
-		
-		$(".boardList").on("click", function(){
+		<div id="">
 			
-			var StudyNoticeboard = {
+		</div>
+		<div>
+			<table>
+				<tr>
+					<td>진행 날짜</td>
+					<td>제목</td>
+					<td>위치</td>
+				</tr>
+				<!-- <td th:text = "${tmp}"> -->
+				<tr th:each="fasn : ${findAllStudyNoticeboard}">
+					<div>
+						<input type="hidden" th:value="${fasn.number}" name="number" />
+						<td th:text="${#dates.format(fasn.day, 'MM월dd일')}"></td>
+						<td><a th:href="@{#}" class="boardList"
+							th:text="${fasn.title}" th:title="${fasn.number}"></a></td>
+					<td th:text="${fasn.location}"></td>
+					</div>
+					<!-- <td th:text = "${tmp.studyNoticeboardReply}"></td> -->
+					<!-- <table> -->
+					<!-- <tr:block th:each = "snr : ${fasn.studyNoticeboardReply}">
+							<td th:text = "${snr.studyNoticeboardReplyId}"></td>
+							<td th:text = "${snr.studId}"></td>
+							<td th:text = "${snr.date}"></td>
+							<td th:text = "${snr.content}"></td> -->
+					<!-- <td th:text = "${snr.studyNoticeboardReplyId}"></td>
+						<td th:text = "${snr.studyId}"></td>
+						<td th:text = "${snr.date}"></td>
+						<td th:text = "${snr.replyGroup}"></td>
+						<td th:text = "${snr.replyStep}"></td>
+						<td th:text = "${snr.studyNoticeboardId"></td> -->
+				</tr>
+			</table>
+		</div>
+		<div id="writeButton">
+			<div id="writeButtonBlockSpace"></div>
+			<div id="writeButtonRealSpace">
+				<button type="button" class="btn btn-dark">글쓰기</button>
+			</div>
+		</div>
+		<div id="pagingButtons">
+			<span></span> <span></span> <span></span> <span></span>
+		</div>
+		<script>
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(function() {
+				$(document).ajaxSend(function(e, xhr, options) {
+					xhr.setRequestHeader(header, token);
+				});
+			});
+
+			$(".boardList").on("click", function() {
+
+				var StudyNoticeboard = {
 					studyId : "BB00001",
 					id : "aaa123",
 					number : this.title
 				}
-			
-			extra = this;
-			
-			$.ajax({
-				type:"POST",
-				contentType: "application/json; charset=UTF-8",
-				url:"/StudyPage/Noticeboard/show",
-				data: JSON.stringify(StudyNoticeboard),
-				dataType: "json",
-				success: function(data){
+
+				extra = this;
+
+				$.ajax({
+					type : "POST",
+					contentType : "application/json; charset=UTF-8",
+					url : "/StudyPage/Noticeboard/show",
+					data : JSON.stringify(StudyNoticeboard),
+					dataType : "json",
+					success : function(data) {
 						console.log(StudyNoticeboard.number)
 						console.log(data);
 						console.log("success");
 						/**
-						*설명 : 덧글만 따로 뽑아내기 위한 Ajax
-						*주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
-						*/
+						 *설명 : 덧글만 따로 뽑아내기 위한 Ajax
+						 *주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
+						 */
 						$.ajax({
-							type:"POST",
-							contentType: "application/json; charset=UTF-8",
-							url:"/StudyPage/Noticeboard/replyshow",
-							data: JSON.stringify(StudyNoticeboard),
-							dataType: "json",
-							success: function(data){
-									data.forEach(function(list){
-										console.log(list);
-									});
-									console.log("success");
-							},error: function() {
+							type : "POST",
+							contentType : "application/json; charset=UTF-8",
+							url : "/StudyPage/Noticeboard/replyshow",
+							data : JSON.stringify(StudyNoticeboard),
+							dataType : "json",
+							success : function(data) {
+								data.forEach(function(list) {
+									console.log(list);
+								});
+								console.log("success");
+							},
+							error : function() {
 								alert("error");
 							}
 						});
-				},error: function() {
-					alert("error");
-				}
+					},
+					error : function() {
+						alert("error");
+					}
+				});
+
 			});
-			
-			
-		});
-	</script>
+		</script>
 	</div>
 </body>
 

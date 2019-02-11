@@ -82,6 +82,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.key("member")
 		.userDetailsService(memberservice);
 		
+		http.headers().frameOptions().sameOrigin();
+		
 		http
 		.rememberMe()
 		.key("member")

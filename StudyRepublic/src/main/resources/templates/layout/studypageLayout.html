@@ -6,13 +6,14 @@
 -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorate="~{/layout/mainLayout}">
 <head>
 <title>Study Republic</title>
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+<!-- <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
 <link rel="stylesheet"
 	th:href="@{/bootstrap/css/bootstrap.min.css}">
 <script
@@ -20,43 +21,16 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script
-	th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	th:src="@{/bootstrap/js/bootstrap.min.js}"></script> -->
 <link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
 
 </head>
-<body class="is-preload">
-	<!-- Wrapper -->
-	<div id="wrapper">
-
-		<!-- Header -->
-		<header id="header" layout:fragment="header">
-			<div class="inner">
-
-				<!-- Login -->
-				<div id="logout" sec:authorize="isAuthenticated()">
-					<ul>
-					<li><a th:href="@{/logout}">로그아웃</a></li>
-					<li><a th:href="@{/mypage}">마이페이지</a></li>
-					</ul>
-					</sec:authorize>
-				</div>
-
-				<div id="login" sec:authorize="isAnonymous()">
-					<ul>
-						<li><a href="/login">로그인</a></li>
-						<li><a href="/member/signup">회원가입</a></li>
-					</ul>
-					</sec:authorize>
-				</div>
-
-				<!-- Logo -->
-				<a th:href="@{/index.html}" class="logo"> <span class="symbol"><img
-						th:src="@{/images/logo.svg}" alt="" /></span><span>Study Republic</span>
-                </a>
-			</div>
-		</header><!-- Main
-		--><div id="content"
-			><div id="left" layout:fragment="left">
+<body>
+	<nav layout:fragment="header-nav"></nav>
+	<nav id="menu" layout:fragment="menu"></nav>
+	<div id="main" layout:fragment="main">
+		<div class="inner">
+			<div id="left" layout:fragment="left">
 				<a th:href="@{/StudyPage/Main}">home</a></br>
 				<a th:href="@{/StudyPage/Noticeboard}">공지사항</a></br>
 				<a th:href="@{/StudyPage/Fileshareboard}">파일 공유</a></br>
@@ -77,13 +51,13 @@
 			</div>
 		</div>
 	</div>
+	<footer id="nonevisiblefooter" layout:fragment="footer"><div></div></footer>
 
 	<!-- Scripts -->
-	<script th:src="@{/assets/js/jquery.min.js}"></script>
+	<!-- <script th:src="@{/assets/js/jquery.min.js}"></script>
 	<script th:src="@{/assets/js/browser.min.js}"></script>
 	<script th:src="@{/assets/js/breakpoints.min.js}"></script>
 	<script th:src="@{/assets/js/util.js}"></script>
-	<script th:src="@{/assets/js/main.js}"></script>
-
+	<script th:src="@{/assets/js/main.js}"></script> -->
 </body>
 </html>
