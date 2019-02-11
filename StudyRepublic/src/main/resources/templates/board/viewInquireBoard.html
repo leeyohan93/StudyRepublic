@@ -47,7 +47,7 @@
 	<div id="main" layout:fragment="main">
 		<div class="inner">
 			<!-- 게시글내용 시작 -->
-			<div class="container">
+			
 
 
 				<div class="beforeAfter">
@@ -55,10 +55,10 @@
 					<a class="btn btn-default" role="button" id="goBeforeFreePage"
 						name="goBeforeFreePage"
 						th:href="@{'goBeforeFreePage'(inquireBoardId=${inquireBoard.inquireBoardId})}">이전글
-						▲</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
+						▼</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
 						name="goAfterFreePage"
 						th:href="@{'writeBoard'(inquireBoardId=${inquireBoard.inquireBoardId})}">다음글
-						▼</a>
+						▲</a>
 
 				</div>
 
@@ -366,5 +366,9 @@
 
 
      </script>
+     	
+     
+		
+
    </body>
 </html>

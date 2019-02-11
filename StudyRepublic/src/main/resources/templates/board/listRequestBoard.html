@@ -5,7 +5,8 @@
   -listRequestBoard.html 추가
  -->
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
 <head>
 
 <title>게시판 글목록</title>
@@ -23,7 +24,7 @@
 
 <style>
 .boardName {
-	margin: 100px 0px 50px 50px;
+	margin: 50px 0px 20px 50px;
 }
 
 .boardNotice {
@@ -97,6 +98,13 @@ span.listReplyCount {
 	color: red;
 }
 
+#listOption{
+  width: 100px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
 
 </style>
 
@@ -107,7 +115,6 @@ span.listReplyCount {
 	<div class="wrapper">
 		<div id="main" layout:fragment="main">
 			<div class="inner">
-				<div class="container">
 					<!--게시판 타이틀  -->
 					<div class="boardName">
 						<h1>
@@ -132,7 +139,7 @@ span.listReplyCount {
 					<div th:with="result=${list.list}">
 						<div class="table">
 							<table
-								class="boardTable table table-bordered table-hover table-responsive">
+								class="boardTable table table-bordered table-hover">
 								<thead>
 									<tr>
 										<th class="boardTableTh col-sm-1">번호</th>
@@ -236,10 +243,7 @@ span.listReplyCount {
 
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-
+	
 
 
 
@@ -322,6 +326,9 @@ span.listReplyCount {
 	
 	
 </script>
+		</div>
+		</div>
+
 
 </body>
 

@@ -31,7 +31,7 @@
 <style>
 #content {
 	resize: none;
-	width: 80%;
+	width: 100%;
 	height: 400px;
 	padding: 12px 13px;
 	border: 1px solid #ccc;
@@ -48,19 +48,15 @@
 	<div id="main" layout:fragment="main">
 		<div class="inner">
 			<!-- 게시글내용 시작 -->
-			<div class="container">
-
 
 				<div class="beforeAfter">
-
 					<a class="btn btn-default" role="button" id="goBeforeFreePage"
 						name="goBeforeFreePage"
 						th:href="@{'goBeforeFreePage'(freeBoardId=${freeBoard.freeBoardId})}">이전글
-						▲</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
+						▼</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
 						name="goAfterFreePage"
-						th:href="@{'writeBoard'(freeBoardId=${freeBoard.freeBoardId})}">다음글
-						▼</a>
-
+						th:href="@{'goAfterFreePage'(freeBoardId=${freeBoard.freeBoardId})}">다음글
+						▲</a>
 				</div>
 
 				<!-- 게시판명  -->
@@ -192,7 +188,7 @@
 				<!-- 게시글 내용 끝 -->
 
 				<!--  댓글  -->
-				<div class="container">
+				<div class="boardReply">
 					<label for="content">댓글수&nbsp&nbsp<span name="replyCount"
 						id="replyCount"></span></label>
 					<form id="commentInsertForm" name="commentInsertForm">
@@ -209,14 +205,19 @@
 					</form>
 				</div>
 
-				<div class="container">
+				<div class="boardReplyList">
 					<div class="commentList"></div>
 				</div>
+				
+				<div class="boardReplySecondList">
+					<div class="commentSecondList"></div>
+				</div>
+				
 
 				<!--댓글끝 -->
 
 			</div>
-		</div>
+		
 
 
 
@@ -232,7 +233,6 @@
 //게시글 번호
  var freeBoardId = [[${freeBoard.freeBoardId}]];
  var likeCount = [[${freeBoard.likeCount}]]
- console.log(freeBoardId);
  $(document).ready(function(){
 	
 	 //ajax사용
@@ -255,7 +255,6 @@
  
  //추천 클릭
  $("#likeCountBtn").click(function(){
-	 alert(freeBoardId);
 	 $.ajax({
 		 url : '/board/likeCountFreeBoard',
 		 type : 'post',
@@ -308,6 +307,7 @@
              $.each(data, function(key, value){ 
                  a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
                  a += '<div class="commentInfo'+value.freeBoardReplyId+'">'+' 작성자 : '+value.id+'&nbsp&nbsp&nbsp'+value.date;
+                 a += '<a onclick="commentSecond('+value.freeBoardReplyId+');"> 답글 </a>';
                  a += '<a onclick="commentUpdate('+value.freeBoardReplyId+',\''+value.content+'\');"> 수정 </a>';
                  a += '<a onclick="commentDelete('+value.freeBoardReplyId+');"> 삭제 </a> </div>';
                  a += '<div class="commentContent'+value.freeBoardReplyId+'"> <p> 내용 : '+value.content +'</p>';
@@ -321,7 +321,7 @@
  }
   
  //댓글 등록
- function commentInsert(insertData){ alert(insertData);
+ function commentInsert(insertData){
      $.ajax({
          url : '/comment/registerFreeReply',
          type : 'post',
@@ -376,10 +376,26 @@
          }
      });
  }
+ 
+ //답글 등록
+ function commentSecond(freeBoardReplyId){
+     
+	 var a ='';
+     
+     a += '<div class="input-group">';
+     a += '<input type="text" class="form-control" name="content_'+freeBoardReplyId+'" value="'+content+'"/>';
+     a += '<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="commentUpdateProc('+freeBoardReplyId+');">등록</button> </span>';
+     a += '</div>';
+     
+     $('.commentSecondList').html(a);
+	 
+ }
 
 
 
 
      </script>
+     </div>
+    
    </body>
 </html>

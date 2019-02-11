@@ -6,7 +6,8 @@
   -2.2 listFreeBoard.html 으로 이름변경
  -->
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
 <head>
 
 <title>게시판 글목록</title>
@@ -24,7 +25,7 @@
 
 <style>
 .boardName {
-	margin: 100px 0px 50px 50px;
+	margin: 50px 0px 20px 50px;
 }
 
 .boardNotice {
@@ -83,7 +84,7 @@
 }
 
 #boardSearchBtn {
-	width: 50px;
+	width: 80px;
 	height: 40px;
 	font-weight: bold;
 	font-siez: 16px;
@@ -92,10 +93,21 @@
 	border-radius: 4px;
 	cursor: pointer;
 	display: inline-block;
+	
 }
 
 span.listReplyCount {
 	color: red;
+}
+#listOption{
+  width: 100px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
+#listBoardNotice{
+display: none;
 }
 
 
@@ -108,7 +120,7 @@ span.listReplyCount {
 	<div class="wrapper">
 		<div id="main" layout:fragment="main">
 			<div class="inner">
-				<div class="container">
+				
 					<!--게시판 타이틀  -->
 					<div class="boardName">
 						<h1>
@@ -131,9 +143,11 @@ span.listReplyCount {
 
 					<!--테이블  -->
 					<div th:with="result=${list.list}">
+
+					
 						<div class="table">
 							<table
-								class="boardTable table table-bordered table-hover table-responsive">
+								class="boardTable table table-bordered table-hover">
 								<thead>
 									<tr>
 										<th class="boardTableTh col-sm-1">번호</th>
@@ -146,8 +160,10 @@ span.listReplyCount {
 								</thead>
 
 								<tbody>
-									<tr th:each="board:${result.content}">
-										<td class="boardTableTd col-sm-1">[[${board.freeBoardId}]]</td>
+									<tr th:each="board:${result.content}">	
+									   													
+									    <td id ="listBoardNotice">[[${board.notice}]]</td>
+										<td class="boardTableTd col-sm-1" id="listBoardTitle">[[${board.freeBoardId}]]</td>
 										<td class="text-left col-sm-5"><a
 											th:href='${board.freeBoardId}' class="boardLink" >[[${board.title}]]</a>
 											<a th:href='${board.freeBoardId}' class="boardLink">
@@ -158,8 +174,9 @@ span.listReplyCount {
 											HH:mm')}]]</td>
 										<td class="boardTableTd col-sm-1">[[${board.hit}]]</td>
 										<td class="boardTableTd col-sm-1">[[${board.likeCount}]]</td>
-
-									</tr>
+									     						
+                                       </tr>
+									
 								</tbody>
 							</table>
 						</div>
@@ -197,10 +214,10 @@ span.listReplyCount {
 						<div class="boardSearch">
 
 							<select id="boardSearchPeriod">
-								<option value="allDay">전체기간</option>
-								<option value="weak">1주</option>
-								<option value="month">1개월</option>
-								<option value="sMonth">6개월</option>
+								<option value="allDay" th:selected="${pageDTO.searchType} =='allDay'">전체기간</option>
+								<option value="weak" th:selected="${pageDTO.searchType} =='weak'">1주</option>
+								<option value="month" th:selected="${pageDTO.searchType} =='month'">1개월</option>
+								<option value="sMonth"th:selected="${pageDTO.searchType} =='sMonth'">6개월</option>
 							</select> <select id="boardSearchType">
 								<option value="all" th:selected="${pageDTO.searchType} =='all'">제목+내용</option>
 								<option value="title"
@@ -227,6 +244,7 @@ span.listReplyCount {
 								th:value=${list.currentPage.pageSize}> <input
 								type="hidden" name="searchType" th:value=${pageDTO.searchType}>
 							<input type="hidden" name="keyword" th:value=${pageDTO.keyword}> 
+							<input type="hidden" name="searchPeriod" th:value=${pageDTO.searchPeriod}>
 							<input type="hidden" name="boardType" value="freeBoard">
 						</form>
 						
@@ -237,10 +255,8 @@ span.listReplyCount {
 
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-
+				
+	
 
 
 
@@ -249,8 +265,11 @@ span.listReplyCount {
 <script th:inline="javascript">
 
      $(document).ready(function() {
+    
 		var formObj = $("#f1");
 		var formLpt = $("#f2");
+		
+		
         
 		//페이징
 		$(".pagination a").click(function(e) {
@@ -282,8 +301,10 @@ span.listReplyCount {
 		$("#boardSearchBtn").click(function(e){
 			
 			var typeStr = $("#boardSearchType").find(":selected").val();
+			var typeDateStr = $("#boardSearchPeriod").find(":selected").val();
 			var keywordStr = $("#boardSearchKeyword").val();
 			
+			formObj.find("[name='searchPeriod']").val(typeDateStr);
 			formObj.find("[name='searchType']").val(typeStr);
 			formObj.find("[name='keyword']").val(keywordStr);
 			formObj.find("[name='page']").val("1");
@@ -314,7 +335,7 @@ span.listReplyCount {
 			formLpt.submit(); 
 		
 		});
-
+   
 		
 		
 	
@@ -322,6 +343,9 @@ span.listReplyCount {
 	
 	
 </script>
+		</div>
+		</div>
+	
 
 </body>
 

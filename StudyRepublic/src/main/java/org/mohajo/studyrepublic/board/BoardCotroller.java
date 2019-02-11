@@ -15,7 +15,9 @@ import org.mohajo.studyrepublic.repository.InquireBoardRepository;
 import org.mohajo.studyrepublic.repository.RequestBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,8 +60,9 @@ public class BoardCotroller {
        	       
 		log.info(pageDTO.toString());
 		Pageable page = pageDTO.makePageable(0, "freeBoardId");
-		Page<FreeBoard> list = freeBoardRepository.findAll(freeBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword()),page);
-       
+		Pageable page1 = pageDTO.noticeMakePageable("notice", "freeBoardId");
+		
+		Page<FreeBoard> list = freeBoardRepository.findAll(freeBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),page1);     
 		model.addAttribute("list", new PageMaker<>(list));
         model.addAttribute("boardName", "자유게시판");
 
@@ -134,7 +137,7 @@ public class BoardCotroller {
 
 		switch(boardType) {
 		case "freeBoard" : 
-			
+		
 			FreeBoard freeBoardHit = freeBoardRepository.findById(freeBoard.getFreeBoardId()).get();
 			freeBoardHit.setHit(freeBoardHit.getHit() + 1);
 			freeBoardRepository.save(freeBoardHit);
@@ -233,20 +236,32 @@ public class BoardCotroller {
 	}
 	
 	//이전글로 이동
-//	@GetMapping("/goBeforeFreePage")
-//	public String goBeforeFreePage(int freeBoardId, @ModelAttribute("freeBoard")FreeBoard freeBoard, Model model) {
-//		
-//		int beforeFreeBoard = freeBoardId -1 ;
-//		log.info(beforeFreeBoard+"");
-//		
-//		log.info(freeBoardId+"");
-//		FreeBoard board = freeBoardRepository.findByfreeBoardId(beforeFreeBoard);
-//		log.info(board.toString());
-////		freeBoardRepository.findById(freeBoardId).ifPresent(board-> model.addAttribute("freeBoard", board));
-//		
-//		
-//		return "redirect:/board/view";
-//	}
+	@GetMapping("/goBeforeFreePage")
+	public String goBeforeFreePage(String boardType, int freeBoardId, Model model) {
+		
+		log.info(freeBoardId+"");
+		FreeBoard beforeBoard = freeBoardRepository.beForeBoard(freeBoardId);
+		log.info(beforeBoard.toString());
+        model.addAttribute("freeBoard",beforeBoard);
+		
+		return "board/viewFreeBoard";
+		
+	}
+	
+	//다음글로 이동
+		@GetMapping("/goAfterFreePage")
+		public String goAfterFreePage(String boardType, int freeBoardId, Model model) {
+			
+			log.info(freeBoardId+"");
+			FreeBoard beforeBoard = freeBoardRepository.beAfterBoard(freeBoardId);
+			log.info(beforeBoard.toString());
+	        model.addAttribute("freeBoard",beforeBoard);
+			
+			return "board/viewFreeBoard";
+			
+		}
+	
+	
 	
 	//글목록 갯수
 	@GetMapping("/listWriteOption")
@@ -260,7 +275,7 @@ public class BoardCotroller {
 		switch(boardType) {
 		case "freeBoard":
 			Pageable page = pageDTO.makePageable(0, "freeBoardId");
-			Page<FreeBoard> list = freeBoardRepository.findAll(freeBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword()),page);
+			Page<FreeBoard> list = freeBoardRepository.findAll(freeBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),page);
 	       
 			model.addAttribute("list", new PageMaker<>(list));
 	        model.addAttribute("boardName", "자유게시판");
@@ -330,8 +345,9 @@ public class BoardCotroller {
 		inquireBoardRepository.save(inquireBoardComment);
 		log.info(inquireBoardComment.toString());
 		
-		return "redirect:/board/listInquireBoard";		
+		return "redirect:/board/listInquireBoard";
 	}
+	
 	
 }
 	

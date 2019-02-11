@@ -45,7 +45,7 @@
             <form id="messageForm" name="messageForm" nameForm="messageForm">
                 <div class="form-group">
                     <div class="input-group clearfix">
-                        <input type="text" id="message"  autocomplete="off" class="form-control"/>
+                        <input type="text" id="message"  class="form-control"/>
                         <button type="submit" class="primary">보내기</button>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
   </body>
 </html>
 <script>
-'use strict';
+
 
 var usernamePage = document.querySelector('#username-page');
 var chatPage = document.querySelector('#chat-page');
@@ -130,10 +130,10 @@ function onMessageReceived(payload) {
 
     if(message.type === 'JOIN') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' 님이 접속하셨습니다!';
+        message.content = message.sender + ' 님이 접속하셨습니다.';
     } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' 님이 떠나셨습니다!';
+        message.content = message.sender + ' 님이 떠나셨습니다.';
     } else {
         messageElement.classList.add('chat-message');
 

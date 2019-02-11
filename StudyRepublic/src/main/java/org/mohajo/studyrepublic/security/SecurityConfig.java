@@ -100,8 +100,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.tokenValiditySeconds(60*60*24);
 
 		 
-		//스마트에디터 관련 설정
-		 http.headers().frameOptions().disable();
+		 //스마트에디터 관련 설정
+		 http.headers().frameOptions().sameOrigin();
 
 		
 		http.addFilterAfter(new ExceptionHandlerFilter(), SecurityContextHolderAwareRequestFilter.class);

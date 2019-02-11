@@ -27,7 +27,7 @@ import com.querydsl.core.types.Predicate;
 public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, QuerydslPredicateExecutor<FreeBoard>{
 
 
-	public default Predicate makePredicate(String searchType, String keyword) {
+	public default Predicate makePredicate(String searchType, String keyword, String searchPeriod) {
 
 		BooleanBuilder builder = new BooleanBuilder();
 
@@ -36,6 +36,7 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, 
 		if(searchType ==null ) {
 			return builder;
 		}
+
 
 		switch(searchType){
 		case "all":
@@ -60,8 +61,12 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, 
 	List<FreeBoard> findFreeBoardById(String id);
 	
 	
-	@Query(value="select f from FreeBoard f where f.freeBoardId=:be")
-	FreeBoard findByfreeBoardId(@Param("be") int beforeFreeBoard);
+	@Query(value = "select * from freeboard f where :fi > f.freeboard_id limit 1", nativeQuery=true)
+	FreeBoard beForeBoard(@Param("fi")int freeBoardId);
+	
+	@Query(value = "select * from freeboard f where f.freeboard_id >:fi limit 1", nativeQuery=true)
+	FreeBoard beAfterBoard(@Param("fi")int freeBoardId);
+
 
 
 

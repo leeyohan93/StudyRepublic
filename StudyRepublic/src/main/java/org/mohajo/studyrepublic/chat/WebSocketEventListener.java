@@ -20,13 +20,15 @@ import lombok.extern.java.Log;
 @Log
 @Component
 public class WebSocketEventListener {
-
+    
+	
+	//메시지 처리기 클래스
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        log.info("소켓연결");
+        log.info("소켓연결됬을때~");
     }
 
     @EventListener
