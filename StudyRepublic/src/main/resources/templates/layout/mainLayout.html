@@ -24,19 +24,15 @@
 #pinterest2cd {
 	display: none
 }
-
 #dinterest2cd {
 	display: block-inline
 }
-
 #winterest2cd {
 	display: none
 }
-
 #ninterest2cd {
 	display: none
 }
-
 #edu {
 	display: none
 }
@@ -56,12 +52,11 @@
 
 				<div>
 				<!-- Login -->
-				<div id="logout" sec:authorize="isAuthenticated()">
+				<div id = "logout" sec:authorize="hasRole('N')">
 					<ul>
 						<li><a th:href="@{/logout}">로그아웃</a></li>
 						<li><a th:href="@{/mypage}">마이페이지</a></li>
 					</ul>
-					</sec:authorize>
 				</div>
 
 				<div id="login" sec:authorize="isAnonymous()">
@@ -71,6 +66,14 @@
 					</ul>
 					</sec:authorize>
 				</div>
+				
+				<div id = "logout" sec:authorize="hasRole('A')">
+						<ul>
+						<li><a th:href="@{/logout}">로그아웃</a></li>
+						<li><a th:href="@{/admin/index}">관리자페이지</a></li>
+						</ul>
+				</div>
+				
 
 
 				<!-- Logo -->
@@ -270,5 +273,4 @@
 
 
 </body>
-
 </html>

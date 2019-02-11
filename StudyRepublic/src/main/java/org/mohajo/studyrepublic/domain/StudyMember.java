@@ -3,7 +3,6 @@ package org.mohajo.studyrepublic.domain;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -12,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
-
 import lombok.Data;
 import lombok.ToString;
 
@@ -22,9 +20,9 @@ import lombok.ToString;
  * @version	0.0
  * - 스터디원 상세 DTO
  */
+
 @Data
 @Entity
-@ToString(exclude="studyNoticeboard, studyNoticeboardReply")
 public class StudyMember implements Serializable {
 
 		@EmbeddedId
@@ -53,18 +51,14 @@ public class StudyMember implements Serializable {
 		@JoinColumn(name="studyId")
 		private Study study;
 		
-		/*@OneToMany(mappedBy="studyMember")
-		private List<StudyNoticeboard> studyNoticeboard;*/
-		/*@OneToMany(mappedBy="studyMember")
-		private List<StudyFileshareboard> studyFileshareboard;
 		@OneToMany(mappedBy="studyMember")
-		private List<StudyQnaboard> studyQnaboard;*/
+		private List<StudyNoticeboard> studyNoticeboard;
 		
-		/*@OneToMany(mappedBy="studyReplyMember")
-		private List<StudyNoticeboardReply> studyNoticeboardReply;*/
-		/*@OneToMany(mappedBy="studyReplyMember")
-		private List<StudyFileshareboardReply> studyFileshareboardReply;
-		@OneToMany(mappedBy="studyReplyMember")
-		private List<StudyQnaboardReply> studyQnaboardReply;*/
+		@OneToMany(mappedBy="studyMember")
+		private List<StudyFileshareboard> studyFileshareboard;
+		
+		@OneToMany(mappedBy="studyMember")
+		private List<StudyQnaboard> studyQnaboard;
+		
 
 }

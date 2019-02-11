@@ -10,6 +10,7 @@ import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Data;
 
@@ -26,6 +27,7 @@ public class MemberSecurity extends User {
 	
 	private Member member;
 	private String name;
+	
 	
 	public MemberSecurity(String username, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);

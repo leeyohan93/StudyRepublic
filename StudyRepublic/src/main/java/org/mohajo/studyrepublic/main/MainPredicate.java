@@ -8,11 +8,8 @@ import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.QStudyInterest;
 import org.mohajo.studyrepublic.domain.QStudyLocation;
 import org.mohajo.studyrepublic.domain.Study;
-import org.mohajo.studyrepublic.repository.StudyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Predicate;
 
 /**
