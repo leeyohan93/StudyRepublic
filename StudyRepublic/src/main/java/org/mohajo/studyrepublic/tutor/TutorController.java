@@ -202,10 +202,10 @@ public class TutorController implements Serializable {
 				         
 	      
 				      tutoruploadfile.setTutorfileSavename(fileSaveName);      
-/*				      String fullUrl = uploadRootPath+"\\"+fileSaveName;
-				      tutoruploadfile.setTutorfileUrl(fullUrl);	 */
+				      String fullUrl = uploadRootPath;
+				      tutoruploadfile.setTutorFileFullUrl(fullUrl);	 
 				      String partUrl = "\\upload\\"+fileSaveName;
-				      tutoruploadfile.setTutorfileUrl(partUrl);	
+				      tutoruploadfile.setTutorfilePartUrl(partUrl);	
 				      tutoruploadfile.setMember(member);
 				      tutoruploadfilerepository.save(tutoruploadfile);
 		               		      
@@ -217,40 +217,11 @@ public class TutorController implements Serializable {
 		         }
 		      }
 		      
-		      /*upload/nPGZp1yi55UvwJHOFaza3aKfHE16oD3n.jpg*/
 		      	 	   	     
 		      model.addAttribute("uploadedFiles", uploadedFiles);
 		      model.addAttribute("failedFiles", failedFiles);
 	
 	   }
-	   
-	  public void downloadFile(TutorUploadFile tutoruploadfile, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		  
-		  File file = new File(tutoruploadfile.getTutorfileUrl(),tutoruploadfile.getTutorfileOriginname());
-		  
-		  BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-		  
-		  String header = request.getHeader("User-Agent");
-		  String fileName;
-	/*	  
-		    if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
-		        //인터넷 익스플로러 10이하 버전, 11버전, 엣지에서 인코딩 
-		        fileName = URLEncoder.encode(boardfile.getFileOrgName(), "UTF-8");
-		    } else {
-		        //나머지 브라우저에서 인코딩
-		        fileName = new String(boardfile.getFileOrgName().getBytes("UTF-8"), "iso-8859-1");
-		    }
-		    //형식을 모르는 파일첨부용 contentType
-		    response.setContentType("application/octet-stream");
-		    //다운로드와 다운로드될 파일이름
-		    response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName + "\"");
-		    //파일복사
-		    FileCopyUtils.copy(in, response.getOutputStream());
-		    in.close();
-		    response.getOutputStream().flush();
-		    response.getOutputStream().close();*/
-		  	  
-	  }
 	   
 	
 	@RequestMapping("/tutor/inquery")
@@ -259,14 +230,10 @@ public class TutorController implements Serializable {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		
-/*		Tutor tutor = tutorrepository.findByTutor(id);*/
-/*		model.addAttribute("tutor", tutor); */
 		
 		List <TutorUploadFile> tutoruploadfile = tutoruploadfilerepository.findByTutorUploadFile(id);
 		
-/*		String tutorfileName = tutoruploadfile.
-		String tutorfileUrl = tutoruploadfile.getTutorfileUrl();*/
-		
+
 		model.addAttribute("tutoruploadfile", tutoruploadfile);			
 		
 		return "tutor/tutor_signupinquery";		
@@ -280,11 +247,11 @@ public class TutorController implements Serializable {
 	}	
 	
 	
-	public void previewFile(HttpServletRequest request, @RequestParam String tutorfileUrl, HttpServletResponse response) throws Exception {
+	public void previewFile(HttpServletRequest request, @RequestParam String tutorFileFullUrl, HttpServletResponse response) throws Exception {
 		
-		TutorUploadFile tutoruploadfile = tutoruploadfilerepository.findByTutorUploadPreviewFile(tutorfileUrl);
+		TutorUploadFile tutoruploadfile = tutoruploadfilerepository.findByTutorUploadPreviewFile(tutorFileFullUrl);
 		
-		File file = new File(tutorfileUrl, tutoruploadfile.getTutorfileSavename());
+		File file = new File(tutorFileFullUrl, tutoruploadfile.getTutorfileSavename());
 		
 		 BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 		 
@@ -305,8 +272,8 @@ public class TutorController implements Serializable {
 		 }	
 	
 	@GetMapping("/tutor/file")
-	public String downloadFile(HttpServletRequest request, @RequestParam String tutorfileUrl, HttpServletResponse response) throws Exception {
-		previewFile(request, tutorfileUrl, response);
+	public String downloadFile(HttpServletRequest request, @RequestParam String tutorFileFullUrl, HttpServletResponse response) throws Exception {
+		previewFile(request, tutorFileFullUrl, response);
 		return "redirect:/tutor/inquery";
 	}
 	

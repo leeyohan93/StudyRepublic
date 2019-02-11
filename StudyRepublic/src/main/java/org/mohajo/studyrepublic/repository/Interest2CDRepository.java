@@ -9,6 +9,7 @@ import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.StudyInterest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -18,7 +19,7 @@ import org.springframework.data.jpa.repository.Query;
  * - AdminCommentRepository추가
  * 
  */
-
+@Transactional(readOnly = true)
 public interface Interest2CDRepository extends JpaRepository<Interest2CD, String>{
 	
 	@Query(value = "select * from interest_2_cd where interest_1_code = 'P'", nativeQuery = true) 

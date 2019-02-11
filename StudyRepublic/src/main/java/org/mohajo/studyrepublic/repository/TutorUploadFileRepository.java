@@ -22,8 +22,8 @@ public interface TutorUploadFileRepository extends JpaRepository<TutorUploadFile
 	@Query(value = "select * from tutor_uploadfile where id = :id", nativeQuery = true)
 	List<TutorUploadFile> findByTutorUploadFile(String id);
 	
-	@Query(value = "select * from tutor_uploadfile where tutorfile_Url = :tutorfileUrl", nativeQuery = true)
-	TutorUploadFile findByTutorUploadPreviewFile(String tutorfileUrl);
+	@Query(value = "select * from tutor_uploadfile where tutorfile_fullurl = :tutorfileFullUrl", nativeQuery = true)
+	TutorUploadFile findByTutorUploadPreviewFile(String tutorfileFullUrl);
 	
 	
 }

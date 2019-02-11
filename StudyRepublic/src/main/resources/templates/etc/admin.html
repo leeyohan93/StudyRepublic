@@ -52,11 +52,13 @@ SecurityConfig에서 지정한 경로 (/tutor로 설정한 hasrole만 권한이 
 <a href='/tutor/aaa'>TUTOR AAA</a>  
   </p> -->
   
-<div sec:authorize="hasRole('N)">노말</div>
-<div sec:authorize="hasAnyRole('A', 'T)">어드민</div> 
+<!-- <div sec:authorize="hasRole('N')">노말1</div>
+<div sec:authorize="hasAnyRole('A', 'T')">어드민애니롤</div>  -->
+<div sec:authorize="hasRole('A')">어드민1</div>
 
-<!-- <div sec:authorize="hasAuthority('ROLE_USER')"></div>
-<div sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')"></div> -->
+<!-- <div sec:authorize="hasAuthority('ROLE_A')">어드민1<div>
+<div sec:authorize="hasAuthority('A')">어드민1<div> -->
+<!-- <div sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')"></div> -->
 
 
 

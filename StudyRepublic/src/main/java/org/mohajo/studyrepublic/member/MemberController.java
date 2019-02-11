@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -98,6 +99,7 @@ public class MemberController {
 	
 	@RequestMapping("/member/insert")
 	public String insertMember(Model model, HttpServletRequest request, @ModelAttribute Member member, @RequestParam String id) {
+		
 		member.setPassword(bcryptpasswordencoder.encode(member.getPassword()));
 				
 		memberrepository.save(member);
@@ -145,6 +147,7 @@ public class MemberController {
 		return "redirect:/index";
 	}
 	
+	@Transactional(readOnly = true)
 	@RequestMapping("/admin") 
 	public String forAdmin(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -152,7 +155,7 @@ public class MemberController {
 		model.addAttribute("id", id);
 		System.out.println(auth);
 		System.out.println(id);
-		return "etc/admin2";
+		return "etc/admin";
 	}
 	
 	@RequestMapping("/login")

@@ -39,10 +39,10 @@ layout:decorate="~{/layout/mainLayout}">
 <div class = "wharthehell" th:each = "tf : ${tutoruploadfile}">
 왜안나옴??
 <input type = "text" th:value = "${tf.tutorfileOriginname}">
-<input id = "fileUrl" type = "text" th:value = "${tf.tutorfileUrl}">
+<input id = "fileUrl" type = "text" th:value = "${tf.tutorfilePartUrl}">
 
-<a th:href = "${tf.tutorfileUrl}">파일미리보기</a> <!-- 파일미리보기 -->
- <a th:href = "@{'/tutor/file'(tutorfileUrl=${tf.tutorfileUrl})}">파일다운로드</a> 
+<a th:href = "${tf.tutorfilePartUrl}">파일미리보기</a> <!-- 파일미리보기 -->
+ <a th:href = "@{'/tutor/file'(tutorFileFullUrl=${tf.tutorFileFullUrl})}">파일다운로드</a> 
 
 </div>
 

@@ -43,8 +43,13 @@ public class TutorUploadFile implements Serializable {
 	   @Column(name = "tutorfile_savename")
 	   private String tutorfileSavename;
 	   
-	   @Column(name = "tutorfile_url")
-	   private String tutorfileUrl;
+	   @Column(name = "tutorfile_parturl")
+	   private String tutorfilePartUrl;
+	   
+	   @Column(name = "tutorfile_fullurl")
+	   private String tutorFileFullUrl;
+	   
+	   
 	   
 	   @ManyToOne
 	   @JoinColumn(name = "id")

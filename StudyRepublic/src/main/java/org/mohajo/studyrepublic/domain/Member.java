@@ -88,12 +88,13 @@ public class Member implements Serializable {
 	@JoinColumn(name = "member")	
 	private List <MemberRoles> roles;
 	
-	@OneToMany
+
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name = "member_interest_id")
 	private List<MemberInterest> memberInterest;
 	
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name = "id")
 	private List <InterestLocation> interestlocation;
 
