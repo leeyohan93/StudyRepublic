@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.Data;
 
 @Data
@@ -16,6 +18,7 @@ public class MemberInterest {
 
 	@Id
 	@Column(name = "member_interest_id")
+	
 	private int memberInterestId;
 	
 	/*

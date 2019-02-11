@@ -5,11 +5,8 @@ package org.mohajo.studyrepublic.repository;
 
 import java.util.List;
 
-import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.QRequestBoard;
 import org.mohajo.studyrepublic.domain.RequestBoard;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;

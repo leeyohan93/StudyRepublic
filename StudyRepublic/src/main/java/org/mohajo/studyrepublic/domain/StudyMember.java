@@ -14,6 +14,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 
 import lombok.Data;
+<<<<<<< HEAD
 import lombok.ToString;
 
 /**
@@ -66,5 +67,53 @@ public class StudyMember implements Serializable {
 		private List<StudyFileshareboardReply> studyFileshareboardReply;
 		@OneToMany(mappedBy="studyReplyMember")
 		private List<StudyQnaboardReply> studyQnaboardReply;*/
+=======
+
+/**
+ * @author	이미연
+ * @since	2019. 1. 22.
+ * @version	0.0
+ * - 스터디원 상세 DTO
+ */
+@Data
+@Entity
+public class StudyMember implements Serializable {
+
+		@EmbeddedId
+		private StudyMemberId studyMemberId;
+		
+		@Column(insertable=false, updatable=false)
+		private String id;
+		
+		@Column(insertable=false, updatable=false)
+		private String studyId;
+		
+		@ManyToOne(cascade=CascadeType.ALL) 
+		@JoinColumn(name = "study_member_status_code")
+		private StudyMemberStatusCD studyMemberStatusCode;
+		
+		private Date enrollDate;
+		private Date exitDate;
+		
+		@MapsId("id")
+		@ManyToOne 
+		@JoinColumn(name = "id")
+		private Member member;
+		
+		@MapsId("studyId")
+		@ManyToOne 	
+		@JoinColumn(name="studyId")
+		private Study study;
+		
+		@OneToMany(mappedBy="studyMember")
+		private List<StudyNoticeboard> studyNoticeboard;
+		
+		@OneToMany(mappedBy="studyMember")
+		private List<StudyFileshareboard> studyFileshareboard;
+		
+		@OneToMany(mappedBy="studyMember")
+		private List<StudyQnaboard> studyQnaboard;
+		
+>>>>>>> refs/heads/Sungho
 
 }
