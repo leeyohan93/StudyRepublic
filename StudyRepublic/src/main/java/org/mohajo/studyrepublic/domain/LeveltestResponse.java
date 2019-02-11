@@ -7,6 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 
 import lombok.Data;
 
@@ -29,4 +33,22 @@ public class LeveltestResponse implements Serializable {
 	@Column
 	private int isCorrect;
 	
+	@Column(insertable=false, updatable=false)
+	private String studyId;
+	
+	@Column(insertable=false, updatable=false)
+	private String id;
+	
+	@MapsId("leveltestId")
+	@ManyToOne
+	@JoinColumns({
+		@JoinColumn(name="questionNumber"),
+		@JoinColumn(name="studyId")
+	})
+	private Leveltest leveltest;
+	
+	@MapsId("id")
+	@ManyToOne
+	@JoinColumn(name = "id", referencedColumnName = "id", updatable=false, insertable=false)
+	private Member member;
 }

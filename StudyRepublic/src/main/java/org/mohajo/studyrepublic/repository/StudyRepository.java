@@ -66,9 +66,12 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 //	public List<Study> findBsStudyBytypeCode();
 	public List<PopularStudy> findBsStudyBytypeCode();
 	
-	@Query(value ="select * from (select * from study_member where id= :member AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1"
-			+ " using (study_id) where s1.study_status_code='G'", nativeQuery=true)
-	List<Study> findByMemberId(Member member);
+//	@Query(value ="select * from (select * from study_member where id= :member AND (study_member_status_code = 'ME' || study_member_s+tatus_code = 'LE')) a1 join study s1"
+//			+ " using (study_id) where s1.study_status_code='G'", nativeQuery=true)
+//	List<Study> findByMemberId(Member member);
+/*	@Query(value ="select * from study s1 join (select * from study_member where id= :member AND (study_member_status_code = 'ME' || study_member_s+tatus_code = 'LE')) a1"
+	+ " using (study_id) where s1.study_status_code='G'", nativeQuery=true)
+	List<Study> findByMemberId(Member member);*/
 	
 	
 }

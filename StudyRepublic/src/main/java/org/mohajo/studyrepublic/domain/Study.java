@@ -38,9 +38,10 @@ import lombok.ToString;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "study"/*, schema = "StudyRepublic"*/)
 //@SecondaryTables({
-//	@SecondaryTable(name="popular_study"),
-//	@SecondaryTable(name="study_view")
+//	@SecondaryTable(name="popular_study")
+//	, @SecondaryTable(name="study_view")
 //})
+//org.springframework.expression.spel.SpelEvaluationException: EL1008E: Property or field 'popularStudy' cannot be found on object of type 'org.mohajo.studyrepublic.domain.StudyMember' - maybe not public or not valid?
 //@DiscriminatorValue("STUDY")
 public class Study implements Serializable {
 

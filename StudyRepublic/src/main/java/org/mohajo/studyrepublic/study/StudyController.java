@@ -1,18 +1,21 @@
 package org.mohajo.studyrepublic.study;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.DayCD;
 import org.mohajo.studyrepublic.domain.LevelCD;
+import org.mohajo.studyrepublic.domain.Leveltest;
+import org.mohajo.studyrepublic.domain.LeveltestResponse;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.Review;
+import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
+import org.mohajo.studyrepublic.domain.StudyMemberId;
 import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TypeCD;
@@ -41,9 +44,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.java.Log;
 
@@ -165,7 +166,6 @@ public class StudyController {
 				//+ 스터디멤버 where studyStatusCode in ('LE', 'ME') where id = ?
 
 		StudyView study = svr.selectStudyViewByStudyId(studyId);		
-		log.info(study.toString());
 		
 		if(study == null) {
 			return "/study/404";
@@ -215,13 +215,19 @@ public class StudyController {
 		return "/study/detail";
 	}
 	
-	@RequestMapping("/prejoin")
+/*	@RequestMapping("/prejoin")
 	public void prejoin( @RequestParam("studyId") String studyId,  @RequestParam("userId") String userId, HttpServletResponse response) {
 
 		log.info("studyId = " + studyId);
 		log.info("userId = " + userId);
 		
+		StudyMemberId smi = new StudyMemberId();
+		smi.setId(userId);
+		smi.setStudyId(studyId);
+		log.info("smi test = " + smi.getId());
 		StudyMember history = smr.findByStudyIdAndId(studyId, userId);
+//		StudyMember history = smr.findById(smi).get();
+		log.info("find test = " + history);
 		ObjectMapper objMapper = new ObjectMapper();
 		
 		try {
@@ -233,9 +239,18 @@ public class StudyController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}*/
+	@RequestMapping("/prejoin")
+	@ResponseBody
+	public StudyMember prejoin( @RequestParam("studyId") String studyId,  @RequestParam("userId") String userId) {
+
+		StudyMemberId smi = new StudyMemberId();
+		smi.setId(userId);
+		smi.setStudyId(studyId);
+		StudyMember history = smr.findByStudyIdAndId(studyId, userId);
 		
+		return history;
 	}
-	
 	
 	/**
 	 * @author	이미연
@@ -271,70 +286,62 @@ public class StudyController {
 	}
 	
 	
-	
 	/**
 	 * @author	이미연
 	 * @return	스터디 가입 페이지
 	 */
 	@RequestMapping("/join/{studyId}")
-	public String join() {
+	public String join(@PathVariable("studyId") String studyId, HttpServletRequest request) {
 		
 		//hasLeveltest == 1 && referer != ...leveltest
-			//return "레벨테스트 페이지";
+		//return "레벨테스트 페이지";
 		//else if, typeCd == "P"
-			//return "결제 페이지";
+		//return "결제 페이지";
 		
-		return "";
+		Study study = sr.findById(studyId).get();
+		String referer = request.getHeader("referer");
+		log.info(referer);
+		
+		if(study.getHasLeveltest() == 1) {
+			return "/study/takeLeveltest";
+		}
+		
+		if(study.getTypeCode().getTypeCode() == "P") {
+			return "/study/pay";
+		}
+		
+		return "/study/join";
 	}
 	
 	@RequestMapping("")
 	public String pay() {
 		
 		//결제 api 테스트 후 추가 --> 포인트 결제 or 포인트 충전 창으로 연결
-		
 		return "";
 	}
 	
 	@RequestMapping("/review")
 	public String review() {
 		
-		
-		
 		return "/study/review";
 	}
 	
-	
-	
-	
-////	StudyNoticeboard 테스트용
-//	@RequestMapping("/test/{noticeId}")
-//	public String test(@PathVariable("noticeId") int noticeId, Model model) {
-//		
-////		StudyNoticeboard notice = snbr.findById(noticeId).get();
-//		List<StudyNoticeboard> notice = snbr.findAll();
-//		log.info(notice.toString());
-//		model.addAttribute(notice);
-//		
-//		return "/study/test";
-//	}
-	
-	//StudyMember 테스트용
+	//테스트용
 	@RequestMapping("/test")
 	public String test(Model model) {
 		
-		List<StudyMember> sm = smr.findAll();
-		model.addAttribute("studyMember", sm);
+//		List<Leveltest> leveltest = lr.findAll();
+//		List<LeveltestResponse> leveltestResponse = lrr.findAll();
+//		List<LeveltestResponse> leveltestResponse = lrr.selectByStudyId("BF00003");
+		List<StudyMember> studyMember = smr.selectByStudyId("BB00002");
+		List<Study> study = sr.findAll();
 		
-		return "/study/studyMemberList";
-	}
-	
-	@RequestMapping("/test2")
-	public String test2(Model model) {
-		
-//		StudyView studyView = svr.findById("BB00001").get();
-//		model.addAttribute("studyView", studyView);
-		
-		return "/study/studyViewTest";
+		model.addAttribute("test", study);
+//		model.addAttribute("test", leveltest);
+//		model.addAttribute("test", leveltestResponse);
+		model.addAttribute("test2", studyMember);
+
+		return "/study/test";
 	}
 
 }

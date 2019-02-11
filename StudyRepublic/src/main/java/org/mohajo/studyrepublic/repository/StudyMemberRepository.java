@@ -61,4 +61,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	List<StudyMember> findQnaboardInfoByStudyId(@Param(value="studyId") String studyId);
 
 	StudyMember findByStudyIdAndId(String studyId, String userId);
+
+	@Query(value="select sm from StudyMember sm where sm.studyId = ?1")
+	List<StudyMember> selectByStudyId(String string);
 }
