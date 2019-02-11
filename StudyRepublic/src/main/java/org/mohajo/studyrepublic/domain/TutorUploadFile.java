@@ -43,6 +43,9 @@ public class TutorUploadFile implements Serializable {
 	   @Column(name = "tutorfile_savename")
 	   private String tutorfileSavename;
 	   
+	   @Column(name = "tutorfile_uploadpath")
+	   private String tutorfileUploadPath;
+	   
 	   @Column(name = "tutorfile_parturl")
 	   private String tutorfilePartUrl;
 	   

@@ -5,9 +5,7 @@ package org.mohajo.studyrepublic.repository;
 
 import java.util.List;
 
-import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.InquireBoard;
-import org.mohajo.studyrepublic.domain.QFreeBoard;
 import org.mohajo.studyrepublic.domain.QInquireBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
