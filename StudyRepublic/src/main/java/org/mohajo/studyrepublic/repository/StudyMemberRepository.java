@@ -60,6 +60,12 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 			"order by study_qnaboard_id desc", nativeQuery=true)
 	List<StudyMember> findQnaboardInfoByStudyId(@Param(value="studyId") String studyId);
 
+	StudyMember findByStudyIdAndId(String studyId, String userId);
+
+	//테스트 시작.
+	@Query(value="select sm from StudyMember sm where sm.studyId = ?1")
+	List<StudyMember> selectByStudyId(String string);
+	//테스트 끝.
 	
 	@Query(value="select *\r\n" + 
 			"from study_member left join member using (id)\r\n" + 

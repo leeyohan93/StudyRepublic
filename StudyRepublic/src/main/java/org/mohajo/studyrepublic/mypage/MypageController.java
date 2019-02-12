@@ -66,10 +66,10 @@ public class MypageController {
 		model.addAttribute("mbr",user);
 		
 		
-		List<Study> studymember = sr.findByMemberId(user);
-		model.addAttribute("sr",studymember);
+//		List<Study> studymember = sr.findByMemberId(user);
+//		model.addAttribute("sr",studymember);
 		
-		System.out.println(studymember);
+//		System.out.println(studymember);
 		
 		System.out.println(user); /*유저정보 데이터*/
 		return "mypage/mypage_main";

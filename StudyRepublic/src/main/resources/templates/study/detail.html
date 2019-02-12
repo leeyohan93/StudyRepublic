@@ -4,7 +4,16 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorate="~{/layout/mainLayout}">
 <head>
 <title>Study Detail View</title>
-<meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<!-- <meta property="og:title" content="제목"> -->
+<!-- <meta property="og:description" content="설명"> -->
+<!-- <meta property="og:image" content="대표 이미지"> -->
+<!-- <meta name="twitter:card" content="트위터 카드 타입" /> -->
+<!-- <meta property="og:url" content="현재 페이지 링크"> -->
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header"
+   th:content="${_csrf.headerName}" />
 <style type="text/css">
 	
 	.studyDetail {
@@ -26,7 +35,7 @@ layout:decorate="~{/layout/mainLayout}">
 	}
 	
 	.column-name {
-		font: bold;
+		font: 1.1em bolder !important;
 	}
 	
 	.essential-info-1 {
@@ -114,7 +123,7 @@ layout:decorate="~{/layout/mainLayout}">
 	}
 
 	/* .tab-head .tab-item{} */
-	.tab-item0 {
+	.tab-title {
 		box-sizing:border-box;
 		background-color:#fafafa;
 		border:1px solid #ddd;
@@ -122,18 +131,20 @@ layout:decorate="~{/layout/mainLayout}">
 		margin-left:-1px;
 		margin-bottom:-1px;
 		text-align:center;
+		padding: 0.3em 0;
 		
-		display: inline-block;
+ 		display: inline-block;
 		height: auto;
 		width: 20%;
+		cursor: pointer;
 	}
 	
 	/* .tab-head .tab-item:after{content:"";display:table;clear:both;*zoom:1} */
 	/* .tab-head .tab-item.tab-active{background-color:#fff;border-bottom:1px solid #fff;opacity:1} */
-	.tab-item0.tab-active {
+	.tab-title.tab-active {
 		background-color: white;
 		border-bottom:1px solid #fff;
-		opacity:1
+		opacity:1;
 	}
 	
 	.tab-content {
@@ -160,108 +171,246 @@ layout:decorate="~{/layout/mainLayout}">
 		display: none;
 	}
 	
+	.disable {
+		color: silver;
+		cursor: not-allowed;
+	}
+	
 </style>
 </head>
 <body>
 
 	<div layout:fragment="main">
 		<div class="inner">
-		<h3>스터디 상세</h3>
-		<section class="studyDetail">
-			<section class="row basic-info">
-				<div class="row essential-info-1">
-					<div class="col-md-2 column-name">스터디명</div>
-					<div class="col-md-10 column-value"><span th:text="${study.name}">name</span></div>	
-					<div class="col-md-2 column-name">기간</div>
-					<div class="col-md-10 column-value"><span th:text="|${study.startDate}~${study.endDate}|">period</span>(<span th:text="${dayDiff}">n</span>개월)</div>
-					<div class="col-md-2 column-name">일시</div>
-					<div class="col-md-10 column-value"><span th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</span>(<span th:text="${timeDiff}">n</span>시간)</div>
+			<h3>스터디 상세</h3>
+			<section class="studyDetail">
+				<div class="row share-via-sns">
+					<!-- 공유하기 아이콘 -->
 				</div>
-				<div class="row essential-info-2">
-					<div class="col-md-2 column-name">유형</div>
-					<div class="col-md-10 column-value"><i class="tag-primary" th:text="${study.typeCode.codeValueKorean}">type</i></div>
-					<div class="col-md-2 column-name">진행방식</div>
-					<div class="col-md-10 column-value"><i class="tag-primary" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
-					<div class="col-md-2 column-name">지역</div>
-					<div class="col-md-10 column-value"><th:block th:each="location : ${study.studyLocation}"><i class="tag" th:text="${location.interestLocation}">location</i>&nbsp;</th:block></div>
-					<div class="col-md-2 column-name">분야</div>
-					<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
-					<th:block th:if="${study.price}">
-						<div class="col-md-2 column-name">가격</div>
-						<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">studyPrice</th:block></div>
-					</th:block>
-				</div>
-				<div class="box-info">
-					<div class="enroll-count" th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</div>
-					<i class="tag btn-primary btn-xs" th:text="${study.studyStatusCode.codeValueKorean}">study status</i>
-					<div class="level">레벨: <strong><th:block th:text="${study.levelCode.codeValueKorean}">level</th:block></strong></div> 
-				</div>
-
-			</section>
-			<section class="intro">
-				<h5>소개</h5>
-				<div class="intro-content">
-					<p th:text="${study.introduction}"></p>
-				</div>
-			</section>
-			<section class="additional-info">
-				<div class="tab-head0">
-					<ul class="tab-head0">
-						<li type="button0" class="tab-item0 tab-active">
-							<span class="txt-tab">리더 정보</span>
-						</li>
-						<li type="button0" class="tab-item0">
-							<span class="txt-tab">강의 후기</span>
-						</li>
-					</ul>
-				</div>
-<!-- 				스터디 타입에 따라 불러오는 데이터 달라진다. (미구현 상태) -->
-				<div class="tab-content leader-info">
-					<div class="profile-container">
-						<div class="profile-image-container">
-							<th:block th:if="${leaderInfo.profileSaveName} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/${leaderInfo.id}/${leaderInfo.profile_save_name}}"></th:block>
-							<th:block th:unless="${leaderInfo.profileSaveName} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/defaultProfile.jpg}"></th:block>
-							<span th:text="${leaderInfo.nickname}">리더 이름</span>
+				<section class="row basic-info">
+					<div class="row essential-info-1">
+						<div class="col-md-2 column-name">스터디명</div>
+						<div class="col-md-10 column-value"><span th:text="${study.name}">name</span></div>	
+						<div class="col-md-2 column-name">기간</div>
+	<!-- 					<div class="col-md-10 column-value"><span th:text="|${study.startDate}~${study.endDate}|">period</span>(<span th:text="${dayDiff}">n</span>개월)</div> -->
+						<div class="col-md-10 column-value"><span th:text="|${study.startDate}~${study.endDate}|">period</span>(총 <span th:text="${study.studyCount}">n</span>회)</div>
+						<div class="col-md-2 column-name">일시</div>
+	<!-- 					<div class="col-md-10 column-value"><span th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</span>(<span th:text="${timeDiff}">n</span>시간)</div> -->
+						<div class="col-md-10 column-value"><span th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</span>(<span th:text="${#dates.format(study.timeDiff, 'H')}">n</span>시간)</div>
+					</div>
+					<div class="row essential-info-2">
+						<div class="col-md-2 column-name">유형</div>
+						<div class="col-md-10 column-value"><i class="tag" th:text="${study.typeCode.codeValueKorean}">type</i></div>
+						<div class="col-md-2 column-name">진행방식</div>
+						<div class="col-md-10 column-value"><i class="tag" th:text="${study.onoffCode.codeValueKorean}">onoff</i></div>
+						<div class="col-md-2 column-name">지역</div>
+						<div class="col-md-10 column-value"><th:block th:each="location : ${study.studyLocation}"><i class="tag" th:text="${location.interestLocation}">location</i>&nbsp;</th:block></div>
+						<div class="col-md-2 column-name">분야</div>
+						<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
+						<th:block th:if="${study.price}">
+							<div class="col-md-2 column-name">가격</div>
+							<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">studyPrice</th:block></div>
+						</th:block>
+					</div>
+					<div class="box-info">
+						<div class="enroll-count" th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</div>
+						<i class="tag btn-primary btn-xs" id="study-status" th:value="${study.studyStatusCode.studyStatusCode}" th:text="${study.studyStatusCode.codeValueKorean}">study status</i>
+						<div class="level">레벨: <strong><th:block th:text="${study.levelCode.codeValueKorean}">level</th:block></strong></div> 
+					</div>
+	
+				</section>
+				<!-- 2. 스터디 소개 -->
+				<section class="intro">
+					<h5>소개</h5>
+					<div class="intro-content">
+						<p th:text="${study.introduction}"></p>
+					</div>
+				</section>
+				<section class="additional-info">
+					<div class="tab-head0">
+						<ul class="tab-head0">
+							<li type="button0" class="tab-title tab-active" id="tab-title-leaderInfo">
+								<span class="txt-tab">리더 정보</span>
+							</li>
+							<li type="button0" class="tab-title disable" id="tab-title-review">
+								<span class="txt-tab">강의 후기</span>
+							</li>
+						</ul>
+					</div>
+	<!-- 				스터디 타입에 따라 불러오는 데이터 달라진다. (미구현 상태) -->
+					<div class="tab-content leader-info" id="tab-content-leaderInfo" th:if="${tutorInfo}" th:with="leaderInfo = ${tutorInfo.member}">
+						<div class="profile-container">
+							<div class="profile-image-container">
+								<img th:alt="|${leaderInfo.nickname}님의 프로필 사진|" th:src="${leaderInfo.profileSaveName}? @{'/static/images/' + ${leaderInfo.id} + '/' + ${leaderInfo.profileSaveName}} : @{/static/images/defaultProfile.jpg}">
+<!-- 								<th:block th:if="${leaderInfo.profileSaveName} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/${leaderInfo.id}/${leaderInfo.profile_save_name}}"></th:block> -->
+<!-- 								<th:block th:unless="${leaderInfo.profileSaveName} != null"><img alt="|${leaderInfo.nickname}님의 프로필 사진|" src="@{/static/images/defaultProfile.jpg}"></th:block> -->
+								<span th:text="${leaderInfo.nickname}">리더 닉네임</span>
+							</div>
+						</div>
+						<div class="member-interest-container">
+							<h5>관심분야</h5>
+							<p th:text="${#lists.isEmpty(leaderInfo.memberInterest)}? 없음: ${leaderInfo.memberInterest}">관심 분야</p>
+						</div>
+						<div class="study-activity">
+							<h5>전체 활동내역</h5>
+							<table>
+								<tr>
+									<th>No.</th>
+									<th>스터디명</th>
+									<th>기간</th>
+									<th>평점</th>
+								</tr>
+								<tr th:each="tempStudyActivity : ${studyActivity}">
+									<th:block th:with="tempStudy = ${tempStudyActivity.study}">
+										<td>no.</td>
+										<td><a th:href="@{'/study/detail/' + ${tempStudy.studyId}}" th:text="${tempStudy.name}">studyName</a>&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorean}">status</i></td>
+										<td th:text="|${tempStudy.startDate}~${tempStudy.endDate}|">period</td>
+										<td th:if="${tempStudy.averageScore}!=-1" th:text="${tempStudy.averageScore}">avgScore</td>
+										<td th:if="${tempStudy.averageScore}==-1">-</td>
+									</th:block>
+								</tr>
+							</table>
 						</div>
 					</div>
-					<p th:if="${leaderInfo.memberInterest}!=null" th:text="${leaderInfo.memberInterest}">관심 분야</p>
-					<div class="study-activity">
-						<h5>활동내역</h5>
-						<table>
-							<tr>
-								<th>No.</th>
-								<th>스터디명</th>
-								<th>기간</th>
-								<th>평점</th>
-							</tr>
-							<tr th:each="tempStudyActivity : ${studyActivity}">
-								<th:block th:with="tempStudy = ${tempStudyActivity.study}">
-									<td>no.</td>
-									<td><a th:href="@{'/study/detail/' + ${tempStudy.studyId}}" th:text="${tempStudy.name}">studyName</a>&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorean}">status</i></td>
-									<td th:text="|${tempStudy.startDate}~${tempStudy.endDate}|">period</td>
-									<td th:if="${tempStudy.averageScore}!=-1" th:text="${tempStudy.averageScore}">avgScore</td>
-									<td th:if="${tempStudy.averageScore}==-1">-</td>
-								</th:block>
-							</tr>
-						</table>
-<!-- 						테스트 -->
-<!-- 						<div th:each="tempStudyActivity : ${studyActivity}" th:text="${tempStudyActivity}"></div> -->
+					<div class="tab-content review invisible" id="tab-content-review">
+						<p th:text="${#lists.isEmpty(study.review)}? '작성 된 후기가 없습니다.' :${study.review}">후기 리스트</p>
 					</div>
-				</div>
-				<div class="tab-content review">
-					<p th:text="${review}">후기 리스트</p>
-				</div>
+				</section>
+				<th:block th:with="studyStatusCode = ${study.studyStatusCode.studyStatusCode}">
+					<th:block th:unless="${studyStatusCode.equals('C')} OR ${studyStatusCode.equals('D')}">
+						<button sec:authorize="isAnonymous()" class="sticky btn-join-study" data-user-type="anonymous" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
+						<button sec:authorize="isAuthenticated()" class="sticky btn-join-study" data-user-type="authenticated" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
+					</th:block>
+				</th:block>
 			</section>
-			<button class="sticky">스터디 가입 신청</button>
-		</section>
+			<input type="hidden" id="loggedInUserId" th:value="${loggedInUserId}">
 		</div>
 	</div>
 
-	<script type="text/javascript">
-		//     	1. 탭 메뉴 : 완료된 스터디의 경우에만 리뷰 탭 class=active & 버튼 활성화
+	<script layout:fragment="customScript">
+		
+		<!-- Spring Security ~ Ajax 관련 추가 코드 BY 성호님 -->
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$(function() {
+			$(document).ajaxSend(function(e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+		});
+		
+		$(document).ready(function() {
+			
+			makeTabWorks();
+			activateReviewTab();
+			prejoinCheck();
+			
+		});
 
-		//     	2. 스터디 가입 : 이미 가입된 스터디인 경우, 거절/탈퇴한 스터디인 경우, 	가입 승인 대기중인 스터디인 경우 --> 메시지
-		// 					 정원 초과된 스터디인 경우 --> 버튼 비활성화
+		//	1. 탭 메뉴 구현
+		function makeTabWorks() {
+
+			// 아래는 왜 한 번만 실행되지?
+			/* $('.tab-title:not(.tab-active)').on('click', function() {
+				$('.tab-active').removeClass("tab-active");
+				$(this).addClass("tab-active");
+			}); */
+			$('.tab-title').on('click', function() {
+				if (!$(this).hasClass("tab-active")
+						&& !$(this).hasClass("disable")) {
+
+					//tab-title
+					$('.tab-active').removeClass("tab-active");
+					$(this).addClass("tab-active");
+
+					//tab-content
+					$('.tab-content').addClass("invisible");
+					var targetTabContent = $('#tab-content-'
+							+ $(this)[0].id.split("-")[2])[0];
+					targetTabContent.classList.remove("invisible");
+				}
+			});
+		}
+
+		//	2. 리뷰 탭 활성화: 완료 스터디 대상
+		function activateReviewTab() {
+			// 완료된 스터디이면, 리뷰 탭의 disable 클래스를 제거한다.
+			if ($('#study-status').val() == "C") {
+				$('#tab-content-review').removeClass('disable');
+			}
+		}
+
+		//	3. 스터디 가입 제한
+		function prejoinCheck() {
+			$('.btn-join-study').on('click', function(e) {
+				// 모집 마감된 스터디는 버튼을 비활성화 한다.
+				if ($('.btn-join-study').hasClass('disable')) {
+					e.preventDefault();
+					return;
+				}
+
+				// 1) 비로그인 유저의 경우 --> 로그인 페이지
+				// *** 로그인 여부 판별하는 방법 확인하기
+				var joinBtn = $('.btn-join-study')[0];
+				
+				var pathName = window.location.pathname;
+				var studyId = pathName.replace('/study/detail/', '');
+				var originUrl = window.location.origin;
+				var location = "";
+				var userId = document.getElementById('loggedInUserId').value;
+
+				if (joinBtn.dataset.userType == "anonymous") {
+					alert("로그인 후 신청할 수 있어요!");
+					location = "/login";
+					window.location.href = originUrl + location;
+					// 로그인 후 스터디 가입 페이지 또는 상세 페이지로 이동하도록 처리할 것! ********
+
+				} else if (joinBtn.dataset.userType == "authenticated") {
+					// 3) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우 --> 메시지	==> 예기치 못한 Ajax...
+					$.ajax({
+						type : "GET",
+						contentType : "application/json",
+						url : "/study/prejoin",
+						data : {
+							"studyId" : studyId,
+							"userId" : userId
+						},
+						/* dataType : 'json', */
+						cache : false,
+						timeout : 600000,
+						success : function(data) {
+							console.log("Success: " + data);
+							
+							if (!data) {
+								location = "/study/join/" + studyId;
+								window.location.href = originUrl + location;
+							}
+							/* var jsonData = JSON.parse(data);
+							var studyMemberStatusCode = jsonData.studyMemberStatusCode.studyMemberStatusCode; */
+							var studyMemberStatusCode = data.studyMemberStatusCode.studyMemberStatusCode;
+							console.log("studyMemberStatusCode = " + studyMemberStatusCode);
+
+							switch (studyMemberStatusCode) {
+								case "WA":
+									alert("승인 대기중인 스터디입니다.");
+									return;
+								case "ME":
+								case "LE":
+									alert("이미 가입된 스터디입니다.");
+									return;
+								case "EX":
+								case "DE":
+									alert("가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.");
+									return;
+							}
+						},
+						error : function(e) {
+							console.log("Error: " + e);
+							return false;
+						}
+					});
+				}
+			});
+		}
 	</script>
 </body>
 </html>

@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
@@ -46,19 +48,33 @@ public class StudyMember implements Serializable {
 		@JoinColumn(name = "id")
 		private Member member;
 		
+//		@MapsId("studyId")
+//		@ManyToOne 	
+//		@JoinColumn(name="studyId")
+//		private StudyView studyView;
+		
 		@MapsId("studyId")
 		@ManyToOne 	
 		@JoinColumn(name="studyId")
 		private Study study;
 		
-		@OneToMany(mappedBy="studyMember")
+/*		@OneToMany(mappedBy="studyMember")
 		private List<StudyNoticeboard> studyNoticeboard;
 		
 		@OneToMany(mappedBy="studyMember")
 		private List<StudyFileshareboard> studyFileshareboard;
 		
 		@OneToMany(mappedBy="studyMember")
-		private List<StudyQnaboard> studyQnaboard;
+		private List<StudyQnaboard> studyQnaboard;*/
+		
+		/* Caused by: org.hibernate.AnnotationException: A Foreign key refering org.mohajo.studyrepublic.domain.StudyMember from org.mohajo.studyrepublic.domain.LeveltestResponse has the wrong number of column. should be 2 */
+		@MapsId("id")
+		@OneToMany
+		@JoinColumns({
+			@JoinColumn(name = "id"/*, referencedColumnName = "id", updatable=false, insertable=false*/),
+			@JoinColumn(name = "studyId")
+		})
+		private List<LeveltestResponse> leveltestResponse;
 		
 
 }
