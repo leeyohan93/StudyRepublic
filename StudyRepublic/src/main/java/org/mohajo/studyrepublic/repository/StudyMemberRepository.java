@@ -59,4 +59,26 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 			"left join member using (id)\r\n" + 
 			"order by study_qnaboard_id desc", nativeQuery=true)
 	List<StudyMember> findQnaboardInfoByStudyId(@Param(value="studyId") String studyId);
+	
+	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기 */
+	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where  type_code='B' and s1.study_status_code='G'",nativeQuery=true)
+	List<StudyMember> findActivityById(String id);
+	
+	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기(카운터방식으로) */
+	@Query(value="select count(*) from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where  type_code='B' and s1.study_status_code='G'",nativeQuery=true)
+	int studycount(String id); 
+	
+	@Query(value="select * from study_member sm join study s on sm.study_id=s.study_id where sm.id= :id",nativeQuery=true)
+	List<StudyMember> findBasicByList(String id);
+	
+	/*일반스터디 리더이거나 멤버일때 스터디 정보가져오기(스터디테이블사용)*/
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id and sv.type_code='B'",nativeQuery=true)
+	List<StudyMember> findbasicStudylist(String id);
+	
+	/*프리미엄스터디 리더이거나 멤버일때 스터디 정보가져오기(스터디테이블사용)*/
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id and sv.type_code='P'",nativeQuery=true)
+	List<StudyMember> findPremiumStudylist(String id);
+	
+	
+	
 }

@@ -63,9 +63,7 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 			+ "and STUDY_STATUS_CODE ='O' order by rand() limit 2",nativeQuery=true)
 	public List<Study> findBsStudyBytypeCode();
 	
-	@Query(value ="select * from (select * from study_member where id= :member AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1"
-			+ " using (study_id) where s1.study_status_code='G'", nativeQuery=true)
-	List<Study> findByMemberId(Member member);
+	
 	
 	
 }

@@ -57,6 +57,11 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 	@Query(value="update member set password = :password where id = :id", nativeQuery = true)
 	void saveById(String password);
 	
+	@Transactional
+	@Modifying
+	@Query(value="update member set profile_origin_name = :profileOriginName, profile_save_name = :profileSaveName where id = :id", nativeQuery = true)
+	int changeProfile(String profileOriginName, String profileSaveName,String id);
+	
 
 }
 
