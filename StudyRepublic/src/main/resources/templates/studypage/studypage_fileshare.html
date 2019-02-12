@@ -15,42 +15,17 @@
 	<div id="right" layout:fragment="right">
 		<table>
 			<tr>
-				<td>파일공유 고유번호</td>
-				<td>스터디 ID</td>
-				<td>게시글 번호</td>
-				<td>제목</td>
-				<!-- <td>내용</td> -->
-				<td>작성일</td>
+				<td>프로필 사진</td>
 				<td>작성자</td>
-				<!-- <td>덧글번호</td>
-				<td>덧글 번호가 속한 스터디 ID</td>
-				<td>덧글 작성 일자</td>
-				<td>group</td>
-				<td>step</td> -->
+				<td>제목</td>
+				<td>작성일시</td>
 			</tr>
-			<!-- <td th:text = "${tmp}"> -->
 			<tr th:each="fasf : ${findAllStudyFileshareboard}">
-				<td th:text = "${fasf.studyNoticeboardId}"></td>
-				<td th:text = "${fasf.studyId}"></td>
-				<td th:text = "${fasf.number}"></td>
+				<td th:text = "${fasf.studyMember.member.profileSaveName}"></td>
+				<td th:text = "${fasf.studyMember.member.nickname}"></td>
 				<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${fasf.title}"></a></td>
-				<td th:text = "${fasf.date}"></td>
-				<td th:text = "${fasf.id}"></td>
-				<!-- <td th:text = "${tmp.studyNoticeboardReply}"></td> -->
-				<!-- <table> -->
-				<!-- <tr:block th:each = "snr : ${fasn.studyNoticeboardReply}">
-						<td th:text = "${snr.studyNoticeboardReplyId}"></td>
-						<td th:text = "${snr.studId}"></td>
-						<td th:text = "${snr.date}"></td>
-						<td th:text = "${snr.content}"></td> -->
-					<!-- <td th:text = "${snr.studyNoticeboardReplyId}"></td>
-					<td th:text = "${snr.studyId}"></td>
-					<td th:text = "${snr.date}"></td>
-					<td th:text = "${snr.replyGroup}"></td>
-					<td th:text = "${snr.replyStep}"></td>
-					<td th:text = "${snr.studyNoticeboardId"></td> -->
-				</tr>
-				</table>
+				<td th:text = "${#dates.format(fasf.date, 'yyyy/MM/dd HH:mm:ss')}"></td>
+			</tr>
 		</table>
 	</div>
 </body>

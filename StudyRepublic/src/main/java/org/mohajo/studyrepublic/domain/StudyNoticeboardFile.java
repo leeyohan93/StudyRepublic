@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -32,6 +33,7 @@ public class StudyNoticeboardFile extends StudyBoardFile{
 	@Column(name = "study_noticeboard_file_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyNoticeboardFileId;
+	
 	@Column(name = "study_noticeboard_id")
 	private int studyNoticeboardId;
 }

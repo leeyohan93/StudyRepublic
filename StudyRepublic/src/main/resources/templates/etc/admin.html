@@ -15,7 +15,7 @@ layout:decorate="~{/layout/mainLayout}">
 <div id = "main" layout:fragment = "main">
 <div class = "inner">
 
-<sec:authorize access="isAnonymous()">
+<!-- <sec:authorize access="isAnonymous()">
 
     <a href="/login" target="_self">Login</a>
 
@@ -36,41 +36,43 @@ layout:decorate="~{/layout/mainLayout}">
 
 <form action = "/">
 <input id = "id" th:value = "${id}"></input>
-</form>
+</form> -->
 
   <h1>Admin Page</h1>
 <!-- 	<p th:text="${id} + 님 하이염"  ></p> -->
-  <h3 sec:authentication="name">Spning security username</h3> 님 하이염.
+<!--   <h3 sec:authentication="name">Spning security username</h3> 님 하이염.
 
 <p sec:authorize-url="/admin/aaa">
 <a href='/admin/aaa'>ADMIN AAA</a>
 </p>
 
 
-<!-- SecurityConfig에서 지정한 경로 (/tutor로 설정한 hasrole만 권한이 뜸. -->
+SecurityConfig에서 지정한 경로 (/tutor로 설정한 hasrole만 권한이 뜸.
 <p sec:authorize-url = "/tutor/aaa">
 <a href='/tutor/aaa'>TUTOR AAA</a>  
-  </p>
+  </p> -->
   
-  <div sec:authorize="hasRole('ROLE_USER')"></div>
-<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')"></div>
+<!-- <div sec:authorize="hasRole('N')">노말1</div>
+<div sec:authorize="hasAnyRole('A', 'T')">어드민애니롤</div>  -->
+<div sec:authorize="hasRole('A')">어드민1</div>
 
-<div sec:authorize="hasAuthority('ROLE_USER')"></div>
-<div sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')"></div>
+<!-- <div sec:authorize="hasAuthority('ROLE_A')">어드민1<div>
+<div sec:authorize="hasAuthority('A')">어드민1<div> -->
+<!-- <div sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')"></div> -->
 
 
 
 <!-- 
-<!-- 로그인 여부 체크, 로그인 시 로그아웃버튼 보여주고, 로그인 아닐시 로그인 버튼 보여주고 ㅎ -->
+
 <div sec:authorize="isAuthenticated()">
 <a href='/tutor/aaa'>TUTOR AAA</a> 
 </sec:authorize></div>
 
 <div sec:authorize ="isAnonymous()">
 <a href='/tutor/aaa'>TUTOR AAA</a> 
-</sec:authorize></div> -->
+</sec:authorize></div> 
 
-
+ -->
 </div>
 </div>
 </div>

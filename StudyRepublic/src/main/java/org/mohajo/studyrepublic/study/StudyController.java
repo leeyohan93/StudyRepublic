@@ -113,10 +113,8 @@ public class StudyController {
 //		Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "postDate");
 		Pageable paging = pageDto.makePageable(0, "postDate");
 		typeCd.setTypeCode(typeCode);
-//		List<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
 		Page<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
 		
-//		model.addAttribute("list", list);
 		model.addAttribute("list", new PageMaker(list));
 		model.addAttribute("typeCode", typeCode);
 

@@ -32,9 +32,8 @@ import lombok.ToString;
 
 @Data
 @Entity
-@ToString
 @Table(name = "study_noticeboard")
-public class StudyNoticeboard extends StudyBoard implements Serializable{
+public class StudyNoticeboard extends StudyBoard{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -42,20 +41,24 @@ public class StudyNoticeboard extends StudyBoard implements Serializable{
 	@Column(name = "study_noticeboard_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyNoticeboardId;
+	
 	@Column(name = "starttime")
 	private Time startTime;
+	
 	@Column(name = "endtime")
 	private Time endTime;
+	
 	@Column
 	private Date day;
+	
 	@Column
 	private String location;
 	
-	@OneToMany/*(fetch=FetchType.EAGER)*/
+	@OneToMany
 	@JoinColumn(name="study_noticeboard_id")
 	private List<StudyNoticeboardFile> studyNoticeboardFile;
 	
-	@OneToMany/*(fetch=FetchType.EAGER)*/
+	@OneToMany
 	@JoinColumn(name="study_noticeboard_id")
 	private List<StudyNoticeboardReply> studyNoticeboardReply;
 

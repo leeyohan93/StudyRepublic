@@ -132,8 +132,6 @@ public class Study implements Serializable {
 	 * - 정상 실행 됐으나, merge 후 에러 남.
 	 */
 	/*@OneToMany(mappedBy="study")
-	 * 
-	 * 
 	private List<StudyMember> studyMember;*/
 	
 	/**

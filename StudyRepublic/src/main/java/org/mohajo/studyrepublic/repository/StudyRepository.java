@@ -16,7 +16,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 
-
 /**
  * @author	이미연
  * @since	2019. 1. 22.
@@ -40,7 +39,6 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 	}
 
 	@Query(value = "select s from Study s where s.typeCode = ?1 and s.studyStatusCode not in ('C', 'D')")
-//	public List<Study> findValidStudyByTypeCode(TypeCD typeCode, Pageable paging);
 	public Page<Study> findValidStudyByTypeCode(TypeCD typeCode, Pageable paging);
 	//쿼리문 안에는 Study 클래스에 설정한 TypeCD 타입 변수명을 사용한다.
 		//@Query(value = "select s from (select s from Study s where s.typeCode = ?1) where s.studyStatusCode in ('C', 'D')")

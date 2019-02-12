@@ -24,6 +24,8 @@ public class AdminMemberController {
 	@Autowired
 	AdminMemberService adminMemberService;
 	
+	
+	
 	@RequestMapping("/list")
 	public String list(Model model) {
 		
