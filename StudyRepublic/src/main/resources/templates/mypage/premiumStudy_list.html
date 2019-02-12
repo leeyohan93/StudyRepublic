@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- 	layout:decorate="~{/layout/mainLayout}"> -->
+<head>
+<meta charset="UTF-8">
+<title>프리미엄스터디 활동내역</title>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+</head>
+<body>
+
+		
+	<table class="table">
+		
+			<tr>
+				<th scope="cols">스터디명</th>
+				<th scope="cols">진행상태</th>
+				<th scope="cols">기간</th>
+				<th scope="cols">탈퇴</th>
+				<!-- <th scope="cols">평점</th> -->
+			</tr>
+		
+	 
+			<tr th:each="premium : ${myp}">
+				<td><a th:href="@{'/study/detail/'+${premium.study.studyId}}" th:text= "${premium.study.name}"></a></td>
+				<td th:text="${premium.study.studyStatusCode.codeValueKorean}"/>
+				<td th:text="|${premium.study.startDate}~${premium.study.endDate}|"/>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'ME'}" ><a href="" >탈퇴</a></td>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'LE' }" ><a href="" >해체</a></td>
+			
+				
+			</tr>
+	</table>
+				
+				
+			
+	
+
+</body>
+</html>

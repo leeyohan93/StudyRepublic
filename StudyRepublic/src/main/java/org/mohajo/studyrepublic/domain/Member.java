@@ -66,10 +66,10 @@ public class Member implements Serializable {
 	private int visibility = 0;
 	
 	@Column(nullable = false)
-	private String profileOriginName;
+	private String profileOriginName = "default_img.png";
 	
 	@Column(nullable = false)
-	private String profileSaveName;
+	private String profileSaveName = "default_img.png";
 	
 	@Temporal(TemporalType.DATE)	// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
 	@Column(nullable = false)

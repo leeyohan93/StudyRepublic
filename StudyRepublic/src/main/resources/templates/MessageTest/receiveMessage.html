@@ -4,7 +4,7 @@
 <!-- 	layout:decorate="~{/layout/mainLayout}"> -->
 <head>
 <meta charset="UTF-8">
-<title>보낸쪽지함</title>
+<title>받은쪽지함</title>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
@@ -12,30 +12,25 @@
 <body>
 
 
-<h2>보낸쪽지함</h2>
+<h2>받은쪽지함</h2> <a href="sendMessage">보낸쪽지함</a> <a href="messageWrite">쪽지쓰기</a>
 <table th:inline ="text" class="table" border ="1">
 	<tr>
 		<!-- <td>번호</td> -->
-		<td>받는사람</td>
+		<td>보낸사람</td>
 		<td>내용</td>
 		<td>날짜</td>
 		<td>삭제여부</td>
 	</tr>
 		
 	
-	<tr th:each = "send : ${sendmessagerepository}">
-	<!-- 	<td th:text=" ${send.messageSendId}"/> -->
-		<td th:text="${send.receiveId}"/>
-		<td th:text="${send.messageContent}"/>
-		<td th:text="${send.messageDate}"/>
-		<td th:text="${send.messageDelete}"/>
+	<tr th:each = "receive : ${receivemessagerepository}">
+		<!-- <td th:text=" ${receive.messageReceiveId}"/> -->
+		<td th:text="${receive.sendId}"/>
+		<td th:text="${receive.messageContent}"/>
+		<td th:text="${receive.messageDate}"/>
+		<td th:text="${receive.messageDelete}"/>
 	</tr>	
 	
-
-
-
-
-
 
 
 </body>

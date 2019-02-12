@@ -1,10 +1,18 @@
 package org.mohajo.studyrepublic.mypage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,7 +30,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Controller
 public class ModifyMemberController {
@@ -165,9 +179,10 @@ public Map <String, Integer> chk_email(@RequestParam String email) {
 @ResponseBody 
 public Map <String, Integer> chk_password(@RequestParam String password) {		
 	System.out.println(password);
-	Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+	Authentication auth =(Authentication)SecurityContextHolder.getContext().getAuthentication();
 	String id = auth.getName();
-	
+	Member memberpassword = mbr.findById(id).get();
+	bcryptpasswordencoder.matches(password, memberpassword.getPassword()); //회원의 기존 비밀번호를 입력 
 	int mypassword = 0;
 	Map<String, Integer> map = new HashMap<String, Integer>();
 	
@@ -177,6 +192,73 @@ public Map <String, Integer> chk_password(@RequestParam String password) {
 
 	return map;	
 }
+
+
+
+@RequestMapping(value="/attachments", method=RequestMethod.POST)
+public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,HttpSession session, @RequestPart MultipartFile sourceFile)throws IOException{
+	Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+	String id = auth.getName();
+	
+	String sourceFileName = sourceFile.getOriginalFilename();
+	String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
+	
+	String realPath =  request.getSession().getServletContext().getRealPath("member_image/");
+	
+	
+	File saveFile;
+	String saveFileName;
+	/**
+	 * 
+	 * saveFileName -> 저장할 파일명
+	 * sourceFile.getOriginalFilename() -> 원래파일명
+	 * */
+	System.out.println("realPath:"+realPath);
+	do {
+		saveFileName = RandomStringUtils.randomAlphanumeric(32)+"."+ sourceFileNameExtension;
+		saveFile = new File(realPath + saveFileName);
+		System.out.println("filename:"+saveFileName);
+		
+	}while(saveFile.exists());
+	saveFile.getParentFile().mkdirs();
+	sourceFile.transferTo(saveFile);
+	
+	UploadAttachementResponse response = new UploadAttachementResponse();
+	response.setFileName(sourceFile.getOriginalFilename());
+	response.setFileSize(sourceFile.getSize());
+	response.setFileContentType(sourceFile.getContentType());
+	response.setAttachmentUrl("http://localhost:8080/member_image/" + saveFileName);
+	
+	int uploadResult = mbr.changeProfile(sourceFileName+sourceFileNameExtension, saveFileName, id);
+	
+	
+	return new ResponseEntity<>(response,HttpStatus.OK);
+}
+
+	@NoArgsConstructor
+	@Data
+	private static class UploadAttachementResponse{
+		private String fileName;
+		private long fileSize;
+		private String fileContentType;
+		private String attachmentUrl;
+	}
+	
+	@RequestMapping("/setdefault_img")
+	public String defaultimg(Model model) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		int uploadResult = mbr.changeProfile("default_img.png", "default_img.png", id);
+		
+		
+		return "redirect:/modimember";
+	}
+	
+
+	
+
+
 
 
 	
