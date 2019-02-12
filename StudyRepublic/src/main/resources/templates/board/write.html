@@ -37,10 +37,11 @@
 	width: 50%;
 	height: 40px;
 	padding: 12px 13px;
-	margin: 10px 0;
+	margin: 10px 0px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	font-size: 16px;
+	display: inline-block;
 }
 
 #boardNotice, #boardHide {
@@ -52,6 +53,10 @@
 	font-size: 16px;
 }
 
+#smarteditor {
+	width: 95%;
+	height: 100%
+}
 
 /* .cancelBtn{ */
 /*     position:relative; */
@@ -79,7 +84,7 @@
 
 <div id = "main" layout:fragment = "main">
 <div class="inner">
-<div class="container">
+
 
 <form id="boardWriteForm" th:action="@{registerBoard}" method="post">
 	 
@@ -93,22 +98,20 @@
 	</div>
 	
 <!-- 제목, 공지옵션, 비공개옵션, -->
-  <div>
+  <span>
 	<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
-	<input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/>
+	<input id ="boardWriter" name ='id' type='hidden' th:value="${memberId}">
+	</span>
     <input id ="boardNotice" name ="notice" type="checkbox" value="0">
     <span class ="boardTitleOpt">공지</span> 
-    <input id="boardHide" name ="hide" type="checkbox" value="0">
-    <sapn class ="boardTitleOpt">비공개</span>
-  
-  </div>
+
   
   <!--제목, 공지옵션, 비공개옵션 끝 -->
   
   <!-- 스마트 에디터 적용 글내용 -->
   <div id = "editor">
     <div>  
-       <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:700px; height:1000px;"></textarea>
+       <textarea name="content" id="smarteditor" rows="10" cols="100"></textarea>
 	</div>
   </div>
 
@@ -127,15 +130,20 @@
   </span>
 	 </form>
   </div>
- </div>
+ 
+ 
 
 
 
 <script th:inline="javascript">
 
+
+//스마트에디터 여기부터
 $(document).ready(function(){
     //전역변수선언
     var editor_object = [];
+
+
     
      
     nhn.husky.EZCreator.createInIFrame({
@@ -157,6 +165,7 @@ $(document).ready(function(){
     
 
     });
+
      
     //전송버튼 클릭이벤트
     $("#boardRegister").click(function(){
@@ -166,6 +175,7 @@ $(document).ready(function(){
         $("#boardWriteForm").submit();
             
     });
+
     
     
     //미리보기
@@ -176,9 +186,28 @@ $(document).ready(function(){
 
 
     });
+});
+    
+    //공지사항
+    $("#boardNotice").change(function(){
+    	
+    	if($("#boardNotice").is(":checked")){ 	
+    	
+    		var c = $("#boardNotice").val(1);
+    		console.log(c.val());
+    		
+
+    	}else{
+    		var d= $("#boardNotice").val(0);  
+    		console.log(d.val());
+    		
+    	}  
+    	
+    })
   
-})
+
 
     </script>
+   </div>
     </body>
 </html>

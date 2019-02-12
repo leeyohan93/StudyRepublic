@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()	
 		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**","/tutor/**").permitAll()
 		.antMatchers("/admin/**","/member/inquery","/member","/adminPage/**").hasRole("A")
-		.antMatchers("/tutor/signup","/tutor/insert","/pay"  ).hasAnyRole("N","A")
+		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**").hasAnyRole("N","A")
 		.antMatchers("/tutor/inquery").hasRole("N")
 /*		.antMatchers("/tutor/**","/tutor/file/**").hasRole("W")*/
 		/*.antMatchers("/admin/**").hasAnyRole("A","T")*/	// a나 t  둘 다 된다.
@@ -61,8 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 /*		.antMatchers("/").permitAll();*/
 		// .antMatchers("/admin/**","/member/**").hasRole("A") 여기서 /member/** 는 동작하지 않음(/member 하위 접근권한 x. *바로 아랫줄 .antMatchers("/member/**").hasRole("N")가 있기 떼문
 		// /member/** 에 대한 권한이 N인 사람의 권한으로 덮어쓰기됨. 이럴 경우 A권한인 사람은 N권한도 중복으로 가져야함. DB에서 등록.
-		
-				
+						
 		http
 		.formLogin()
 		.loginPage("/login")
@@ -97,8 +96,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.tokenValiditySeconds(60*60*24);
 
 		 
-		//스마트에디터 관련 설정
-		 http.headers().frameOptions().disable();
+		 //스마트에디터 관련 설정
+		 http.headers().frameOptions().sameOrigin();
 
 		
 		http.addFilterAfter(new ExceptionHandlerFilter(), SecurityContextHolderAwareRequestFilter.class);
