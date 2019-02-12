@@ -32,6 +32,12 @@ public class MemberStatusCD implements Serializable {
 		super();
 		this.memberStatusCode = memberStatusCode;
 	}
+	
+	public MemberStatusCD(String memberStatusCode,String codevalueKorean) {
+		super();
+		this.memberStatusCode = memberStatusCode;
+		this.codeValueKorean = codevalueKorean;
+	}
 
 	public MemberStatusCD() {
 		super();
