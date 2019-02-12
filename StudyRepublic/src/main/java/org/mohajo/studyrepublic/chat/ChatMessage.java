@@ -1,5 +1,7 @@
 package org.mohajo.studyrepublic.chat;
 
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -11,15 +13,16 @@ import lombok.Data;
 
 @Data
 public class ChatMessage {
-    private MessageType type;
+//    private MessageType type;
     private String content;
     private String sender;
+    private Date date = new Date();
 
-    public enum MessageType {
-        CHAT,
-        JOIN,
-        LEAVE
-    }
+//    public enum MessageType {
+//        CHAT,
+//        JOIN,
+//        LEAVE
+//    }
 
 
     

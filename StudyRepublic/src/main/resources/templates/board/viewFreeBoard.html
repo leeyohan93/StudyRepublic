@@ -70,7 +70,7 @@
 
 				<!--아이디 조회수 추천 날짜 -->
 				<div class="row2">
-					<span name="id" id="id">[[${freeBoard.id}]]</span> <span name="hit"
+					<span name="id" id="id">[[${freeBoard.member.nickname}]]</span> <span name="hit"
 						id="hit">조회수&nbsp[[${freeBoard.hit}]]</span> 
 					<spane name="date" id="date">[[${#dates.format(freeBoard.date,
 					'yyyy-MM-dd HH:mm')}]]</span>
@@ -163,10 +163,12 @@
 
                 <!--수정 삭제 목록 글쓰기  -->
 				<div class="row4">
-
+				
+                    <span th:if="${freeBoard.Id} eq ${memberId}">                
 					<a class="btn btn-default"
 						role="button" id="modify" name="modify">수정</a>
 					<a class="btn btn-default" role="button" id="status" name="status">삭제</a>
+					</span>
 					<a class="btn btn-default" role="button" id="list" name="list"
 						th:href="@{listFreeBoard}">목록</a> <a class="btn btn-default"
 						role="button" id="writeBtn" name="writeBtn"
@@ -195,7 +197,7 @@
 						<div class="input-group">
 							<input type="hidden" name=freeBoardId
 								th:value="${freeBoard.freeBoardId}" /> <input type="hidden"
-								name="id" value="aaa123" /> <input type="text"
+								name="id" th:value="${freeBoard.member.id}" /> <input type="text"
 								class="form-control" id="registerContent" name="content"
 								placeholder="내용을 입력하세요."> <span class="input-group-btn">
 								<button class="btn btn-default" type="button"
@@ -232,7 +234,7 @@
  var header = $("meta[name='_csrf_header']").attr("content");
 //게시글 번호
  var freeBoardId = [[${freeBoard.freeBoardId}]];
- var likeCount = [[${freeBoard.likeCount}]]
+ var likeCount = [[${freeBoard.likeCount}]];
  $(document).ready(function(){
 	
 	 //ajax사용
@@ -271,7 +273,7 @@
  
  //댓글 등록 버튼 클릭
  $("#commentInsertBtn").click(function(){  
-	
+	 alert()
 	 //commentInsertForm의 내용을 가져옴
 	 var insertData = $("#commentInsertForm").serialize(); 
      commentInsert(insertData); //Insert 함수호출(아래)
@@ -306,7 +308,7 @@
              var a =''; 
              $.each(data, function(key, value){ 
                  a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                 a += '<div class="commentInfo'+value.freeBoardReplyId+'">'+' 작성자 : '+value.id+'&nbsp&nbsp&nbsp'+value.date;
+                 a += '<div class="commentInfo'+value.freeBoardReplyId+'">'+' 작성자 : '+value.member.nickname+'&nbsp&nbsp&nbsp'+value.date;
                  a += '<a onclick="commentSecond('+value.freeBoardReplyId+');"> 답글 </a>';
                  a += '<a onclick="commentUpdate('+value.freeBoardReplyId+',\''+value.content+'\');"> 수정 </a>';
                  a += '<a onclick="commentDelete('+value.freeBoardReplyId+');"> 삭제 </a> </div>';

@@ -3,22 +3,23 @@
  */
 package org.mohajo.studyrepublic.board;
 
-import java.util.Optional;
-
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.InquireBoard;
+import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.RequestBoard;
 import org.mohajo.studyrepublic.repository.FreeBoardRepository;
 import org.mohajo.studyrepublic.repository.InquireBoardRepository;
+import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.RequestBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,9 +51,9 @@ public class BoardCotroller {
 	@Autowired
 	InquireBoardRepository inquireBoardRepository;
 	
-	
-	
-	
+	@Autowired
+	MemberRepository memberrepository;
+
 
 	//자유게시판 글목록 페이징
 	@RequestMapping("/listFreeBoard")
@@ -94,8 +95,13 @@ public class BoardCotroller {
 
 	//글쓰기 폼으로 이동
 	@GetMapping("/writeBoard")
-	public String writeBoard() {
-
+	public String writeBoard(Model model) {
+        
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 
+	    String id = auth.getName();
+	    model.addAttribute("memberId",id);
+	      
 		return "board/write";
 
 	}
@@ -104,13 +110,15 @@ public class BoardCotroller {
 	//게시판 글등록
 	@PostMapping("/registerBoard")
 	public String registerFreeBoard(FreeBoard freeBoard,RequestBoard requestBoard,InquireBoard inquireBoard,String boardType) {
-		
+		 
+
+	      
 		log.info(boardType);
 		
 		switch(boardType) {		
 		
 		case "freeBoard":
-			freeBoardRepository.save(freeBoard);		
+			freeBoardRepository.save(freeBoard);	
 			return "redirect:/board/listFreeBoard";
 		
 		case "requestBoard":
@@ -133,7 +141,12 @@ public class BoardCotroller {
 	//글확인 및 조회수
 	@GetMapping("/viewBoard")
     public String viewFreeBoard(String boardType,FreeBoard freeBoard,RequestBoard requestBoard,InquireBoard inquireBoard, Model model) {
-		
+		 
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String id = auth.getName();
+		    
+	    model.addAttribute("memberId",id);
+	    
 
 		switch(boardType) {
 		case "freeBoard" : 
@@ -325,8 +338,13 @@ public class BoardCotroller {
 	@GetMapping("/commentBoard")
 	public void commentBoard(int inquireBoardId, Model model) {
 		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 
+	    String id = auth.getName();
+	    model.addAttribute("memberId",id);
+		
 		inquireBoardRepository.findById(inquireBoardId).ifPresent(board->{
-			model.addAttribute("board", board);
+		model.addAttribute("board", board);
 		});
 				
 	}

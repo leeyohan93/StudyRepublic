@@ -169,7 +169,7 @@ display: none;
 											<a th:href='${board.freeBoardId}' class="boardLink">
 											<span class="listReplyCount">([[${board.freeBoardReply.size()}]])</span></a>
 											</td>
-										<td class="boardTableTd col-sm-2">[[${board.id}]]</td>
+										<td class="boardTableTd col-sm-2">[[${board.member.nickname}]]</td>
 										<td class="boardTableTd col-sm-2">[[${#dates.format(board.date,'yyyy-MM-dd
 											HH:mm')}]]</td>
 										<td class="boardTableTd col-sm-1">[[${board.hit}]]</td>

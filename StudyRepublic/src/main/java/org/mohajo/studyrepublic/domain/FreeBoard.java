@@ -44,6 +44,9 @@ public class FreeBoard extends Board{
 	@Column(name = "freeboard_id")
 	private int freeBoardId;
 
+	@Column(insertable=false, updatable=false)
+	protected String id;
+	
 	protected String title;
 	protected String content;
 	@CreationTimestamp
@@ -65,8 +68,8 @@ public class FreeBoard extends Board{
 	private List<FreeBoardFile> freeBoardFile;
 	
     @ManyToOne
-    @JoinColumn(name="id")
-	protected String id;
+    @JoinColumn(name="id",insertable=false, updatable=false)
+	protected Member member;
 
 
 

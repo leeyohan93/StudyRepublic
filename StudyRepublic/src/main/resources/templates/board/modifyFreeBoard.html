@@ -91,7 +91,8 @@
     
     <div>
 	<input id="boardTitle" name="title" type="text" placeholder="제목을 입력해주세요." th:value="${board.title}"> 
-	<input id ="boardWriter" name ='id' type='hidden' value="aaa123">
+	<input id ="boardWriter" name ='id' type='hidden' th:value="${board.member.Id}">
+	<input id ="writerNickname" name ='id' type='hidden' th:value="${board.member.nickname}">
 	<input type="hidden" name="boardType" value="freeBoard"> 
 	<input id="freeBoardId" name="freeBoardId" type="hidden" th:value="${board.freeBoardId}">
     <input id="boardNotice" name="notice" type="checkbox" value="0">

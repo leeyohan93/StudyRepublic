@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,12 +34,12 @@ import lombok.Getter;
 @Entity
 @Table(name = "inquireboard_reply")
 public class InquireBoardReply extends Reply{
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "inquireboard_reply_id")
 	private int inquireBoardReplyId;
-	
+
 	protected String id;
 	protected String content;
 	@CreationTimestamp
@@ -46,8 +48,12 @@ public class InquireBoardReply extends Reply{
 	protected int replyGroup;
 	@Column(name = "replystep")
 	protected int replyStep;
-	
+
 
 	@Column(name = "inquireboard_id")
 	private int inquireBoardId;
+
+	@ManyToOne
+	@JoinColumn(name="id",insertable=false, updatable=false)
+	protected Member member;
 }

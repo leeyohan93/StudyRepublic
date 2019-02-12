@@ -100,7 +100,7 @@
 <!-- 제목, 공지옵션, 비공개옵션, -->
   <span>
 	<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
-	<input id ="boardWriter" name ='id' type='hidden' value="aaa123">
+	<input id ="boardWriter" name ='id' type='hidden' th:value="${memberId}">
 	</span>
     <input id ="boardNotice" name ="notice" type="checkbox" value="0">
     <span class ="boardTitleOpt">공지</span> 
@@ -194,9 +194,8 @@ $(document).ready(function(){
     	if($("#boardNotice").is(":checked")){ 	
     	
     		var c = $("#boardNotice").val(1);
-    		var a = Number(c.val()) + 2;
-    		console.log(a);
-    		$("#boardNotice").val(a);
+    		console.log(c.val());
+    		
 
     	}else{
     		var d= $("#boardNotice").val(0);  
