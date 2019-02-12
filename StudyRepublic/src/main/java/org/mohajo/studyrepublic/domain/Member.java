@@ -82,7 +82,7 @@ public class Member implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "GRADE_CODE")
-	private GradeCD gradeCD = new GradeCD("N");
+	private GradeCD gradeCD;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name = "member")	

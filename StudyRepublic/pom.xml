@@ -105,15 +105,12 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
 			<version>3.0.2.RELEASE</version>
-        </dependency>
+		</dependency>
 
-		<!-- <dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.6.4</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-core</artifactId> 
+			<version>2.6.4</version> </dependency> -->
 
-		<!--AJAX 결과를 객체 타입으로 반환하기 위한 dependency 19/02/04 sangyong.shin  -->
+		<!--AJAX 결과를 객체 타입으로 반환하기 위한 dependency 19/02/04 sangyong.shin -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -123,6 +120,12 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.9.4</version>
+		</dependency>
+		<!-- Java Mail API -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>1.4.3.RELEASE</version>
 		</dependency>
 	</dependencies>
 

@@ -17,4 +17,18 @@ public interface AdminMemberService {
 
 	List<Member> getMemberList();
 
+	List<Member> changeGrade(String[] selectedId, String changeGrade);
+
+	void sendEmailMessage(String[] to, String subject, String text);
+
+	List<Member> pauseMember(String[] selectedId);
+
+	List<Member> unpauseMember(String[] selectedId);
+
+	List<Member> exiteMember(String[] selectedId);
+
+	void changePassword(String memberId, String memberPhonenumber);
+
+	List<Member> getSearchMember(String[] grade, String[] status, String searchKey, String searchValue);
+
 }

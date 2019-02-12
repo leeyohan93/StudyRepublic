@@ -1,5 +1,6 @@
 package org.mohajo.studyrepublic.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mohajo.studyrepublic.domain.Interest1CD;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author 이요한
@@ -109,11 +112,10 @@ public class MainServiceImpl implements MainService{
 		Page<Study> searchResult = studyRepository.findAll(MainPredicate.searchStudy(studyInfo,searchDate,location,interest),paging);
 		
 		List<Study> searchList = searchResult.getContent();
-/*		for(Study list:searchList) {
-			System.out.println("list = ");
-			System.out.println(list);
-		}
-*/		return searchList;
+		
+		Iterable<Study> a = studyRepository.findAll(MainPredicate.searchStudy(studyInfo,searchDate,location,interest));
+		List b =Lists.newArrayList(a);
+		return searchList;
 		
 	}
 	

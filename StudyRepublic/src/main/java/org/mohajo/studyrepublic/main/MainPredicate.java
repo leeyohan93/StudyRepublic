@@ -74,6 +74,8 @@ public class MainPredicate {
 			builder.and(study.studyInterest.any().interest2code.interest2Code.in(interest));
 		}
 		
+		builder.and(study.studyStatusCode.studyStatusCode.notIn("C","D"));
+		
 		System.out.println(builder.toString());
 		return builder;
 	}
