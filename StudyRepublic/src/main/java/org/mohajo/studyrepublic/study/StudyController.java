@@ -281,6 +281,11 @@ public class StudyController {
 		log.info("open() called...");
 
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+
+		if(auth.getName() == "anonymousUser") {
+			return "/member/login";
+		}
+		
 		String id = auth.getName();
 		Member member = mr.findById(id).get();
 		
@@ -352,7 +357,7 @@ public class StudyController {
 		
 		log.info("test() called...");
 
-//		List<Leveltest> leveltest = lr.findAll();
+/*//		List<Leveltest> leveltest = lr.findAll();
 //		List<LeveltestResponse> leveltestResponse = lrr.findAll();
 //		List<LeveltestResponse> leveltestResponse = lrr.selectByStudyId("BF00003");
 		List<StudyMember> studyMember = smr.selectByStudyId("BB00002");
@@ -363,7 +368,10 @@ public class StudyController {
 //		model.addAttribute("test", leveltestResponse);
 		model.addAttribute("test2", studyMember);
 
-		return "/study/test";
+		return "/study/test";*/
+		
+		return "/study/paperBootTest";
+		
 	}
 	// 테스트 끝.
 

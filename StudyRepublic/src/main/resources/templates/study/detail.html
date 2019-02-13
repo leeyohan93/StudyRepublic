@@ -161,24 +161,32 @@ layout:decorate="~{/layout/mainLayout}">
 	*	Star Ratings With JavaScript & Font Awesome, BY Traversy Media (https://www.youtube.com/watch?v=u3rylF3y3og)
 	*/
 	.stars-outer {
-		position: relative;
-		display: inline-block;
-	}
-	.stars-inner {
-		position: absolute;
-		top: 0;
-		left: 0;
-		white-space: nowrap;
-		overflow: hidden;
-		width: 0; 
-	}
-	.start-outer::before {
-		content: "\f005";
-		font-family: 'Font Awesome Free';
-		font-weight: 900;
-		color: #ccc;
+	  position: relative;
+	  display: inline-block;
 	}
 	
+	.stars-inner {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  width: 0;
+	}
+	
+	.stars-outer::before {
+	  content: "\f005 \f005 \f005 \f005 \f005";
+	  font-family: "Font Awesome 5 Free";
+	  font-weight: 900;
+	  color: #ccc;
+	}
+	
+	.stars-inner::before {
+	  content: "\f005 \f005 \f005 \f005 \f005";
+	  font-family: "Font Awesome 5 Free";
+	  font-weight: 900;
+	  color: #f8ce0b;
+	}
 </style>
 </head>
 <body>
@@ -187,9 +195,12 @@ layout:decorate="~{/layout/mainLayout}">
 		<div class="inner">
 			<h3>스터디 상세</h3>
 			<section class="studyDetail">
+			
+				<!-- 공유하기 -->
 				<div class="row share-via-sns">
-					<!-- 공유하기 아이콘 -->
 				</div>
+				
+				<!-- 1. 기본 정보 -->
 				<section class="row basic-info">
 					<div class="row essential-info-1">
 						<div class="col-md-2 column-name">스터디명</div>
@@ -222,6 +233,7 @@ layout:decorate="~{/layout/mainLayout}">
 					</div>
 	
 				</section>
+				
 				<!-- 2. 스터디 소개 -->
 				<section class="intro">
 					<h5>소개</h5>
@@ -229,6 +241,8 @@ layout:decorate="~{/layout/mainLayout}">
 						<p th:text="${study.introduction}"></p>
 					</div>
 				</section>
+				
+				<!-- 3. 추가 정보 -->
 				<section class="additional-info">
 					<div class="tab-head0">
 						<ul class="tab-head0">
@@ -240,7 +254,8 @@ layout:decorate="~{/layout/mainLayout}">
 							</li>
 						</ul>
 					</div>
-	<!-- 				스터디 타입에 따라 불러오는 데이터 달라진다. (미구현 상태) -->
+					
+					<!-- 1) 리더 정보 -->
 					<div class="tab-content leader-info" id="tab-content-leaderInfo" th:if="${tutorInfo}" th:with="leaderInfo = ${tutorInfo.member}">
 						<div class="profile-container">
 							<div class="profile-image-container">
@@ -268,33 +283,38 @@ layout:decorate="~{/layout/mainLayout}">
 										<td>no.</td>
 										<td><a th:href="@{'/study/detail/' + ${tempStudy.studyId}}" th:text="${tempStudy.name}">studyName</a>&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorean}">status</i></td>
 										<td th:text="|${tempStudy.startDate}~${tempStudy.endDate}|">period</td>
-										<td><div class="stars-outer">
-											<div class="stars-inner"></div>
-										</div><span class="stars-score" th:value="${tempStudy.averageScore}!=-1? ${tempStudy.averageScore} : '-'" th:text="${tempStudy.averageScore}!=-1? ${tempStudy.averageScore} : '-'">avgScore</span></td>
+										<td th:if="${tempStudy.averageScore}==-1">-</td>
+										<td th:unless="${tempStudy.averageScore}==-1" class="score-container">
+											<div class="stars-outer"><div class="stars-inner">별</div></div>
+											<span class="stars-score" th:text="${tempStudy.averageScore}!=-1? ${tempStudy.averageScore} : '-'">avgScore</span>
+										</td>
 									</th:block>
 								</tr>
 							</table>
 						</div>
 					</div>
+					<!-- 2) 강의 후기 -->
 					<div class="tab-content review invisible" id="tab-content-review">
 						<p th:text="${#lists.isEmpty(study.review)}? '작성 된 후기가 없습니다.' ">후기 리스트</p>
 						<th:block th:if="${not #lists.isEmpty(study.review)}">
 							<span class="review-counter" ></span>
 							
-							<div class="review-unit" th:each="review : ${study.review}">
+							<div class="review-unit" th:each="review : ${study.review}" th:with="reviewer = ${review.studyMember.member}">
 								<span class="review-index" th:classappend="${reviewStat.index}" th:text="${reviewStat.index}+1"></span>
-								<img class="reviewer-profile-image" alt="리뷰어 프로필 사진" th:with="reviewer = ${review.studyMember.member}" th:src="${reviewer.profileSaveName}? @{'/static/images/' + ${reviewer.id} + '/' + ${reviewer.profileSaveName}} : @{/static/images/defaultProfile.jpg}">
-								<span class="reviewer-nickname" th:text="${review.studyMember.member.nickname}"></span>
-								<div class="stars-outer">
-									<div class="stars-inner"></div>
+								<img class="reviewer-profile-image" alt="리뷰어 프로필 사진" th:src="${reviewer.profileSaveName}? @{'/static/images/' + ${reviewer.id} + '/' + ${reviewer.profileSaveName}} : @{/static/images/defaultProfile.jpg}">
+								<span class="reviewer-nickname" th:text="${reviewer.nickname}"></span>
+								<div class="score-container">
+									<div class="stars-outer"><div class="stars-inner">별</div></div>
+									<span class="stars-score" th:text="${review.score}">score</span>
 								</div>
-								<span class="stars-score" th:value="${review.score}" th:text="${review.score}">score</span>
 								<p th:text="${review.content}"></p>
 							</div>
 							
 						</th:block>
 					</div>
 				</section>
+				
+				<!-- 스터디 가입 신청 버튼 -->
 				<th:block th:with="studyStatusCode = ${study.studyStatusCode.studyStatusCode}">
 					<th:block th:unless="${studyStatusCode.equals('C')} OR ${studyStatusCode.equals('D')}">
 						<button sec:authorize="isAnonymous()" class="sticky btn-join-study" data-user-type="anonymous" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
@@ -433,21 +453,20 @@ layout:decorate="~{/layout/mainLayout}">
 		}
 		
 		function getRatingStars() {
-			var s = $(".stars-score:not([value='-'])");
-			var score = s[i].getAttribute("value");
+			var s = $(".stars-score");
+			var score;
+			var scoreTotal = 5;
+			var width;
 			
-			var width = Math.round( score / scoreTotal * 100 /10 ) * 10;
-			
-			document.querySelector('. .stars-inner').style.width = width;
-			
-			
-			
-			
-			$('.stars-score').length;	//전체 평균평점 개수 (리더 활동내역 및 스터디 후기 탭 모두 포함)
-			var starWidth = Math.round()*10;
-			
-			document.querySelector('. .stars-inner').style.width = starWidth;
-			
+			for(let i=0; i < s.length; i++) {
+				score = s[i].textContent;
+				
+				if(score != "-") {
+					width = Math.round( (score/scoreTotal * 100) /10 ) * 10 + "%";
+					console.log(width);
+					s[i].previousElementSibling.children[0].style.width = width;
+				}			
+			}
 		}
 		
 	</script>
