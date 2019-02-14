@@ -45,7 +45,6 @@ public class AdminMemberController {
 	public String changePassword(Model model,String memberId,String[] memberEmail,String memberPhonenumber) {
 		String subject="Study Republic 비밀번호 초기화 확인 메일입니다";
 		String text="비밀번호는 회원님의 휴대전화번호로 초기화 되었습니다";
-		System.out.println(memberId);
 		adminMemberService.sendEmailMessage(memberEmail,subject,text);
 		adminMemberService.changePassword(memberId,memberPhonenumber);
 		return "redirect:/adminPage/member/list";
@@ -54,7 +53,6 @@ public class AdminMemberController {
 	@ResponseBody
 	@RequestMapping(value = "/unpause", method = RequestMethod.POST)
 	public List<Member> unpause(Model model,String[] selectedId, String[] selectedEmail) {
-		System.out.println("ajax");
 		String subject="당신의 활동을 허하노라";
 		String text="하위";
 		adminMemberService.sendEmailMessage(selectedEmail,subject,text);
