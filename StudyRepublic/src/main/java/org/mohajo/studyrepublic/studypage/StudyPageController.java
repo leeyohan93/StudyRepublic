@@ -193,4 +193,11 @@ public class StudyPageController {
 		return studyNoticeboardReplyRepository.findNoticeboardReplyByStudyIdANDNumber(readBoardContent.getStudyId(), readBoardContent.getNumber());
 	}
 
+	@RequestMapping(value="/StudyPage/Write", method=RequestMethod.GET)
+	public String showStudyNoticeboardWrite(Model model, @RequestParam(name="board") String board){
+		log.info("글쓰기 폼 진입");
+		log.info(board);
+		model.addAttribute("boardName", board);
+		return "studypage/studypage_write";
+	}
 }

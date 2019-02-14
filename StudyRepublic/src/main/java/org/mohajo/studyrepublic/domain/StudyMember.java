@@ -51,14 +51,14 @@ public class StudyMember implements Serializable {
 		@JoinColumn(name="studyId")
 		private Study study;
 		
-		@OneToMany(mappedBy="studyMember")
+		/*@OneToMany(mappedBy="studyMember")
 		private List<StudyNoticeboard> studyNoticeboard;
 		
 		@OneToMany(mappedBy="studyMember")
 		private List<StudyFileshareboard> studyFileshareboard;
 		
 		@OneToMany(mappedBy="studyMember")
-		private List<StudyQnaboard> studyQnaboard;
+		private List<StudyQnaboard> studyQnaboard;*/
 		
 
 }

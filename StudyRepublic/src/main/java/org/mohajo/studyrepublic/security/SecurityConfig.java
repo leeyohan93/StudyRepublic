@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**","/tutor/**").permitAll()
 		.antMatchers().hasRole("A")
 		.antMatchers("/tutor/signup","/tutor/insert","/pay"  ).hasAnyRole("N","A")
-		.antMatchers("/tutor/inquery").hasRole("N")
+		.antMatchers("/tutor/inquery" /*,"/StudyPage/**"*/).hasRole("N")
 /*		.antMatchers("/tutor/**","/tutor/file/**").hasRole("W")*/
 		/*.antMatchers("/admin/**").hasAnyRole("A","T")*/	// a나 t  둘 다 된다.
 /*		.antMatchers("/tutor/**").hasRole("T")*/;
@@ -82,14 +82,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.logoutSuccessUrl("/index");
 /*		.deleteCookies("JSESSIONID","remember-me");*/
 		
-		
-		http
-		.rememberMe()
-		.key("member")
-		.userDetailsService(memberservice);
-		
-		http.headers().frameOptions().sameOrigin();
-		
 		http
 		.rememberMe()
 		.key("member")
@@ -100,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		 
 		//스마트에디터 관련 설정
-		 http.headers().frameOptions().disable();
+		 http.headers().frameOptions().sameOrigin();
 
 		
 		http.addFilterAfter(new ExceptionHandlerFilter(), SecurityContextHolderAwareRequestFilter.class);
