@@ -53,9 +53,8 @@ $(document).ready(function () {
             data: formData,
 
             success: function (data) {
-                alert("성공");
                 for (var i = 0; i < selectedRow.length; i++) {
-                    $('#' + selectedRow[i].id)[0].children[9].innerText = data[i].studyStatusCode.codeValueKorean;
+                    $('#' + selectedRow[i].id)[0].children[8].innerText = data[i].studyStatusCode.codeValueKorean;
                 }
                 
             },

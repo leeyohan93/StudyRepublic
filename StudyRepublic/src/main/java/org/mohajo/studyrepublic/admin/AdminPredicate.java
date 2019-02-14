@@ -7,7 +7,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.mohajo.studyrepublic.domain.QFreeBoard;
+import org.mohajo.studyrepublic.domain.QInquireBoard;
 import org.mohajo.studyrepublic.domain.QMember;
+import org.mohajo.studyrepublic.domain.QRequestBoard;
 import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.QStudyInterest;
 import org.mohajo.studyrepublic.domain.QStudyLocation;
@@ -33,7 +36,6 @@ public class AdminPredicate {
 			builder.and(member.id.in(selectedId));
 		}
 		
-		System.out.println(builder.toString());
 		return builder;
 	}
 	
@@ -121,5 +123,68 @@ public class AdminPredicate {
 		
 		return builder;
 	}
+	
+	public static Predicate searchFreeBoard(String searchKey, String searchValue) {
+
+		BooleanBuilder builder = new BooleanBuilder();
+		QFreeBoard freeBoard = QFreeBoard.freeBoard;
+		
+		if(!(searchValue.equals(""))) {
+			switch(searchKey) {
+			case "title":
+				builder.and(freeBoard.title.contains(searchValue));
+				break;
+			case "content":
+				builder.and(freeBoard.content.contains(searchValue));
+				break;
+			case "memberId":
+				builder.and(freeBoard.id.contains(searchValue));
+			}
+		}
+		return builder;
+	}
+	
+	public static Predicate searchRequestBoard(String searchKey, String searchValue) {
+
+		BooleanBuilder builder = new BooleanBuilder();
+		QRequestBoard requestBoard = QRequestBoard.requestBoard;
+		
+		if(!(searchValue.equals(""))) {
+			switch(searchKey) {
+			case "title":
+				builder.and(requestBoard.title.contains(searchValue));
+				break;
+			case "content":
+				builder.and(requestBoard.content.contains(searchValue));
+				break;
+			case "memberId":
+				builder.and(requestBoard.id.contains(searchValue));
+			}
+		}
+		return builder;
+	}
+	
+	public static Predicate searchInquireBoard(String searchKey, String searchValue) {
+
+		BooleanBuilder builder = new BooleanBuilder();
+		QInquireBoard inquiredBoard = QInquireBoard.inquireBoard;
+		
+		if(!(searchValue.equals(""))) {
+			switch(searchKey) {
+			case "title":
+				builder.and(inquiredBoard.title.contains(searchValue));
+				break;
+			case "content":
+				builder.and(inquiredBoard.content.contains(searchValue));
+				break;
+			case "memberId":
+				builder.and(inquiredBoard.id.contains(searchValue));
+			}
+		}
+		
+		
+		return builder;
+	}
+
 
 }

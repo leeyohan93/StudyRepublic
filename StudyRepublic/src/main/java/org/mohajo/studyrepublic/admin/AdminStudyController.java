@@ -52,9 +52,8 @@ public class AdminStudyController {
 		return "/adminPage/study/list";
 	}
 	
-	@ResponseBody
 	@RequestMapping("/disband")
-	public List<Study> disband(Model model,String[] selectedMemberId,String[] selectedId,String sendId,String messageContent){
+	public String disband(Model model,String[] selectedMemberId,String[] selectedId,String sendId,String messageContent){
 		for(String receiveId : selectedMemberId) {
 			SendMessage sendmessage = new SendMessage();
 			sendmessage.setSendId(sendId);
@@ -68,6 +67,26 @@ public class AdminStudyController {
 //			selected.setStudyStatusCode(new StudyStatusCD("O","모집중"));
 			studyRepository.save(selected);
 		}
-		return studyRepository.getSelectedStudy(selectedId);
+		return "redirect:/adminPage/study/list";
 	}
+	
+	//paging ajax으로 인한 사용 중지
+	/*@ResponseBody
+	@RequestMapping("/disband")
+	public List<Study> disband(Model model,String[] selectedMemberId,String[] selectedId,String sendId,String messageContent){
+		for(String receiveId : selectedMemberId) {
+			SendMessage sendmessage = new SendMessage();
+			sendmessage.setSendId(sendId);
+			sendmessage.setReceiveId(receiveId);
+			sendmessage.setMessageContent(messageContent);
+			sendMessageRepository.save(sendmessage);
+		}
+		List<Study> selectedStudy = studyRepository.getSelectedStudy(selectedId);
+		for(Study selected : selectedStudy) {
+//			selected.setStudyStatusCode(new StudyStatusCD("D","해체"));
+			selected.setStudyStatusCode(new StudyStatusCD("O","모집중"));
+			studyRepository.save(selected);
+		}
+		return studyRepository.getSelectedStudy(selectedId);
+	}*/
 }

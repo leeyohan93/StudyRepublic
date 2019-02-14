@@ -160,7 +160,7 @@
 							<a class="close" data-dismiss="modal" href="#"><i
 								class="fa fa-close"></i></a>
 						</div>
-						<form id="permission" method="post">
+						<form id="permission" action="permission" method="post">
 							<input type="hidden" th:name="${_csrf.parameterName}"
 								th:value="${_csrf.token}" />
 							<div class="modal-body">
@@ -176,7 +176,11 @@
 							</div>
 							<div class="modal-footer">
 								<a data-dismiss="modal" href="#">Cancel</a>
-								<a id="permission-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a>
+								<!-- <a id="permission-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
+								<input type="submit"
+									class="btn btn-custon-rounded-four btn-primary"
+									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									value="Process">
 							</div>
 						</form>
 					</div>
@@ -192,7 +196,7 @@
 							<a class="close" data-dismiss="modal" href="#"><i
 								class="fa fa-close"></i></a>
 						</div>
-						<form id="prohibition" method="post">
+						<form id="prohibition" action="prohibition" method="post">
 							<input type="hidden" th:name="${_csrf.parameterName}"
 								th:value="${_csrf.token}" />
 							<div class="modal-body">
@@ -209,7 +213,11 @@
 								</div>
 							<div class="modal-footer danger-md">
 								<a data-dismiss="modal" href="#">Cancel</a>
-								<a id="prohibition-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a>
+								<!-- <a id="prohibition-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
+								<input type="submit"
+									class="btn btn-custon-rounded-four btn-primary"
+									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									value="Process">
 							</div>
 						</form>
 					</div>

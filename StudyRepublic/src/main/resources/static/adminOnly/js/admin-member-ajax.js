@@ -14,7 +14,7 @@ $(function() {
 });
 
 $(document).ready(function () {
-
+	// paging과 맞물려 사용 중지
     $("#unpause-process").click(function (event) {
         unpause();
     });

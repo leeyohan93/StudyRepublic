@@ -51,7 +51,36 @@ public class AdminTutorController {
 		return "/adminPage/tutor/list";
 	}
 	
-	@ResponseBody
+	@RequestMapping("/permission")
+	public String permission(Model model,String[] selectedId,String sendId,String messageContent){
+		for(String receiveId : selectedId) {
+			SendMessage sendmessage = new SendMessage();
+			sendmessage.setSendId(sendId);
+			sendmessage.setReceiveId(receiveId);
+			sendmessage.setMessageContent(messageContent);
+			sendMessageRepository.save(sendmessage);
+		}
+		
+		adminMemberService.changeGrade(selectedId,"T");
+		return "redirect:/adminPage/tutor/list";
+	}
+
+	@RequestMapping("/prohibition")
+	public String prohibition(Model model,String[] selectedId,String sendId,String messageContent){
+		for(String receiveId : selectedId) {
+			SendMessage sendmessage = new SendMessage();
+			sendmessage.setSendId(sendId);
+			sendmessage.setReceiveId(receiveId);
+			sendmessage.setMessageContent(messageContent);
+			sendMessageRepository.save(sendmessage);
+		}
+		
+		adminMemberService.changeGrade(selectedId,"N");
+		return "redirect:/adminPage/tutor/list";
+	}
+	
+	//ajax 사용 했으나 paging ajax와 맞물려서 다시 redirect로 수정 함...
+	/*@ResponseBody
 	@RequestMapping("/permission")
 	public List<Member> permission(Model model,String[] selectedId,String sendId,String messageContent){
 		for(String receiveId : selectedId) {
@@ -77,5 +106,5 @@ public class AdminTutorController {
 		}
 		
 		return adminMemberService.changeGrade(selectedId,"N");
-	}
+	}*/
 }

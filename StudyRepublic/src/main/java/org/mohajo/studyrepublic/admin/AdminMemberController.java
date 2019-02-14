@@ -50,7 +50,45 @@ public class AdminMemberController {
 		return "redirect:/adminPage/member/list";
 	}
 	
-	@ResponseBody
+	@RequestMapping(value = "/unpause")
+	public String unpause(Model model,String[] selectedId, String[] selectedEmail) {
+		String subject="당신의 활동을 허하노라";
+		String text="하위";
+		adminMemberService.sendEmailMessage(selectedEmail,subject,text);
+		List<Member> list = adminMemberService.unpauseMember(selectedId);
+		return "redirect:/adminPage/member/list";
+	}
+	
+	@RequestMapping("/changeGrade")
+	public String changeGrade(Model model,String changeGrade, String[] selectedId) {
+		 adminMemberService.changeGrade(selectedId,changeGrade);
+		 return "redirect:/adminPage/member/list";
+	}
+	
+	@RequestMapping("/pause")
+	public String pauseMember(Model model,String[] selectedId,String[] selectedEmail,String subject,String text) {
+		adminMemberService.sendEmailMessage(selectedEmail,subject,text);
+		adminMemberService.pauseMember(selectedId);
+		return "redirect:/adminPage/member/list";
+	}
+	
+	@RequestMapping("/exit")
+	public String exitMember(Model model,String[] selectedId,String[] selectedEmail,String subject,String text) {
+		adminMemberService.sendEmailMessage(selectedEmail,subject,text);
+		adminMemberService.exiteMember(selectedId);
+		return "redirect:/adminPage/member/list";
+	}
+	
+	@RequestMapping("/searchMember")
+	public String searchMember(Model model,String[] grade,String[] status,String searchKey,String searchValue){
+		model.addAttribute("memberList",adminMemberService.getSearchMember(grade, status, searchKey, searchValue));
+		return "/adminPage/member/list";
+	}
+
+	
+	
+	//ajax 사용 했으나 paging ajax와 맞물려서 다시 redirect로 수정 함...
+	/*@ResponseBody
 	@RequestMapping(value = "/unpause", method = RequestMethod.POST)
 	public List<Member> unpause(Model model,String[] selectedId, String[] selectedEmail) {
 		String subject="당신의 활동을 허하노라";
@@ -79,11 +117,4 @@ public class AdminMemberController {
 		adminMemberService.sendEmailMessage(selectedEmail,subject,text);
 		return adminMemberService.exiteMember(selectedId);
 	}
-	
-	@RequestMapping("/searchMember")
-	public String searchMember(Model model,String[] grade,String[] status,String searchKey,String searchValue){
-		model.addAttribute("memberList",adminMemberService.getSearchMember(grade, status, searchKey, searchValue));
-		
-		return "/adminPage/member/list";
-	}
-}
+*/}
