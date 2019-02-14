@@ -1,6 +1,6 @@
 spring:
   thymeleaf:
-    cache: false
+    cache: false                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://1.220.120.66:3306/StudyRepublic?serverTimezone=Asia/Seoul&useSSL=true&useUnicode=yes&characterEncoding=utf-8
@@ -14,9 +14,7 @@ spring:
     properties:  
         hibernate.format_sql: true # 형식화된 sql 문을 보여준다. Beautifier 기능이라고 생각하면 된다
         hibernate.enable_lazy_load_no_trans: true #Lazy Load 를 적용하기 위한 설정
-    
-
-
+        
       
 
     

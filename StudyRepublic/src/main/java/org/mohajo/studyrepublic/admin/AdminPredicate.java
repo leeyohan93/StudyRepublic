@@ -3,15 +3,7 @@
  */
 package org.mohajo.studyrepublic.admin;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.mohajo.studyrepublic.domain.QMember;
-import org.mohajo.studyrepublic.domain.QStudy;
-import org.mohajo.studyrepublic.domain.QStudyInterest;
-import org.mohajo.studyrepublic.domain.QStudyLocation;
-import org.mohajo.studyrepublic.domain.Study;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;

@@ -49,25 +49,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 	
 		http
-		.authorizeRequests()	
-		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**","/tutor/**").permitAll()
-		.antMatchers("/admin/**","/member/inquery","/member","/adminPage/**").hasRole("A")
-		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**").hasAnyRole("N","A")
-		.antMatchers("/tutor/inquery").hasRole("N")
-/*		.antMatchers("/tutor/**","/tutor/file/**").hasRole("W")*/
-		/*.antMatchers("/admin/**").hasAnyRole("A","T")*/	// a나 t  둘 다 된다.
-/*		.antMatchers("/tutor/**").hasRole("T")*/;
+		.authorizeRequests()
+		.antMatchers("/login", "/member/signup","/member/insert","/member/checkid","/member/checknick").anonymous()
+		.antMatchers("/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**").permitAll()
+		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/tutor/inquery","/tutor/file/**","/tutor/delete/**").hasAnyRole("N","W","T","A")
+		.antMatchers("/tutor").hasAnyRole("T","A")
+		.antMatchers("/admin/**","/adminPage/**").hasRole("A");
 
-/*		.antMatchers("/").permitAll();*/
-		// .antMatchers("/admin/**","/member/**").hasRole("A") 여기서 /member/** 는 동작하지 않음(/member 하위 접근권한 x. *바로 아랫줄 .antMatchers("/member/**").hasRole("N")가 있기 떼문
-		// /member/** 에 대한 권한이 N인 사람의 권한으로 덮어쓰기됨. 이럴 경우 A권한인 사람은 N권한도 중복으로 가져야함. DB에서 등록.
 						
+
 		http
 		.formLogin()
 		.loginPage("/login")
 		.successHandler(new LoginSuccessHandler())
-		.defaultSuccessUrl("/index")
-		.permitAll();
+		.defaultSuccessUrl("/index");
+		
 		
 		http
 		.exceptionHandling()
