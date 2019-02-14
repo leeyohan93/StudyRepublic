@@ -69,6 +69,7 @@
 			$.ajax({
 				type:"POST",
 				contentType: "application/json; charset=UTF-8",
+// 				Transfer-Encoding:chunked,
 				url:"/StudyPage/Noticeboard/show",
 				data: JSON.stringify(StudyNoticeboard),
 				dataType: "json",

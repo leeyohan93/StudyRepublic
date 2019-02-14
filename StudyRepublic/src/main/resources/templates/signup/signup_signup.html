@@ -43,7 +43,7 @@ layout:decorate="~{/layout/mainLayout}">
 </head>
 <body>
 	
- <div id = "wrapper"> 
+<div id = "wrapper"> 
 <div layout:fragment = "main">
 <div class = "inner"> 
 
@@ -110,12 +110,12 @@ layout:decorate="~{/layout/mainLayout}">
 						
 						<div class="join-input100" data-validate = "성별을 선택해주세요." style = "float:left; margin : 0 50px 30px 0;"> 
 						<input class = "input100" type="radio" id = "gender" name="gender" value="남" onblur="check_Gender()"/>
-						<label for = "gender">남자</label>
+						<label for = "gender" style = "margin:30px 0px 0px 10px">남자</label>
 						<input class = "input100" type="radio" id = "gender" name="gender" value="여" onblur="check_Gender()"/>
-						<label for = "gender">여자</label>
+						<label for = "gender" style = "margin:30px 0px 0px 10px">여자</label>
 						<span class="focus-input100"></span>
 						<span class="label-radio">성별</span>
-						<span class = "member" id = "enterGender" style = "padding:0px 160px 0px 26px"></span>
+						<span class = "member" id = "enterGender" style = "padding:10px 160px 0px 26px"></span>
 						<span class = "member" id = "enterGender" style = "display:none"></span>
 						</div>		
 			
@@ -137,7 +137,7 @@ layout:decorate="~{/layout/mainLayout}">
 						<span class = "member" style = "display:none"></span>
 						</div>
 						
-						<div class="join-input100" data-validate = "이메일을 선택해주세요." style = "float:left;   margin:0px 0px 30px 0px; width:150px"> 
+						<div class="join-input100" data-validate = "이메일을 선택해주세요." style = "float:left;  margin:0px 0px 30px 0px; width:150px;">  
 				            <select name="email3" id="email3" onchange="email_change(this)" onblur = "emailvalue()" style = "padding: 0px 0px 0px 15px">
 				            <option value="0">선택</option>
 				            <option value="9">직접입력</option>
@@ -324,7 +324,7 @@ $(function() {
           $('#signup').on('click', function(){
           rePw = document.getElementById("repassword").value;
        
-        if(!(idCheck ==0 && nickCheck == 0 && (pw == repw) && uid != "" && pw != "" && repw != "" && name != "" && gender != "" && email != "" && phonenumber != "" && birth != "")) {
+        if(!(idCheck ==0 && nickCheck == 0 && (pw == repw) && uid != "" && pw != "" && repw != "" && name != "" && gender != "" && email != "" && phoneNumber != "" && birth != "")) {
             alert("미입력 부분을 입력하세요.");
             for(i = 0; i < information.length; i++) {              
                     if(information[i].value == "") {
