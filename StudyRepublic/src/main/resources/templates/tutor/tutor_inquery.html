@@ -11,40 +11,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
-<!-- default header name is X-CSRF-TOKEN -->
+default header name is X-CSRF-TOKEN
 <meta id="_csrf_header" name="_csrf_header"
 	th:content="${_csrf.headerName}" />
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="icon" type="image/png"
 	href="/Login_v18/images/icons/favicon.ico" />
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css"
 	href="/Login_v18/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css"
 	href="/Login_v18/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css"
 	href="/Login_v18/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css"
 	href="/Login_v18/vendor/animate/animate.css">
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css"
 	href="/Login_v18/vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css"
 	href="/Login_v18/vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css"
 	href="/Login_v18/vendor/select2/select2.min.css">
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css"
 	href="/Login_v18/vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
+===============================================================================================
 <link rel="stylesheet" type="text/css" href="/Login_v18/css/util.css">
 <link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
-<!--===============================================================================================-->
+===============================================================================================
 
 <style>
  table {
@@ -108,7 +108,7 @@ padding: 2em 1.2em;
 							<form class="login100-form validate-form" name="image_Form"
 								id="image_Form" action="attachments" method="post"
 								style="margin-top: 50px; margin-bottom: 0; width: 940px; padding: 50px 55px 0px 55px;">
-								<!-- <span class="login100-form-title p-b-43"> 프리미엄등급 신청 내역 </span> -->
+								<span class="login100-form-title p-b-43"> 프리미엄등급 신청 내역 </span>
 
 								<div class="wrap-input100_label" th:each = "member : ${mdu}"style="width: auto; height: auto; margin-bottom: 120px" >
 									<span class="label-input100_label"  th:text = "${member.name} + '님 신청내역'"style="width: 220px; font-size:25px">
@@ -130,20 +130,20 @@ padding: 2em 1.2em;
 
 								   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 								   
-<!-- 								<div class="wrap-input100_ validate-input" style = "width:500px;float:left; top:53px;">	
+								<div class="wrap-input100_ validate-input" style = "width:500px;float:left; top:53px;">	
 								
 								<div th:each="member : ${mdu}" >
 								<div th:text= "${member.name}"></div>
 								</div>
 								
-								</div>	 -->
+								</div>	
 								
-<!-- 						<div class="join-input100" style = "float:left;"> 
+						<div class="join-input100" style = "float:left;"> 
 			
 						<span class="focus-input100"></span>
 						<span class="label-input100">윤성호</span>
 						<span class="label-input100">이름</span>
-						</div> -->
+						</div>
 							
 					<div class="wrap-input100_ validate-input" style = "width:500px;float:left;">
 					<table id="table" class="bluetop" th:each="member : ${mdu}" th:inline = "text" border = "1">
@@ -183,19 +183,19 @@ padding: 2em 1.2em;
 
 
 						<div class="wrap-input100_label"
-							style="width: auto; height: auto; margin-bottom: 70px; ">
-							<span class="label-input100_label" style="width: 80px; ">
+							style="width: auto; height: auto; margin-bottom: 70px">
+							<span class="label-input100_label" style="width: 80px;">
 								경력사항</span>
 						</div>
 											
 						
 						
-							<div class="wrap-input100 validate-input" style="padding: 20px; margin: auto; margin-bottom: 40px; height:auto">
+							<div class="wrap-input100 validate-input" style="padding: 20px; margin: auto; margin-bottom: 40px;">
 
 							<div class="wrap-input100_ validate-input_">
 								<div th:each="selc : ${selectedtutorcareer}">
 								<div id="career" name="career">
-									<div class="ysh" id="sedu" style="margin-bottom: 20px; padding: 0"><span class="yshspan">⊙</span></div>
+									<div class="ysh" id="sedu" style="margin-bottom: 20px; padding: 0"><span class="yshspan">></span></div>
 									<div class="ysh" id="sedu" style="margin-bottom: 20px;"><span class="yshspan" th:text = "${selc.careerCD.codeValueKorean}">&gt;</span></div>
 								</div>
 								
@@ -205,18 +205,18 @@ padding: 2em 1.2em;
 							
 							
 						<div class="wrap-input100_label"
-							style="width: auto; height: auto; margin-bottom: 70px; ">
-							<span class="label-input100_label" style="width: 132px;height:auto" >
+							style="width: auto; height: auto; margin-bottom: 70px">
+							<span class="label-input100_label" style="width: 132px;">
 								스터디희망분야</span>
 						</div>
 							
 							
-							<div class="wrap-input100 validate-input" style="padding: 20px; margin: auto; margin-bottom: 40px; height:auto">
+							<div class="wrap-input100 validate-input" style="padding: 20px; margin: auto; margin-bottom: 40px;">
 
 							<div class="wrap-input100_ validate-input_">
 								<div th:each="seli : ${selectedtutorinterest}">
 								<div id="interest" name="interest">
-									<div class="ysh" id="sedu" style="margin-bottom: 20px; padding: 0"><span class="yshspan">⊙</span></div>
+									<div class="ysh" id="sedu" style="margin-bottom: 20px; padding: 0"><span class="yshspan">></span></div>
 									<div class="ysh" id="sedu" style="margin-bottom: 20px;"><span class="yshspan" th:text = "${seli.interest2CD.codeValueKorean}">&gt;</span></div>
 								</div>
 								
@@ -227,15 +227,15 @@ padding: 2em 1.2em;
 
 
 							<div class="wrap-input100_ validate-input">
-<!-- 								<div id="interest1cd" name="interest1cd">
+								<div id="interest1cd" name="interest1cd">
 									<div id="int1"></div>
-								</div> -->
+								</div>
 							</div>
 
 							<div class="wrap-input100_ validate-input">
-<!-- 								<div id="interest2cd" name="interest2cd">
+								<div id="interest2cd" name="interest2cd">
 									<div id="int2"><input type="text" id="isel0" name="tutorinterest[0].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel0" onclick="deleteInterest(0)" style="display: none;"><div id="liisel0" class="ysh"><span class="yshspan"> &gt; 네트워크관리</span> <input class="yshbtn" type="button" value="X" id="liidel0" onclick="deleteInterest(0)"></div><input type="text" id="isel1" name="tutorinterest[1].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel1" onclick="deleteInterest(1)" style="display: none;"><div id="liisel1" class="ysh"><span class="yshspan"> &gt; LINUX</span> <input class="yshbtn" type="button" value="X" id="liidel1" onclick="deleteInterest(1)"></div><input type="text" id="isel2" name="tutorinterest[2].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel2" onclick="deleteInterest(2)" style="display: none;"><div id="liisel2" class="ysh"><span class="yshspan"> &gt; 서버관리</span> <input class="yshbtn" type="button" value="X" id="liidel2" onclick="deleteInterest(2)"></div></div>
-								</div> -->
+								</div>
 							</div>
 
 						</div>					
@@ -274,14 +274,14 @@ padding: 2em 1.2em;
 					
 						 <input name = "tutorNumber" th:value = "${tutor.tutorNumber}" style = "display:none"> 
 						<div th:each = "tf : ${tutoruploadfile}"  >
-						<div class = "file_input" style = "margin:10px 0px 0 0; width: 500px" > 
-						<!-- <span th:text = "${tf.tutorfileOriginname}" ></span> -->
+						<div class = "file_input" style = "margin:10px 50px 0 0; width: 300px" > 
+						<span th:text = "${tf.tutorfileOriginname}" ></span>
 						<input id = "fileUrl" name = "tutorFileFullUrl" type = "text" th:value = "${tf.tutorFileFullUrl}" style = "display:none">
 						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
 						<a th:href = "${tf.tutorfilePartUrl}" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a>
 						<a th:href = "@{'/tutor/file'(tutorFileFullUrl=${tf.tutorFileFullUrl})}" style = "color:blue">다운로드</a> 
 						</div>
-						<!-- <a th:href = "@{'/tutor/file/delete'(tutorFileFullUrl=${tf.tutorFileFullUrl})}">X(삭제)</a>  -->
+						<a th:href = "@{'/tutor/file/delete'(tutorFileFullUrl=${tf.tutorFileFullUrl})}">X(삭제)</a> 
 						</div>
 
 						</div>
@@ -307,10 +307,10 @@ padding: 2em 1.2em;
 						
 						
 				
-<!-- 						<input type="hidden" th:name="${_csrf.parameterName}"
+						<input type="hidden" th:name="${_csrf.parameterName}"
 							th:value="${_csrf.token}" />
 							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-							<input type = "submit" value = "신청취소"> -->
+							<input type = "submit" value = "신청취소">
 				</form>
 
 
@@ -325,21 +325,20 @@ padding: 2em 1.2em;
 
 
 
-			<!--===============================================================================================-->
+			===============================================================================================
 			<script src="/Login_v18/vendor/jquery/jquery-3.2.1.min.js"></script>
-			<!--===============================================================================================-->
+			===============================================================================================
 			<script src="/Login_v18/vendor/animsition/js/animsition.min.js"></script>
-			<!--===============================================================================================-->
+			===============================================================================================
 			<script src="/Login_v18/vendor/bootstrap/js/popper.js"></script>
 			<script src="/Login_v18/vendor/bootstrap/js/bootstrap.min.js"></script>
-			<!--===============================================================================================-->
+			===============================================================================================
 			<script src="/Login_v18/vendor/select2/select2.min.js"></script>
-			<!--===============================================================================================-->
+			===============================================================================================
 			<script src="/Login_v18/vendor/daterangepicker/moment.min.js"></script>
-			<script src="/Login_v18/vendor/daterangepicker/daterangepicker.js"></script>
-			<!--===============================================================================================-->
+			===============================================================================================
 			<script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
-			<!--===============================================================================================-->
+			===============================================================================================
 			<script src="/Login_v18/js/main.js"></script>
 
 			<script

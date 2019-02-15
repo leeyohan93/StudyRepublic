@@ -1024,6 +1024,40 @@ padding:5px;
 	border:1;
 }
 
+ .filePicture label {
+	position:relative;
+	cursor:pointer;
+	display:inline-block;
+	vertical-align:middle;
+	overflow:hidden;
+	width:100px;
+	height:30px;
+	background: transparent;
+	color:black;
+	text-align:center;
+	line-height:37px;
+	margin:0 0 10px 0;
+	text-decoration:none; border-bottom:1px solid #286555; padding-bottom:3px;
+} 
+
+.filePicture label input {
+	position:absolute;
+	width:0;
+	height:0;
+	overflow:hidden;
+}
+
+.filePicture input[type=text] {
+	vertical-align:middle;
+	display:inline-block;
+	width:100px;
+	height:auto;
+	line-height:28px;
+	font-size:13px;
+	padding:0;
+	border:1;
+}
+
 
 
 
