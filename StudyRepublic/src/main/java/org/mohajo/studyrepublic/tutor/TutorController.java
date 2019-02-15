@@ -25,6 +25,8 @@ import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.domain.Tutor;
+import org.mohajo.studyrepublic.domain.TutorCareer;
+import org.mohajo.studyrepublic.domain.TutorInterest;
 import org.mohajo.studyrepublic.domain.TutorUploadFile;
 import org.mohajo.studyrepublic.fileupload.MyUploadForm;
 import org.mohajo.studyrepublic.repository.CareerCDRepository;
@@ -33,14 +35,14 @@ import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.MemberRolesRepository;
+import org.mohajo.studyrepublic.repository.TutorCareerRepository;
+import org.mohajo.studyrepublic.repository.TutorInterestRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.mohajo.studyrepublic.repository.TutorUploadFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,6 +77,11 @@ public class TutorController implements Serializable {
 	Interest2CDRepository interest2CDRepository;
 	@Autowired
 	TutorUploadFileRepository tutoruploadfilerepository;
+	@Autowired
+	TutorCareerRepository tutorcareerrepository;
+	@Autowired
+	TutorInterestRepository tutorinterestrepository;
+
 
 	@RequestMapping("/tutor")
 	public String tutorInfo(Model model) {
@@ -120,6 +127,8 @@ public class TutorController implements Serializable {
 		List<Interest2CD> Ninterest2cd = interest2CDRepository.Ninterest2List();
 		model.addAttribute("ninterest2cd", Ninterest2cd);
 
+		Member modifyuser = memberrepository.findById(id).get();
+		model.addAttribute("mdu",modifyuser);
 		return "tutor/tutor_signuptutor";
 
 	}
@@ -164,18 +173,32 @@ public class TutorController implements Serializable {
 	}
 
 	private void doUpload(HttpServletRequest request, Model model, //
-			List<MultipartFile> uploadFileList, Tutor tutor, Member member) {
+			List<MultipartFile> uploadFileList, Tutor tutor, Member member) throws IOException {
 
 		String fileOriginName = "";
 
-		// Root Directory.
-//		String uploadRootPath = request.getServletContext().getRealPath("upload");
 
-		String uploadRootPath = "C:\\Users\\82102\\Desktop\\SeongHo\\StudyRepublic\\StudyRepublic\\src\\main\\resources\\static\\tutorFileUpload";
-//		String folder = "\\tutorFileUpload\\";
-		/* String uploadRootPath = request.getServletPath(); */
-		System.out.println("uploadRootPath = " + uploadRootPath);
-//		System.out.println("folder = " + folder);
+
+/*		String uploadRootPath = "C:\\Users\\82102\\Desktop\\SeongHo\\StudyRepublic\\StudyRepublic\\src\\main\\resources\\static\\tutorFileUpload";
+		System.out.println("uploadRootPath = " + uploadRootPath);*/
+		
+		//
+	
+		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
+		
+		Resource resource = defaultresourceloader
+				.getResource("file:src\\main\\resources\\static\\tutorFileUpload");
+		
+		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
+		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
+		
+		String uploadRootPath = resource.getFile().getAbsolutePath();
+
+		File file = new File(resource.getFile().getAbsolutePath());
+//		File file = new File(tutorFileFullUrl);
+		System.out.println("file: " + file);
+		
+//
 
 		File uploadRootDir = new File(uploadRootPath);
 		// Create directory if it not exists.
@@ -251,9 +274,26 @@ public class TutorController implements Serializable {
 		
 		Tutor tutor = tutorrepository.findByTutor(id);
 		List<TutorUploadFile> tutoruploadfile = tutoruploadfilerepository.findByTutorUploadFile(id);
-		
+				
 		model.addAttribute("tutor", tutor);
 		model.addAttribute("tutoruploadfile", tutoruploadfile);
+		
+		int tutor_number = tutor.getTutorNumber();
+		System.out.println(tutor_number);
+		
+		List<TutorCareer> selectedtutorcareer = tutorcareerrepository.selectedtutorcareer(tutor_number);
+		model.addAttribute("selectedtutorcareer", selectedtutorcareer);
+		
+		List<TutorInterest> selectedtutorinterest = tutorinterestrepository.selectedtutorinterest(tutor_number);
+		model.addAttribute("selectedtutorinterest", selectedtutorinterest);
+		
+		Member modifyuser = memberrepository.findById(id).get();
+		model.addAttribute("mdu",modifyuser);
+		
+		String tutorEducationCD = tutor.getEducationCD().getCodeValueKorean();
+		model.addAttribute("tutorEducationCD", tutorEducationCD);
+		
+		
 
 		return "tutor/tutor_signupinquery";
 	}

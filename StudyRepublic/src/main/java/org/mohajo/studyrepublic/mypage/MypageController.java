@@ -84,11 +84,11 @@ public class MypageController {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		Member modifyuser = mbr.findById(id).get();
-		
 		model.addAttribute("mdu",modifyuser);
 		
 		System.out.println(modifyuser);
 		return "mypage/member_modify";
+		
 		
 	}
 		

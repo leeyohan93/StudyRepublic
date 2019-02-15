@@ -74,8 +74,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.addLogoutHandler(new TaskImplementingLogoutHandler())
 		.permitAll()
 /*		.invalidateHttpSession(true)*/
-		.logoutSuccessUrl("/index");
-/*		.deleteCookies("JSESSIONID","remember-me");*/
+		.logoutSuccessUrl("/index")
+		.deleteCookies("JSESSIONID","remember-me")
+		.invalidateHttpSession(true);
 		
 		http
 		.rememberMe()
