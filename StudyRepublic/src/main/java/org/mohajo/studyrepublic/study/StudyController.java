@@ -302,7 +302,7 @@ public class StudyController {
 		model.addAttribute("levelCode", levelCode);
 		model.addAttribute("dayCode", dayCode);
 		
-		return "/study/openBasic";
+		return "/study/open";
 	}
 	
 	

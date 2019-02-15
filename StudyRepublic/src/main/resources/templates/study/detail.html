@@ -401,7 +401,8 @@ layout:decorate="~{/layout/mainLayout}">
 				if (joinBtn.dataset.userType == "anonymous") {
 					alert("로그인 후 신청할 수 있어요!");
 					location = "/login";
-					window.location.href = originUrl + location;
+					window.location.replace = originUrl + location;
+					return;
 					// 로그인 후 스터디 가입 페이지 또는 상세 페이지로 이동하도록 처리할 것! ********
 
 				} else if (joinBtn.dataset.userType == "authenticated") {
