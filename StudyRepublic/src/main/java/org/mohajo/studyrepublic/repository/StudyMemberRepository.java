@@ -25,6 +25,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	List<StudyMember> findTutorActivityById(String id);
 //	List<StudyMember> findTutorActivityByStudyMemberId(StudyMemberId studyMemberId);
 
+	
 	//noticeboard에서 클릭한 글과 관련된 사람의 정보를 가져오는 쿼리
 	@Query(value="select *\r\n" + 
 			"from (((study_noticeboard left join study_member using (study_id, id))\r\n" + 

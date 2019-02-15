@@ -6,11 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.DayCD;
 import org.mohajo.studyrepublic.domain.LevelCD;
+import org.mohajo.studyrepublic.domain.Leveltest;
+import org.mohajo.studyrepublic.domain.LeveltestResponse;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
-import org.mohajo.studyrepublic.domain.Review;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberId;
@@ -33,9 +34,7 @@ import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.mohajo.studyrepublic.repository.TypeCDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -357,20 +356,25 @@ public class StudyController {
 		
 		log.info("test() called...");
 
-/*//		List<Leveltest> leveltest = lr.findAll();
-//		List<LeveltestResponse> leveltestResponse = lrr.findAll();
+/*
 //		List<LeveltestResponse> leveltestResponse = lrr.selectByStudyId("BF00003");
-		List<StudyMember> studyMember = smr.selectByStudyId("BB00002");
+		
 		List<Study> study = sr.findAll();
 		
 		model.addAttribute("test", study);
-//		model.addAttribute("test", leveltest);
-//		model.addAttribute("test", leveltestResponse);
-		model.addAttribute("test2", studyMember);
-
-		return "/study/test";*/
+		*/
 		
-		return "/study/paperBootTest";
+		List<StudyMember> studyMember = smr.selectByStudyId("BF00002");
+		model.addAttribute("studyMember", studyMember);
+		
+//		List<Leveltest> leveltest = lr.findAll();
+//		List<LeveltestResponse> leveltestResponse = lrr.findAll();
+//		model.addAttribute("leveltest", leveltest);
+//		model.addAttribute("leveltestResponse", leveltestResponse);
+	
+		return "/study/test";
+		
+//		return "/study/paperBootTest";
 		
 	}
 	// 테스트 끝.
