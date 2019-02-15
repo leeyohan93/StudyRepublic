@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous">
+  
 <style layout:fragment="customCss">
 	
 /* Star Rating BY James Barnett (https://codepen.io/jamesbarnett/pen/vlpkh) */
@@ -20,8 +26,9 @@
 	}
 	
 	.rating > input { display: none; } 
+	
 	.rating > label:before { 
-	  margin: 5px;
+	  margin: 3px;
 	  font-size: 1.25em;
 	  font-family: FontAwesome;
 	  display: inline-block;
@@ -35,7 +42,7 @@
 	
 	.rating > label { 
 	  color: #ddd; 
-	 float: right; 
+	  float: right; 
 	}
 	
 	/***** CSS Magic to Highlight Stars on Hover *****/
@@ -48,38 +55,77 @@
 	.rating > input:checked ~ label:hover,
 	.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 	.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+	
+	#star-rating-container{
+		width: auto;
+		display: inline-block;
+		margin: 1em 0;
+	}
+	
+	#star-rating-container > span {
+		right: 0%;
+		top: 50%;
+		transform: translateY(-50%);
+		vertical-align: middle;
+		text-align: center;
+		margin: 0 1.5px 0 0;
+	}
+	
+	#review-notice {
+		font: bolder;
+	}
 /* End of Star Rating */
 </style>
 </head>
 <body>
 	
-	<div>
-		참가하신 스터디는 어떠셨나요?<br>
+	<div id="review-notice">
+		<h3>참가하신 스터디는 어떠셨나요?<br>
 		별점과 후기를 남겨주세요!
+		</h3>
 	</div>
 	<div>
-		<form action="" id="review-form">
+		<form action="/study/review/save" id="review-form">
+			<input type="hidden" name="id" value="${loggedInUserId}">
+			<input type="hidden" name="studyId" value="${studyId}">
+			<div>스터디명</div>
+			<div th:text="${studyName}"></div>
 			<div id="star-rating-container">
 				<!-- Star Rating BY James Barnett (https://codepen.io/jamesbarnett/pen/vlpkh) -->
 				<fieldset class="rating">
-				    <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="최고예요! - 5점"></label>
-				    <input type="radio" id="star4half" name="rating" value="4 and a half" /><label class="half" for="star4half" title="아주 좋아요! - 4.5점"></label>
-				    <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="좋아요! - 4점"></label>
-				    <input type="radio" id="star3half" name="rating" value="3 and a half" /><label class="half" for="star3half" title="괜찮아요 - 3.5점"></label>
-				    <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="보통이에요 - 3점"></label>
-				    <input type="radio" id="star2half" name="rating" value="2 and a half" /><label class="half" for="star2half" title="그냥 그래요 - 2.5점"></label>
-				    <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="아쉬워요 - 2점"></label>
-				    <input type="radio" id="star1half" name="rating" value="1 and a half" /><label class="half" for="star1half" title="별로예요 - 1.5점"></label>
-				    <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="아주 별로예요 - 1 star"></label>
-				    <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="최악이에요 - 0.5점"></label>
+				    <input type="radio" id="star5" name="score" value="5" /><label class = "full" for="star5" title="최고예요! - 5점"></label>
+				    <input type="radio" id="star4half" name="score" value="4.5" /><label class="half" for="star4half" title="아주 좋아요! - 4.5점"></label>
+				    <input type="radio" id="star4" name="score" value="4" /><label class = "full" for="star4" title="좋아요! - 4점"></label>
+				    <input type="radio" id="star3half" name="score" value="3.5" /><label class="half" for="star3half" title="괜찮아요 - 3.5점"></label>
+				    <input type="radio" id="star3" name="score" value="3" checked /><label class = "full" for="star3" title="보통이에요 - 3점"></label>
+				    <input type="radio" id="star2half" name="score" value="2.5" /><label class="half" for="star2half" title="그냥 그래요 - 2.5점"></label>
+				    <input type="radio" id="star2" name="score" value="2" /><label class = "full" for="star2" title="아쉬워요 - 2점"></label>
+				    <input type="radio" id="star1half" name="score" value="1.5" /><label class="half" for="star1half" title="별로예요 - 1.5점"></label>
+				    <input type="radio" id="star1" name="score" value="1" /><label class = "full" for="star1" title="아주 별로예요 - 1 star"></label>
+				    <input type="radio" id="starhalf" name="score" value="0.5" /><label class="half" for="starhalf" title="최악이에요 - 0.5점"></label>
 				</fieldset>
+			    &nbsp;<span id="star-score">3</span>점
 			</div>
 			<div id="review-content-container">
-				<textarea rows="30" cols="500"></textarea>
+				<textarea rows="20" cols="100" name="content" placeholder="리뷰를 50자 이상 작성해주세요!"></textarea>
 			</div>
+			<input type="submit" value="후기 작성">
 		</form>
 	</div>
 	
+	<script type="text/javascript" th:fragment="customScript">
+		$(document).ready(function() {
+			
+			// 별점을 선택하면 점수가 변경된다.
+			$('.rating > input').on('click', function() {
+				var score = $('.rating > input:checked').val();
+				document.getElementById('star-score').innerText = score;
+			});
+			
+			// 정규식 활용한 input check:	50 <= content 의 길이 < 500
+			
+		});
+	</script>
 	
 
 </body>
