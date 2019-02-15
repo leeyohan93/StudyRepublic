@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
@@ -155,8 +156,8 @@
 		}
 	  </style>
 	  <div class="rightContent rightAll" >
-		<form id="boardWriteForm" th:action="@{/StudyPage/}" method="post">
-		<!-- 제목, 공지옵션, 비공개옵션, -->
+		<form id="boardWriteForm" th:action="@{/StudyPage/Register}" method="post">
+		<!-- 제목 -->
 		  <div>
 			<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
 			<input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/>
@@ -169,10 +170,10 @@
 			</div>
 		  </div>
 		  
-		  <!--스마트 에디터 적용 글내용 끝  -->
+		  <!--스마트 에디터 버튼들  -->
 		  <div id = "buttonDiv">
 			  <div class="cancelBtn">
-			  	<input type="hidden" id="boardName" th:value="${boardName}"/>
+			  	<input type="hidden" id="boardName" name="boardName" th:value="${boardName}"/>
 			  	<button class ="btn btn-dark" role="button" id="cancel" type="button">취소</button> 
 			  </div>
 			  <div id="registerBtns">
@@ -212,7 +213,15 @@
 	    
 	
 	    });
-	     
+	    
+	    //미리보기
+	    $('#writePreview').click(function(){
+			console.log("check");
+	      	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+	        window.open("StudypagePreview","자식창","width=400,height=300,left=300,top=50");
+	    });
+
+	    
 	    //전송버튼 클릭이벤트
 	    $("#boardRegister").click(function(){
 	        //id가 smarteditor인 textarea에 에디터에서 대입
