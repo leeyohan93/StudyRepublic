@@ -3,6 +3,7 @@ package org.mohajo.studyrepublic.domain;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 
 import lombok.Data;
 
@@ -16,7 +17,10 @@ import lombok.Data;
 @Embeddable
 public class LeveltestResponseId implements Serializable {
 
-	private LeveltestId leveltestId;
-	private String id;
+	/*private LeveltestId leveltestId;*/
+	/*private String id;*/
+	private int leveltestId;
+	@Embedded
+	private StudyMemberId studyMemberId;
 	
 }

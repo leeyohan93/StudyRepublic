@@ -23,22 +23,22 @@ transparent = true;
             /*  Activate the tooltips      */
             $('[rel="tooltip"]').tooltip();
 
-            // Code for the Validator
-            var $validator = $('.wizard-card form').validate({
-        		  rules: {
-        		    firstname: {
-        		      required: true,
-        		      minlength: 3
-        		    },
-        		    lastname: {
-        		      required: true,
-        		      minlength: 3
-        		    },
-        		    email: {
-        		      required: true
-        		    }
-                },
-        	});
+//            // Code for the Validator
+//            var $validator = $('.wizard-card form').validate({
+//        		  rules: {
+//        		    firstname: {
+//        		      required: true,
+//        		      minlength: 3
+//        		    },
+//        		    lastname: {
+//        		      required: true,
+//        		      minlength: 3
+//        		    },
+//        		    email: {
+//        		      required: true
+//        		    }
+//                },
+//        	});
 
             // Wizard Initialization
           	$('.wizard-card').bootstrapWizard({

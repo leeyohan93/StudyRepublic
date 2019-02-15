@@ -1,7 +1,6 @@
 package org.mohajo.studyrepublic.repository;
 
 import org.mohajo.studyrepublic.domain.Leveltest;
-import org.mohajo.studyrepublic.domain.LeveltestId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -10,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @version	0.0
  * - 기능 설명 1
  */
-public interface LeveltestRepository extends JpaRepository<Leveltest, LeveltestId>{
+//public interface LeveltestRepository extends JpaRepository<Leveltest, LeveltestId>{
+public interface LeveltestRepository extends JpaRepository<Leveltest, String>{
+
 
 }

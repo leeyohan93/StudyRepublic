@@ -34,23 +34,27 @@ layout:decorate="~{/layout/mainLayout}">
 	<!-- 게시판형으로 우선 작업 -->
 	
 	<div id="studyList" layout:fragment="main">
-		<p th:text="${test}">.</p>
-		<hr>
-<!-- 		<p th:text="${test2}">.</p> -->
+<!-- 		<p th:text="${test}">.</p> -->
+<!-- 		<hr> -->
+<!-- <!-- 		<p th:text="${test2}">.</p> --> -->
 		
-		<div th:each="studyMember : ${test2}">
+<!-- 		<div th:each="studyMember : ${test2}"> -->
 		
-			<h1>${studyMember.study.name}</h1>
-			<p th:text="${studyMember.study.name}">
-			</p>
+<!-- 			<h1>${studyMember.study.name}</h1> -->
+<!-- 			<p th:text="${studyMember.study.name}"> -->
+<!-- 			</p> -->
 			
 			<h1>${studyMember}</h1>
 			<p th:text="${studyMember}">
 			</p>
 			
-			<h1>${studyMember.study}</h1>
-			<p th:text="${studyMember.study}">
+						<h1>${studyMember.leveltestResponse}</h1>
+			<p th:text="${studyMember}">
 			</p>
+			
+<!-- 			<h1>${studyMember.study}</h1> -->
+<!-- 			<p th:text="${studyMember.study}"> -->
+<!-- 			</p> -->
 			
 <!-- 			<h1>${studyMember.studyView}</h1> -->
 <!-- 			<p th:text="${studyMember.studyView}"> -->
@@ -60,7 +64,12 @@ layout:decorate="~{/layout/mainLayout}">
 <!-- 			<p th:text="${studyMember.popularStudy}"> -->
 <!-- 			</p> -->
 			
-		</div>
+<!-- 		</div> -->
+		
+<!-- 		<h1>leveltest</h1> -->
+<!-- 		<p th:text="${leveltest}"></p> -->
+<!-- 		<h1>leveltest response</h1> -->
+<!-- 		<p th:text="${leveltestResponse}"></p> -->
 		
     </div>
     
