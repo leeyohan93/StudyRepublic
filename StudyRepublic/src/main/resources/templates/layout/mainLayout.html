@@ -57,24 +57,28 @@
 				<div>
 				<!-- Login -->
 				<div id = "logout" sec:authorize="hasRole('N')">
-					<ul>
-						<li><a th:href="@{/logout}">로그아웃</a></li>
-						<li><a th:href="@{/mypage}">마이페이지</a></li>
-					</ul>
+						<ul>
+						<li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li>
+						<li id = "loginli"><a th:href="@{/mypage}">마이페이지</a></li>
+						<li id = "loginli" th:text = ${session.nickname}+'님' ></li>
+						<li id = "loginimg"><img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%;"></li>
+						</ul>
 				</div>
 
 				<div id="login" sec:authorize="isAnonymous()">
 					<ul>
-						<li><a href="/login">로그인</a></li>
-						<li><a href="/member/signup">회원가입</a></li>
+						<li id = "loginli"><a href="/login">로그인</a></li>
+						<li id = "loginli"><a href="/member/signup">회원가입</a></li>
 					</ul>
 					</sec:authorize>
 				</div>
 				
-				<div id = "logout" sec:authorize="hasRole('A')">
+				<div id = "logout" sec:authorize="hasRole('A')">						
 						<ul>
-						<li><a th:href="@{/logout}">로그아웃</a></li>
-						<li><a th:href="@{/admin/index}">관리자페이지</a></li>
+						<li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li>
+						<li id = "loginli"><a th:href="@{/admin/index}">관리자페이지</a></li>	
+						<li id = "loginli" th:text = ${session.nickname}+'님' ></li>
+						<li id = "loginimg"><img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%;"></li>
 						</ul>
 				</div>
 				

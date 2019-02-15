@@ -29,7 +29,7 @@
     <img id="img_profile" th:src="@{'/member_image/'+${md.profileSaveName}}" style="width:200px; height:200px"/>
    <br>
    <input name="sourceFile" id="sourceFile" type="file">
-   
+   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
    <input type="button"  id="newimg_upload" name="newimg_upload" value="이미지변경"/>
    </form>
    
