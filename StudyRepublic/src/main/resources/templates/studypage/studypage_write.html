@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{/layout/studypageLayout}">
+<head>
+<meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+<title>글쓰기</title>
+</head>
+<body>
+	<div id="right" layout:fragment="right">
+	<style>
+	  	table{
+	  		margin-bottom: 1%;
+	  		background-color: #ffe300b5;
+	  	}
+	  	.contentForm{
+	  		padding-left: 5%;
+	  	}
+	  	.contentDate{
+	  		display: inline-block;
+	  	}
+	  	.contentWriteDate{
+ 	  		display: inline-block;
+		    float: right;
+		    width: 30%;
+		    text-align: center;
+	  	}
+	  	.content{
+	  	    width: 95%;
+		    /*border: gray 1px;
+		    border-style: inset;
+		    border-radius: 1% / 9%;
+		    padding-top: 7%;
+		    padding-bottom: 3%;*/
+		    margin-top: 5%;
+		    margin-bottom: 3%;
+	  	}
+	  	.contentReplyForm{
+	  	    width: 95%;
+		    border: gray 1px;
+		    border-style: inset;
+		    border-radius: 10px;
+		    padding : 1%;
+		    padding-left : 2%;
+		    padding-right: 2%;
+			background-color: #73737333;
+	  	}
+	  	#contentReply{
+	  		margin-bottom: 2%;
+	  	}
+	  	#userProfile{
+	  		width: 8%;
+	  		display: inline-block;
+	  	}
+	  	#contentReplyWrite{
+	  		width: 70%;
+	  		display: inline-block;
+	  		background-color: white;
+	  	}
+	  	#replyButton{
+	  		margin-left: 4%;
+	  		color: snow !important;
+	  	}
+	  	#writeButtonSpace{
+	  		text-align: right;
+	  	}
+	  	.btn-dark{
+	  	    background-color: dimgrey;
+	  	}
+	  	#writeButton{
+	  		padding-left: 3%;
+    		padding-right: 2%;
+    		color: snow !important;
+	  	}
+	  	.rightTitleLeft{
+			width: 20%;
+	  		text-align: center;
+	  	}
+		.rightTitleMiddle{
+	  		width: 50%;
+	  		text-align: center;
+	  	}
+	  	.rightTitleRight{
+	  		width: 30%;
+	  		text-align: center;
+	  	}
+	  	.rightLeft{
+			width: 20%;
+	  		text-align: center;
+	  	}
+		.rightMiddle{
+	  		width: 50%;
+	  		text-align: center;
+	  	}
+	  	.rightRight{
+	  		width: 30%;
+	  		text-align: center;
+	  	}
+	  	.btn-dark{
+	  		border : 0px;
+	  	}
+		.rightContent{
+		    height: 20%;
+		    width: 100%;
+		    padding-top: 20px;
+		    padding-bottom: 20px;
+		    border: gray 1px;
+		    border-style: inset;
+	 	    border-radius: 10px;
+		    margin-bottom: 1%;
+		    padding-left: 5%;
+		    padding-right: 5%;
+	  	}
+	  	.rightTitle{
+	  		display: inline-block;
+	  	}
+		#right{
+	  		heigth: 100%;
+	  	}
+	  	input[type="submit"]:hover,
+	  	input[type="reset"]:hover,
+	  	input[type="button"]:hover,
+	  	button:hover,
+	  	.button:hover{
+	  		color : white !important;
+	  		box-shadow: none;
+	  	}
+	  	.dateFont{
+	  		font-weight: bold;
+	  	}
+	  	.smarteditor{
+	  		width: 100%;
+	  		hegith: 100%;
+	  	}
+	  	#boardWriteForm{
+			width: 100%;
+			height: 100%;
+		}
+		input#boardTitle{
+			width: 75%;
+			background-color: #8080803b;
+			border-radius: 10px;
+			padding: 2%;
+		}
+		#buttonDiv div{
+			display:inline-block;
+		}
+		#registerBtns{
+			float: right;
+		}
+		#smarteditor{
+			width: 99%;
+		}
+	  </style>
+	  <div class="rightContent rightAll" >
+		<form id="boardWriteForm" th:action="@{/StudyPage/Register}" method="post">
+		<!-- 제목 -->
+		  <div>
+			<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
+			<input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/>
+		  </div>
+	
+		  <!-- 스마트 에디터 적용 글내용 -->
+		  <div id = "editor">
+		    <div>
+		    	<textarea name="content" id="smarteditor" rows="10" cols="100"></textarea>
+			</div>
+		  </div>
+		  
+		  <!--스마트 에디터 버튼들  -->
+		  <div id = "buttonDiv">
+			  <div class="cancelBtn">
+			  	<input type="hidden" id="boardName" name="boardName" th:value="${boardName}"/>
+			  	<button class ="btn btn-dark" role="button" id="cancel" type="button">취소</button> 
+			  </div>
+			  <div id="registerBtns">
+				  <div class="previewBtn">
+				    <button class="btn btn-dark" name="writePreview" id="writePreview" type="button">미리보기</button> 
+				  </div>
+				  <div class="registerBtn">
+					 <button class="btn btn-dark" name="boardRegister" id="boardRegister"  type="submit">확인</button>
+				  </div>
+			  </div>
+		  </div>
+		</form>
+	</div>
+	<script th:inline="javascript">
+	
+	$(document).ready(function(){
+	    //전역변수선언
+	    var editor_object = [];
+	    
+	     
+	    nhn.husky.EZCreator.createInIFrame({
+	        oAppRef: editor_object,
+	        elPlaceHolder: "smarteditor",
+	        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+	        htParams : {
+	            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseToolbar : true,            
+	            // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseVerticalResizer : true,    
+	            // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseModeChanger : true,
+	            // 기본 글꼴 설정
+	            SE2M_FontName: {
+	    			htMainFont: {'id': '굴림','name': '굴림','size': '14','url': '','cssUrl': ''} 
+	    		}
+	        }
+	    
+	
+	    });
+	    
+	    //미리보기
+	    $('#writePreview').click(function(){
+			console.log("check");
+	      	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+	        window.open("StudypagePreview","자식창","width=400,height=300,left=300,top=50");
+	    });
+
+	    
+	    //전송버튼 클릭이벤트
+	    $("#boardRegister").click(function(){
+	        //id가 smarteditor인 textarea에 에디터에서 대입
+	        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+	              
+	        $("#boardRegister").submit();
+	            
+	    });
+	});
+    </script>
+    <script>
+    	$(document).ready(function(){
+    		$("#cancel").on("click", function(){
+    	  		$(location).attr('href', '/StudyPage/'+ $("#boardName").val());	
+    		});
+    	});
+    </script>
+	</div>
+</body>
+</html>

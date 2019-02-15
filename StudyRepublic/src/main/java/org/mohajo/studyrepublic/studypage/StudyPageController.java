@@ -26,7 +26,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +42,7 @@ import lombok.extern.java.Log;
 
 @Log
 @Controller
+@RequestMapping(value="/StudyPage")
 public class StudyPageController {
 
 	static private StudyPagePredicate predicate = new StudyPagePredicate();
@@ -81,7 +84,7 @@ public class StudyPageController {
 	@Autowired
 	StudyQnaboardReplyRepository studyQnaboardReplyRepository;
 
-	@RequestMapping("/StudyPage/Main")
+	@RequestMapping("/Main")
 	public String studyPageMain(Model model/* , @RequestParam("studyId") String studyId */) {
 		// extra varialbe
 		String studyId = "BB00001";
@@ -118,7 +121,7 @@ public class StudyPageController {
 		return "studypage/studypage_main";
 	}
 
-	@RequestMapping("/StudyPage/Noticeboard")
+	@RequestMapping("/Noticeboard")
 	public String studyNoticeboard(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -127,7 +130,7 @@ public class StudyPageController {
 		return "studypage/studypage_notice";
 	}
 
-	@RequestMapping("/StudyPage/Qnaboard")
+	@RequestMapping("/Qnaboard")
 	public String studyQnaboard(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -138,7 +141,7 @@ public class StudyPageController {
 		return "studypage/studypage_qna";
 	}
 
-	@RequestMapping("/StudyPage/Fileshareboard")
+	@RequestMapping("/Fileshareboard")
 	public String studyFileshareboard(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -148,7 +151,7 @@ public class StudyPageController {
 		return "studypage/studypage_fileshare";
 	}
 	
-	@RequestMapping("/StudyPage/Management")
+	@RequestMapping("/Management")
 	public String studyManagement(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -158,7 +161,7 @@ public class StudyPageController {
 		return "studypage/studypage_management";
 	}
 	
-	@RequestMapping("/StudyPage/VideoCalling")
+	@RequestMapping("/VideoCalling")
 	public String studyVideoCalling(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -167,7 +170,7 @@ public class StudyPageController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/StudyPage/Noticeboard/show", method = RequestMethod.POST)
+	@RequestMapping(value="/Noticeboard/show", method = RequestMethod.POST)
 	public StudyNoticeboard showStudyNoticeboard(/*@RequestBody String studyId*/@RequestBody StudyNoticeboard readBoardContent){
 		log.info("시행됨1");
 		/*log.info(studyId);
@@ -186,11 +189,33 @@ public class StudyPageController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/StudyPage/Noticeboard/replyshow", method = RequestMethod.POST)
+	@RequestMapping(value="/Noticeboard/replyshow", method = RequestMethod.POST)
 	public List<StudyNoticeboardReply> showStudyNoticeboardReply(/*@RequestBody String studyId*/@RequestBody StudyNoticeboard readBoardContent){
 		log.info("시행됨2");
 		
 		return studyNoticeboardReplyRepository.findNoticeboardReplyByStudyIdANDNumber(readBoardContent.getStudyId(), readBoardContent.getNumber());
 	}
 
+	@RequestMapping(value="/Write", method=RequestMethod.GET)
+	public String showStudyBoardWrite(Model model, @RequestParam(name="board") String board){
+		log.info("글쓰기 폼 진입");
+		log.info(board);
+		model.addAttribute("boardName", board);
+		return "studypage/studypage_write";
+	}
+	
+	@RequestMapping(value="/Register", method= RequestMethod.POST)
+	public String writeRegister(Model model, @RequestParam(name="boardName") String boardName){
+		log.info(boardName+"2");
+		return "redirect:/StudyPage/Noticeboard";
+	}
+	
+	//미리보기
+	@RequestMapping(value="/StudypagePreview")
+	public String studypage_preview() {
+		
+		log.info("들어오긴 하냐?");
+		System.out.println("더 울어라 젊은 인생아");
+		return "studypage/studypage_preview";
+	}
 }

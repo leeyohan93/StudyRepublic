@@ -7,10 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 
 import lombok.Data;
 
@@ -26,29 +23,47 @@ public class LeveltestResponse implements Serializable {
 
 	@EmbeddedId
 	private LeveltestResponseId leveltestResponseId;
-
-	@Column
-	private String submitAnswer;
 	
-	@Column
-	private int isCorrect;
+/*//	@Id
+//	private String leveltestResponseId;
 	
+//	@Column
+//	private String leveltestId;
+*/	
 	@Column(insertable=false, updatable=false)
 	private String studyId;
 	
 	@Column(insertable=false, updatable=false)
 	private String id;
 	
-	@MapsId("leveltestId")
+	@Column
+	private String submitAnswer;
+	
+	@Column
+	private int isCorrect;
+
+	
+	
+//	@MapsId("leveltestId")
+//	@ManyToOne
+//	@JoinColumns({
+//		@JoinColumn(name="questionNumber"),
+//		@JoinColumn(name="studyId")
+//	})
 	@ManyToOne
-	@JoinColumns({
-		@JoinColumn(name="questionNumber"),
-		@JoinColumn(name="studyId")
-	})
+	@JoinColumn(name = "leveltestId", nullable = false, insertable=false, updatable=false)
 	private Leveltest leveltest;
 	
-	@MapsId("id")
+/*//	@MapsId("id")
 	@ManyToOne
 	@JoinColumn(name = "id", referencedColumnName = "id", updatable=false, insertable=false)
-	private Member member;
+	private Member member;*/
+	
+/*//	@MapsId("studyMemberId")
+	@ManyToOne
+	@JoinColumns({
+		@JoinColumn(name="studyId", insertable=false, updatable=false, referencedColumnName="studyId"),
+		@JoinColumn(name="id", insertable=false, updatable=false, referencedColumnName="id")
+	})
+	private StudyMember studyMember;*/
 }

@@ -3,8 +3,8 @@ package org.mohajo.studyrepublic.domain;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -20,13 +20,16 @@ import lombok.Data;
 @Entity
 public class Leveltest implements Serializable {
 
-	@EmbeddedId
-	private LeveltestId leveltestId;
+/*	@EmbeddedId
+	private LeveltestId leveltestId;*/
 	
-	@Column(insertable=false, updatable=false)
+	@Id
+	private int leveltestId;
+	
+	@Column/*(insertable=false, updatable=false)*/
 	private int questionNumber;
 	
-	@Column(insertable=false, updatable=false)
+	@Column/*(insertable=false, updatable=false)*/
 	private String studyId;
 	
 	@ManyToOne

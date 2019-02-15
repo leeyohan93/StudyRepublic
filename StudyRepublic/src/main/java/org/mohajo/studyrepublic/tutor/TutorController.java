@@ -196,6 +196,12 @@ public class TutorController implements Serializable {
 
 		File file = new File(resource.getFile().getAbsolutePath());
 //		File file = new File(tutorFileFullUrl);
+
+		
+	      if (!file.exists()) {
+		         file.mkdirs();
+		      }
+	      
 		System.out.println("file: " + file);
 		
 //
