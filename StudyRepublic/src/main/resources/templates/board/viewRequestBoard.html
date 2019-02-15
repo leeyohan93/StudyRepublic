@@ -55,10 +55,10 @@
 					<a class="btn btn-default" role="button" id="goBeforeFreePage"
 						name="goBeforeFreePage"
 						th:href="@{'goBeforeFreePage'(requestBoardId=${requestBoard.requestBoardId})}">이전글
-						▲</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
+						▼</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
 						name="goAfterFreePage"
 						th:href="@{'writeBoard'(requestBoardId=${requestBoard.requestBoardId})}">다음글
-						▼</a>
+						▲</a>
 
 				</div>
 
@@ -212,8 +212,7 @@
 
 				<!--댓글끝 -->
 
-			</div>
-		</div>
+		
 
 
 
@@ -365,5 +364,8 @@
 
 
      </script>
+     	</div>
+		</div>
+		</div>
    </body>
 </html>

@@ -35,7 +35,6 @@
 
 .ts-forms select,
 .ts-forms input[type="button"],
-.ts-forms input[type="submit"],
 .ts-forms input[type="search"] {
 	-webkit-tap-highlight-color:transparent;
 	-webkit-tap-highlight-color:rgba(0,0,0,0);
@@ -45,7 +44,13 @@
 	-webkit-border-radius:0px;
 	border-radius:0px;
 }
-
+.ts-forms input[type="submit"]{
+background-color: #006DF0;
+	padding: 10px 20px;
+	margin-left: 20px;
+	height: 40px;
+	margin-bottom: 2px;
+	border-radius: 3px;}
 /* Header
 =============================== */
 .ts-forms .header {

@@ -1,79 +1,100 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorate="~{/layout/mainLayout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Study List View</title>
-    <style type="text/css">
-    	
-    	#studyDetail {
-    		font-size: 0.7em;
-    	}
-    	
-    	.heading {
-    		font-size: 0.9vm;
-    		font: bold;
-    		display: inline-block;
-    		left: 20%;
-    	}
-    	
-    	h2 {
-    		font-size: 0.3vm;
-    	}
-    
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Study List View</title>
+<style layout:fragment="customCss">
+
+	.heading {
+		font-size: 0.9vm;
+		font: bold;
+		display: inline-block;
+		left: 20%;
+	}
+	
+	h2 {
+		font-size: 0.3vm;
+	}
+</style>
 </head>
 <body>
-    
-    
-    
+
+
 	<!-- 스터디 목록 스타일: 게시판형, 카드형 고려중 -->
 	<!-- 게시판형으로 우선 작업 -->
-	
+
 	<div id="studyList" layout:fragment="main">
 		<div class="inner">
-    	<div class="heading">
-    		<h3 th:if="${typeCode} eq 'p'">프리미엄스터디</h3>
-    		<h3 th:if="${typeCode} eq 'b'">일반 스터디</h3>
-    		<h3 th:if="${typeCode} eq 'All'">전체 스터디</h3>
-    		<hr>
-    		<h3>찾아보기</h3>
-    	</div>
-    	<div class="body">
-	    	<table class="table table-striped table-hover">
-	    		<tr>
-	    			<th>No.</th>
-	    			<th>스터디명</th>
-	    			<th th:if="${typeCode} eq 'p'">리더</th>
-	    			<th>기간</th>
-	    			<th>일시</th>
-	    			<th>인원</th>
-	    		</tr>
-	    		<tr th:each="study : ${list}">
-	    			<td>no</td>
-	    			<td><a th:href="@{'/study/detail/' + ${study.studyId}}" th:text="${study.name}">study name</a>&nbsp;<i class="tag btn-primary" th:text="${study.studyStatusCode.codeValueKorean}">status</i></td>
-					<th:block th:if="${typeCode} eq 'p'">
-						<td th:text="${study.member.name}">leader</td>
-					</th:block>
-<!-- 					@Temporal 지정 안 해줬을 때 -->
-<!-- 	    			<td th:text="|${#dates.format(study.startDate, 'yyyy-MM-dd')}~${#dates.format(study.endDate, 'yyyy-MM-dd')}|">period</td> -->
-	    			<td th:text="|${study.startDate}~${study.endDate}|">period</td>
-   					<td th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</td>
-   					<th:inline="html">
-	   			
-   					</th:inline>
-	    			<td th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</td>
-	    		</tr>
-	    	</table>
-	    	<table>
-<!-- 	    		<tr th:with="study=${list[0]}" th:text="${study.studyLocation[0].interestLocation}">location</tr> -->
-	    	</table>
-	    </div>
-    	</div>
-    
-    </div>
+			<div class="heading">
+				<h3 th:if="${typeCode} eq 'p'">프리미엄 스터디</h3>
+				<h3 th:unless="${typeCode} eq 'p'">일반 스터디</h3>
+				<hr>
+				<h3>찾아보기</h3>
+			</div>
+			<div class="body">
+				<table class="table table-striped table-hover" th:with="list=${pagedList.list}">
+					<tr>
+						<th>No.</th>
+						<th>스터디명</th>
+						<th th:if="${typeCode} eq 'p'">리더</th>
+						<th>기간</th>
+						<th>일시</th>
+						<th>인원</th>
+					</tr>
+					<tr th:each="study : ${list}">
+						<td>no</td>
+						<td><a th:href="@{'/study/detail/' + ${study.studyId}}" th:text="${study.name}">study name</a>&nbsp;<i class="tag btn-primary" th:text="${study.studyStatusCode.codeValueKorean}">status</i></td>
+						<th:block th:if="${typeCode} eq 'p'">
+							<td th:text="${study.member.name}">leader</td>
+						</th:block>
+						<!-- 					@Temporal 지정 안 해줬을 때 -->
+						<!-- 	    			<td th:text="|${#dates.format(study.startDate, 'yyyy-MM-dd')}~${#dates.format(study.endDate, 'yyyy-MM-dd')}|">period</td> -->
+						<td th:text="|${study.startDate}~${study.endDate}|">period</td>
+						<td th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</td>
+						<td th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</td>
+					</tr>
+				</table>
+				
+				<!-- 페이지 번호 출력 -->
+				<nav>
+					<div>
+						<ul class="pagination">
+							<li class="page-item" th:if="${pagedList.prevPage}"><a th:href="${pagedList.prevPage.pageNumber}">[[${pagedList.prevPage}]]</a></li>
+							<li class="page-item" th:classappend="${page.pageNumber == pagedList.currentPageNum -1}? active: ''" th:each="page : ${pagedList.pageList}"><a th:href="${page.pageNumber}+1">[[${page.pageNumber}+1]]</a></li>
+							<li class="page-item" th:if="${pagedList.nextPage}"><a th:href="${pagedList.nextPage.pageNumber}">[[${pagedList.nextPage}]]</a></li>
+						</ul>
+					</div>
+				</nav>
+				
+				<!-- 페이지 번호를 통해 이동 1 -->
+				<form id="pageForm" th:action="@{'/study/list/' + ${typeCode}}" method="get">
+					<input type="hidden" name="page" th:value="${pagedList.currentPageNum}">
+					<input type="hidden" name="size" th:value="${pagedList.currentPage.pageSize}">
+				</form>
+
+			</div>
+			
+		</div>
+	</div>
+	
+	<div layout:fragment="customScript">	
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				
+				var pageForm = $("#pageForm");
+				$(".pagination a").click(function(e) {
+					e.preventDefault();
+					pageForm.find('[name="page"]').val($(this).attr('href'));
+					pageForm.submit();
+				});
+				
+			});
+		</script>
+	
+	</div>
 </body>
 </html>

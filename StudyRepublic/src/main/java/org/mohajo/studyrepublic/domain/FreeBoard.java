@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -43,7 +44,9 @@ public class FreeBoard extends Board{
 	@Column(name = "freeboard_id")
 	private int freeBoardId;
 
+	@Column(insertable=false, updatable=false)
 	protected String id;
+	
 	protected String title;
 	protected String content;
 	@CreationTimestamp
@@ -63,8 +66,10 @@ public class FreeBoard extends Board{
 	@OneToMany
 	@JoinColumn(name="freeboard_id")
 	private List<FreeBoardFile> freeBoardFile;
-
-
+	
+    @ManyToOne
+    @JoinColumn(name="id",insertable=false, updatable=false)
+	protected Member member;
 
 
 

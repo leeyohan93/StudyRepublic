@@ -23,6 +23,12 @@ public class Leveltest implements Serializable {
 	@EmbeddedId
 	private LeveltestId leveltestId;
 	
+	@Column(insertable=false, updatable=false)
+	private int questionNumber;
+	
+	@Column(insertable=false, updatable=false)
+	private String studyId;
+	
 	@ManyToOne
 	@JoinColumn(name = "LEVELTEST_TYPE_CODE", nullable = false)
 	private LeveltestTypeCD leveltestTypeCode;

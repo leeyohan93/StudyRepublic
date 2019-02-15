@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Study List View</title>
+    <style type="text/css">
+    	
+    	#studyDetail {
+    		font-size: 0.7em;
+    	}
+    	
+    	.heading {
+    		font-size: 0.9vm;
+    		font: bold;
+    		display: inline-block;
+    		left: 20%;
+    	}
+    	
+    	h2 {
+    		font-size: 0.3vm;
+    	}
+    
+    </style>
+</head>
+<body>
+    
+    
+    
+	<!-- 스터디 목록 스타일: 게시판형, 카드형 고려중 -->
+	<!-- 게시판형으로 우선 작업 -->
+	
+	<div id="studyList" layout:fragment="main">
+		<p th:text="${test}">.</p>
+		<hr>
+<!-- 		<p th:text="${test2}">.</p> -->
+		
+		<div th:each="studyMember : ${test2}">
+		
+			<h1>${studyMember.study.name}</h1>
+			<p th:text="${studyMember.study.name}">
+			</p>
+			
+			<h1>${studyMember}</h1>
+			<p th:text="${studyMember}">
+			</p>
+			
+			<h1>${studyMember.study}</h1>
+			<p th:text="${studyMember.study}">
+			</p>
+			
+<!-- 			<h1>${studyMember.studyView}</h1> -->
+<!-- 			<p th:text="${studyMember.studyView}"> -->
+<!-- 			</p> -->
+			
+<!-- 			<h1>${studyMember.popularStudy}</h1> -->
+<!-- 			<p th:text="${studyMember.popularStudy}"> -->
+<!-- 			</p> -->
+			
+		</div>
+		
+    </div>
+    
+    
+</body>
+</html>

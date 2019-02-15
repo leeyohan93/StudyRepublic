@@ -15,6 +15,9 @@ layout:fragment="main"  : 메인 변경
     <title>Dashboard V.1 | Kiaalap - Kiaalap Admin Template</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+	<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
     <!-- favicon
 		============================================ -->
     <link rel="shortcut icon" th:type="@{/adminOnly/image/x-icon}" th:href="@{/adminOnly/img/favicon.ico}">
@@ -74,6 +77,9 @@ layout:fragment="main"  : 메인 변경
      <!-- modals CSS
 		============================================ -->
     <link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
+     <!-- forms CSS
+		============================================ -->
+    <link rel="stylesheet" th:href="@{/adminOnly/css/form/all-type-forms.css}">
     <!-- style CSS
 		============================================ -->
     <link rel="stylesheet" th:href="@{/adminOnly/style.css}">
@@ -95,7 +101,7 @@ layout:fragment="main"  : 메인 변경
     <div class="left-sidebar-pro">
         <nav id="sidebar" class="">
             <div class="sidebar-header">
-                <a href="index.html"><img class="main-logo" th:src="@{/images/logo.svg}" alt="" /></a>
+                <a href="/adminPage/index"><img class="main-logo" th:src="@{/images/logo.svg}" alt="" /></a>
                 <strong><a href="index.html"><img th:src="@{/images/logo.svg}" alt="" /></a></strong>
             </div>
             <div class="left-custom-menu-adp-wrap comment-scrollbar">
@@ -115,16 +121,15 @@ layout:fragment="main"  : 메인 변경
                         <li>
                             <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Member</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Member" href="#"><span class="mini-sub-pro">회원 전체</span></a></li>
-                                <li><a title="Nomal Member" href="#"><span class="mini-sub-pro">일반 회원</span></a></li>
-                                <li><a title="Tutor Member" href="#"><span class="mini-sub-pro">강사 회원</span></a></li>
+                                <li><a title="All Member" href="/adminPage/member/list"><span class="mini-sub-pro">회원 전체</span></a></li>
+                                <li><a title="Nomal Member" href="/adminPage/member/searchMember?grade=N&searchKey=id&searchValue="><span class="mini-sub-pro">일반 회원</span></a></li>
+                                <li><a title="Tutor Member" href="/adminPage/member/searchMember?grade=T&searchKey=id&searchValue="><span class="mini-sub-pro">강사 회원</span></a></li>
                             </ul>
                         </li>
                         <li>
                             <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Tutor</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
                                 <li><a title="All Professors" href="all-professors.html"><span class="mini-sub-pro">강사신청</span></a></li>
-                                <li><a title="Add Professor" href="add-professor.html"><span class="mini-sub-pro">환급신청</span></a></li>
                             </ul>
                         </li>
                         <li>
@@ -802,17 +807,15 @@ layout:fragment="main"  : 메인 변경
                                             <ul class="collapse dropdown-header-top">
                                                 <li><a href="#">회원 전체</a>
                                                 </li>
-                                                <li><a href="#">일반 회원</a>
+                                                <li><a href="/adminPage/member/searchMember?grade=N&searchKey=id&searchValue=">일반 회원</a>
                                                 </li>
-                                                <li><a href="#">강사 회원</a>
+                                                <li><a href="/adminPage/member/searchMember?grade=T&searchKey=id&searchValue=">강사 회원</a>
                                                 </li>
                                             </ul>
                                         </li>
                                         <li><a data-toggle="collapse" href="#">Tutor <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul class="collapse dropdown-header-top">
                                                 <li><a href="#">강사 신청</a>
-                                                </li>
-                                                <li><a href="#">환급 신청</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -864,7 +867,7 @@ layout:fragment="main"  : 메인 변경
                 </div>
             </div>
             <!-- Mobile Menu end -->
-            <div class="breadcome-area" style="padding-top: 15px;">
+            <div class="breadcome-area" style="padding-top: 15px; margin-top: 20px;">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1450,9 +1453,9 @@ layout:fragment="main"  : 메인 변경
     <script th:src="@{/adminOnly/js/morrisjs/morris-active.js}" layout:fragment="indexScript"></script>  
     <!-- morrisjs JS
 		============================================ -->
- 	<script th:src="@{/adminOnly/js/sparkline/jquery.sparkline.min.js}" layout:fragment="indexScript"></script>
-    <script th:src="@{/adminOnly/js/sparkline/jquery.charts-sparkline.js}" layout:fragment="indexScript"></script>
-    <script th:src="@{/adminOnly/js/sparkline/sparkline-active.js}" layout:fragment="indexScript"></script> 
+ 	<script th:src="@{/adminOnly/js/sparkline/jquery.sparkline.min.js}" layout:fragment="indexScript2"></script>
+    <script th:src="@{/adminOnly/js/sparkline/jquery.charts-sparkline.js}" layout:fragment="indexScript2"></script>
+    <script th:src="@{/adminOnly/js/sparkline/sparkline-active.js}" layout:fragment="indexScript2"></script> 
     <!-- calendar JS
 		============================================ -->
     <script th:src="@{/adminOnly/js/calendar/moment.min.js}"></script>
@@ -1490,7 +1493,16 @@ layout:fragment="main"  : 메인 변경
     <!-- main JS
 		============================================ -->
     <script th:src="@{/adminOnly/js/main.js}"></script>
-
+     <!-- icheck JS
+		============================================ -->
+    <script th:src="@{/adminOnly/js/icheck/icheck.min.js}"></script>
+    <script th:src="@{/adminOnly/js/icheck/icheck-active.js}"></script>
+	<!-- tab JS
+		============================================ -->
+    <script th:src="@{/adminOnly/js/tab.js}"></script>
+    <!-- custom JS
+		============================================ -->
+   
 </body>
 
 </html>

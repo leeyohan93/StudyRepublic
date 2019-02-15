@@ -1,20 +1,23 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,8 +35,14 @@ import lombok.ToString;
 @Data
 @ToString(exclude = "review")
 @Entity
-@Table(name = "study", schema = "StudyRepublic")
-@SecondaryTable(name="popular_study")
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "study"/*, schema = "StudyRepublic"*/)
+//@SecondaryTables({
+//	@SecondaryTable(name="popular_study")
+//	, @SecondaryTable(name="study_view")
+//})
+//org.springframework.expression.spel.SpelEvaluationException: EL1008E: Property or field 'popularStudy' cannot be found on object of type 'org.mohajo.studyrepublic.domain.StudyMember' - maybe not public or not valid?
+//@DiscriminatorValue("STUDY")
 public class Study implements Serializable {
 
 	@Id
@@ -131,5 +140,5 @@ public class Study implements Serializable {
 	/*@OneToMany(mappedBy="study")
 	private List<StudyMember> studyMember;*/
 	
-	
+
 }

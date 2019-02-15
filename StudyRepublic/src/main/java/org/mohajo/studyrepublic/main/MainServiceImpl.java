@@ -5,12 +5,11 @@ import java.util.List;
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.PopularStudy;
 import org.mohajo.studyrepublic.domain.Study;
-import org.mohajo.studyrepublic.domain.StudyInterest;
 import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
-import org.mohajo.studyrepublic.repository.StudyInterestRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 /**
  * @author 이요한
@@ -40,7 +38,8 @@ public class MainServiceImpl implements MainService{
 	Interest2CDRepository interest2CDRepository;
 		
 	@Override
-	public List<Study> getPopularPremiumStudy() {
+//	public List<Study> getPopularPremiumStudy() {
+	public List<PopularStudy> getPopularPremiumStudy() {
 		return studyRepository.findPrStudyBytypeCode();
 		
 	}
@@ -51,7 +50,8 @@ public class MainServiceImpl implements MainService{
 		
 	}
 	@Override
-	public List<Study> getPopularBasicStudy() {
+//	public List<Study> getPopularBasicStudy() {
+	public List<PopularStudy> getPopularBasicStudy() {
 		return studyRepository.findBsStudyBytypeCode();
 		
 	}
@@ -100,20 +100,22 @@ public class MainServiceImpl implements MainService{
 	//검색기능추가 미연님의 페이지 합치는데 수정 요함
 	//스터디 타입과 유형의 기본값을 어떻게 처리할지.. / 스터디 전체를 어덯게 나타내야할지 고민. / Page 처리
 	@Override
-	public List<Study> search(Study studyInfo,String searchDate,String[] location, String[] interest){
+	public Page<Study> search(Study studyInfo,String searchDate,String[] location, String[] interest, Pageable pageable){
 		
 		
 		
-		Pageable paging = PageRequest.of(0, 10, Sort.Direction.DESC, "postDate");
+//		Pageable paging = PageRequest.of(0, 10, Sort.Direction.DESC, "postDate");
 		
-		Page<Study> searchResult = studyRepository.findAll(MainPredicate.searchStudy(studyInfo,searchDate,location,interest),paging);
+		Page<Study> searchResult = studyRepository.findAll(MainPredicate.searchStudy(studyInfo,searchDate,location,interest),pageable);
 		
-		List<Study> searchList = searchResult.getContent();
+//		List<Study> searchList = searchResult.getContent();
 /*		for(Study list:searchList) {
 			System.out.println("list = ");
 			System.out.println(list);
 		}
-*/		return searchList;
+*/
+//		return searchList;
+		return searchResult;
 		
 	}
 	
