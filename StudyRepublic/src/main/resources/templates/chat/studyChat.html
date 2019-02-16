@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<title></title>
+</head>
+<style>
+
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: white;
+	border-radius: 10px;
+}
+
+#messageArea {
+	width: 410px;
+	height: 490px;
+	padding-bottom: 10px;
+	overflow: auto;
+	word-break: break-all;
+	background-color: #adcdea;
+	font-size: 14px;
+}
+
+.chatPage {
+	width: 415px;
+	height: 590px;
+	border-top: 1px solid;
+}
+
+#chatMessage {
+	width: 317px;
+	height: 55px;
+	overflow: auto;
+	padding: 10px;
+	border: 0;
+	resize: none;
+	font-size: 15px;
+}
+
+.chatTextArea {
+	background-color: white;
+	height: 75px;
+}
+
+#messageForm {
+	width: 392px;
+}
+
+#sendMessageBtn {
+	width: 50px;
+	height: 35px;
+	margin: 10px 5px 0px 0px;
+	float: right;
+	background-color: rgb(179, 220, 248);
+	border-radius: 4px;
+	border: 0px;
+}
+
+.joinOutMessage {
+	text-align: center;
+	font-size: 13px;
+	display: block;
+}
+
+#myMessage {
+	text-align: right;
+	margin: 0px 15px 0px 150px;
+	padding: 10px;
+	/* 	float:right; */
+}
+
+#myMessageContent {
+	position: relative;
+	background-color: yellow;
+	padding: 10px;
+	margin: 0px;
+	border-radius: 10px;
+	text-align: left;
+	display:inline-block;
+}
+
+#myMessageContent:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 0 5px 8px;
+	border-color: transparent yellow;
+	width: 0;
+	z-index: 1;
+	right: -8px;
+	top: 12px;
+}
+
+#myMessageDate {
+	font-size: 10px;
+}
+
+#chatImgProfile {
+	display: none;
+	width: 50px;
+	height: 50px;
+	border-radius: 100%;
+}
+
+#receiveMessage {
+	text-align: left;
+	margin: 0px 100px 0px 0px;
+	padding: 10px;
+	display: flex;
+}
+
+#receiveProfileForm {
+	display: inline-block;
+}
+
+#receiveProfile {
+	width: 50px;
+	height: 50px;
+	border-radius: 100%;
+}
+
+#receiveUser {
+	font-size: 13px;
+	text-align: left;
+}
+
+#receiveMessageForm {
+	display: inline-block;
+	padding: 5px;
+}
+
+#receiveContent {
+	position: relative;
+	background-color: white;
+	padding: 10px;
+	margin: 0px;
+	border-radius: 10px;
+	text-align: left;
+	display: inline-block;
+}
+
+#receiveContent:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 8px 5px 0;
+	border-color: transparent white;
+	width: 0;
+	z-index: 1;
+	left: -8px;
+	top: 12px;
+}
+
+#receiveDate {
+	font-size: 10px;
+	text-align: right;
+}
+
+.userList {
+	width: 410px;
+	margin: 0px;
+}
+
+#userListForm {
+	display: inline-block;
+	padding: 15px;
+}
+
+#userProfileList {
+	width: 35px;
+	height: 35px;
+	border-radius: 100%;
+}
+
+#userNameList {
+	font-size: 10px
+}
+
+#userInfo {
+	
+}
+
+#chat {
+	border: 1px solid;
+	padding: 10px;
+	text-align: -webkit-center;
+	background-color: #adcdea;
+}
+</style>
+<body>
+
+
+	<img id="chatImgProfile"
+		th:src="@{'/member_image/'+${member.profileSaveName}}" />
+	<input id="username" type="hidden" th:value="${member.nickname}">
+	<input id="userId" type="hidden" th:value="${member.id}">
+
+
+	<!-- 참여자 리스트 인원 -->
+	<div id="chat">
+		<div id="userInfo">
+			<span id=user> 채팅 참여자 <span id="userCount"></span>
+			</span>
+			<div class="userList">
+				<span id="listArea"></span>
+			</div>
+		</div>
+
+		<!-- 참여자 리스트 인원 끝-->
+
+		<!-- 채팅방  -->
+		<div class="chatPage">
+			<div id="messageArea"></div>
+			<form id="messageForm" name="messageForm">
+				<div class="chatTextArea">
+					<textarea id="chatMessage" class="form-control"></textarea>
+					<button type="submit" id="sendMessageBtn">전송</button>
+				</div>
+			</form>
+		</div>
+		<!--채팅방 끝  -->
+
+	</div>
+
+</body>
+
+</html>
+
+<script>
+	// var messageForm = $('#messageForm');
+	var messageForm = document.querySelector('#messageForm');
+	console.log(messageForm);
+	var messageInput = document.querySelector('#chatMessage');
+	var messageArea = document.querySelector('#messageArea');
+	var stompClient = null;
+	//로그인 닉네임
+	var username = $('#username').val();
+	//로그인Id
+	var userId = $('#userId').val();
+	console.log(userId);
+	//접속자 프로필
+	var userProfile = $('#chatImgProfile').attr("src");
+	console.log(userProfile);
+	//접속자 리스트
+
+	$(document).ready(function() {
+
+		//화면로딩 되면 연결
+		connect();
+
+		//submit눌럿을때
+		messageForm.addEventListener('submit', sendMessage);
+
+		// 왜 제이쿼리로는 안되는 것인가~	
+		// 	$("#sendMessageBtn").on("click", function(){
+		// 	   sendMessage();
+		// 	})
+
+		//엔터키눌럿을때
+		$("#messageForm").keyup(function(e) {
+			if (e.keyCode == 13) {
+				sendMessage();
+			}
+		});
+
+	});
+
+	//창을 새로고치거나 종료하면 발생
+	window.onbeforeunload = function() {
+		disconnect();
+	}
+
+	//     window.opener.location.close 
+	//연결
+	function connect() {
+
+		console.log(username);
+		if (username !== null) {
+			//서버소켓의 endpoint인 "/ws"로 접속할 클라이언트 소켓 생성
+			var socket = new SockJS('/ws');
+			//stomp 초기화하기위해 over를 사용 socket의 정보를 기반으로 설정
+			stompClient = Stomp.over(socket);
+
+			stompClient.connect({}, function() {
+
+				//boardcasting api를 설정	
+				stompClient.subscribe('/topic/public', allMessage);
+
+				//         	stompClient.subscribe('/topic/userStatus', function(msg){
+				//         		joinOutMessage(msg.body);      		
+				//         	});
+
+				stompClient.subscribe('/topic/userJoin', joinMessage);
+
+				stompClient.subscribe('/topic/userLeave', outMessage);
+
+				//유저접속 메시지 전송
+				//             stompClient.send('/app/userStatus',{},JSON.stringify({sender: username, type: 'JOIN'}))   
+				stompClient.send('/userJoin', {}, JSON.stringify({
+					sender : username,
+					profile : userProfile
+				}));
+			});
+		}
+	}
+
+	//연결 해제
+	function disconnect() {
+
+		if (stompClient !== null) {
+			stompClient.send('/userLeave', {}, JSON.stringify({
+				sender : username,
+				profile : userProfile
+			}));
+			stompClient.disconnect();
+
+		}
+	}
+
+	//에러났을떄 출력
+	// function onError(error) {
+	//     connectingElement.textContent = '오류 연결을 다시확인해주세요';
+	//     connectingElement.style.color = 'red';
+	// }
+
+	function sendMessage(e) {
+
+		//메시지 내용을 담는다.
+		var messageContent = messageInput.value.trim();
+		//json형식으로 send메시지를 보냄
+		if (messageContent && stompClient) {
+			var chatMessage = {
+				sender : username,
+				content : messageInput.value,
+				profile : userProfile
+
+			};
+
+			stompClient.send('/sendMessage', {}, JSON
+					.stringify(chatMessage));
+			messageInput.value = '';
+
+		}
+		e.preventDefault();
+
+	}
+
+	//모두에게 메시지 전송
+	function allMessage(payload) {
+
+		// 서버로 부터 수신한 message의 body를 json으로 파싱
+		var message = JSON.parse(payload.body);
+
+		//메시지 보내는 시간을 사용하기위해 선언
+		var date = new Date().toLocaleTimeString().replace(
+				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+		console.log(date);
+
+		if (message.sender === username) {"<span id='receiveMessageForm'>"
+			$("#messageArea").append(
+					"<div id='myMessage'>" + "<div id='myMessageContent'>"
+							+ message.content + "</div>"
+							+ "<div id='myMessageDate'>" + date + "</div>"
+							+ "</div>");
+		} else {
+			$("#messageArea")
+					.append(
+							"<div id='receiveMessage'>"
+									+ "<span id='receiveProfileForm'>"
+									+ "<img id='receiveProfile' src="+message.profile+"/>"
+									+ "</span>"
+									+ "<span id='receiveMessageForm'>"
+									+ "<div id='receiveUser'>" + message.sender
+									+ "</div>" + "<div id='receiveContent'>"
+									+ message.content + "</div>"
+									+ "<div id='receiveDate'>" + date
+									+ "</div>" + "</div>" + "</span>");
+		}
+
+		//스크롤바 지속적으로 아래로 이동 
+		messageArea.scrollTop = messageArea.scrollHeight;
+
+	}
+
+	//입장 메시지 참석리스트 출력
+	function joinMessage(payload) {
+
+		var message = JSON.parse(payload.body);
+
+		$("#messageArea").append(
+				"<p class='joinOutMessage'>" + message.sender + " 님이 입장하셨습니다."
+						+ "</p>")
+		$("#listArea").text("");
+		for (var i = 0; i < message.userList.length; i++) {
+			if (username == message.userList[i]) {
+				$('#listArea')
+						.append(
+								"<span id='userListForm'>"
+										+ "<img id='userProfileList' src="+message.userProfile[i]+" />"
+										+ "<div id='userNameList'>"
+										+ message.userList[i] + "(나)"
+										+ "</div>" + "</span>")
+			} else {
+				$('#listArea')
+						.append(
+								"<span id='userListForm'>"
+										+ "<img id='userProfileList' src="+message.userProfile[i]+" />"
+										+ "<div id='userNameList'>"
+										+ message.userList[i] + "</div>"
+										+ "</span>")
+			}
+		}
+		$("#userCount").text(message.userCount);
+
+		messageArea.scrollTop = messageArea.scrollHeight;
+
+	}
+
+	//퇴장 메시지
+	function outMessage(payload) {
+
+		var message = JSON.parse(payload.body);
+
+		$("#messageArea").append(
+				"<p class='joinOutMessage'>" + message.sender + " 님이 퇴장하셨습니다."
+						+ "</p>")
+		$("#listArea").text("");
+		for (var i = 0; i < message.userList.length; i++) {
+			if (username == message.userList[i]) {
+				$('#listArea')
+						.append(
+								"<span id='userListForm'>"
+										+ "<img id='userProfileList' src="+message.userProfile[i]+" />"
+										+ "<div id='userNameList'>"
+										+ message.userList[i] + "(나)"
+										+ "</div>" + "</span>")
+			} else {
+				$('#listArea')
+						.append(
+								"<span id='userListForm'>"
+										+ "<img id='userProfileList' src="+message.userProfile[i]+" />"
+										+ "<div id='userNameList'>"
+										+ message.userList[i] + "</div>"
+										+ "</span>")
+			}
+		}
+
+		$("#userCount").text(message.userCount);
+		messageArea.scrollTop = messageArea.scrollHeight;
+
+	}
+</script>

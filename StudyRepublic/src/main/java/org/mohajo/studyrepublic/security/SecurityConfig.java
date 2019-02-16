@@ -1,7 +1,5 @@
 package org.mohajo.studyrepublic.security;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +47,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 	
 		http
+
 		.authorizeRequests()
 		.antMatchers("/login", "/member/signup","/member/insert","/member/checkid","/member/checknick").anonymous()
 		.antMatchers("/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**").permitAll()
-		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/tutor/inquery","/tutor/file/**","/tutor/delete/**").hasAnyRole("N","W","T","A")
+		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/tutor/inquery","/tutor/file/**","/tutor/delete/**","/chat/studyChat").hasAnyRole("N","W","T","A")
 		.antMatchers("/tutor").hasAnyRole("T","A")
 		.antMatchers("/admin/**","/adminPage/**").hasRole("A");
+
 
 						
 
@@ -89,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 
 		 //스마트에디터 관련 설정
 		 http.headers().frameOptions().sameOrigin();
-
+		 
 		
 		http.addFilterAfter(new ExceptionHandlerFilter(), SecurityContextHolderAwareRequestFilter.class);
 		

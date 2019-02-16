@@ -36,7 +36,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "inquireboard")
-public class InquireBoard extends Board{
+public class InquireBoard{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
