@@ -73,8 +73,14 @@ public class MainController {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);
+		
+		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);	
 		model.addAttribute("joiningStudy", joiningStudy);
+		System.out.println("조이닝스터디: "  + joiningStudy.toString());
+		
+
+		
+		membercontroller.getSession_Study(auth, hs, joiningStudy);
 	}
 	
 	@RequestMapping("/search")

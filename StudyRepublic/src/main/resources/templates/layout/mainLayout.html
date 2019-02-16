@@ -14,6 +14,7 @@
 	type="text/css">
 <!-- <div layout:fragment="bootCss"> -->
 	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+	
 <!-- </div> -->
 <div layout:fragment="customCss"></div>
 <!-- <div layout:fragment="bootJs"> -->
@@ -38,6 +39,21 @@
 #edu {
 	display: none
 }
+
+ 	select option:hover,
+    select option:focus,
+    select option:active {
+/*      background: rgb(179,220,248); */
+        background-color: rgb(179,220,248); /* for IE */
+        color: white;
+    }
+
+    select option:checked {
+        background: linear-gradient(#d6d6d6, #d6d6d6);
+        background-color: #d6d6d6 !important; /* for IE */
+        color: #000000 !important;
+    }
+
 </style>
 
 </head>
@@ -54,13 +70,84 @@
 
 				<div>
 				<!-- Login -->
+				
+
+				
+			
+
+				
 				<div id = "logout" sec:authorize="hasRole('N')">
-						<ul>
+						
+						
+
+						
+						<div class = "info" style = "display: inline-block; width:auto;height:50px;float:right;">
+					
+						<div id = "displaying" style = "visibility:hidden; float:right;">
+						<ul > <!--  -->
 						<li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li>
-						<li id = "loginli"><a th:href="@{/mypage}">마이페이지</a></li>
-						<li id = "loginli" th:text = ${session.nickname}+'님' ></li>
-						<li id = "loginimg"><img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%;"></li>
+						<li id = "loginli"><a th:href="@{/mypage}">마이페이지</a></li>				
 						</ul>
+						</div>
+						
+						<div style = "margin-bottom : 10px; float:right">
+						<ul >			
+						<li id = "loginli" th:text = "${session.nickname}+' 왔냐?'"></li>
+						<li id = "loginimg"><img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%; margin-bottom:5px; float:right;"></li>
+						</ul>
+						</div>
+						
+
+						
+
+						
+						</div>
+						
+						
+							<div>
+						<ul>
+						<li style = "top:14px; text-overflow: ellipsis;">
+						<select name = "joinStudy" id = "joinStudy" onchange = "joinStudy(this)" style ="border:solid 1px #b6babd; width:110px;height:auto; padding: 0 0 0 5px; background-position: calc(98%) center;" >
+						<option th:each = "joinSt : ${session.studyNameList}"th:value="${joinSt}" th:text="${joinSt}"></option>
+						</select>
+						</li>
+						</ul>
+						</div>
+
+				
+						
+						<div th:each = "joinStId : ${session.studyIdList}" style = "display:none">
+							<input class = "joiningStudyId" type = "text" th:value = "${joinStId}">					
+						</div>
+						
+						<div th:each = "joinStName : ${session.studyNameList}" style = "display:none">
+							<input class = "joiningStudyName" type = "text" th:value = "${joinStName}">					
+						</div>
+						
+						
+						
+						<!-- 스터디페이지 이동관련 폼 -->
+						<div style = "display:none">
+						<form id = "moveStudy" action = "/StudyPage/Main" method = "post">
+						
+						<input id = "studyId" name ="studyId">
+						<input type="hidden" th:name="${_csrf.parameterName}"
+						th:value="${_csrf.token}" />
+						
+						</form>
+						</div>
+						<!-- <div th:text = "${session.studyNameList}"></div>
+ -->	
+				
+<!-- 							<select name="joinStudy" id="joinStudy"
+							 onchange="joinStudy(this)">
+								<option th:each="joinSt : ${joiningStudy}"
+									th:value="${joinSt.study.name}" th:text="${joinSt.study.name}">
+								</option>
+							</select> -->
+								
+				</div>
+
 				</div>
 
 				<div id="login" sec:authorize="isAnonymous()">
@@ -276,7 +363,53 @@
 	<script th:src="@{/datepicker/js/i18n/datepicker.en.js}"></script>
 	<div layout:fragment="customScript"></div>
 
+	<script>
+	
+	var joiningStudyId = document.getElementsByClassName("joiningStudyId");
+	var joiningStudyText = document.getElementsByClassName("joiningStudyName");
+	
+	var studyText = new Array(joiningStudyText.length);
+	
+	var joinStudyListText = "";
+	var joinStudyListValue = "";
+	
 
+	
+	function joinStudy(obj) {		/* 스터디페이지이동..js  */
+		
+		for ( var i = 0; i < studyText.length; i++) {
+				studyText[i] = joiningStudyText[i].value;
+		}
+		
+		for ( var i = 0; i < studyText.length; i++) {
+			if ( studyText[i] == obj.options[obj.selectedIndex].value) {
+				joinStudyListValue = joiningStudyId[i].value
+			}
+		}
+		/* document.getElementById('studyId').style.display = 'none'; */
+		document.getElementById('studyId').value = joinStudyListValue
+		document.getElementById('moveStudy').submit();
+		
+
+		
+	}
+	
+
+	$(function(){
+		$('.info').mouseenter(function(){
+			document.getElementById('displaying').style.visibility = 'visible';
+			document.getElementById('displaying').style.float = 'right';
+		});
+		
+		$('.info').mouseleave(function(){
+			document.getElementById('displaying').style.visibility = 'hidden';
+		});
+		
+		
+	});
+	
+	
+	</script>
 
 </body>
 </html>

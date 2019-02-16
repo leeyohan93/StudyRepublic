@@ -194,7 +194,7 @@ public class TutorController implements Serializable {
 		
 		String uploadRootPath = resource.getFile().getAbsolutePath();
 
-		File file = new File(resource.getFile().getAbsolutePath());
+		File file = new File(uploadRootPath);
 //		File file = new File(tutorFileFullUrl);
 
 		

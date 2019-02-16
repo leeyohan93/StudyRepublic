@@ -24,6 +24,8 @@ import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,12 +86,14 @@ public class StudyPageController {
 	@Autowired
 	StudyQnaboardReplyRepository studyQnaboardReplyRepository;
 
-	@RequestMapping("/Main")
-	public String studyPageMain(Model model/* , @RequestParam("studyId") String studyId */) {
+	@PostMapping("/Main")
+	public String studyPageMain(Model model , @RequestParam("studyId") String studyId ) {
 		// extra varialbe
-		String studyId = "BB00001";
-		String id = "aaa123";
-
+		/*String studyId = "BB00001";*/
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();/*"aaa123";*/
+		
+		
+		System.out.println(studyId);
 		/*
 		 * 이 주석 코드는 로그인 기능이 활성화 된 후 체크할 예정임.
 		 * 
