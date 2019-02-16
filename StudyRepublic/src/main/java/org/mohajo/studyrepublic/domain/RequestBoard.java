@@ -4,6 +4,7 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -36,7 +37,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "requestboard")
-public class RequestBoard extends Board{
+public class RequestBoard{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +47,7 @@ public class RequestBoard extends Board{
 	protected String id;
 	protected String title;
 	protected String content;
+
 	@CreationTimestamp
 	protected Timestamp date;
 	protected int notice;

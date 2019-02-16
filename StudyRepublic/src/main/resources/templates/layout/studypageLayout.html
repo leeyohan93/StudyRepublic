@@ -62,7 +62,7 @@
 				<a th:href="@{/StudyPage/Fileshareboard}">파일 공유</a></br>
 				<a th:href="@{/StudyPage/Qnaboard}">질문 및 답변</a></br>
 				<a th:href="@{#}"><!-- 에러 때문에 일단은 주석 처리 "@{/StudyPage/VideoCalling}" -->화상 통화</a></br>
-				<a th:href="@{#}">채팅</a></br>
+				<a id ="chatPage" th:href="@{#}">채팅</a></br>
 				<a th:href="@{/StudyPage/Management}">관리</a></br>
 				<a th:href="@{#}">탈퇴</a></br>
 				<a th:href="@{#}">신고</a></br>
@@ -77,6 +77,19 @@
 			</div>
 		</div>
 	</div>
+	        <script>
+      
+    var popOpen;
+ 
+    //채팅 팝업 (원식)
+    $('#chatPage').click(function(){
+    	  	
+    	var popOption = "width=460px, height=735px, top=100px, left=650px;"
+        popOpen = window.open("/chat/studyChat","chatPage", popOption);
+
+    });
+    
+    </script>
 
 	<!-- Scripts -->
 	<script th:src="@{/assets/js/jquery.min.js}"></script>

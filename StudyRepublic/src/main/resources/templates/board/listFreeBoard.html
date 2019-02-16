@@ -18,10 +18,12 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+     <!-- modals CSS
+		============================================ -->
+    <link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
 
 <style>
 .boardName {
@@ -109,6 +111,9 @@ span.listReplyCount {
 #listBoardNotice{
 display: none;
 }
+.modal-backdrop{
+ z-index:0;
+}
 
 
 </style>
@@ -181,14 +186,33 @@ display: none;
 							</table>
 						</div>
 						<!--테이블 끝  -->
-
-
+   
+                        <!--글쓰기 버튼  -->
 						<div class="boardWriteBtn">
 							<a class="btn btn-primary" id="writeBtn" th:href="@{writeBoard}"
 								role="button">글쓰기</a>
 						</div>
-
-
+                           
+                        <a class="Primary mg-b-10" href="#" data-toggle="modal" data-target="#PrimaryModalalert">Primary</a>
+                         <div id="PrimaryModalalert" class="modal modal-edu-general default-popup-PrimaryModal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-close-area modal-close-df">
+                                        <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                                    </div>
+                                    <div class="modal-body">
+                                        <i class="educate-icon educate-checked modal-check-pro"></i>
+                                        <h2>Awesome!</h2>
+                                        <p>The Modal plugin is a dialog box/popup window that is displayed on top of the current page</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a data-dismiss="modal" href="#">Cancel</a>
+                                        <a href="#">Process</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <!--글쓰기 버튼 끝 -->
 						<!-- 페이징   -->
 
 						<nav>
@@ -214,10 +238,10 @@ display: none;
 						<div class="boardSearch">
 
 							<select id="boardSearchPeriod">
-								<option value="allDay" th:selected="${pageDTO.searchType} =='allDay'">전체기간</option>
-								<option value="weak" th:selected="${pageDTO.searchType} =='weak'">1주</option>
-								<option value="month" th:selected="${pageDTO.searchType} =='month'">1개월</option>
-								<option value="sMonth"th:selected="${pageDTO.searchType} =='sMonth'">6개월</option>
+								<option value="allDay" th:selected="${pageDTO.searchPeriod} =='allDay'">전체기간</option>
+								<option value="weak" th:selected="${pageDTO.searchPeriod} =='weak'">1주</option>
+								<option value="month" th:selected="${pageDTO.searchPeriod} =='month'">1개월</option>
+								<option value="sMonth"th:selected="${pageDTO.searchPeriod} =='sMonth'">6개월</option>
 							</select> <select id="boardSearchType">
 								<option value="all" th:selected="${pageDTO.searchType} =='all'">제목+내용</option>
 								<option value="title"

@@ -15,8 +15,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 
 <style>
@@ -140,7 +138,8 @@
 
 //스마트에디터 여기부터
 $(document).ready(function(){
-    //전역변수선언
+
+	//전역변수선언
     var editor_object = [];
 
 
@@ -182,10 +181,14 @@ $(document).ready(function(){
     $('#writePreview').click(function(){
 
     	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
-        window.open("preview","자식창","writh=400,height=300,left=300,top=50");
+    	
+    	 var popOption = "width=750px, height=750px, top=50px, left=600px;"
+        window.open("preview","previewPage",popOption);
 
 
     });
+    
+
 });
     
     //공지사항

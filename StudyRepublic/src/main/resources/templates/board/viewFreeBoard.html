@@ -23,10 +23,6 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <style>
 #content {
@@ -261,7 +257,7 @@
 		 url : '/board/likeCountFreeBoard',
 		 type : 'post',
 		 data : {'freeBoardId':freeBoardId},
-	     success : function(data){ alert(data);
+	     success : function(data){ 
 	    	 if(data != 0){
 	    		 $("#likeCount").text(data);
 	    		 
@@ -273,7 +269,6 @@
  
  //댓글 등록 버튼 클릭
  $("#commentInsertBtn").click(function(){  
-	 alert()
 	 //commentInsertForm의 내용을 가져옴
 	 var insertData = $("#commentInsertForm").serialize(); 
      commentInsert(insertData); //Insert 함수호출(아래)
@@ -359,16 +354,17 @@
      $.ajax({
          url : '/comment/updateFreeReply',
          type : 'post',
-         data : {'content' : updateContent, 'freeBoar'dReplyId' : freeBoardReplyId},
+         data : {'content' : updateContent, 'freeBoardReplyId' : freeBoardReplyId},
          success : function(data){ 
         	 console.log("data = ",data);
              if(data != 0) commentList(freeBoardId);  
          }
      });
  }
+ 
   
  //댓글 삭제 
- function commentDelete(freeBoardReplyId){ alert(freeBoardReplyId);
+ function commentDelete(freeBoardReplyId){ 
      $.ajax({
          url : '/comment/deleteFreeReply/'+freeBoardReplyId,
          type : 'post',

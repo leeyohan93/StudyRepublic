@@ -11,6 +11,7 @@
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
 	type="text/css">
 <div layout:fragment="customCss"></div>
@@ -19,6 +20,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
 
 <style>
 #pinterest2cd {
@@ -58,10 +60,15 @@
 				<!-- Login -->
 				<div id = "logout" sec:authorize="hasRole('N')">
 					<ul>
-						<li><a th:href="@{/logout}">로그아웃</a></li>
+						<li class="logoutConfirm"><a th:href="@{/logout}">로그아웃</a></li>
 						<li><a th:href="@{/mypage}">마이페이지</a></li>
 					</ul>
 				</div>
+				<script> 
+				$('.logoutConfirm').click(function(){
+					alert("잘가라 이녀석");
+				});
+				</script>
 
 				<div id="login" sec:authorize="isAnonymous()">
 					<ul>
@@ -273,7 +280,6 @@
 	<script th:src="@{/datepicker/js/datepicker.js}"></script>
 	<script th:src="@{/datepicker/js/i18n/datepicker.en.js}"></script>
 	<div layout:fragment="customScript"></div>
-
 
 
 </body>

@@ -48,6 +48,8 @@
 			</form>
 		</div>
 	</div>
+	<img class="chatImg" src="chat.png">
+	<img id="img_profile" th:src="@{'/member_image/'+${md.profileSaveName}}" style="width:200px; height:200px"/>
 
 
 </body>
@@ -199,7 +201,7 @@ function allMessage(payload) {
 //     dateElement.appendChild(dateText);
 //     messageElement.appendChild(dateElement);
     if(message.sender === username){
-    	$("#messageArea").append("<li>"+"<p>"+message.content+"</p>"+"<div>"+date+"</div>"+"</li>");
+    	$("#messageArea").append("<li class="">"+"<p>"+message.content+"</p>"+"<div>"+date+"</div>"+"</li>");
     }else{
     $("#messageArea").append("<li>"+"<span>"+message.sender+"</span>"+"<p>"+message.content+"</p>"+"<div>"+date+"</div>"+"</li>");
     }

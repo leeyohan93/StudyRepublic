@@ -100,6 +100,7 @@ public class BoardCotroller {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		 
 	    String id = auth.getName();
+	    log.info(id);
 	    model.addAttribute("memberId",id);
 	      
 		return "board/write";

@@ -1,7 +1,5 @@
 package org.mohajo.studyrepublic.security;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()	
 		.antMatchers("/member/signup","/member/insert","/member/checkid","/member/checknick", "/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**","/tutor/**").permitAll()
 		.antMatchers("/admin/**","/member/inquery","/member","/adminPage/**").hasRole("A")
-		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**").hasAnyRole("N","A")
+		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/chat/studyChat").hasAnyRole("N","A")
 		.antMatchers("/tutor/inquery").hasRole("N")
 /*		.antMatchers("/tutor/**","/tutor/file/**").hasRole("W")*/
 		/*.antMatchers("/admin/**").hasAnyRole("A","T")*/	// a나 t  둘 다 된다.
@@ -98,7 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 
 		 //스마트에디터 관련 설정
 		 http.headers().frameOptions().sameOrigin();
-
+		 
 		
 		http.addFilterAfter(new ExceptionHandlerFilter(), SecurityContextHolderAwareRequestFilter.class);
 		
