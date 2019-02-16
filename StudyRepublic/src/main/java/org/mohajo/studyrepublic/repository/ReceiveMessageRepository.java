@@ -16,7 +16,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface ReceiveMessageRepository extends JpaRepository<ReceiveMessage, Integer> {
 	
 	/*받은쪽지함*/
-	@Query(value="select * from message_receive where receive_id = :id" ,nativeQuery=true)
+	@Query(value="select * from message_receive where receive_id = :id ORDER BY message_date DESC" ,nativeQuery=true)
 	List<ReceiveMessage> findreceiveById(String id);
+	
 
 }

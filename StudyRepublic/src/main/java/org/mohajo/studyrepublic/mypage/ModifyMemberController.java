@@ -255,7 +255,20 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
 		return "redirect:/modimember";
 	}
 	
-
+	
+	/*회원정보수정페이지 폼만드는중*/
+	@RequestMapping("/testmodi")
+	public String membermodi(Model model) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		Member modifyuser = mbr.findById(id).get();
+		
+		model.addAttribute("mdu",modifyuser);
+		
+		
+		return "mypage/testmodify";
+		
+	}
 	
 
 

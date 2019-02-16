@@ -26,9 +26,9 @@
  <div>
  	<b>프로필사진</b> 
  	<form name="image_Form" id="image_Form" action="attachments" method="post">
- 	<img id="img_profile" th:src="@{'/member_image/'+${md.profileSaveName}}" style="width:200px; height:200px"/>
+ 	<img id="img_profile" th:src="@{'/member_image/'+${md.profileSaveName}}" style="border-radius:100%; width:200px; height:200px"/>
 	<br>
-	<input name="sourceFile" id="sourceFile" type="file">
+	<input name="sourceFile" id="sourceFile" type="file"/>
 	
 	<input type="button"  id="newimg_upload" name="newimg_upload" value="이미지변경"/>
 	</form>

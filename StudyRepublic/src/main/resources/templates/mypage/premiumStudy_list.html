@@ -16,6 +16,7 @@
 		
 			<tr>
 				<th scope="cols">스터디명</th>
+				<th scope="cols"></th>
 				<th scope="cols">진행상태</th>
 				<th scope="cols">기간</th>
 				<th scope="cols">탈퇴</th>
@@ -25,11 +26,20 @@
 	 
 			<tr th:each="premium : ${myp}">
 				<td><a th:href="@{'/study/detail/'+${premium.study.studyId}}" th:text= "${premium.study.name}"></a></td>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'WA'}">신청중</td>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'LE'}">리더</td>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'ME'}">승인</td>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'DE'}">거절</td>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'EX'}">탈퇴</td>
+				
 				<td th:text="${premium.study.studyStatusCode.codeValueKorean}"/>
 				<td th:text="|${premium.study.startDate}~${premium.study.endDate}|"/>
 				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'ME'}" ><a href="" >탈퇴</a></td>
 				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'LE' }" ><a href="" >해체</a></td>
-			
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'WA' }" >-</td>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'DE' }" >-</td>
+				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'EX' }" >-</td>
+				
 				
 			</tr>
 	</table>

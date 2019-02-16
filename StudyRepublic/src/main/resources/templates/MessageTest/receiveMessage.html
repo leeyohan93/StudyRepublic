@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<!-- 	layout:decorate="~{/layout/mainLayout}"> -->
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
+
 <head>
 <meta charset="UTF-8">
 <title>받은쪽지함</title>
@@ -12,7 +13,26 @@
 <body>
 
 
-<h2>받은쪽지함</h2> <a href="sendMessage">보낸쪽지함</a> <a href="messageWrite">쪽지쓰기</a>
+
+<div id="main" layout:fragment="main">
+<div class="inner">
+<div class="row">
+
+		<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar" style="height: 500px;">
+				<ul class="nav nav-pills flex-column">
+				
+					<li class="nav-item">
+						<a class="nav-link" href="messageWrite">쪽지쓰기</a>
+						<a class="nav-link" href="receiveMessage">받은쪽지함</a>
+						<a class="nav-link" href="sendMessage">보낸쪽지함</a>
+						
+					</li>   	
+				</ul>
+	</nav>
+
+<div class="row" style="width: 86%">
+<div class="col-sm-9">
+<h2>받은쪽지함</h2>
 <table th:inline ="text" class="table" border ="1">
 	<tr>
 		<!-- <td>번호</td> -->
@@ -30,7 +50,13 @@
 		<td th:text="${receive.messageDate}"/>
 		<td th:text="${receive.messageDelete}"/>
 	</tr>	
-	
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
 
 
 </body>

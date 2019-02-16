@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
+<!-- layout:decorate="~{/layout/mainLayout}" -->
+<head>
+<meta charset="UTF-8">
+<title>마이페이지 테스트</title>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
+<style>
+	.container-fluid{
+		font-style:normal;
+	}
+
+	.sidebar{
+	
+		position:sticky;
+		height:100%;
+		text-align:center;
+		border-right:1px solid #eee;
+		font-size:small;
+		
+	}
+		
+	
+	.placeholders{
+		padding-bottom:3rem;
+		height:200px;
+		margin-bottom: 3em;
+		
+	}
+	.border-top{
+		width:100%;
+		height:60px;
+		text-align:left;
+	}
+	.myschedulerbtn{
+		width:100%;
+		height: 15%
+		
+	}
+	.profile{
+		width: 100%;
+		height: 100%;
+	}
+	.userinfo{
+		width: 100%;
+		height: 100%;
+		text-align:left;
+	}
+	.studyinfo{
+		height:80%; 
+		margin-top:3px;
+		text-align:left;
+	}
+	.modifybtn{
+		float: right;
+	}
+	.btn{
+		background-color:rgb(179,220,248);
+	}
+	
+	
+
+	
+
+</style>
+
+</head>
+<body>
+
+<div id="main" layout:fragment="main">
+<div class="inner">
+	
+	<div class="container-fluid">
+		<div class="row">
+			<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+				<ul class="nav nav-pills flex-column">
+					<li class="nav-item">
+						프리미엄등급신청
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">신청하기</a>
+						<a class="nav-link" href="#">신청현황</a>
+					</li>   	
+				</ul>
+				
+				<ul class="nav nav-pills flex-column">
+					<li class="nav-item">
+						강사페이지
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">강사프로필</a>
+						<a class="nav-link" href="#">프리미엄<br>스터디<br>개설내역</a>
+					</li>   	
+				</ul>
+			</nav>
+			
+			<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+				<h3>마이페이지</h3>
+				<section class="row text-center placeholders">
+					<div class="col-3 col-sm-7 placeholder">
+						<div class="border border-top">
+							<span sec:authentication="principal.member.nickname"></span>님이 접속중입니다.<br>
+							<a href="receiveMessage">쪽지함</a> 
+							<a href="activityinfo">활동정보</a>
+							<a href="activityinfo">결제정보</a>
+						</div>
+					<div  th:each="mbr : ${mbr}">		
+						<div class="col-sm-4 border profile">
+							<img id="img_profile" th:src="@{'/member_image/'+${mbr.profileSaveName}}" style="width:100%; height:120px;"/>
+						</div>	
+						<div class="col-sm-8 border userinfo">
+								ID:	<span th:text=${mbr.id} ></span>
+								<br> 
+								이름: <span th:text=${mbr.name} ></span>
+								<br> 
+								성별: <span th:text=${mbr.gender} ></span>
+								<br> 
+								생년월일: <span th:text=${mbr.birth} ></span>
+								<br> 
+								E-Mail: <span th:text=${mbr.email} ></span>
+								<br> 
+								연락처: <span th:text=${mbr.phonenumber} ></span>
+								<br>
+						</div>
+					
+							<a class="btn modifybtn" id="modifybtn" th:href="@{modimember}" role="button">수정하기</a>
+						
+					</div>	
+							
+							
+						
+						
+					</div>
+							
+							
+					<div class="col-6 col-sm-5 placeholder">
+						<a class="btn myschedulerbtn" href="#" role="button">MY 스케줄러</a>
+						
+						<div class="border studyinfo">
+							현재진행중인 스터디<br> 
+							<br>(일반스터디)<br>
+							<div th:each="studymember : ${smr}">현재 진행중인 스터디가없습니다.
+								<li th:text="${smr.study.name}"></li>
+								<li th:text="${smr.study.name}"></li>
+							</div>
+							<br>(프리미엄스터디)<br>
+							<li>현재 진행중인 스터디가 없습니다.</li>
+							
+						</div>
+					</div>
+				</section>
+								
+							
+						
+						
+					
+					
+					
+					
+			<!--관심지역 정보 가져올것 	<div th:each="iir : ${iir}"> -->
+				
+				<section class="row text-center placeholders">
+					<div class="col-6 col-sm-12 border">
+					관심지역
+						<div th:each="iir : ${iir}"> 
+							<li th:text="${iir.interestLocation}">	
+					
+						</div>
+					</div>
+				</section>
+				
+				
+				<section class="row text-center placeholders">
+					<div class="col-6 col-sm-12 border">
+					
+					</div>
+				</section>
+			</main>
+				
+					 
+					
+				
+			
+		</div>
+	
+	
+	</div>
+	
+
+</div>
+<!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
+</div>
+<!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
+
+</body>
+</html>

@@ -67,14 +67,14 @@ public class StudyMember implements Serializable {
 		@OneToMany(mappedBy="studyMember")
 		private List<StudyQnaboard> studyQnaboard;*/
 		
-		/* Caused by: org.hibernate.AnnotationException: A Foreign key refering org.mohajo.studyrepublic.domain.StudyMember from org.mohajo.studyrepublic.domain.LeveltestResponse has the wrong number of column. should be 2 */
+/*		 Caused by: org.hibernate.AnnotationException: A Foreign key refering org.mohajo.studyrepublic.domain.StudyMember from org.mohajo.studyrepublic.domain.LeveltestResponse has the wrong number of column. should be 2 
 		@MapsId("id")
 		@OneToMany
 		@JoinColumns({
-			@JoinColumn(name = "id"/*, referencedColumnName = "id", updatable=false, insertable=false*/),
+			@JoinColumn(name = "id", referencedColumnName = "id", updatable=false, insertable=false),
 			@JoinColumn(name = "studyId")
 		})
 		private List<LeveltestResponse> leveltestResponse;
-		
+		*/
 
 }
