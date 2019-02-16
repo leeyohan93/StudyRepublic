@@ -69,7 +69,6 @@ public interface MemberRepository extends JpaRepository<Member, String>, Queryds
 	List<Member> getSelectedMember(String[] selectedId);
 	
 
-
 }
 
 	

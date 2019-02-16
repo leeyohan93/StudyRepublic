@@ -27,7 +27,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 
 	
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기 */
-	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where  type_code='B' and s1.study_status_code='G'",nativeQuery=true)
+	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where s1.study_status_code='O'",nativeQuery=true)
 	List<StudyMember> findActivityById(String id);
 	
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기(카운터방식으로) */
@@ -37,14 +37,22 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	@Query(value="select * from study_member sm join study s on sm.study_id=s.study_id where sm.id= :id",nativeQuery=true)
 	List<StudyMember> findBasicByList(String id);
 	
-	/*일반스터디 리더이거나 멤버일때 스터디 정보가져오기(스터디테이블사용)*/
-	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id and sv.type_code='B'",nativeQuery=true)
+	/*일반스터디 스터디 정보가져오기(스터디테이블사용)*/
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.id = :id and sv.type_code='B' order by start_date DESC",nativeQuery=true)
 	List<StudyMember> findbasicStudylist(String id);
 	
-	/*프리미엄스터디 리더이거나 멤버일때 스터디 정보가져오기(스터디테이블사용)*/
-	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id and sv.type_code='P'",nativeQuery=true)
+	/*프리미엄스터디  스터디 정보가져오기(스터디테이블사용)*/
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.id = :id and sv.type_code='P' order by start_date DESC",nativeQuery=true)
 	List<StudyMember> findPremiumStudylist(String id);
-	
+	/*스터디 정보 가져오는데 일반스터디 이고 진행중인 스터디 상위 1개 가져오기(가져오는갯수 수정가능) 마이페이지 메인에서 사용 */
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'B' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 1",nativeQuery=true)
+	List<StudyMember> findstudyall(String id);
+	/*스터디 정보 가져오는데 프리미엄 이고 진행중인 스터디 상위 1개 가져오기(가져오는갯수 수정가능) 마이페이지 메인에서 사용 */
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'P' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 1",nativeQuery=true)
+	List<StudyMember> findstudyall2(String id);
+	/*위에꺼에 맴버상태넣지않은것*/
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.id = :id",nativeQuery=true)
+	List<StudyMember> findStudyMemberStatus(String id);
 
 	//noticeboard에서 클릭한 글과 관련된 사람의 정보를 가져오는 쿼리
 	@Query(value="select *\r\n" + 
@@ -104,3 +112,4 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	/*@Query(value = "")*/
 	
 }
+

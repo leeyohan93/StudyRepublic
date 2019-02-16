@@ -235,37 +235,40 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
    return new ResponseEntity<>(response,HttpStatus.OK);
 }
 
-   @NoArgsConstructor
-   @Data
-   private static class UploadAttachementResponse{
-      private String fileName;
-      private long fileSize;
-      private String fileContentType;
-      private String attachmentUrl;
-   }
-   
-   @RequestMapping("/setdefault_img")
-   public String defaultimg(Model model) {
-      Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-      String id = auth.getName();
-      
-      int uploadResult = mbr.changeProfile("default_img.png", "default_img.png", id);
-      
-      
-      return "redirect:/modimember";
-   }
-   
-
-   
-
-
-
-
-   
-   
-
-
-
+	@NoArgsConstructor
+	@Data
+	private static class UploadAttachementResponse{
+		private String fileName;
+		private long fileSize;
+		private String fileContentType;
+		private String attachmentUrl;
+	}
+	
+	@RequestMapping("/setdefault_img")
+	public String defaultimg(Model model) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		int uploadResult = mbr.changeProfile("default_img.png", "default_img.png", id);
+		
+		
+		return "redirect:/modimember";
+	}
+	
+	
+	/*회원정보수정페이지 폼만드는중*/
+	@RequestMapping("/testmodi")
+	public String membermodi(Model model) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		Member modifyuser = mbr.findById(id).get();
+		
+		model.addAttribute("mdu",modifyuser);
+		
+		
+		return "mypage/testmodify";
+		
+	}
 
 
 }
