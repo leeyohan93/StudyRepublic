@@ -1,11 +1,10 @@
 package org.mohajo.studyrepublic.mypage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.Member;
@@ -16,14 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-/**
- * @author 김준석
- * @since 2019.01.23
- * @version 0.0
- * -
- * 
- * 
- */
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,10 +25,18 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * @author 김준석
+ * @since 2019.01.23
+ * @version 0.0
+ * -
+ * 
+ * 
+ */
 @Controller
 public class ModifyMemberController {
    
@@ -235,6 +234,7 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
    return new ResponseEntity<>(response,HttpStatus.OK);
 }
 
+
 	@NoArgsConstructor
 	@Data
 	private static class UploadAttachementResponse{
@@ -269,6 +269,59 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
 		return "mypage/testmodify";
 		
 	}
+
+
+
+@RequestMapping(value="/attachments_tutor", method=RequestMethod.POST)
+public ResponseEntity<?> uploadAttachment_tutor(MultipartHttpServletRequest request ,HttpSession session, @RequestPart MultipartFile sourceFile)throws IOException{
+   Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+   String id = auth.getName();
+   
+   String sourceFileName = sourceFile.getOriginalFilename();
+   String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
+   
+   String realPath =  request.getSession().getServletContext().getRealPath("member_image/");
+   
+   
+   File saveFile;
+   String saveFileName;
+   /**
+    * 
+    * saveFileName -> 저장할 파일명
+    * sourceFile.getOriginalFilename() -> 원래파일명
+    * */
+   System.out.println("realPath:"+realPath);
+   do {
+      saveFileName = RandomStringUtils.randomAlphanumeric(32)+"."+ sourceFileNameExtension;
+      saveFile = new File(realPath + saveFileName);
+      System.out.println("filename:"+saveFileName);
+      
+   }while(saveFile.exists());
+   saveFile.getParentFile().mkdirs();
+   sourceFile.transferTo(saveFile);
+   
+   UploadAttachementResponse response = new UploadAttachementResponse();
+   response.setFileName(sourceFile.getOriginalFilename());
+   response.setFileSize(sourceFile.getSize());
+   response.setFileContentType(sourceFile.getContentType());
+   
+   Member member = mbr.findById(id).get();
+   member.setProfileOriginName(sourceFileName);
+   member.setProfileSaveName(saveFileName);
+   mbr.save(member);
+   
+   response.setAttachmentUrl("http://localhost:8080/member_image/" + member.getProfileSaveName());
+   
+   int uploadResult = mbr.changeProfile(sourceFileName+sourceFileNameExtension, saveFileName, id);
+   System.out.println("윤성호");
+   System.out.println("원본명: " + member.getProfileOriginName());
+   System.out.println("파일저장명: " + member.getProfileSaveName());
+   
+   return new ResponseEntity<>(response,HttpStatus.OK);
+}
+
+
+ 
 
 
 }

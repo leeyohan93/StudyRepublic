@@ -194,8 +194,9 @@ public class TutorController implements Serializable {
 		
 		String uploadRootPath = resource.getFile().getAbsolutePath();
 
-		File file = new File(resource.getFile().getAbsolutePath());
+		File file = new File(uploadRootPath);
 //		File file = new File(tutorFileFullUrl);
+
 		
 	      if (!file.exists()) {
 		         file.mkdirs();
@@ -409,8 +410,6 @@ public class TutorController implements Serializable {
 		System.out.println("강사신청삭제완료!");
 		return "redirect:/index";
 	}
-	
-	
 	
 	
 	   @RequestMapping(value = "/uploadOneFile", method = RequestMethod.GET)

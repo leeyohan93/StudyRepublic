@@ -762,7 +762,7 @@ input[type = "radio"] {
 }
 
 
- select {
+select[class='shsel']:valid {
     width:200px;
     height:120px;
     font-size:14px;
@@ -795,7 +795,7 @@ select option:hover {
 }
  */
  
- select option:hover,
+ 	select option:hover,
     select option:focus,
     select option:active {
 /*      background: rgb(179,220,248); */

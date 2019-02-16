@@ -112,4 +112,3 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	/*@Query(value = "")*/
 	
 }
-
