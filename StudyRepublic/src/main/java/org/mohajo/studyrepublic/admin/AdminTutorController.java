@@ -5,6 +5,8 @@ package org.mohajo.studyrepublic.admin;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.SendMessage;
 import org.mohajo.studyrepublic.repository.MemberRepository;
@@ -44,15 +46,15 @@ public class AdminTutorController {
 		return "/adminPage/tutor/list";
 	}
 	
-	@RequestMapping("/searchTutor")
-	public String searchTutor(Model model,String searchKey,String searchValue){
+	@RequestMapping("/search")
+	public String search(Model model,String searchKey,String searchValue){
 		Iterable<Member> searchTutor = memberRepository.findAll(AdminPredicate.searchTutor(searchKey, searchValue));
 		model.addAttribute("memberList",Lists.newArrayList(searchTutor));
 		return "/adminPage/tutor/list";
 	}
 	
 	@RequestMapping("/permission")
-	public String permission(Model model,String[] selectedId,String sendId,String messageContent){
+	public String permission(Model model,String[] selectedId,String sendId,String messageContent,HttpServletRequest request){
 		for(String receiveId : selectedId) {
 			SendMessage sendmessage = new SendMessage();
 			sendmessage.setSendId(sendId);
@@ -62,11 +64,12 @@ public class AdminTutorController {
 		}
 		
 		adminMemberService.changeGrade(selectedId,"T");
-		return "redirect:/adminPage/tutor/list";
+//		return "redirect:/adminPage/tutor/list";
+		return "redirect:"+request.getHeader("Referer");
 	}
 
 	@RequestMapping("/prohibition")
-	public String prohibition(Model model,String[] selectedId,String sendId,String messageContent){
+	public String prohibition(Model model,String[] selectedId,String sendId,String messageContent,HttpServletRequest request){
 		for(String receiveId : selectedId) {
 			SendMessage sendmessage = new SendMessage();
 			sendmessage.setSendId(sendId);
@@ -76,7 +79,8 @@ public class AdminTutorController {
 		}
 		
 		adminMemberService.changeGrade(selectedId,"N");
-		return "redirect:/adminPage/tutor/list";
+//		return "redirect:/adminPage/tutor/list";
+		return "redirect:"+request.getHeader("Referer");
 	}
 	
 	//ajax 사용 했으나 paging ajax와 맞물려서 다시 redirect로 수정 함...

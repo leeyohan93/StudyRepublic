@@ -13,7 +13,7 @@
 <body>
 	<div layout:fragment="search" style="width: 400px; padding-left: 10px;">
 		<div class="form-group-inner">
-			<form action="searchMember">
+			<form action="search">
 			<div class="row">
 					<label class="login2 pull-left pull-left-pro">회원 등급<span
 						class="basic-ds-n" style="margin: 0px 10px 5px 10px;"></span>
@@ -149,7 +149,7 @@
 																		type="submit"
 																		class="btn btn-custon-rounded-four btn-primary"
 																		style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
-																		value="Process"> --><a class="changePassword-process" data-dismiss="modal" href="javascript:void(0);" th:onclick="'changePassword('+${memberStat.index}+')'" style="display: inline-block;color:white;">Process</a>
+																		value="Process"> --><a class="changePassword-process" href="javascript:void(0);" th:onclick="'changePassword('+${memberStat.index}+')'" style="display: inline-block;color:white;">Process</a>
 																</div>
 															</form>
 														</div>
@@ -169,39 +169,43 @@
 			<div class="modal-bootstrap shadow-inner mg-tb-30 responsive-mg-b-0"
 				style="padding-top: 0; margin: 0;">
 				<div class="modal-area-button">
-					<a class="Primary mg-b-10" href="#" data-toggle="modal"
-						data-target="#Message" onclick="sendEmail(this)">정지해제</a> <a
-						class="Information Information-color mg-b-10" href="#"
-						onclick="selected(this)" data-toggle="modal" data-target="#Grade">등급변경</a>
-					<a class="Warning Warning-color mg-b-10" href="#"
-						onclick="sendEmail(this)" data-toggle="modal" data-target="#Pause">정지처리</a>
-					<a class="Danger danger-color" href="#" onclick="sendEmail(this)"
+						<a class="Primary mg-b-10" href="#" data-toggle="modal" 
+						data-target="#Message" onclick="selected(this)" style="background: #999;">쪽지전송</a> 
+						<a class="Information Information-color mg-b-10" href="#"
+						onclick="selected(this)" data-toggle="modal" data-target="#Grade">등급변경</a> 
+						<a class="Primary mg-b-10" href="#" data-toggle="modal" 
+						data-target="#Unpause" onclick="sendEmail(this)">정지해제</a> 
+						<a class="Warning Warning-color mg-b-10" href="#"
+						onclick="sendEmail(this)" data-toggle="modal" data-target="#Pause">정지처리</a> 
+						<a class="Danger danger-color" href="#" onclick="sendEmail(this)"
 						data-toggle="modal" data-target="#Exit">탈퇴처리</a>
 				</div>
 			</div>
 			<div id="Message"
-				class="modal modal-edu-general default-popup-PrimaryModal fade"
-				role="dialog">
+				class="modal modal-edu-general default-popup-PrimaryModal fade" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-close-area modal-close-df">
-							<a class="close" data-dismiss="modal" href="#"><i
-								class="fa fa-close"></i></a>
+							<a class="close" data-dismiss="modal" href="#" style="background: #999;"><i
+								class="fa fa-close" style="background: #999;"></i></a>
 						</div>
-						<form id="unpause-form" action="unpause" method="post">
+						<form id="message" action="message" method="post">
 							<input type="hidden" th:name="${_csrf.parameterName}"
 								th:value="${_csrf.token}" />
 							<div class="modal-body">
-								<i class="educate-icon educate-checked modal-check-pro"></i>
-								<h2>회원 정지를 해제합니다.</h2>
-								<p>정지 회원에게 메일을 보내줍니다.</p>
+								<i class="educate-icon educate-checked modal-check-pro" ></i>
+								<h2>회원에게 쪽지를 전송합니다.</h2>
 								<div class="optionalId"></div>
-								<div class="optionalEmail"></div>
+								<div class="form-group" style="margin-top: 15px">
+									<input type="hidden" name="sendId" th:value="${adminId}">
+									<label for="exampleFormControlTextarea1">Content</label>
+									<textarea name="messageContent" rows="3">카톡이 오지 않는 너에게 쪽지라도..</textarea>
+								</div>
 							</div>
 							<div class="modal-footer">
-								<a data-dismiss="modal" href="#">Cancel</a><input type="submit"
+								<a data-dismiss="modal" href="#" style="background: #999;">Cancel</a><input type="submit"
 									class="btn btn-custon-rounded-four btn-primary"
-									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									style="background-color: #999; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;border: 0px;"
 									value="Process"><!-- <a id="unpause-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
 							</div>
 						</form>
@@ -238,11 +242,40 @@
 							<div class="modal-footer info-md">
 								<a data-dismiss="modal" href="#">Cancel</a><input type="submit"
 									class="btn btn-custon-rounded-four btn-primary"
-									style="background-color: #933EC5; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									style="background-color: #933EC5; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;border: 0px;"
 									value="Process"><!-- <a id="changeGrade-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
 							</div>
 						</form>
 
+					</div>
+				</div>
+			</div>
+			<div id="Unpause"
+				class="modal modal-edu-general default-popup-PrimaryModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<form id="unpause-form" action="unpause" method="post">
+							<input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}" />
+							<div class="modal-body">
+								<i class="educate-icon educate-checked modal-check-pro"></i>
+								<h2>회원 정지를 해제합니다.</h2>
+								<p>정지 회원에게 메일을 보내줍니다.</p>
+								<div class="optionalId"></div>
+								<div class="optionalEmail"></div>
+							</div>
+							<div class="modal-footer">
+								<a data-dismiss="modal" href="#">Cancel</a><input type="submit"
+									class="btn btn-custon-rounded-four btn-primary"
+									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;border: 0px;"
+									value="Process"><!-- <a id="unpause-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -278,7 +311,7 @@
 							<div class="modal-footer warning-md">
 								<a data-dismiss="modal" href="#">Cancel</a><input type="submit"
 									class="btn btn-custon-rounded-four btn-primary"
-									style="background-color: #65b12d; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									style="background-color: #65b12d; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;border: 0px;"
 									value="Process"><!-- <a id="pause-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
 							</div>
 						</form>
@@ -318,7 +351,7 @@
 							<div class="modal-footer danger-md">
 								<a data-dismiss="modal" href="#">Cancel</a> <input type="submit"
 									class="btn btn-custon-rounded-four btn-primary"
-									style="background-color: #D80027; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									style="background-color: #D80027; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;border: 0px;"
 									value="Process"> <!-- <a id="exit-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
 							</div>
 						</form>

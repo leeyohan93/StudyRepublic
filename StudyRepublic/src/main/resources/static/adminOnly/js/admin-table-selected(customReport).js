@@ -11,15 +11,16 @@ $(function () {
 	
 	$("form").on("submit", function() {
 		loading.show(); //submit시 로딩바를 보여준다.
-	    });
+		});
 	
 	$(document).ajaxStart(function(){
-        $('#loading-bar').show(); //미리 만들어둔 loadingBar
-    }).ajaxStop(function(){
-        $('#loading-bar').hide();   
-        $('.modal').modal('hide');
-    });
+		$('#loading-bar').show(); //미리 만들어둔 loadingBar
+	}).ajaxStop(function(){
+		$('#loading-bar').hide();   
+		$('.modal').modal('hide');
+	});
 });
+
 
 function selected() {
 	selectedObject = document.getElementsByClassName("selected");
@@ -30,8 +31,8 @@ function selected() {
 	}
 	else {
 		for (var i = 0; i < selectedObject.length; i++) {
-            inputCommand += "<input type='hidden' name='selectedId' value=" + selectedObject[i].cells[2].innerText + ">";
-            inputCommand += "<input type='hidden' name='selectedMemberId' value="+selectedObject[i].cells[6].innerText+">";
+			inputCommand += "<input type='hidden' name='selectedId' value=" + selectedObject[i].cells[1].innerText + ">"
+			inputCommand += "<input type='hidden' name='selectedMemberId' value="+selectedObject[i].cells[5].innerText+">";
 		}
 		for (var i = 0; i < optionalId.length; i++) {
 			optionalId[i].innerHTML = inputCommand;

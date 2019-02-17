@@ -6,6 +6,9 @@ package org.mohajo.studyrepublic.admin;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.InquireBoard;
 import org.mohajo.studyrepublic.domain.RequestBoard;
@@ -44,8 +47,8 @@ public class AdminCommunityController {
 		return "/adminPage/community/list";
 	}	
 	
-	@RequestMapping("/searchCommunity")
-	public String searchCommunity(Model model,String[] type,String searchKey, String searchValue) {
+	@RequestMapping("/search")
+	public String search(Model model,String[] type,String searchKey, String searchValue) {
 		if(type == null) {
 			type = new String[3]; 
 			type[0]="free";
@@ -72,8 +75,44 @@ public class AdminCommunityController {
 		return "/adminPage/community/list";
 	}
 	
+	@RequestMapping("/recovery")
+	public String recovery(Model model,String[] selectedBoard,int[] selectedId,HttpServletRequest request) {
+		
+		List<FreeBoard> selectedFreeBoard = new ArrayList<>();
+		List<RequestBoard> selectedRequestBoard = new ArrayList<>();
+		List<InquireBoard> selectedInquireBoard = new ArrayList<>();
+		
+		for(int i=0; i<selectedId.length; i++) {
+			switch (selectedBoard[i]) {
+			case "자유게시판":
+				selectedFreeBoard.add(freeBoardRepository.findById(selectedId[i]).get());
+				break;
+			case "요청게시판":
+				selectedRequestBoard.add(requestBoardRepository.findById(selectedId[i]).get());
+				break;
+			case "문의게시판":
+				selectedInquireBoard.add(inquireBoardRepository.findById(selectedId[i]).get());
+				break;
+			}
+		}
+		for(FreeBoard selected : selectedFreeBoard) {
+			selected.setStatus(0);
+			freeBoardRepository.save(selected);
+		}
+		for(RequestBoard selected : selectedRequestBoard) {
+			selected.setStatus(0);
+			requestBoardRepository.save(selected);
+		}
+		for(InquireBoard selected : selectedInquireBoard) {
+			selected.setStatus(0);
+			inquireBoardRepository.save(selected);
+		}
+//		return "redirect:/adminPage/community/list";
+		return "redirect:"+request.getHeader("Referer");
+	}	
+	
 	@RequestMapping("/delete")
-	public String delete(Model model,String[] selectedBoard,int[] selectedId) {
+	public String delete(Model model,String[] selectedBoard,int[] selectedId,HttpServletRequest request) {
 		
 		List<FreeBoard> selectedFreeBoard = new ArrayList<>();
 		List<RequestBoard> selectedRequestBoard = new ArrayList<>();
@@ -104,6 +143,7 @@ public class AdminCommunityController {
 			selected.setStatus(1);
 			inquireBoardRepository.save(selected);
 		}
-		return "redirect:/adminPage/community/list";
+//		return "redirect:/adminPage/community/list";
+		return "redirect:"+request.getHeader("Referer");
 	}	
 }

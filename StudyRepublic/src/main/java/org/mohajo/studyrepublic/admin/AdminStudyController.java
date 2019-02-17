@@ -5,6 +5,9 @@ package org.mohajo.studyrepublic.admin;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.mohajo.studyrepublic.domain.GradeCD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.SendMessage;
 import org.mohajo.studyrepublic.domain.Study;
@@ -45,15 +48,41 @@ public class AdminStudyController {
 		return "/adminPage/study/list";
 	}
 	
-	@RequestMapping("/searchStudy")
-	public String searchStudy(Model model,String[] type, String[] status,String[] onoff,String searchKey, String searchValue) {
+	@RequestMapping("/search")
+	public String search(Model model,String[] type, String[] status,String[] onoff,String searchKey, String searchValue) {
 		Iterable<Study> searchStudy = studyRepository.findAll(AdminPredicate.searchStudy(type, status, onoff, searchKey, searchValue));
 		model.addAttribute("studyList",Lists.newArrayList(searchStudy));
 		return "/adminPage/study/list";
 	}
 	
+	@RequestMapping("/recovery")
+	public String recovery(Model model,String[] selectedId,String changeStatus,HttpServletRequest request){
+		List<Study> selectedStudy = studyRepository.getSelectedStudy(selectedId);
+		String gradeValueKorean = "";
+		switch(changeStatus) {
+		case "O":
+			gradeValueKorean="모집중";
+			break;
+		case "F":
+			gradeValueKorean="모집마감";
+			break;
+		case "G":
+			gradeValueKorean="진행중";
+			break;
+		case "C":
+			gradeValueKorean="완료";
+		}
+		
+		for (int i = 0; i < selectedStudy.size(); i++) {
+			selectedStudy.get(i).setStudyStatusCode(new StudyStatusCD(changeStatus,gradeValueKorean));
+			studyRepository.save(selectedStudy.get(i));
+		}
+		return "redirect:"+request.getHeader("Referer");
+	}
+	
+	
 	@RequestMapping("/disband")
-	public String disband(Model model,String[] selectedMemberId,String[] selectedId,String sendId,String messageContent){
+	public String disband(Model model,String[] selectedMemberId,String[] selectedId,String sendId,String messageContent,HttpServletRequest request){
 		for(String receiveId : selectedMemberId) {
 			SendMessage sendmessage = new SendMessage();
 			sendmessage.setSendId(sendId);
@@ -67,7 +96,8 @@ public class AdminStudyController {
 //			selected.setStudyStatusCode(new StudyStatusCD("O","모집중"));
 			studyRepository.save(selected);
 		}
-		return "redirect:/adminPage/study/list";
+//		return "redirect:/adminPage/study/list";
+		return "redirect:"+request.getHeader("Referer");
 	}
 	
 	//paging ajax으로 인한 사용 중지

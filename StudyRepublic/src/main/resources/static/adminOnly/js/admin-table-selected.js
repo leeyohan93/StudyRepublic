@@ -4,6 +4,24 @@
 					var selectedObject;
 					var inputCommand;
 
+					//로딩 바 및 modal hide()
+					$(function () {
+						var loading = $('#loading-bar');
+						
+						
+						$("form").on("submit", function() {
+							loading.show(); //submit시 로딩바를 보여준다.
+						    });
+						
+						$(document).ajaxStart(function(){
+				            $('#loading-bar').show(); //미리 만들어둔 loadingBar
+				        }).ajaxStop(function(){
+				            $('#loading-bar').hide();   
+				            $('.modal').modal('hide');
+				        });
+					});
+					
+					
 					function selected() {
 						selectedObject = document.getElementsByClassName("selected");
 						inputCommand = "";

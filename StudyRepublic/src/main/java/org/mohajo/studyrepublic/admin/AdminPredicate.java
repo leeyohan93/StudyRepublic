@@ -10,6 +10,7 @@ import java.util.Date;
 import org.mohajo.studyrepublic.domain.QFreeBoard;
 import org.mohajo.studyrepublic.domain.QInquireBoard;
 import org.mohajo.studyrepublic.domain.QMember;
+import org.mohajo.studyrepublic.domain.QReport;
 import org.mohajo.studyrepublic.domain.QRequestBoard;
 import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.QStudyInterest;
@@ -109,7 +110,7 @@ public class AdminPredicate {
 		}
 		if(!(searchValue.equals(""))) {
 			switch(searchKey) {
-			case "studyId":
+			case "id":
 				builder.and(study.studyId.contains(searchValue));
 				break;
 			case "name":
@@ -139,6 +140,9 @@ public class AdminPredicate {
 				break;
 			case "memberId":
 				builder.and(freeBoard.id.contains(searchValue));
+				break;
+			case "id":
+				builder.and(freeBoard.freeBoardId.eq(Integer.parseInt(searchValue)));
 			}
 		}
 		return builder;
@@ -159,6 +163,8 @@ public class AdminPredicate {
 				break;
 			case "memberId":
 				builder.and(requestBoard.id.contains(searchValue));
+			case "id":
+				builder.and(requestBoard.requestBoardId.eq(Integer.parseInt(searchValue)));
 			}
 		}
 		return builder;
@@ -179,9 +185,36 @@ public class AdminPredicate {
 				break;
 			case "memberId":
 				builder.and(inquiredBoard.id.contains(searchValue));
+			case "id":
+				builder.and(inquiredBoard.inquireBoardId.eq(Integer.parseInt(searchValue)));
 			}
 		}
 		
+		
+		return builder;
+	}
+	
+	public static Predicate searchReport(String[] type,String searchKey,String searchValue) {
+		
+		BooleanBuilder builder = new BooleanBuilder();
+		QReport report = QReport.report;
+		
+		if(type != null) {
+			builder.and(report.reportTypeCD.reportTypeCode.in(type));
+		}
+		
+		if(!(searchValue.equals(""))) {
+			switch(searchKey) {
+			case "title":
+				builder.and(report.reportWhyCD.codeValueKorean.contains(searchValue));
+				break;
+			case "content":
+				builder.and(report.content.contains(searchValue));
+				break;
+			case "memberId":
+				builder.and(report.id.contains(searchValue));
+			}
+		}
 		
 		return builder;
 	}
