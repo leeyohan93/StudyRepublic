@@ -7,9 +7,13 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tomcat.util.json.JSONParser;
+import org.mohajo.studyrepublic.domain.InquireBoard;
+import org.mohajo.studyrepublic.domain.StudyBoard;
+import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboardReply;
+import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardFileRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardReplyRepository;
@@ -24,6 +28,7 @@ import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -201,13 +206,40 @@ public class StudyPageController {
 		log.info("글쓰기 폼 진입");
 		log.info(board);
 		model.addAttribute("boardName", board);
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		model.addAttribute("memberid", id);
 		return "studypage/studypage_write";
 	}
 	
 	@RequestMapping(value="/Register", method= RequestMethod.POST)
-	public String writeRegister(Model model, @RequestParam(name="boardName") String boardName){
-		log.info(boardName+"2");
-		return "redirect:/StudyPage/Noticeboard";
+	public String writeRegister(Model model, @ModelAttribute StudyNoticeboard studyNoticeboard, @ModelAttribute StudyFileshareboard studyfileshare, @ModelAttribute StudyQnaboard studyQnaboard, @RequestParam(name="boardName") String boardName){
+		
+		log.info(boardName);
+		
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		studyNoticeboard.setId(id);
+		studyNoticeboard.setStudyId("BB00001");
+		
+		model.addAttribute("memberid", id);
+		
+		switch(boardName) {		
+		
+		case "Noticeboard":
+			log.info(studyNoticeboard.getStudyId());
+			log.info(studyNoticeboard.toString());
+			studyNoticeboardRepository.save(studyNoticeboard);
+			log.info("현 최종 목적지에 도달함2");
+			return "redirect:/StudyPage/Noticeboard";
+		case "Fileshareboard":
+			log.info("현 최종 목적지에 도달함3");
+			studyQnaboardRepository.save(studyQnaboard);
+			return "redirect:/StudyPage/Fileshareboard";
+		case "Qnaboard":
+			studyFileshareboardRepository.save(studyfileshare);
+			return "redirect:/StudyPage/Qnaboard";
+		}
+		
+		return "studypage/error";
 	}
 	
 	//미리보기
