@@ -50,18 +50,31 @@
 	  	#contentReply{
 	  		margin-bottom: 2%;
 	  	}
-	  	#userProfile{
+	  	.contentReplyWriteForm{
+	  		width:100%;
+	  		display: inline-flex;
+	  	}
+	  	.userProfile{
 	  		width: 8%;
 	  		display: inline-block;
 	  	}
-	  	#contentReplyWrite{
+	  	.contentReplyWriteDiv{
 	  		width: 70%;
 	  		display: inline-block;
 	  		background-color: white;
 	  	}
-	  	#replyButton{
+	  	.contentReplyWriteInput{
+	  		width: 100%;
+	  		background-color: white;
+	  	}
+	  	.replyButton{
+	  		width: 18%;
+	  		display: inline-block !important;
 	  		margin-left: 4%;
 	  		color: snow !important;
+	  	}
+	  	.contentModifyAndDelete div{
+	  		display: inline-block;
 	  	}
 	  	#writeButtonSpace{
 	  		text-align: right;
@@ -156,17 +169,22 @@
 						</div>
 						<div class="content" th:text="${fasn.content}">
 						</div>
-						<div class="contentReplyForm">
-							<div>
-							<div class="contentReply" th:text="${fasn.studyNoticeboardReply}">
+						<div class="contentReplyForm"
+							><div class="contentReply" th:text="${fasn.studyNoticeboardReply}">
 							
 							</div>
-							<div class="contentdReplyWriteFrom">
-								<div id="userProfile">
-									프
-								</div>
-								<input type="text" id="contentReplyWrite"/>
-								<button type="button" class="btn btn-dark" id="replyButton">댓글 작성</button>
+							<div class="contentReplyWriteForm"
+								><div class="userProfile">프</div
+								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
+								><button type="button" class="btn btn-dark replyButton">댓글 작성</button
+							></div
+						></div>
+						<div class="contentModifyAndDelete">
+							<div class="contentModify">
+								<button type="button" class="btn btn-dark modifyButton">수정</button>
+							</div>
+							<div class="contentDelete">
+								<button type="button" class="btn btn-dark deleteButton">삭제</button>
 							</div>
 						</div>
 					</div>
