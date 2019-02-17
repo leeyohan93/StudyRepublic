@@ -28,7 +28,7 @@ public class MainPredicate {
 		QStudyInterest studyInterest = QStudyInterest.studyInterest;
 
 		if (!studyInfo.getName().equals("")) {
-			builder.and(study.name.like("%" + studyInfo.getName() + "%"));
+			builder.and(study.name.contains(studyInfo.getName()));
 		}
 		if (!studyInfo.getTypeCode().getTypeCode().equals("All")) {
 			builder.and(study.typeCode.typeCode.eq(studyInfo.getTypeCode().getTypeCode() + ""));

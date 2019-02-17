@@ -68,6 +68,10 @@ public interface MemberRepository extends JpaRepository<Member, String>, Queryds
 	@Query(value = "select * from member where id in (:selectedId)",nativeQuery=true)
 	List<Member> getSelectedMember(String[] selectedId);
 	
+	@Query(value = "select * from member where  grade_code=:gradeCode",nativeQuery=true)
+	List<Member> getTutorMember(String gradeCode);
+	
+
 
 }
 
