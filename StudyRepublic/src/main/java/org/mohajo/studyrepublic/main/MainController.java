@@ -90,7 +90,7 @@ public class MainController {
 		Pageable page = pageDTO.makePageable(0, "postDate");
 				
 		Page<Study> searchList = mainService.search(studyInfo, searchDate, location, interest, page);
-		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());
+//		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());
 //		model.addAttribute("list", searchList);
 		model.addAttribute("pagedList", new PageMaker(searchList));
 		model.addAttribute("typeCode", studyInfo.getTypeCode().getTypeCode());

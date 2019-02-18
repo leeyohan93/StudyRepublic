@@ -60,7 +60,7 @@ Morris.Area({
             period: '2010',
             CSE: 50,
             Accounting: 80,
-            Electrical: 20
+            Electrical: 200
         }, {
             period: '2011',
             CSE: 130,

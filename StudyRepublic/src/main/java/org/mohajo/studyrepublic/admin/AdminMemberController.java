@@ -6,20 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.SendMessage;
-import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.repository.SendMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 /**
  * @author 이요한
@@ -33,6 +27,8 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 @Controller
 @RequestMapping("/adminPage/member")
 public class AdminMemberController {
+	
+	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
 	@Autowired
 	AdminMemberService adminMemberService;
@@ -54,7 +50,8 @@ public class AdminMemberController {
 		String subject="Study Republic 비밀번호 초기화 확인 메일입니다";
 		String text="비밀번호는 회원님의 휴대전화번호로 초기화 되었습니다";
 		adminMemberService.sendEmailMessage(memberEmail,subject,text);
-		adminMemberService.changePassword(memberId,memberPhonenumber);
+//		adminMemberService.changePassword(memberId,memberPhonenumber);
+		adminMemberService.changePassword(memberId,bcryptpasswordencoder.encode(memberPhonenumber));
 //		return "redirect:/adminPage/member/list";
 		return "redirect:"+request.getHeader("Referer");
 	}

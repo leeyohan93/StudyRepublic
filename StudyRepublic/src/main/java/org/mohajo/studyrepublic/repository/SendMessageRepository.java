@@ -11,12 +11,14 @@ import org.mohajo.studyrepublic.domain.ReceiveMessage;
  * 
  */
 import org.mohajo.studyrepublic.domain.SendMessage;
+import org.mohajo.studyrepublic.domain.Study;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface SendMessageRepository extends JpaRepository<SendMessage, Integer> {
+public interface SendMessageRepository extends JpaRepository<SendMessage, Integer>, QuerydslPredicateExecutor<SendMessageRepository> {
 	
 	
 	/*보낸쪽지함*/
@@ -27,6 +29,9 @@ public interface SendMessageRepository extends JpaRepository<SendMessage, Intege
 	@Modifying
 	@Query(value="update message_send set message_delete ='1' where message_send_id = :message_send_id", nativeQuery = true)
 	int sendmessagedelete(int message_send_id);
+	
+	@Query(value = "select s from SendMessage s where s.messageSendId in ?1")
+	List<SendMessage> getSelectedMessage(int[] selectedId);
 
 	
 }

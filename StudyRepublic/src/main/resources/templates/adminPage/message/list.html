@@ -3,7 +3,7 @@
 	layout:decorate="~{/layout/adminLayout}">
 
 <head>
-<title>Tutor</title>
+<title>Message</title>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
 	<meta id="_csrf_header" name="_csrf_header"
@@ -11,34 +11,33 @@
 
 </head>
 <body>
-	<div layout:fragment="search" style="width: 400px; padding-left: 10px;">
+	<div layout:fragment="search" style="width: 500px; padding-left: 10px;">
 		<div class="form-group-inner">
 			<form action="search">
-				<div class="row">
-					<label class="login2 pull-left pull-left-pro">검색어 <span
-						class="basic-ds-n" style="margin: 0px 10px 5px 10px;"></span></label> <select
-						name=searchKey class="custom-select mr-sm-2"
-						style="margin-top: 8px; height: 30px;">
-						<option value="id">ID</option>
-						<option value="name">이름</option>
-						<option value="nickname">닉네임</option>
-					</select> <input type="text" name="searchValue"
-						style="margin-left: 8px; height: 30px;">
-				</div>
-				<div class="row" style="margin-top: 10px">
+		<div class="row">
+			<label class="login2 pull-left pull-left-pro">검색어 <span
+				class="basic-ds-n" style="margin: 0px 10px 5px 10px;"></span></label>
+				<select name = searchKey class="custom-select mr-sm-2" style="margin-top: 8px;height: 30px;">
+					<option value="sendId">발신자</option>
+					<option value="receiveId">수신자</option>
+					<option value="content">내용</option>
+					<option value="id">쪽지번호</option>
+				</select>
+					<input type="text" name="searchValue" style="margin-left: 8px;height: 30px;"> 
+		</div>
+		<div class="row" style="margin-top: 10px">
 					<input type="submit"
 						class="btn btn-custon-rounded-four btn-primary"
 						style="background-color: #006DF0; padding: 10px 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
 						value="Search">
 				</div>
 				</form>
+				</div>
 		</div>
-		
-	</div>
 	<script>
 		
 	</script>
-	<h3 layout:fragment="title">Tutor</h3>
+	<h3 layout:fragment="title">Message</h3>
 	<!-- Static Table Start -->
 	<div class="data-table-area mg-b-15" layout:fragment="main">
 		<div class="container-fluid" style="padding-bottom: 0;">
@@ -47,7 +46,7 @@
 					<div class="sparkline13-list">
 						<div class="sparkline13-hd">
 							<div class="main-sparkline13-hd">
-								<h1>Tutor Data Table</h1>
+								<h1>Message Data Table</h1>
 							</div>
 						</div>
 						<div class="sparkline13-graph">
@@ -64,43 +63,35 @@
 									data-show-pagination-switch="true" data-show-refresh="true"
 									data-key-events="true" data-show-toggle="true"
 									data-resizable="true" data-cookie="true"
-									data-cookie-id-table="saveId" data-show-export="true"
+									data-cookie-id-table="false" data-show-export="true"
 									data-click-to-select="true" data-toolbar="#toolbar">
 									<thead>
 										<tr>
 											<th data-field="static" data-checkbox="true"></th>
-											<th data-field="No">No</th>
-											<th data-field="ID">ID</th>
-											<th data-field="이름" data-editable="false">이름</th>
-											<th data-field="닉네임" data-editable="false">닉네임</th>
-											<th data-field="등급" data-editable="false">등급</th>
-											<th data-field="상태" data-editable="false">상태</th>
-											<th data-field="e-mail">이메일</th>
-											<th data-field="가입일">가입일</th>
-											<th data-field="관리">관리</th>
+											<th data-field="쪽지번호">쪽지번호</th>
+											<th data-field="발신자">발신자</th>
+											<th data-field="수신자">수신자</th>
+											<th data-field="내용">내용</th>
+											<th data-field="날짜">날짜</th>
+											<th data-field="삭제여부">삭제여부</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="member : ${memberList}" th:id="'row'+${memberStat.index}">
+											<tr th:each="message : ${messageList}">
 											<td></td>
-											<td th:text="${memberStat.index}"></td>
-											<td th:text="${member.id}"></td>
-											<td th:text="${member.name}"></td>
-											<td th:text="${member.nickname}"></td>
-											<td th:text="${member.gradeCD.codeValueKorean}"></td>
-											<td th:text="${member.memberStatusCD.codeValueKorean}"></td>
-											<td th:text="${member.email}"></td>
-											<td th:text="${member.registrationDate}"></td>
-											<td class="datatable-ct">
-											
-												<div class="modal-area-button" style="margin-top: 0;">
+											<td th:text="${message.messageSendId}"></td>
+											<td th:text="${message.sendId}"></td>
+											<td th:text="${message.receiveId}"></td>
+											<!-- <td th:if="${#strings.length(message.messageContent)>=5}" th:text="${#strings.substring(message.messageContent,0,6)+'...'}"> -->
+											<td th:if="${#strings.length(message.messageContent)>=5}">
+												<div class="modal-area-button">
 													<a class="Primary mg-b-10" href="#" data-toggle="modal"
-														th:data-target="'#'+${memberStat.index}"
-														style="color: white; margin-top: 0; padding: 3px 15px;
-														 ">신청서 관리</a>
+														th:data-target="'#'+${message.messageSendId}"
+														style="color: blue; margin-top: 0; padding: 0px;
+														 background: none;" th:text="${#strings.substring(message.messageContent,0,6)+'...'}"></a>
 												</div>
 												
-												<div th:id="${memberStat.index}"
+												<div th:id="${message.messageSendId}"
 													class="modal modal-edu-general default-popup-PrimaryModal fade"
 													role="dialog">
 													<div class="modal-dialog">
@@ -109,28 +100,19 @@
 																<a class="close" data-dismiss="modal" href="#"><i
 																	class="fa fa-close"></i></a>
 															</div>
-															<form action="signup" method="post">
-																<input type="hidden" th:name="${_csrf.parameterName}"
-																	th:value="${_csrf.token}" />
 																<div class="modal-body">
 																	<i class="educate-icon educate-checked modal-check-pro"></i>
-																	<h2>강사 신청서 관리</h2>
-																	<p>자세히보기 클릭시 강사 신청서 상세 페이지가 출력됩니다</p>
-																	<input type="hidden" name="memberId" th:value="${member.id}">
+																	<h4>쪽지 내용</h4>
+																	<p th:utext="${message.messageContent}">내용</p>
 																</div>
-																<div class="modal-footer">
-																	<a data-dismiss="modal" href="#" style="color: white;">Cancel</a> <input
-																		type="submit"
-																		class="btn btn-custon-rounded-four btn-primary"
-																		style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
-																		value="자세히">
-																</div>
-															</form>
 														</div>
 													</div>
 												</div>
 											</td>
-										</tr>
+											<td th:unless="${#strings.length(message.messageContent)>=5}" th:text="${message.messageContent}"></td>
+											<td th:text="${message.messageDate}"></td>
+											<td th:text="${message.messageDelete}"></td>
+											</tr>  
 									</tbody>
 								</table>
 							</div>
@@ -144,12 +126,12 @@
 				style="padding-top: 0; margin: 0;">
 				<div class="modal-area-button">
 					<a class="Primary mg-b-10" href="#" data-toggle="modal"
-						data-target="#Permission" onclick="selected()">허가</a> 
+						data-target="#Recovery" onclick="selected()">쪽지 복원</a> 
 					<a class="Danger danger-color" href="#" onclick="selected()"
-						data-toggle="modal" data-target="#Prohibition">불가</a>
+						data-toggle="modal" data-target="#Delte">쪽지 삭제</a>
 				</div>
 			</div>
-			<div id="Permission"
+			<div id="Recovery"
 				class="modal modal-edu-general default-popup-PrimaryModal fade"
 				role="dialog">
 				<div class="modal-dialog">
@@ -158,20 +140,15 @@
 							<a class="close" data-dismiss="modal" href="#"><i
 								class="fa fa-close"></i></a>
 						</div>
-						<form id="permission" action="permission" method="post">
+						<form id="recovery" action="recovery" method="post">
 							<input type="hidden" th:name="${_csrf.parameterName}"
 								th:value="${_csrf.token}" />
 							<div class="modal-body">
 								<i class="educate-icon educate-checked modal-check-pro"></i>
-								<h2>회원의 강사신청을 허가합니다.</h2>
-								<p>축하 쪽지를 발송합니다.</p>
+								<h2>쪽지 복원</h2>
+								<p style="margin-bottom: 15px">쪽지를 복원 합니다!</p>
 								<div class="optionalId"></div>
-								<div class="form-group">
-									<input type="hidden" name="sendId" th:value="${adminId}">
-									<label for="exampleFormControlTextarea1">Content</label>
-									<textarea name="messageContent" rows="3">당신은 이제 강사입니다 ~!</textarea>
 								</div>
-							</div>
 							<div class="modal-footer">
 								<a data-dismiss="modal" href="#">Cancel</a>
 								<!-- <a id="permission-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
@@ -184,8 +161,7 @@
 					</div>
 				</div>
 			</div>
-		
-			<div id="Prohibition"
+			<div id="Delte"
 				class="modal modal-edu-general FullColor-popup-DangerModal fade"
 				role="dialog">
 				<div class="modal-dialog">
@@ -194,24 +170,19 @@
 							<a class="close" data-dismiss="modal" href="#"><i
 								class="fa fa-close"></i></a>
 						</div>
-						<form id="prohibition" action="prohibition" method="post">
+						<form id="delete" action="delete" method="post">
 							<input type="hidden" th:name="${_csrf.parameterName}"
 								th:value="${_csrf.token}" />
 							<div class="modal-body">
 								<span
 									class="educate-icon educate-danger modal-check-pro information-icon-pro"></span>
-								<h2>회원의 강사신청을 불허합니다</h2>
-								<p style="margin-bottom: 15px">타당한 이유를 쪽지로 보내주세요.</p>
+								<h2>쪽지 삭제</h2>
+								<p style="margin-bottom: 15px">쪽지를 삭제처리 합니다!</p>
 								<div class="optionalId"></div>
-								<div class="form-group">
-									<input type="hidden" name="sendId" th:value="${adminId}">
-									<label for="exampleFormControlTextarea1">Content</label>
-									<textarea name="messageContent" rows="3">그냥 당신이 강사가 되는게 싫어..</textarea>
-								</div>
 								</div>
 							<div class="modal-footer danger-md">
-								<a data-dismiss="modal" href="#">Cancel</a>
-								<!-- <a id="prohibition-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
+								<a data-dismiss="modal" href="#">Cancel</a> 
+								<!-- <a id="disband-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
 								<input type="submit"
 									class="btn btn-custon-rounded-four btn-primary"
 									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
@@ -223,10 +194,11 @@
 			</div>
 		</div>
 	</div>
+	</div>
 	<!-- Static Table End -->
 	
-	 <script th:src="@{/adminOnly/js/admin-table-selected.js}" layout:fragment="indexScript"></script>
-    <script layout:fragment="indexScript2"></script>
+	 <script th:src="@{/adminOnly/js/admin-table-selected(customMessage).js}" layout:fragment="indexScript"></script>
+     <script layout:fragment="indexScript2"></script>
 
 </body>
 
