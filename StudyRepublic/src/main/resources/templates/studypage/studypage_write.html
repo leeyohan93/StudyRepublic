@@ -160,8 +160,9 @@
 		<!-- 제목 -->
 		  <div>
 			<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
-			<input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/>
+			<!-- <input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/> -->
 		  </div>
+		  <input name = "id" th:value = "${memberid}">
 	
 		  <!-- 스마트 에디터 적용 글내용 -->
 		  <div id = "editor">

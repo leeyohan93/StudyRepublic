@@ -12,12 +12,9 @@
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
 	type="text/css">
-<!-- <div layout:fragment="bootCss"> -->
-	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
-	
-<!-- </div> -->
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" layout:fragment="bootCss">
 <div layout:fragment="customCss"></div>
-<!-- <div layout:fragment="bootJs"> -->
+<div layout:fragment="bootJs">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
@@ -161,7 +158,7 @@
 				<div id = "logout" sec:authorize="hasRole('A')">						
 						<ul>
 						<li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li>
-						<li id = "loginli"><a th:href="@{/admin/index}">관리자페이지</a></li>	
+						<li id = "loginli"><a th:href="@{/adminPage/index}">관리자페이지</a></li>	
 						<li id = "loginli" th:text = ${session.nickname}+'님' ></li>
 						<li id = "loginimg"><img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%;"></li>
 						</ul>
