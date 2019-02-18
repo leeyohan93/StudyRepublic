@@ -27,7 +27,7 @@ public class ReceiveMessage extends Message implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="message_receive_id" , nullable=false)
-	private int messageReciveId;
+	private int messageReceiveId;
 	
 
 

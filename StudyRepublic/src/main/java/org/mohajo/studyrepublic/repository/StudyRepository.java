@@ -68,6 +68,7 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 //	public List<Study> findBsStudyBytypeCode();
 	public List<PopularStudy> findBsStudyBytypeCode();
 	
+
 // 스터디 뷰 테이블 관계 설정 후 에러. 주석 처리함. BY 이미연
 //	@Query(value ="select * from (select * from study_member where id= :member AND (study_member_status_code = 'ME' || study_member_s+tatus_code = 'LE')) a1 join study s1"
 //			+ " using (study_id) where s1.study_status_code='G'", nativeQuery=true)
@@ -77,5 +78,8 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 	+ " using (study_id) where s1.study_status_code='G'", nativeQuery=true)
 	List<Study> findByMemberId(Member member);*/
 	
+	@Query(value = "select s from Study s where s.studyId in ?1")
+	List<Study> getSelectedStudy(String[] selectedId);
 	
+
 }

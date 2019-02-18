@@ -84,6 +84,23 @@
     border: 1px solid black;
     background-color: black;
 }
+/* 사진을 원형으로 출력할 수 있게 해주는 CSS */
+#thumnailImage{
+	/* width: 100px;
+	height: 100px; */
+    object-fit: cover;
+    border-radius: 50%;
+}
+#writeButtonBlockSpace{
+	float: left;
+	display: inline-block;
+	width: 75%;
+	height: auto;
+}
+#writeButtonRealSpace{
+	width: 20%;
+	heigth: parent;
+}
 /* #main{
     min-width: 900px;
     height : 720px;

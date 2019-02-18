@@ -20,7 +20,7 @@ public class ReportWhyCD {
 	@Id
 	private int reportWhyCode;
 	
-	private String codeValueEngilsh;
+	private String codeValueEnglish;
 	private String codeValueKorean;
 
 

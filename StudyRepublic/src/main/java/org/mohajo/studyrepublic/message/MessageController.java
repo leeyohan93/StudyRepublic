@@ -11,27 +11,107 @@ package org.mohajo.studyrepublic.message;
 import java.io.Serializable;
 import java.util.List;
 
+import org.mohajo.studyrepublic.domain.FreeBoard;
+import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.ReceiveMessage;
 import org.mohajo.studyrepublic.domain.SendMessage;
+import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.ReceiveMessageRepository;
 import org.mohajo.studyrepublic.repository.SendMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MessageController {
-
+	
 	@Autowired
-	private SendMessageRepository smr;
+	private MemberRepository mbr;
+	@Autowired
+	private SendMessageRepository sendmessagerepository;
+	@Autowired
+	private ReceiveMessageRepository receivemessagerepository;
 	
-	@RequestMapping("/Message")
+	/*받은쪽지함*/
+	@RequestMapping("/receiveMessage")
+	public String receivemessagelist(Model model) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		List<ReceiveMessage> receiveMessageList= receivemessagerepository.findreceiveById(id);
+		model.addAttribute("receivemessagerepository", receiveMessageList);
+		
+		return"MessageTest/receiveMessage";
+	}	
+	
+	/*보낸쪽지함*/
+	@RequestMapping("/sendMessage")
 	public String sendmessagelist(Model model) {
-		List<SendMessage> sendlist = smr.findAll();
-		model.addAttribute("smr",sendlist);
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
 	
-		System.out.println("smr");
+		List<SendMessage> sendMessageList = sendmessagerepository.findSendById(id);
+		model.addAttribute("sendmessagerepository",sendMessageList);
+		
+		System.out.println("sendmessagerepository");
 		return "MessageTest/sendMessage";
 	}
+	
+	@RequestMapping("/messageWrite")
+	public String messagewrite(Model model) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		return "MessageTest/message_write";
+	}
+	
+	@RequestMapping("/messageWriteResult")
+	public String messageResult(Model model,@RequestParam("receiveId")String receiveId,@RequestParam("messageContent")String messageContent) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		SendMessage sendmessage = new SendMessage();
+		sendmessage.setSendId(id);
+		sendmessage.setReceiveId(receiveId);
+		sendmessage.setMessageContent(messageContent);
+		
+		sendmessagerepository.save(sendmessage);
+		
+		return "redirect:/sendMessage";
+	}
+	/*쪽지 삭제 미완성*/
+	@RequestMapping("/messageDelete")
+	public String messagedelete(@ModelAttribute SendMessage sendmessage, @ModelAttribute ReceiveMessage receivemessage) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+	
+
+		int exitresult = sendmessagerepository.sendmessagedelete(sendmessage.getMessageSendId());
+		
+		
+		System.out.println(123);
+		
+		return "redirect:receiveMessage";
+		
+		
+		
+
+		
+	}
+		
+		
+		
+		
+		
+		
+		
+	
+	
 	
 	
 	

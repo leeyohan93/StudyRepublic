@@ -5,65 +5,51 @@
 <head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<!-- 참고:  https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_form_steps -->
 <title>Paper Bootstrap Wizard by Creative Tim</title>
-
-<meta
-	content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
-	name='viewport' />
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 <meta name="viewport" content="width=device-width" />
+</head>
 
 <th:block layout:fragment="customCss">
-	<link rel="apple-touch-icon" sizes="76x76"
-		th:href="@{/paperBootstrapWizard/assets/img/apple-icon.png}" />
-	<link rel="icon" type="image/png"
-		th:href="@{/paperBootstrapWizard/assets/img/favicon.png}" />
+
+	<link rel="apple-touch-icon" sizes="76x76" th:href="@{/paperBootstrapWizard/assets/img/apple-icon.png}" />
+<!-- 	<link rel="icon" type="image/png" th:href="@{/paperBootstrapWizard/assets/img/favicon.png}" /> -->
 
 	<!-- CSS Files -->
-	<link th:href="@{/paperBootstrapWizard/assets/css/bootstrap.min.css}"
-		rel="stylesheet" />
-	<link
-		th:href="@{/paperBootstrapWizard/assets/css/paper-bootstrap-wizard.css}"
-		rel="stylesheet" />
+	<link th:href="@{/paperBootstrapWizard/assets/css/bootstrap.min.css}" rel="stylesheet" />
+	<link th:href="@{/paperBootstrapWizard/assets/css/paper-bootstrap-wizard.css}" rel="stylesheet" />
 
 	<!-- CSS Just for demo purpose, don't include it in your project -->
-	<link th:href="@{/paperBootstrapWizard/assets/css/demo.css}"
-		rel="stylesheet" />
+	<link th:href="@{/paperBootstrapWizard/assets/css/demo.css}" rel="stylesheet" />
 
 	<!-- Fonts and Icons -->
-	<link
-		href="http://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css"
-		rel="stylesheet">
-	<link href='https://fonts.googleapis.com/css?family=Muli:400,300'
-		rel='stylesheet' type='text/css'>
-	<link th:href="@{/paperBootstrapWizard/assets/css/themify-icons.css}"
-		rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+	<link th:href="@{/paperBootstrapWizard/assets/css/themify-icons.css}" rel="stylesheet">
 
 	<!-- CSS for Datepicker, jQuery UI -->
-	<link type="text/css"
-		href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"
-		rel="stylesheet">
+	<link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
 
 	<!-- Script for Datepicker, jQuery UI -->
-	<script type="text/javascript"
-		src="http://code.jquery.com/jquery-1.9.1.js"></script>
-	<script type="text/javascript"
-		src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
 <!-- 	<!-- CSS for Bootstrap --> -->
 <!-- 	<link rel="stylesheet" -->
 <!-- 		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
-	<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 	<!-- Script for Bootstrap -->
 	<!-- 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
 	
 	<!-- Script for Smart Editor 2.0 -->
-	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js"
-		charset="utf-8"></script>
+	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+		
 		
 	<!-- Custom CSS -->
 	<style>
+	
 	.ui-datepicker {
 		font-size: 12px;
 		width: auto;
@@ -176,12 +162,17 @@
 	}
 	
 	</style>
+	
 </th:block>
-</head>
+
 
 <body>
+
+
 	<div layout:fragment="main">
 		<div class="inner">
+		
+		
 			<div class="image-container set-full-height"
 				style="background-image: url('/paperBootstrapWizard/assets/img/paper-1.jpeg')">
 
@@ -496,9 +487,14 @@
 			var enrollCapacityMin = 2;
 			
 		$(document).ready(function() {
+			
+			$('.introduction-container').on('ready', function() {
+				$(this).hide();
+			});
+			
 			$('.nav.nav-pills').on('click', function() {
 				$('.tab-pane').removeClass("show");
-			})
+			});
 	
 	            calcStudyCount();
 	            calcTimeDiff();

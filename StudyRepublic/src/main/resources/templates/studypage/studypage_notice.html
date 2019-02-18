@@ -1,108 +1,313 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymleaf.org"
- layout:decorate="~{/layout/studypageLayout}">
+	layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
-<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-<!-- default header name is X-CSRF-TOKEN -->
-<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-<title>스터디 공지사항 게시판 입니다.</title>
-<link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
+<title>스터디 공지사항 게시판 입니다.</title>  
 </head>
 <body>
-	<div id="main" layout:fragment = "main">
-	</div>
 	<div id="right" layout:fragment="right">
-		<table>
-			<tr>
-				<td>진행 날짜</td>
-				<td>제목</td>
-				<td>위치</td>
-			</tr>
-			<!-- <td th:text = "${tmp}"> -->
-			<tr th:each="fasn : ${findAllStudyNoticeboard}">
-				<div>
-				<input type="hidden" th:value="${fasn.number}" name="number" />
-				<td th:text = "${#dates.format(fasn.day, 'MM월dd일')}"></td>
-				<td><a th:href="@{#}" class="boardList" th:text="${fasn.title}" th:title="${fasn.number}"></a></td>
-				<td th:text = "${fasn.location}"></td>
+	<th:block layout:fragment="customCss">
+	<style>
+	  	table{
+	  		margin-bottom: 1%;
+	  		background-color: #ffe300b5;
+	  	}
+	  	.contentForm{
+	  		padding-left: 5%;
+	  	}
+	  	.contentDate{
+	  		display: inline-block;
+	  	}
+	  	.contentWriteDate{
+ 	  		display: inline-block;
+		    float: right;
+		    width: 30%;
+		    text-align: center;
+	  	}
+	  	.content{
+	  	    width: 95%;
+		    /*border: gray 1px;
+		    border-style: inset;
+		    border-radius: 1% / 9%;
+		    padding-top: 7%;
+		    padding-bottom: 3%;*/
+		    margin-top: 5%;
+		    margin-bottom: 3%;
+	  	}
+	  	.contentReplyForm{
+	  	    width: 95%;
+		    border: gray 1px;
+		    border-style: inset;
+		    border-radius: 10px;
+		    padding : 1%;
+		    padding-left : 2%;
+		    padding-right: 2%;
+			background-color: #73737333;
+	  	}
+	  	#contentReply{
+	  		margin-bottom: 2%;
+	  	}
+	  	.contentReplyWriteForm{
+	  		width:100%;
+	  		display: inline-flex;
+	  	}
+	  	.userProfile{
+	  		width: 8%;
+	  		display: inline-block;
+	  	}
+	  	.contentReplyWriteDiv{
+	  		width: 70%;
+	  		display: inline-block;
+	  		background-color: white;
+	  	}
+	  	.contentReplyWriteInput{
+	  		width: 100%;
+	  		background-color: white;
+	  	}
+	  	.replyButton{
+	  		width: 18%;
+	  		display: inline-block !important;
+	  		margin-left: 4%;
+	  		color: snow !important;
+	  	}
+	  	.contentModifyAndDelete div{
+	  		display: inline-block;
+	  	}
+	  	#writeButtonSpace{
+	  		text-align: right;
+	  	}
+	  	.btn-dark{
+	  	    background-color: dimgrey;
+	  	}
+	  	#writeButton{
+	  		padding-left: 3%;
+    		padding-right: 2%;
+    		color: snow !important;
+	  	}
+	  	.rightTitleLeft{
+			width: 20%;
+	  		text-align: center;
+	  	}
+		.rightTitleMiddle{
+	  		width: 50%;
+	  		text-align: center;
+	  	}
+	  	.rightTitleRight{
+	  		width: 30%;
+	  		text-align: center;
+	  	}
+	  	.rightLeft{
+			width: 20%;
+	  		text-align: center;
+	  	}
+		.rightMiddle{
+	  		width: 50%;
+	  		text-align: center;
+	  	}
+	  	.rightRight{
+	  		width: 30%;
+	  		text-align: center;
+	  	}
+	  	.btn-dark{
+	  		border : 0px;
+	  	}
+		.rightContent{
+		    height: 20%;
+		    width: 100%;
+		    padding-top: 20px;
+		    padding-bottom: 20px;
+		    border: gray 1px;
+		    border-style: inset;
+	 	    border-radius: 10px;
+		    margin-bottom: 1%
+	  	}
+	  	.rightTitle{
+	  		display: inline-block;
+	  	}
+		#right{
+	  		heigth: 100%;
+	  	}
+	  	input[type="submit"]:hover,
+	  	input[type="reset"]:hover,
+	  	input[type="button"]:hover,
+	  	button:hover,
+	  	.button:hover{
+	  		color : white !important;
+	  		box-shadow: none;
+	  	}
+	  	.dateFont{
+	  		font-weight: bold;
+	  	}
+  	</style>
+	</th:block> 
+		<div id="rightContent">
+			<table>
+				<tr>
+					<td class="rightTitleLeft">진행 날짜</td>
+					<td class="rightTitleMiddle">제목</td>
+					<td class="rightTitleRight">위치</td>
+				</tr>
+			</table>
+			<div th:each="fasn : ${findAllStudyNoticeboard}">
+				<div class="rightContent rightAll" >
+					<div><input type="hidden" th:value="${fasn.number}" name="number">
+					</div>
+					<div class="rightLeft rightTitle dateFont" th:text="${#dates.format(fasn.day, 'MM월dd일')}"></div
+					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasn.number}" data-toggle="collapse" class="boardList"
+							th:text="${fasn.title}" th:id="${fasn.number}"></a></div
+					><div class="rightRight rightTitle" th:text="${fasn.location}"></div>
+					<div class="collapse contentForm" th:id="'write'+${fasn.number}">
+						<input type="hidden" th:id="${fasn.number}">
+						<div class="contentDate" th:text="${#dates.dayOfWeekName(fasn.day)} + ' ' + ${#dates.format(fasn.startTime, 'HH:mm')}+'~'+${#dates.format(fasn.endTime, 'HH:mm')}">
+						</div>
+						<div class="contentWriteDate">
+							<div class="" th:text="${#dates.format(fasn.date, 'yyyy/MM/dd')}"></div>
+							<div class="" th:text="${#dates.format(fasn.date, 'HH:mm:ss')}+' 작성'"></div>
+						</div>
+						<div class="content" th:text="${fasn.content}">
+						</div>
+						<div class="contentReplyForm"
+							><div class="contentReply" th:text="${fasn.studyNoticeboardReply}">
+							
+							</div>
+							<div class="contentReplyWriteForm"
+								><div class="userProfile">프</div
+								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
+								><button type="button" class="btn btn-dark replyButton">댓글 작성</button
+							></div
+						></div>
+						<div class="contentModifyAndDelete">
+							<div class="contentModify">
+								<button type="button" class="btn btn-dark modifyButton">수정</button>
+							</div>
+							<div class="contentDelete">
+								<button type="button" class="btn btn-dark deleteButton">삭제</button>
+							</div>
+						</div>
+					</div>
 				</div>
-				
-				
-				<!-- <td th:text = "${tmp.studyNoticeboardReply}"></td> -->
-				<!-- <table> -->
-				<!-- <tr:block th:each = "snr : ${fasn.studyNoticeboardReply}">
-						<td th:text = "${snr.studyNoticeboardReplyId}"></td>
-						<td th:text = "${snr.studId}"></td>
-						<td th:text = "${snr.date}"></td>
-						<td th:text = "${snr.content}"></td> -->
-					<!-- <td th:text = "${snr.studyNoticeboardReplyId}"></td>
-					<td th:text = "${snr.studyId}"></td>
-					<td th:text = "${snr.date}"></td>
-					<td th:text = "${snr.replyGroup}"></td>
-					<td th:text = "${snr.replyStep}"></td>
-					<td th:text = "${snr.studyNoticeboardId"></td> -->
-			</tr>
-		</table>
+			</div>
+		</div>
+		<div id="writeButtonSpace">
+			<button type="button" class="btn btn-dark" id="writeButton">글쓰기</button>
+		</div>
+		<div id="pagingButtons">
+			<span></span> <span></span> <span></span> <span></span>
+		</div>
 		<script>
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-		$(function() {
-		    $(document).ajaxSend(function(e, xhr, options) {
-		        xhr.setRequestHeader(header, token);
-		    });
-		});
-		
-		$(".boardList").on("click", function(){
+			$(document).ready(function() {
+								var token = $("meta[name='_csrf']").attr("content");
+								var header = $("meta[name='_csrf_header']").attr("content");
+								$(function() {
+									$(document).ajaxSend(
+											function(e, xhr, options) {
+												xhr.setRequestHeader(header,token);
+											});
+								});
+
+								$(".boardList").on("click", function() {
+													var StudyNoticeboard = {
+														studyId : "BB00001",
+														id : "aaa123",
+														number : this.id
+													}
+
+													$.ajax({
+																type : "POST",
+																contentType : "application/json; charset=UTF-8",
+																url : "/StudyPage/Noticeboard/show",
+																data : JSON.stringify(StudyNoticeboard),
+																dataType : "json",
+																success : function(data) {
+																	console.log(StudyNoticeboard.number)
+																	console.log(data);
+																	console.log("success");
+																	/**
+																	 *설명 : 덧글만 따로 뽑아내기 위한 Ajax
+																	 *주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
+																	 */
+																	$.ajax({
+																				type : "POST",
+																				contentType : "application/json; charset=UTF-8",
+																				url : "/StudyPage/Noticeboard/replyshow",
+																				data : JSON.stringify(StudyNoticeboard),
+																				dataType : "json",
+																				success : function(data) {
+																					data.forEach(function(list) {
+																								console.log(list);
+																					});
+																					console.log("success");
+																					
+																				},error : function() {
+																					alert("error");
+																				}
+																			});
+																},error : function() {
+																	alert("error");
+																}
+															});
+												});
+								$("#writeButton").on("click", function(){
+									//tip! : 버튼에 href 링크 넣기
+									$(location).attr('href',  '/StudyPage/Write?board=Noticeboard');
+								});
+							});	//readyEnd
+							
+		</script>
+		<!-- <script th:inline="javascript">	
+			//스마트에디터 여기부터
+			$(document).ready(function(){
+			    //전역변수선언
+			    var editor_object = [];
 			
-			var StudyNoticeboard = {
-					studyId : "BB00001",
-					id : "aaa123",
-					number : this.title
-				}
 			
-			extra = this;
+			    
+			     
+			    nhn.husky.EZCreator.createInIFrame({
+			        oAppRef: editor_object,
+			        elPlaceHolder: "smarteditor",
+			        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+			        htParams : {
+			            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseToolbar : true,            
+			            // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseVerticalResizer : true,    
+			            // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseModeChanger : true,
+			            // 기본 글꼴 설정
+			            SE2M_FontName: {
+			             htMainFont: {'id': '굴림','name': '굴림','size': '14','url': '','cssUrl': ''} 
+			          }
+			        }
+			    
 			
-			$.ajax({
-				type:"POST",
-				contentType: "application/json; charset=UTF-8",
-				url:"/StudyPage/Noticeboard/show",
-				data: JSON.stringify(StudyNoticeboard),
-				dataType: "json",
-				success: function(data){
-						console.log(StudyNoticeboard.number)
-						console.log(data);
-						console.log("success");
-						/**
-						*설명 : 덧글만 따로 뽑아내기 위한 Ajax
-						*주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
-						*/
-						$.ajax({
-							type:"POST",
-							contentType: "application/json; charset=UTF-8",
-							url:"/StudyPage/Noticeboard/replyshow",
-							data: JSON.stringify(StudyNoticeboard),
-							dataType: "json",
-							success: function(data){
-									data.forEach(function(list){
-										console.log(list);
-									});
-									console.log("success");
-							},error: function() {
-								alert("error");
-							}
-						});
-				},error: function() {
-					alert("error");
-				}
+			    });
+			
+			     
+			 	//전송버튼 클릭이벤트
+			    $("#boardRegister").click(function(){
+			        //id가 smarteditor인 textarea에 에디터에서 대입
+			        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+			              
+			        $("#boardWriteForm").submit();
+			            
+			    });
+			
+			    
+			    
+			    //미리보기
+			    $('#writePreview').click(function(){
+			
+			       editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+			        window.open("preview","자식창","writh=400,height=300,left=300,top=50");
+			
+			
+			    });
 			});
-			
-			
-		});
-	</script>
+		</script> -->
 	</div>
 </body>
 

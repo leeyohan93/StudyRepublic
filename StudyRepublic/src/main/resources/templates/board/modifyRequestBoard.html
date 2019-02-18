@@ -15,8 +15,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 
 <style>
@@ -90,10 +88,11 @@
   <div>
     <input id="boardType" name="boardName" type="text" value="스터디 요청게시판" readonly> 
 	<input id="boardTitle" name="title" type="text" placeholder="제목을 입력해주세요." th:value="${board.title}"> 
-    <input id="boardNotice" name="notice" type="checkbox" value="0">
+    <input id="boardWriter" name ='id' type='hidden' value="aaa123"> <br/>
 	<input id="requestBoardId" name="requestBoardId" type="hidden" th:value="${board.requestBoardId}">
 	<input type="hidden" name="boardType" value="requestBoard"> 
 	 <br/>
+    <input id="boardNotice" name="notice" type="checkbox" value="0">
     <span class ="boardTitleOpt">공지</span> 
     <input id="boardHide" name ="hide" type="checkbox" value="0">
     <sapn class ="boardTitleOpt">비공개</span>
@@ -107,7 +106,7 @@
     <div>  
        <textarea name="content" id="smarteditor" rows="10" cols="100" style="width:1000px; height:600px;" th:text="${board.content}"></textarea>
 	</div>
-	<input name ='id' type='hidden' value="aaa123"> <br/>
+
 
 	<!--글내용 끝  -->
   
@@ -116,7 +115,7 @@
   </span>
   
   <span class="previewBtn">
-    <a class ="btn btn-default" href="" role="button" id="preview">미리보기</a> 
+     <button class="btn btn-default" name="writePreview" id="writePreview" type="button">미리보기</button> 
    
   </span>
   <span class="registerBtn">
@@ -164,6 +163,16 @@ $(document).ready(function(){
         $("#boardWriteForm").submit();
             
     });
+    
+    //미리보기
+    $('#writePreview').click(function(){
+
+    	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+        window.open("preview","자식창","writh=400,height=300,left=300,top=50");
+
+
+    });
+    
     
   
     

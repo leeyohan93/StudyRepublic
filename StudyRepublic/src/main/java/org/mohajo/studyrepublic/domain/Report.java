@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 
@@ -42,6 +44,8 @@ public class Report {
 	
 	private String target;
 	private String content;
-	private Date date;
+	@Temporal(TemporalType.DATE)
+	private Date date = new Date();
+	private int status;
 
 }

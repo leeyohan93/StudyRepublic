@@ -6,84 +6,76 @@
 -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorate="~{/layout/mainLayout}">
 <head>
 <title>Study Republic</title>
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
-<link rel="stylesheet" th:href="@{/assets/css/main.css}" />
-<link rel="stylesheet"
-	th:href="@{/bootstrap/css/bootstrap.min.css}">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-<script
-	th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 <link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
+<div layout:fragment="bootCss">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</div>
+<div layout:fragment="bootJs">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+  	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+</div>
 
 </head>
-<body class="is-preload">
-	<!-- Wrapper -->
-	<div id="wrapper">
-
-		<!-- Header -->
-		<header id="header" layout:fragment="header">
-			<div class="inner">
-
-				<!-- Login -->
-				<div id="logout" sec:authorize="isAuthenticated()">
-					<ul>
-					<li><a th:href="@{/logout}">로그아웃</a></li>
-					<li><a th:href="@{/mypage}">마이페이지</a></li>
-					</ul>
-					</sec:authorize>
-				</div>
-
-				<div id="login" sec:authorize="isAnonymous()">
-					<ul>
-						<li><a href="/login">로그인</a></li>
-						<li><a href="/member/signup">회원가입</a></li>
-					</ul>
-					</sec:authorize>
-				</div>
-
-				<!-- Logo -->
-				<a th:href="@{/index.html}" class="logo"> <span class="symbol"><img
-						th:src="@{/images/logo.svg}" alt="" /></span><span>Study Republic</span>
-                </a>
-			</div>
-		</header><!-- Main
-		--><div id="content"
-			><div id="left" layout:fragment="left">
-				<a th:href="@{/StudyPage/Main}">home</a></br>
+<body>
+	<nav layout:fragment="header-nav"></nav>
+	<nav id="menu" layout:fragment="menu"></nav>
+	<div id="main" layout:fragment="main"
+		><div class="inner"
+			><div id="left" layout:fragment="left"
+				><a th:href="@{/StudyPage/Main}">home</a></br>
 				<a th:href="@{/StudyPage/Noticeboard}">공지사항</a></br>
 				<a th:href="@{/StudyPage/Fileshareboard}">파일 공유</a></br>
 				<a th:href="@{/StudyPage/Qnaboard}">질문 및 답변</a></br>
 				<a th:href="@{#}"><!-- 에러 때문에 일단은 주석 처리 "@{/StudyPage/VideoCalling}" -->화상 통화</a></br>
-				<a th:href="@{#}">채팅</a></br>
+				<a id ="chatPage" th:href="@{#}">채팅</a></br>
 				<a th:href="@{/StudyPage/Management}">관리</a></br>
 				<a th:href="@{#}">탈퇴</a></br>
 				<a th:href="@{#}">신고</a></br>
 			</div
-			><div id="right" layout:fragment="right">
-				<div id="noticeBoard"></div>
-				<div id="joinMember"></div>
-				<div id="double">
-						<div id="qnaBoard"></div>
-						<div id="ing"></div>
+			><div id="right" layout:fragment="right"
+				><div id="noticeBoard"></div
+				><div id="joinMember"></div
+				><div id="double"
+					><div id="qnaBoard"
+					></div
+				><div id="ing"></div>
 				</div>
-			</div>
-		</div>
+				</div>
+				
+	        <script>
+      
+    var popOpen;
+ 
+    //채팅 팝업 (원식)
+    $('#chatPage').click(function(){
+    	  	console.log("되냐");
+    	var popOption = "width=460px, height=735px, top=100px, left=650px;"
+        popOpen = window.open("/chat/studyChat","chatPage", popOption);
+
+    });
+    
+    </script>
+				</div>
 	</div>
 
+	<footer id="nonevisiblefooter" layout:fragment="footer"><div></div></footer>
+
+
+
 	<!-- Scripts -->
-	<script th:src="@{/assets/js/jquery.min.js}"></script>
+	<!-- <script th:src="@{/assets/js/jquery.min.js}"></script>
 	<script th:src="@{/assets/js/browser.min.js}"></script>
 	<script th:src="@{/assets/js/breakpoints.min.js}"></script>
 	<script th:src="@{/assets/js/util.js}"></script>
-	<script th:src="@{/assets/js/main.js}"></script>
-
+	<script th:src="@{/assets/js/main.js}"></script> -->
 </body>
 </html>

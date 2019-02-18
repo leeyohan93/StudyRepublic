@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymleaf.org"
- layout:decorate="~{/layout/studypageLayout}">
+ layout:decorate="~{/layout/studypageLayout}"
+>
 <head>
 <meta charset="UTF-8">
 <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-<!-- default header name is X-CSRF-TOKEN -->
 <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>스터디 메인 페이지 입니다.</title>
-<link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
 </head>
 <body>
-	<div id="main" layout:fragment = "main">
-    </div>
     <div id="right" layout:fragment="right">
                 <div id="noticeBoard">
                 	<table>
@@ -23,15 +20,8 @@
 							<td>내용</td>
 							<td>작성일</td>
 							<td>작성자</td>
-							<!-- <td>시작시간</td>
-							<td>종료시간</td> -->
 							<td>진행 날짜</td>
 							<td>위치</td>
-							<!-- <td>덧글번호</td>
-							<td>덧글 번호가 속한 스터디 ID</td>
-							<td>덧글 작성 일자</td>
-							<td>group</td>
-							<td>step</td> -->
 						</tr>
 						<tr th:each="snb : ${studynoticeboard3result}">
 							<td th:text = "${snb.studyNoticeboardId}"></td>
@@ -41,23 +31,11 @@
 							<td th:text = "${snb.content}"></td>
 							<td th:text = "${snb.date}"></td>
 							<td th:text = "${snb.id}"></td>
-							<!-- <td th:text = "${snb.startTime}"></td>
-							<td th:text = "${snb.endTime}"></td> -->
 							<td th:text = "${snb.day}"></td>
 							<td th:text = "${snb.location}"></td>
                 		</tr>
-                		<!-- <tr th:each="snb : ${study}">
-                			<td th:text = "${snb}"></td>
-                		</tr> -->
-                		<!-- <tr th:each="snb : ${studynoticeboard3result}">
-                			<td th:text = "${snb}"></td>
-                		</tr> -->
                 		<tr th:each="snb : ${study}">
                 			<td th:text = "${snb.studyId}"></td>
-                			<!-- <table>
-                				<tr th:each="snb2 : ${snb}">
-                				<td th:text = "${snb2}"></td>
-                			</table> -->
                 	</table>
                 </div>
                 <div id="joinMember">
@@ -101,7 +79,11 @@
                         </div>
                         <div id="ing">
                         </div>
-                </div>
+                      </div>
+  
+ 
 		</div>
+		
+	
 </body>
 </html>

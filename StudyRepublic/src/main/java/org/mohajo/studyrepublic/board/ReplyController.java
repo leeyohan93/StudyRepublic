@@ -130,8 +130,6 @@ public class ReplyController {
 	@ResponseBody
 	public FreeBoardReply updateFreeReply(int freeBoardReplyId, String content) {
 
-		log.info(freeBoardReplyId+"");
-
 		FreeBoardReply freeBoardReply = freeBoardReplyRepository.findById(freeBoardReplyId).get();
 		freeBoardReply.setContent(content);
 		return freeBoardReplyRepository.save(freeBoardReply);
@@ -142,8 +140,6 @@ public class ReplyController {
 	@ResponseBody
 	public RequestBoardReply updateRequestReply(int requestBoardReplyId, String content) {
 
-		log.info(requestBoardReplyId+"");
-
 		RequestBoardReply requestBoardReply = requestBoardReplyRepository.findById(requestBoardReplyId).get();
 		requestBoardReply.setContent(content);
 		return requestBoardReplyRepository.save(requestBoardReply);
@@ -153,8 +149,6 @@ public class ReplyController {
 	@PostMapping("/updateInquireReply")
 	@ResponseBody
 	public InquireBoardReply updateInquireReply(int inquireBoardReplyId, String content) {
-
-		log.info(inquireBoardReplyId+"");
 
 		InquireBoardReply inquireBoardReply = inquireBoardReplyRepository.findById(inquireBoardReplyId).get();
 		inquireBoardReply.setContent(content);
@@ -167,7 +161,6 @@ public class ReplyController {
 	@ResponseBody
 	public int deleteFreeReply(@PathVariable int freeBoardReplyId) {
 
-		log.info(freeBoardReplyId+"");
 		freeBoardReplyRepository.deleteById(freeBoardReplyId);
 		return freeBoardReplyId;
 	}
@@ -177,7 +170,6 @@ public class ReplyController {
 	@ResponseBody
 	public int deleteRequestReply(@PathVariable int requestBoardReplyId) {
 
-		log.info(requestBoardReplyId+"");
 		requestBoardReplyRepository.deleteById(requestBoardReplyId);
 		return requestBoardReplyId;
 	}
@@ -187,7 +179,6 @@ public class ReplyController {
 	@ResponseBody
 	public int deleteInquireReply(@PathVariable int inquireBoardReplyId) {
 
-		log.info(inquireBoardReplyId+"");
 		inquireBoardReplyRepository.deleteById(inquireBoardReplyId);
 		return inquireBoardReplyId;
 	}
@@ -198,9 +189,7 @@ public class ReplyController {
 	@ResponseBody
 	public int commentFreeCount(int freeBoardId) {
 		
-		log.info(freeBoardId+"");
 		int freeCount =freeBoardReplyRepository.replyCount(freeBoardId);
-		log.info(freeCount+"");
 		return freeCount;
 	}
 	
@@ -209,9 +198,7 @@ public class ReplyController {
 	@ResponseBody
 	public int commentRequestCount(int requestBoardId) {
 
-		log.info(requestBoardId+"");
 		int requestCount =requestBoardReplyRepository.replyCount(requestBoardId);
-		log.info(requestCount+"");
 		return requestCount;
 	}
 	
@@ -220,9 +207,7 @@ public class ReplyController {
 	@ResponseBody
 	public int commentInquireCount(int inquireBoardId) {
 		
-		log.info(inquireBoardId+"");
 		int inquireCount =inquireBoardReplyRepository.replyCount(inquireBoardId);
-		log.info(inquireCount+"");
 		return inquireCount;
 	}
 

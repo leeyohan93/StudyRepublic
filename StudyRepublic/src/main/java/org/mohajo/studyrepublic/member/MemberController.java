@@ -1,15 +1,19 @@
 package org.mohajo.studyrepublic.member;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberPoint;
+import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.security.MemberSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,14 +21,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 
@@ -193,5 +194,67 @@ public class MemberController {
 	public String signupTest() {
 		return "sign_up";
 	}
+	
+
+	
+
+	   
+	   public void getSession(Authentication auth, HttpSession session, Member member) {
+		      if(auth!=null && session.getAttribute("userId")==null) {
+		         
+		    	 MemberSecurity sc = (MemberSecurity)auth.getPrincipal();
+		         
+		         String id =sc.getUsername();
+		         
+		        member = memberrepository.findById(id).get();
+		         
+		         session.setAttribute("nickname", member.getNickname());
+		         session.setAttribute("memberimg", member.getProfileSaveName());
+		      
+		      }
+		   }
+	   
+	   public void getSession_Study(Authentication auth, HttpSession session, List<StudyMember> studymember) {
+		      if(auth!=null && session.getAttribute("userId")==null) {
+		         
+		    	
+		  		int listSize = studymember.size();
+				
+				for(int i = 0; i < listSize; i++) {
+					System.out.println("스터디 제목: " + studymember.get(i).getStudy().getName());
+				}
+				
+				for(int i = 0; i < listSize; i++) {
+					System.out.println("스터디 아이디: " + studymember.get(i).getStudy().getStudyId());
+				}
+				
+				
+				List <String> studyNameList = new ArrayList<>(listSize+1);
+				
+				studyNameList.add("참여중인 스터디");
+				
+				for(int i = 1; i < listSize + 1; i++) {
+					studyNameList.add(i, studymember.get(i-1).getStudy().getName());
+				}
+				
+				
+				
+				
+				List <String> studyIdList = new ArrayList<>(); 
+				
+				studyIdList.add("#");
+				
+				for(int i = 1; i < listSize+1; i++) {
+					studyIdList.add(i, studymember.get(i-1).getStudy().getStudyId());
+				}
+		    	  
+		         session.setAttribute("studyNameList", studyNameList);
+		         session.setAttribute("studyIdList",studyIdList);
+		         
+		         
+		      
+		      }
+		   }
+	
 	
 }

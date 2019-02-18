@@ -4,6 +4,7 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -35,7 +37,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "requestboard")
-public class RequestBoard extends Board{
+public class RequestBoard{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +47,7 @@ public class RequestBoard extends Board{
 	protected String id;
 	protected String title;
 	protected String content;
+
 	@CreationTimestamp
 	protected Timestamp date;
 	protected int notice;
@@ -62,6 +65,11 @@ public class RequestBoard extends Board{
 	@OneToMany
 	@JoinColumn(name="requestboard_id")
 	private List<RequestBoardFile> requestBoardFile;
+	
+	@ManyToOne
+    @JoinColumn(name="id",insertable=false, updatable=false)
+	protected Member member;
+
 
 
 }

@@ -3,16 +3,15 @@
  */
 package org.mohajo.studyrepublic.domain;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author 윤원식
@@ -22,17 +21,16 @@ import lombok.ToString;
  */
 
 
-@Getter
-@Setter
-@ToString
+@Data
 @MappedSuperclass
 public class Board {
 
    protected String id;
    protected String title;
    protected String content;
-   @CreationTimestamp
-   protected Timestamp date;
+   
+   @Temporal(TemporalType.TIMESTAMP)
+   protected Date date = new Date();
    protected int notice;
    protected int status;
    protected int hit;

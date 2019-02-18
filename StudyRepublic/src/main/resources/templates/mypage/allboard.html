@@ -15,17 +15,10 @@
 
 <body>
 
-	<h3>자유게시판</h3>	
+	<h3>내가 쓴 모든 게시물</h3>	
 	<table class="table">
 	
-	<tr>
-	
-		<th>id</th>
-		<th>title</th>
-		<th>date</th>
-		<th>like</th>
-		<th>hit</th>
-	</tr>
+
 	<tr th:each=" fbr : ${fbr}">
 	    <td th:text=${fbr.id}></td>
 	    <td th:text="${fbr.title}"></td>
@@ -33,19 +26,8 @@
 		<td th:text="${fbr.likeCount}"></td>
 		<td th:text="${fbr.hit}"></td>
 	</tr>
-	</table>
 	
-		<h3>문의게시판</h3>	
-	<table class="table">
-	
-	<tr>
-	
-		<th>id</th>
-		<th>title</th>
-		<th>date</th>
-		<th>like</th>
-		<th>hit</th>
-	</tr>
+
 	<tr th:each=" ibr : ${ibr}">
 	    <td th:text=${ibr.id}></td>
 	    <td th:text="${ibr.title}"></td>
@@ -53,19 +35,7 @@
 		<td th:text="${ibr.likeCount}"></td>
 		<td th:text="${ibr.hit}"></td>
 	</tr>
-	</table>
 	
-		<h3>스터디요청게시판</h3>	
-	<table class="table">
-	
-	<tr>
-	
-		<th>id</th>
-		<th>title</th>
-		<th>date</th>
-		<th>like</th>
-		<th>hit</th>
-	</tr>
 	<tr th:each=" rbr : ${rbr}">
 	    <td th:text=${rbr.id}></td>
 	    <td th:text="${rbr.title}"></td>

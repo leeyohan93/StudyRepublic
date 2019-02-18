@@ -32,12 +32,15 @@ public class GradeCD implements Serializable {
 	private String codeValueKorean;
 
 	public GradeCD(String gradeCode) {
-		super();
 		this.gradeCode = gradeCode;
 	}
 
 	public GradeCD() {
 		super();
+	}
+	public GradeCD(String gradeCode,String codeValueKorean) {
+		this.gradeCode = gradeCode;
+		this.codeValueKorean=codeValueKorean;
 	}
 
 

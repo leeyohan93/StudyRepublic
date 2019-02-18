@@ -24,7 +24,7 @@ function createSEditor2(elIRField, htParams, elSeAppContainer){
 	oEditor.registerPlugin(new nhn.husky.StringConverterManager());
 
 	var htDimension = {
-		nMinHeight:205,
+		nMinHeight:500,
 		nMinWidth:parseInt(elIRField.style.minWidth, 10)||700,
 		nHeight:elIRField.style.height||elIRField.offsetHeight,
 		nWidth:elIRField.style.width||elIRField.offsetWidth

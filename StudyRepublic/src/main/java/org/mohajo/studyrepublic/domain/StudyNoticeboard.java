@@ -1,8 +1,8 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,15 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * @author 신상용
@@ -33,7 +33,7 @@ import lombok.ToString;
 @Data
 @Entity
 @Table(name = "study_noticeboard")
-public class StudyNoticeboard extends StudyBoard{
+public class StudyNoticeboard extends StudyBoard implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -48,11 +48,36 @@ public class StudyNoticeboard extends StudyBoard{
 	@Column(name = "endtime")
 	private Time endTime;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date day;
 	
 	@Column
 	private String location;
+	
+	/*@Column(name = "study_id")
+	private String studyId;
+	@Column
+	private int number;
+	@Column(nullable = false)
+	private String title;
+	@Column(nullable = false)
+	private String content;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column
+	private Date date=new Date();
+	@Column
+	private String id;
+	@Column
+	private int status;
+	
+	@NotFound(action=NotFoundAction.IGNORE)
+	@ManyToOne(optional=false)
+	@JoinColumns({
+		@JoinColumn(name="study_id", referencedColumnName="studyId", insertable=false, updatable=false),
+		@JoinColumn(name="id", referencedColumnName="id", insertable=false, updatable=false)
+	})
+	private StudyMember studyMember;*/
 	
 	@OneToMany
 	@JoinColumn(name="study_noticeboard_id")
@@ -74,6 +99,4 @@ public class StudyNoticeboard extends StudyBoard{
 //			@JoinColumn(name="id", referencedColumnName = "id", insertable = false, updatable = false)
 //	})
 //	private StudyMember studyMember;
-	
-	
 }

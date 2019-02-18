@@ -27,5 +27,14 @@ public class StudyStatusCD implements Serializable {
 	
 	@Column(nullable = false)
 	private String codeValueKorean;
+	
+	public StudyStatusCD() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public StudyStatusCD(String studyStatusCode, String codeValueKorean){
+		this.studyStatusCode = studyStatusCode;
+		this.codeValueKorean = codeValueKorean;
+	}
 
 }

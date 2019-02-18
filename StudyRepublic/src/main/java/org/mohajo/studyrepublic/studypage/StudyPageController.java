@@ -7,9 +7,13 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tomcat.util.json.JSONParser;
+import org.mohajo.studyrepublic.domain.InquireBoard;
+import org.mohajo.studyrepublic.domain.StudyBoard;
+import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboardReply;
+import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardFileRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardReplyRepository;
@@ -24,9 +28,13 @@ import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +48,7 @@ import lombok.extern.java.Log;
 
 @Log
 @Controller
+@RequestMapping(value="/StudyPage")
 public class StudyPageController {
 
 	static private StudyPagePredicate predicate = new StudyPagePredicate();
@@ -81,12 +90,14 @@ public class StudyPageController {
 	@Autowired
 	StudyQnaboardReplyRepository studyQnaboardReplyRepository;
 
-	@RequestMapping("/StudyPage/Main")
-	public String studyPageMain(Model model/* , @RequestParam("studyId") String studyId */) {
+	@PostMapping("/Main")
+	public String studyPageMain(Model model , @RequestParam("studyId") String studyId ) {
 		// extra varialbe
-		String studyId = "BB00001";
-		String id = "aaa123";
-
+		/*String studyId = "BB00001";*/
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();/*"aaa123";*/
+		
+		
+		System.out.println(studyId);
 		/*
 		 * 이 주석 코드는 로그인 기능이 활성화 된 후 체크할 예정임.
 		 * 
@@ -118,7 +129,7 @@ public class StudyPageController {
 		return "studypage/studypage_main";
 	}
 
-	@RequestMapping("/StudyPage/Noticeboard")
+	@RequestMapping("/Noticeboard")
 	public String studyNoticeboard(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -127,7 +138,7 @@ public class StudyPageController {
 		return "studypage/studypage_notice";
 	}
 
-	@RequestMapping("/StudyPage/Qnaboard")
+	@RequestMapping("/Qnaboard")
 	public String studyQnaboard(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -138,7 +149,7 @@ public class StudyPageController {
 		return "studypage/studypage_qna";
 	}
 
-	@RequestMapping("/StudyPage/Fileshareboard")
+	@RequestMapping("/Fileshareboard")
 	public String studyFileshareboard(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -148,7 +159,7 @@ public class StudyPageController {
 		return "studypage/studypage_fileshare";
 	}
 	
-	@RequestMapping("/StudyPage/Management")
+	@RequestMapping("/Management")
 	public String studyManagement(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -158,7 +169,7 @@ public class StudyPageController {
 		return "studypage/studypage_management";
 	}
 	
-	@RequestMapping("/StudyPage/VideoCalling")
+	@RequestMapping("/VideoCalling")
 	public String studyVideoCalling(Model model) {
 		String studyId = "BB00001";
 		String id = "aaa123";
@@ -167,7 +178,7 @@ public class StudyPageController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/StudyPage/Noticeboard/show", method = RequestMethod.POST)
+	@RequestMapping(value="/Noticeboard/show", method = RequestMethod.POST)
 	public StudyNoticeboard showStudyNoticeboard(/*@RequestBody String studyId*/@RequestBody StudyNoticeboard readBoardContent){
 		log.info("시행됨1");
 		/*log.info(studyId);
@@ -186,11 +197,60 @@ public class StudyPageController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/StudyPage/Noticeboard/replyshow", method = RequestMethod.POST)
+	@RequestMapping(value="/Noticeboard/replyshow", method = RequestMethod.POST)
 	public List<StudyNoticeboardReply> showStudyNoticeboardReply(/*@RequestBody String studyId*/@RequestBody StudyNoticeboard readBoardContent){
 		log.info("시행됨2");
 		
 		return studyNoticeboardReplyRepository.findNoticeboardReplyByStudyIdANDNumber(readBoardContent.getStudyId(), readBoardContent.getNumber());
 	}
 
+	@RequestMapping(value="/Write", method=RequestMethod.GET)
+	public String showStudyBoardWrite(Model model, @RequestParam(name="board") String board){
+		log.info("글쓰기 폼 진입");
+		log.info(board);
+		model.addAttribute("boardName", board);
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		model.addAttribute("memberid", id);
+		return "studypage/studypage_write";
+	}
+	
+	@RequestMapping(value="/Register", method= RequestMethod.POST)
+	public String writeRegister(Model model, @ModelAttribute StudyNoticeboard studyNoticeboard, @ModelAttribute StudyFileshareboard studyfileshare, @ModelAttribute StudyQnaboard studyQnaboard, @RequestParam(name="boardName") String boardName){
+		
+		log.info(boardName);
+		
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		studyNoticeboard.setId(id);
+		studyNoticeboard.setStudyId("BB00001");
+		
+		model.addAttribute("memberid", id);
+		
+		switch(boardName) {		
+		
+		case "Noticeboard":
+			log.info(studyNoticeboard.getStudyId());
+			log.info(studyNoticeboard.toString());
+			studyNoticeboardRepository.save(studyNoticeboard);
+			log.info("현 최종 목적지에 도달함2");
+			return "redirect:/StudyPage/Noticeboard";
+		case "Fileshareboard":
+			log.info("현 최종 목적지에 도달함3");
+			studyQnaboardRepository.save(studyQnaboard);
+			return "redirect:/StudyPage/Fileshareboard";
+		case "Qnaboard":
+			studyFileshareboardRepository.save(studyfileshare);
+			return "redirect:/StudyPage/Qnaboard";
+		}
+		
+		return "studypage/error";
+	}
+	
+	//미리보기
+	@RequestMapping(value="/StudypagePreview")
+	public String studypage_preview() {
+		
+		log.info("들어오긴 하냐?");
+		System.out.println("더 울어라 젊은 인생아");
+		return "studypage/studypage_preview";
+	}
 }

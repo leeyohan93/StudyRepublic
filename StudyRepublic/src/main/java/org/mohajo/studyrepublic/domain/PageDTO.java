@@ -21,32 +21,40 @@ import org.springframework.data.domain.Sort;
 
 
 public class PageDTO {
-   
-	
+
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public static final int DEFAULT_MAX_SIZE = 50;
-	
-	
+
+
 	private int page;
 	private int size=15;
 	private String keyword;
 	private String searchType;
-//	private String searchPeriod;
+	private String searchPeriod;
 
-	
+
 	public PageDTO( ) {
 		this.page =1;
-		
+
 	}
 
 	public Pageable makePageable(int direction, String... props) {
-		
+
 		Sort.Direction dir = direction == 0 ? Sort.Direction.DESC : Sort.Direction.ASC;
-		
+
 		return PageRequest.of(this.page - 1, this.size, dir, props);
 	}
+	public Pageable noticeMakePageable(String notice, String freeBoardId) {
+
+
+		return PageRequest.of(this.page - 1, this.size, Sort.by(
+				Sort.Order.desc(notice),
+				Sort.Order.desc(freeBoardId)));
+	}
+
 
 	public int getPage() {
 		return page;
@@ -81,12 +89,25 @@ public class PageDTO {
 		this.searchType = searchType;
 	}
 
-	@Override
-	public String toString() {
-		return "PageDTO [page=" + page + ", size=" + size + ", keyword=" + keyword + ", searchType=" + searchType + "]";
+
+	public String getSearchPeriod() {
+		return searchPeriod;
 	}
 
 
-	
-	
+	public void setSearchPeriod(String searchPeriod) {
+		this.searchPeriod = searchPeriod;
+	}
+
+
+	@Override
+	public String toString() {
+		return "PageDTO [page=" + page + ", size=" + size + ", keyword=" + keyword + ", searchType=" + searchType
+				+ ", searchPeriod=" + searchPeriod + "]";
+	}
+
+
+
+
+
 }

@@ -5,13 +5,21 @@ package org.mohajo.studyrepublic.main;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.PopularStudy;
 import org.mohajo.studyrepublic.domain.Study;
+import org.mohajo.studyrepublic.domain.StudyMember;
+import org.mohajo.studyrepublic.member.MemberController;
+import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +37,14 @@ public class MainController {
 	
 	@Autowired
 	MainService mainService;
+	@Autowired
+	MemberController membercontroller;
+	@Autowired
+	StudyMemberRepository studymemberrepository;
 	
 	
 	@RequestMapping("/index")
-	public void index(Model model) {
+	public void index(Model model, Member member, Authentication authentication, HttpSession hs) {
 //		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
 		List<PopularStudy> premiumStudy = mainService.getPopularPremiumStudy();
 //		List<Study> basicStudy = mainService.getPopularBasicStudy();
@@ -56,6 +68,19 @@ public class MainController {
 		model.addAttribute("dinterest2cd", mainService.getDInterest2Code());
 		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
 		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
+		
+		membercontroller.getSession(authentication,hs,member);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);	
+		model.addAttribute("joiningStudy", joiningStudy);
+		System.out.println("조이닝스터디: "  + joiningStudy.toString());
+		
+
+		
+		membercontroller.getSession_Study(auth, hs, joiningStudy);
 	}
 	
 	@RequestMapping("/search")
@@ -73,6 +98,7 @@ public class MainController {
 		return "study/list";
 	}
 	
+
 	
 
 }

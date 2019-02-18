@@ -1,28 +1,132 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<!-- 	layout:decorate="~{/layout/mainLayout}"> -->
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>활동정보</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" th:href="@{/assets/css/main.css}">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
+	type="text/css">
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> -->
+<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
 </head>
 <body>
 
-	<div class="commounity">
+
+<div id="main" layout:fragment="main">
+<div class="inner">
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 my-3">
+            <div class="pull-right">
+                <div class="btn-group">
+
+                    <button class="btn btn-danger" id="grid">
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div id="products" class="row view-group">
+                <div class="item col-xs-4 col-lg-4">
+                    <div class="thumbnail card">
+                        <div class="img-event">
+                            <img class="group list-group-image img-fluid" src="http://placehold.it/400x250/000/fff" alt="" />
+                        </div>
+                        <div class="caption card-body">
+                            <h4 class="group card-title inner list-group-item-heading">
+                               MY-Community</h4>
+                            <p class="group inner list-group-item-text">
+                               <a href="allboard">내가쓴 모든 게시물 보기</a></p>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                </div>
+                                   
+                                <div class="col-xs-12 col-md-6">
+                                    <a class="btn btn-success" href="http://www.jquery2dotnet.com">My-activity</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item col-sm-4 col-lg-4">
+                    <div class="thumbnail card">
+                        <div class="img-event">
+                            <img class="group list-group-image img-fluid" src="http://placehold.it/400x250/000/fff" alt="" />
+                        </div>
+                        <div class="caption card-body">
+                            <h4 class="group card-title inner list-group-item-heading">
+                                Basic Study</h4>
+                            <p class="group inner list-group-item-text">
+                             </p>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                  	
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <a class="btn btn-success" href="basicstudylist">My-activity</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item col-sm-4 col-lg-4">
+                    <div class="thumbnail card">
+                        <div class="img-event">
+                            <img class="group list-group-image img-fluid" src="http://placehold.it/400x250/000/fff" alt="" />
+                        </div>
+                        <div class="caption card-body">
+                            <h4 class="group card-title inner list-group-item-heading">
+                                Premium -Study</h4>
+                            <p class="group inner list-group-item-text">
+                               </p>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                   
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <a class="btn btn-success" href="premiumstudylist">My-activity</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            
+            </div>
+</div>
+
+
+</div>
+</div>
+
+</body>
+</html>
+<!-- 	<div class="row">
+
+	<div class="col-sm-8 commounity">
 	<h3>내가쓴 게시글 내역</h3>
 		<a href="allboard">내가 쓴 모든 게시물</a>
 		
 	</div>
 	
-	<div class="mybasicstudy">
+	<div class="col-sm-8 mybasicstudy">일반스터디 활동내역
 		<a href="basicstudylist">나의 활동스터디 보기</a>
 	</div>
 	
-	<div class="mypremiumstudy">
+	<div class="col-sm-8 mypremiumstudy">프리미엄스터디 활동내역
 		<a href="premiumstudylist">나의 활동스터디 보기</a>
 	</div>
 
-
-
-</body>
-</html>
+	</div> -->

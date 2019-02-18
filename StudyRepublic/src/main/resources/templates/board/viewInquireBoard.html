@@ -23,10 +23,6 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <style>
 #content {
@@ -47,7 +43,7 @@
 	<div id="main" layout:fragment="main">
 		<div class="inner">
 			<!-- 게시글내용 시작 -->
-			<div class="container">
+			
 
 
 				<div class="beforeAfter">
@@ -55,10 +51,10 @@
 					<a class="btn btn-default" role="button" id="goBeforeFreePage"
 						name="goBeforeFreePage"
 						th:href="@{'goBeforeFreePage'(inquireBoardId=${inquireBoard.inquireBoardId})}">이전글
-						▲</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
+						▼</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
 						name="goAfterFreePage"
 						th:href="@{'writeBoard'(inquireBoardId=${inquireBoard.inquireBoardId})}">다음글
-						▼</a>
+						▲</a>
 
 				</div>
 
@@ -366,5 +362,9 @@
 
 
      </script>
+     	
+     
+		
+
    </body>
 </html>

@@ -15,6 +15,9 @@ layout:fragment="main"  : 메인 변경
     <title>Dashboard V.1 | Kiaalap - Kiaalap Admin Template</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+	<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
     <!-- favicon
 		============================================ -->
     <link rel="shortcut icon" th:type="@{/adminOnly/image/x-icon}" th:href="@{/adminOnly/img/favicon.ico}">
@@ -74,6 +77,9 @@ layout:fragment="main"  : 메인 변경
      <!-- modals CSS
 		============================================ -->
     <link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
+     <!-- forms CSS
+		============================================ -->
+    <link rel="stylesheet" th:href="@{/adminOnly/css/form/all-type-forms.css}">
     <!-- style CSS
 		============================================ -->
     <link rel="stylesheet" th:href="@{/adminOnly/style.css}">
@@ -82,6 +88,9 @@ layout:fragment="main"  : 메인 변경
     <!-- responsive CSS
 		============================================ -->
     <link rel="stylesheet" th:href="@{/adminOnly/css/responsive.css}">
+    <!-- Preloader CSS
+		============================================ -->
+    <link rel="stylesheet" th:href="@{/adminOnly/css/preloader/preloader-style.css}">
     <!-- modernizr JS
 		============================================ -->
     <script th:src="@{/adminOnly/js/vendor/modernizr-2.8.3.min.js}"></script>
@@ -92,10 +101,25 @@ layout:fragment="main"  : 메인 변경
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
     <!-- Start Left menu area -->
-    <div class="left-sidebar-pro">
+
+	<div id="loading-bar"
+		style="position: fixed; top: 40%; right: 0; bottom: 0; left: 0; z-index: 1050; display: none; z-index: 2000;">
+		<div id="tscssload-global">
+			<div id="tscssload-top" class="tscssload-mask">
+				<div class="tscssload-plane"></div>
+			</div>
+			<div id="tscssload-middle" class="tscssload-mask">
+				<div class="tscssload-plane"></div>
+			</div>
+			<div id="tscssload-bottom" class="tscssload-mask">
+				<div class="tscssload-plane"></div>
+			</div>
+		</div>
+	</div>
+	<div class="left-sidebar-pro">
         <nav id="sidebar" class="">
             <div class="sidebar-header">
-                <a href="index.html"><img class="main-logo" th:src="@{/images/logo.svg}" alt="" /></a>
+                <a href="/adminPage/index"><img class="main-logo" th:src="@{/images/logo.svg}" alt="" /></a>
                 <strong><a href="index.html"><img th:src="@{/images/logo.svg}" alt="" /></a></strong>
             </div>
             <div class="left-custom-menu-adp-wrap comment-scrollbar">
@@ -113,48 +137,47 @@ layout:fragment="main"  : 메인 변경
                             </ul>
                         </li>
                         <li>
-                            <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Member</span></a>
+                            <a class="has-arrow" href="/adminPage/member/list" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Member</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Member" href="#"><span class="mini-sub-pro">회원 전체</span></a></li>
-                                <li><a title="Nomal Member" href="#"><span class="mini-sub-pro">일반 회원</span></a></li>
-                                <li><a title="Tutor Member" href="#"><span class="mini-sub-pro">강사 회원</span></a></li>
+                                <li><a title="All Member" href="/adminPage/member/list"><span class="mini-sub-pro">회원 전체</span></a></li>
+                                <li><a title="Nomal Member" href="/adminPage/member/search?grade=N&searchKey=id&searchValue="><span class="mini-sub-pro">일반 회원</span></a></li>
+                                <li><a title="Tutor Member" href="/adminPage/member/search?grade=T&searchKey=id&searchValue="><span class="mini-sub-pro">강사 회원</span></a></li>
                             </ul>
                         </li>
                         <li>
-                            <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Tutor</span></a>
+                            <a class="has-arrow" href="/adminPage/tutor/list" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Tutor</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Professors" href="all-professors.html"><span class="mini-sub-pro">강사신청</span></a></li>
-                                <li><a title="Add Professor" href="add-professor.html"><span class="mini-sub-pro">환급신청</span></a></li>
+                                <li><a title="All Professors" href="/adminPage/tutor/list"><span class="mini-sub-pro">강사신청</span></a></li>
                             </ul>
                         </li>
                         <li>
-                            <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-course icon-wrap"></span> <span class="mini-click-non">Study</span></a>
+                            <a class="has-arrow" href="/adminPage/study/list" aria-expanded="false"><span class="educate-icon educate-course icon-wrap"></span> <span class="mini-click-non">Study</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Study" href="#"><span class="mini-sub-pro">스터디 전체</span></a></li>
-                                <li><a title="Basic Study" href="#"><span class="mini-sub-pro">일반 스터디</span></a></li>
-                                <li><a title="Premium Study" href="#"><span class="mini-sub-pro">프리미엄 스터디</span></a></li>
+                                <li><a title="All Study" href="/adminPage/study/list"><span class="mini-sub-pro">스터디 전체</span></a></li>
+                                <li><a title="Basic Study" href="/adminPage/study/search?type=B&searchKey=studyId&searchValue="><span class="mini-sub-pro">일반 스터디</span></a></li>
+                                <li><a title="Premium Study" href="/adminPage/study/search?type=P&searchKey=studyId&searchValue="><span class="mini-sub-pro">프리미엄 스터디</span></a></li>
                             </ul>
                         </li>
                         <li>
-                            <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-library icon-wrap"></span> <span class="mini-click-non">Community</span></a>
+                            <a class="has-arrow" href="/adminPage/community/list" aria-expanded="false"><span class="educate-icon educate-library icon-wrap"></span> <span class="mini-click-non">Community</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All board" href="#"><span class="mini-sub-pro">게시판 전체</span></a></li>
-                                <li><a title="Free board" href="#"><span class="mini-sub-pro">자유 게시판</span></a></li>
-                                <li><a title="Require board" href="#"><span class="mini-sub-pro">스터디요청 게시판</span></a></li>
-                                <li><a title="Question board" href="#"><span class="mini-sub-pro">문의 게시판</span></a></li>
+                                <li><a title="All board" href="/adminPage/community/list"><span class="mini-sub-pro">게시판 전체</span></a></li>
+                                <li><a title="Free board" href="/adminPage/community/search?type=free&searchKey=title&searchValue="><span class="mini-sub-pro">자유 게시판</span></a></li>
+                                <li><a title="Require board" href="/adminPage/community/search?type=request&searchKey=title&searchValue="><span class="mini-sub-pro">스터디요청 게시판</span></a></li>
+                                <li><a title="Question board" href="/adminPage/community/search?type=inquire&searchKey=title&searchValue="><span class="mini-sub-pro">문의 게시판</span></a></li>
                             </ul>
                         </li>
                         <li>
                             <a href="#"><span class="educate-icon educate-department icon-wrap"></span> <span class="mini-click-non">Payment</span></a>
                         </li>
                         <li>
-                            <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-interface icon-wrap"></span> <span class="mini-click-non">Report</span></a>
+                            <a class="has-arrow" href="/adminPage/report/list" aria-expanded="false"><span class="educate-icon educate-interface icon-wrap"></span> <span class="mini-click-non">Report</span></a>
                             <ul class="submenu-angle interface-mini-nb-dp" aria-expanded="false">
-                                <li><a title="All Report" href="#"><span class="mini-sub-pro">신고 전체</span></a></li>
-                                <li><a title="Member Report" href="#"><span class="mini-sub-pro">회원 신고</span></a></li>
-                                <li><a title="Study Report" href="#"><span class="mini-sub-pro">스터디 신고</span></a></li>
-                                <li><a title="Community Report" href="#"><span class="mini-sub-pro">게시물 신고</span></a></li>
-                                <li><a title="Message Report" href="#"><span class="mini-sub-pro">쪽지 신고</span></a></li>
+                                <li><a title="All Report" href="/adminPage/report/list"><span class="mini-sub-pro">신고 전체</span></a></li>
+                                <li><a title="Member Report" href="/adminPage/report/search?type=member&searchKey=title&searchValue="><span class="mini-sub-pro">회원 신고</span></a></li>
+                                <li><a title="Study Report" href="/adminPage/report/search?type=study&searchKey=title&searchValue="><span class="mini-sub-pro">스터디 신고</span></a></li>
+                                <li><a title="Community Report" href="/adminPage/report/search?type=free&type=request&type=inquire&searchKey=title&searchValue="><span class="mini-sub-pro">게시물 신고</span></a></li>
+                                <li><a title="Message Report" href="/adminPage/report/search?type=message&searchKey=title&searchValue="><span class="mini-sub-pro">쪽지 신고</span></a></li>
                             </ul>
                         </li>
                         <li id="removable">
@@ -798,64 +821,62 @@ layout:fragment="main"  : 메인 변경
                                                 <li><a href="#">Widgets</a></li>
                                             </ul>
                                         </li>
-                                        <li><a data-toggle="collapse" href="#">Member <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
+                                        <li><a data-toggle="collapse" href="/adminPage/member/list">Member <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul class="collapse dropdown-header-top">
-                                                <li><a href="#">회원 전체</a>
+                                                <li><a href="/adminPage/member/list">회원 전체</a>
                                                 </li>
-                                                <li><a href="#">일반 회원</a>
+                                                <li><a href="/adminPage/member/search?grade=N&searchKey=id&searchValue=">일반 회원</a>
                                                 </li>
-                                                <li><a href="#">강사 회원</a>
+                                                <li><a href="/adminPage/member/search?grade=T&searchKey=id&searchValue=">강사 회원</a>
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li><a data-toggle="collapse" href="#">Tutor <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
+                                        <li><a data-toggle="collapse" href="/adminPage/tutor/list">Tutor <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul class="collapse dropdown-header-top">
-                                                <li><a href="#">강사 신청</a>
-                                                </li>
-                                                <li><a href="#">환급 신청</a>
+                                                <li><a href="/adminPage/tutor/list">강사 신청</a>
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li><a data-toggle="collapse" href="#">Study <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
+                                        <li><a data-toggle="collapse" href="/adminPage/study/list">Study <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul class="collapse dropdown-header-top">
-                                                <li><a href="#">스터디 전체</a>
+                                                <li><a href="/adminPage/study/list">스터디 전체</a>
                                                 </li>
-                                                <li><a href="#">일반 스터디</a>
+                                                <li><a href="/adminPage/study/search?type=B&searchKey=studyId&searchValue=">일반 스터디</a>
                                                 </li>
-                                                <li><a href="#">프리미엄 스터디</a>
+                                                <li><a href="/adminPage/study/search?type=P&searchKey=studyId&searchValue=">프리미엄 스터디</a>
                                                 </li>
                                            	</ul>
                                       	</li>
                                             
-                                        <li><a data-toggle="collapse" href="#">Community <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
+                                        <li><a data-toggle="collapse" href="/adminPage/community/list">Community <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul class="collapse dropdown-header-top">
-                                                <li><a href="#">게시판 전체</a>
+                                                <li><a href="/adminPage/community/list">게시판 전체</a>
                                                 </li>
-                                                <li><a href="#">자유 게시판</a>
+                                                <li><a href="/adminPage/community/search?type=free&searchKey=title&searchValue=">자유 게시판</a>
                                                 </li>
-                                                <li><a href="#">스터디요청 게시판</a>
+                                                <li><a href="/adminPage/community/search?type=request&searchKey=title&searchValue=">스터디요청 게시판</a>
                                                 </li>
-                                                <li><a href="#">문의 게시판</a>
+                                                <li><a href="/adminPage/community/search?type=inquire&searchKey=title&searchValue=">문의 게시판</a>
                                                 </li>
                                                 
                                             </ul>
                                         </li>
                                         <li><a href="#">Payment </a></li>
-                                         <li><a data-toggle="collapse" href="#">Report <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
+                                         <li><a data-toggle="collapse" href="/adminPage/report/list">Report <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul class="collapse dropdown-header-top">
-                                                <li><a href="#">신고 전체</a>
+                                                <li><a href="/adminPage/report/list">신고 전체</a>
                                                 </li>
-                                                <li><a href="#">회원 신고</a>
+                                                <li><a href="/adminPage/report/search?type=member&searchKey=title&searchValue=">회원 신고</a>
                                                 </li>
-                                                <li><a href="#">스터디 신고</a>
+                                                <li><a href="/adminPage/report/search?type=study&searchKey=title&searchValue=">스터디 신고</a>
                                                 </li>
-                                                <li><a href="#">게시물 신고</a>
+                                                <li><a href="/adminPage/report/search?type=free&type=request&type=inquire&searchKey=title&searchValue=">게시물 신고</a>
                                                 </li>
-                                                <li><a href="#">쪽지 신고</a>
+                                                <li><a href="/adminPage/report/search?type=message&searchKey=title&searchValue=">쪽지 신고</a>
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li><a href="#">Exit </a></li>
+                                        <li><a href="/index">Exit </a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -864,7 +885,7 @@ layout:fragment="main"  : 메인 변경
                 </div>
             </div>
             <!-- Mobile Menu end -->
-            <div class="breadcome-area" style="padding-top: 15px;">
+            <div class="breadcome-area" style="padding-top: 15px; margin-top: 20px;">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1445,14 +1466,18 @@ layout:fragment="main"  : 메인 변경
     <script th:src="@{/adminOnly/js/metisMenu/metisMenu-active.js}"></script>
     <!-- morrisjs JS
 		============================================ -->
-    <script th:src="@{/adminOnly/js/morrisjs/raphael-min.js}" layout:fragment="indexScript"></script>
-    <script th:src="@{/adminOnly/js/morrisjs/morris.js}" layout:fragment="indexScript"></script>
-    <script th:src="@{/adminOnly/js/morrisjs/morris-active.js}" layout:fragment="indexScript"></script>  
+	<scirpt layout:fragment="indexScript">
+    <script th:src="@{/adminOnly/js/morrisjs/raphael-min.js}"></script>
+    <script th:src="@{/adminOnly/js/morrisjs/morris.js}"></script>
+    <script th:src="@{/adminOnly/js/morrisjs/morris-active.js}"></script>
+    </scirpt>  
     <!-- morrisjs JS
 		============================================ -->
- 	<script th:src="@{/adminOnly/js/sparkline/jquery.sparkline.min.js}" layout:fragment="indexScript"></script>
-    <script th:src="@{/adminOnly/js/sparkline/jquery.charts-sparkline.js}" layout:fragment="indexScript"></script>
-    <script th:src="@{/adminOnly/js/sparkline/sparkline-active.js}" layout:fragment="indexScript"></script> 
+	<scirpt layout:fragment="indexScript2">
+ 	<script th:src="@{/adminOnly/js/sparkline/jquery.sparkline.min.js}" ></script>
+    <script th:src="@{/adminOnly/js/sparkline/jquery.charts-sparkline.js}"></script>
+    <script th:src="@{/adminOnly/js/sparkline/sparkline-active.js}"></script> 
+    </scirpt>
     <!-- calendar JS
 		============================================ -->
     <script th:src="@{/adminOnly/js/calendar/moment.min.js}"></script>
@@ -1490,7 +1515,16 @@ layout:fragment="main"  : 메인 변경
     <!-- main JS
 		============================================ -->
     <script th:src="@{/adminOnly/js/main.js}"></script>
-
+     <!-- icheck JS
+		============================================ -->
+    <script th:src="@{/adminOnly/js/icheck/icheck.min.js}"></script>
+    <script th:src="@{/adminOnly/js/icheck/icheck-active.js}"></script>
+	<!-- tab JS
+		============================================ -->
+    <script th:src="@{/adminOnly/js/tab.js}"></script>
+    <!-- custom JS
+		============================================ -->
+   
 </body>
 
 </html>

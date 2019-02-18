@@ -2863,7 +2863,7 @@ input::-moz-focus-inner {
 		
 			#logout > ul > li > a
 			{
-				display: block;
+						display: block;
 						position: relative;
 						height: 3em;
 						line-height: 3em;
@@ -2876,11 +2876,104 @@ input::-moz-focus-inner {
 						letter-spacing: 0.35em;
 						text-transform: uppercase;
 			}
-								#logout > ul > li
+			
+		#logout > div > ul > li > a
+			{
+						display: block;
+						position: relative;
+						height: 3em;
+						line-height: 3em;
+						padding: 0 0.5em;
+						background-color: rgba(255, 255, 255, 0.5);
+						border-radius: 4px;
+						border: 0;
+						font-size: 0.6em;
+						font-weight: 700;
+						letter-spacing: 0.35em;
+						text-transform: uppercase;
+			}
+			
+		#logout > div > div > ul > li > a
+			{
+						display: block;
+						position: relative;
+						height: 3em;
+						line-height: 3em;
+						padding: 0 0.5em;
+						background-color: rgba(255, 255, 255, 0.5);
+						border-radius: 4px;
+						border: 0;
+						font-size: 0.6em;
+						font-weight: 700;
+						letter-spacing: 0.35em;
+						text-transform: uppercase;
+			}
+	
+	
+	#logout > ul > li/*  */
 					{
 						float: right;
 						list-style: none;
+						display: block;
+						position: relative;
+						height: 3em;
+						line-height: 3em;
+						padding: 0 0.5em;
+						background-color: rgba(255, 255, 255, 0.5);
+						border-radius: 4px;
+						border: 0;
+						font-size: 0.6em;
+						font-weight: 700;
+						letter-spacing: 0.1em;
+						text-transform: uppercase;
 					}
+					
+					
+	#logout > div > ul > li/*  */
+					{
+						float: right;
+						list-style: none;
+						display: block;
+						position: relative;
+						height: 3em;
+						line-height: 3em;
+						padding: 0 0.5em;
+						background-color: rgba(255, 255, 255, 0.5);
+						border-radius: 4px;
+						border: 0;
+						font-size: 0.6em;
+						font-weight: 700;
+						letter-spacing: 0.1em;
+						text-transform: uppercase;
+					}
+					
+					
+					
+			#logout > div > div > ul > li/*  */
+					{
+						float: right;
+						list-style: none;
+						display: block;
+						position: relative;
+						height: 3em;
+						line-height: 3em;
+						padding: 0 0.5em;
+						background-color: rgba(255, 255, 255, 0.5);
+						border-radius: 4px;
+						border: 0;
+						font-size: 0.6em;
+						font-weight: 700;
+						letter-spacing: 0.1em;
+						text-transform: uppercase;
+					}
+					
+		#loginli {
+		top:15px;
+		}
+		
+		#loginimg {
+		top:10px;
+		}
 			
 			
 		#header .logo {
@@ -3133,7 +3226,6 @@ input::-moz-focus-inner {
 	background-color: transparent;
 	border: none;
 	border-radius: 0;
- 	border-bottom: solid 1px #c9c9c9; 
 	color: inherit;
 	display: inline-block;
 	outline: 0;
