@@ -258,6 +258,33 @@ iframe {
   margin-bottom: 10px;
 }
 
+.wrap-input100_findpw {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  width: 70%;
+  height: 80px;
+  position: relative;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+/*   margin:auto; */
+  margin: auto;
+  margin-bottom:20px;
+  
+}
+
+.modal_head {
+	display:block; 
+	float:right;
+	height:20px;
+	width:100%;
+	margin-bottom:35px;
+}
+
 .join-input100 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -385,6 +412,17 @@ iframe {
   padding: 0 26px;
 }
 
+.input100_findpw {
+  display: block;
+  width: 100%;
+  background: transparent;
+  font-size: 12px;
+  color: #555555;
+  line-height: 1.2;
+  padding: 0 26px;
+}
+
+
 
 
 input.input100 {
@@ -467,10 +505,13 @@ input.radio100 {
   height: 48px;
 }
 
+
 .input100:focus + .focus-input100 + .label-input100 {
   top: 14px;
   font-size: 13px;
 }
+
+
 
 .has-val {
   height: 48px !important;
@@ -480,6 +521,9 @@ input.radio100 {
   top: 14px;
   font-size: 13px;
 }
+
+
+
 
 /*==================================================================
 [ Restyle Checkbox ]*/
@@ -542,6 +586,19 @@ input.radio100 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.container-login100-form-btn_findpw {
+  width: 70%;
+  margin:auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  
 }
 
 

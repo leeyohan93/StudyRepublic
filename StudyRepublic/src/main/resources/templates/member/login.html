@@ -9,6 +9,10 @@ layout:decorate="~{/layout/mainLayout}">
    <title>Login</title>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
+   	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/> 
+<!-- default header name is X-CSRF-TOKEN -->
+	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+	
 <!--===============================================================================================-->   
    <link rel="icon" type="image/png" href="/Login_v18/images/icons/favicon.ico"/>
 <!--===============================================================================================-->
@@ -31,6 +35,60 @@ layout:decorate="~{/layout/mainLayout}">
    <link rel="stylesheet" type="text/css" href="/Login_v18/css/util.css">
    <link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
 <!--===============================================================================================-->
+
+<style>
+
+        .modal {
+            display: none; 
+            position: fixed; 
+            margin:auto;
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%; 
+/*             overflow: auto; */
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4);
+/*        		text-align: center;
+       		vertical-align: middle;   */  		
+        } 
+        
+
+    
+        /* Modal Content/Box */
+        .modal_cotent{
+            background-color: #fefefe;
+            border: 1px solid #888;
+            width: 450px;
+            hegiht:auto; 
+            box-sizing : border-box;
+            margin:9pc auto 0;
+            background:#f7f7f7;
+                                      
+        }
+        
+        .modal_middle {
+        width:100%;
+        height:auto;
+        }
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+</style>
+
 </head>
 <body>
    
@@ -43,16 +101,12 @@ layout:decorate="~{/layout/mainLayout}">
             
 
             
-            <form class="login100-form validate-form" method="post" autocomplete = "off">
+            <form class="login100-form validate-form" action = "login" method="post" autocomplete = "off" >
             
                <span th:if="${param.logout == null}"class="login100-form-title p-b-43">
                   Login to continue
                </span>
-            
-
-
-               
-               
+        
                <div class="wrap-input100 validate-input" data-validate = "아이디를 입력해주세요.">
                   <input class="input100" type="text" id="username" name="username">
                   <span class="focus-input100"></span>
@@ -68,7 +122,7 @@ layout:decorate="~{/layout/mainLayout}">
                
                
                <span th:if="${param.error != null}" class="login100-form-title-error p-b-43">
-                  아이디 또는 비밀번호가 일치하지 않습니다.
+                  		아이디 또는 비밀번호가 일치하지 않습니다.
                </span>
                
 
@@ -81,11 +135,13 @@ layout:decorate="~{/layout/mainLayout}">
                   </div>
 
                   <div>
-                     <a href="#" class="txt1">
+                     <a href="javascript:callModal();" class="txt1">
                         Forgot Password?
                      </a>
                   </div>
+
                </div>
+ 
          
 
                <div class="container-login100-form-btn">
@@ -115,11 +171,102 @@ layout:decorate="~{/layout/mainLayout}">
             </form>
          </div>
 
+
+
    </div> 
    <div>  
    </div> 
 
-   
+                     <div id = "myModal" class = "modal">
+                     
+                  <div class = "modal_cotent">
+                
+                  <div class = "modal_head">
+                  <span class = "close" style = "display: block; padding: 10px 15px;">&times;</span>
+              	</div>
+              	
+              	<div class = "modal_middle">
+              	
+               
+               
+               
+               
+               
+               <form id = "goModifyPw" action = "/member/successAuth" class="login100-form validate-form" method="post" autocomplete = "off" style = "padding:0; width:400px; height:auto; overflow-x:unset">
+               
+                <span th:if="${param.logout == null}"class="login100-form-title p-b-43" style = "font-size:20px; padding-bottom: 20px;">
+                  	비밀번호찾기
+               </span>
+               
+               <span th:if="${param.logout == null}"class="login100-form-title p-b-43" style = "font-size:14px; padding-bottom:20px">
+						가입하신 사용자 전화번호를 입력해주세요.<br>
+						비밀번호 재설정 인증번호를 보내드립니다.
+               </span>
+               
+               
+
+               
+               <div class="wrap-input100_findpw" >
+               <input class="input100" type="text" id="id" name="id" onkeyup = "removeIdMs()" onblur = "check_Id()">
+                  <span class="focus-input100"></span>
+                  <span class="label-input100">아이디</span>
+               </div>
+               
+               <span id = "spanId" th:if="${param.logout == null}"class="login100-form-title p-b-43" style = "font-size:10px; display:none; padding-bottom:12px; display:none; color:red" >
+						유효하지 않은 형식입니다.	
+               </span>
+               
+               <div class="wrap-input100_findpw" >
+               <input class="input100" type="text" id="userphonenumber" name="userphonenumber" onkeyup = "removePhoneMs()" onblur = "check_Phone()" >
+                  <span class="focus-input100"></span>
+                  <span class="label-input100">휴대전화번호</span>
+               </div>
+               
+               <span id = "spanPhone" th:if="${param.logout == null}"class="login100-form-title p-b-43" style = "font-size:10px; display:none; padding-bottom:12px; display:none; color:red">
+						유효하지 않은 형식입니다.	
+               </span>
+               
+               <span id = "spaninfo" th:if="${param.logout == null}"class="login100-form-title p-b-43" style = "font-size:10px; display:none; padding-bottom:12px; display:none; color:red">
+						아이디 또는 휴대전화번호를 입력해주세요.		
+               </span>
+               
+               <div class="container-login100-form-btn_findpw" style = "margin-bottom:25px;">
+                  <button id = "findPw" type="button" class="login100-form-btn">
+                     	인증번호발송
+                  </button>
+               </div>
+               
+               
+              <div id = "messageInput"class="wrap-input100_findpw" style = "display:none; margin-bottom:5px">
+               <input class="input100" type="text" id="messageNumber" name="messageNumber" onkeyup = "removeAuthMs()">
+                  <span class="focus-input100"></span>
+                  <span class="label-input100">인증번호</span>
+               </div>
+               
+               <span id = "spanms" th:if="${param.logout == null}"class="login100-form-title p-b-43" style = "font-size:10px; display:none; padding-bottom:12px; ">
+							인증번호가 전송되었습니다. 인증번호를 입력해주세요.	
+               </span>
+               
+              <span id = "spancheckms" th:if="${param.logout == null}"class="login100-form-title p-b-43" style = "font-size:10px; display:none; padding-bottom:12px; color:red">
+							 인증번호가 일치하지 않습니다.
+               </span>
+               
+               <input id = "authNum" style = "display:none">
+               
+               <div id = "authCheck" class="container-login100-form-btn_findpw" style = "display:none">
+                  <button id = "authNumCheck" type="button" class="login100-form-btn">
+                     	다음
+                  </button>
+               </div>
+               
+               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+                </form>
+              </div>
+         
+                  
+                  </div>
+                  
+                  </div>
    
 <!--===============================================================================================-->
    <script src="/Login_v18/vendor/jquery/jquery-3.2.1.min.js"></script>
@@ -137,6 +284,154 @@ layout:decorate="~{/layout/mainLayout}">
    <script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
    <script src="/Login_v18/js/main.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   
+   <script>
+   
+   var token = $("meta[name='_csrf']").attr("content");
+   var header = $("meta[name='_csrf_header']").attr("content");
+   $(function() {
+       $(document).ajaxSend(function(e, xhr, options) {
+           xhr.setRequestHeader(header, token);
+       });
+   });
+   
+   var uid = "";
+   var phoneNumber = "";
+   var regex_id = /^[A-Za-z0-9+]{4,12}$/ 
+   var regex_phone = /^[0-9]{10,11}$/
+   
+   var modal = document.getElementById('myModal');
+   
+   // Get the <span> element that closes the modal
+   var span = document.getElementsByClassName("close")[0]; 
+   
+   function callModal() {
+	   
+	   modal.style.display="block";
+	
+   }
+   
+
+   span.onclick = function() {
+       modal.style.display = "none";
+       document.getElementById('messageInput').style.display = 'none';
+       document.getElementById('spanms').style.display = 'none';
+       document.getElementById('spancheckms').style.display = 'none';
+       
+       document.getElementById('authCheck').style.display = 'none';
+       document.getElementById('spaninfo').style.display = 'none';
+  	   document.getElementById('spanId').style.display = 'none';
+	   document.getElementById('spanPhone').style.display = 'none';
+       
+   	   document.getElementById('userphonenumber').value = "";
+	   document.getElementById('id').value = "";
+	   document.getElementById('authNum').value = "";
+   }
+
+
+   window.onclick = function(event) {
+       if (event.target == modal) {
+           modal.style.display = "none";
+       }
+   }
+   
+   var data = {};
+   
+
+       
+     $('#findPw').on('click', function(){
+ //   	 alert(document.getElementById("userphonenumber").value);
+    	 data.phonenumber = document.getElementById("userphonenumber").value;
+ 	     data.messageNumber = document.getElementById("messageNumber").value;
+ 	   
+ 	   if(document.getElementById("userphonenumber").value != "" && document.getElementById("id").value != "" && regex_phone.test(phoneNumber) && regex_id.test(uid)) {
+ 	     
+      $.ajax({
+        type : 'POST',
+        data : data, 
+        url:'/member/findPassword',   
+        
+        success:function(data){
+        	document.getElementById('messageInput').style.display = 'block';
+        	document.getElementById('authNum').value = data.messageNumber;
+   
+        	document.getElementById('spanms').style.display = 'block';
+        	document.getElementById('authCheck').style.display = 'block';
+             
+        },
+        error:function(error) {
+           alert("error: " + error)
+        }
+     });
+ 	   }
+ 	       else if ( (phoneNumber != "" && uid != "")  && !(regex_phone.test(phoneNumber)) || regex_phone.test(uid) ) {
+ 	    	  document.getElementById('spaninfo').style.display = 'none';
+ 	      }
+ 	   
+ 	   else {
+ 		  document.getElementById('spanId').style.display = 'none';
+ 		  document.getElementById('spanPhone').style.display = 'none';
+ 		   document.getElementById('spaninfo').style.display = 'block';
+ 	   }
+  }); 
+     
+     
+     $('#authNumCheck').on('click', function(){
+     
+     	if(document.getElementById('authNum').value == document.getElementById('messageNumber').value) {
+     		alert("일치");
+     		$('#goModifyPw').submit();
+     		
+     	} else {
+     		alert("불일치");
+     		document.getElementById('spancheckms').style.display = 'block';
+    	 }
+     });
+     
+     function removems() {
+    	 document.getElementById('spaninfo').style.display = 'none';
+
+     }
+     
+     function removeIdMs() {
+    	 document.getElementById('spanId').style.display = 'none';
+     }
+     
+     function removePhoneMs() {
+    	 document.getElementById('spanPhone').style.display = 'none';
+     }
+     
+     function removeAuthMs() {
+    	 document.getElementById('spancheckms').style.display = 'none';
+     }
+     
+    
+     function check_Id() {
+         uid = document.getElementById("id").value;
+         regex_id = /^[A-Za-z0-9+]{4,12}$/  
+         
+    if ( !(regex_id.test(uid)) && uid !== "" ) {
+            	 document.getElementById('spanId').style.display = 'block';	
+            	 document.getElementById('spaninfo').style.display = 'none';	
+              }
+         
+     }
+     
+     function check_Phone(){
+         phoneNumber = document.getElementById("userphonenumber").value;
+         regex_phone = /^[0-9]{10,11}$/
+         
+        	 if ( !(regex_phone.test(phoneNumber)) && phoneNumber != "") {
+        		 document.getElementById('spanPhone').style.display = 'block';	
+        		 document.getElementById('spaninfo').style.display = 'none';	
+              }
+         
+     }
+   
+
+
+   </script>
 
 </div>
 </div>

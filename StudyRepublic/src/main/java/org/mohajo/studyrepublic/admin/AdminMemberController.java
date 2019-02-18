@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.Study;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ public class AdminMemberController {
 	@Autowired
 	AdminMemberService adminMemberService;
 	
-	
+	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
 	@RequestMapping("/list")
 	public String list(Model model) {
@@ -47,7 +48,9 @@ public class AdminMemberController {
 		String text="비밀번호는 회원님의 휴대전화번호로 초기화 되었습니다";
 		System.out.println(memberId);
 		adminMemberService.sendEmailMessage(memberEmail,subject,text);
-		adminMemberService.changePassword(memberId,memberPhonenumber);
+		
+		// 요한아 패스워드 인코딩해서 넣는 것으로 추가했어. 아래코드로 손을 봄.
+		adminMemberService.changePassword(memberId,bcryptpasswordencoder.encode(memberPhonenumber));
 		return "redirect:/adminPage/member/list";
 	}
 	
