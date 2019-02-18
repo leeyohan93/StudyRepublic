@@ -6,8 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.DayCD;
 import org.mohajo.studyrepublic.domain.LevelCD;
-import org.mohajo.studyrepublic.domain.Leveltest;
-import org.mohajo.studyrepublic.domain.LeveltestResponse;
+import org.mohajo.studyrepublic.domain.LeveltestList;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
@@ -39,6 +38,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -378,6 +378,26 @@ public class StudyController {
 		
 	}
 	// 테스트 끝.
+	
+	@RequestMapping("/leveltest")
+	public String leveltest() {
+		
+		return "/study/leveltestTest";
+	}
+	
+	@RequestMapping("/leveltestSubmitTest")
+	public String leveltestSubmitTest(@ModelAttribute LeveltestList leveltests, Model model) {
+		
+		log.info("leveltestSubmitTest() called...");
+		
+		log.info(leveltests.toString());
+		
+		model.addAttribute("test", leveltests);
+		
+		
+		return "/study/test";
+
+	}
 
 }
 	
