@@ -31,5 +31,14 @@ public class TypeCD implements Serializable {
 	
 	@Column(nullable = false)
 	private String codeValueKorean;
+
+	public TypeCD() {
+		super();
+	}
+	
+	public TypeCD(String typeCode) {
+		super();
+		this.typeCode = typeCode;
+	}
 	
 }

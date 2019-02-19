@@ -1,10 +1,15 @@
 package org.mohajo.studyrepublic.study;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.DayCD;
+import org.mohajo.studyrepublic.domain.Interest1CD;
+import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.LevelCD;
 import org.mohajo.studyrepublic.domain.LeveltestList;
 import org.mohajo.studyrepublic.domain.Member;
@@ -12,12 +17,15 @@ import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.Study;
+import org.mohajo.studyrepublic.domain.StudyHelper;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberId;
 import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TypeCD;
 import org.mohajo.studyrepublic.repository.DayCDRepository;
+import org.mohajo.studyrepublic.repository.Interest1CDRepository;
+import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.LevelCDRepository;
 import org.mohajo.studyrepublic.repository.LeveltestRepository;
 import org.mohajo.studyrepublic.repository.LeveltestResponseRepository;
@@ -98,6 +106,12 @@ public class StudyController {
 	
 	@Autowired
 	StudyViewRepository svr;
+	
+	@Autowired
+	Interest1CDRepository i1cdr;
+	
+	@Autowired
+	Interest2CDRepository i2cdr;
 	
 	
 	@Autowired
@@ -274,7 +288,7 @@ public class StudyController {
 	 * @author	이미연
 	 * @return	스터디 개설 1단계 (/study/openBasic.html)
 	 */
-	@RequestMapping("/open/basic")
+	@RequestMapping("/open")
 	public String open(Model model) {
 
 		log.info("open() called...");
@@ -295,13 +309,28 @@ public class StudyController {
 		List<LevelCD> levelCode = lcr.findAll();
 		List<DayCD> dayCode = dcr.findAll();
 		
+		List<Interest1CD> interest1cd = i1cdr.findAll();
+		List<Interest2CD> interest2cd = i2cdr.findAll();
+		List<Interest2CD> Pinterest2cd = i2cdr.Pinterest2List();
+		List<Interest2CD> Dinterest2cd = i2cdr.Dinterest2List();
+		List<Interest2CD> Winterest2cd = i2cdr.Winterest2List();
+		List<Interest2CD> Ninterest2cd = i2cdr.Ninterest2List();
+
+		model.addAttribute("interest1cd", interest1cd);
+		model.addAttribute("interest2cd", interest2cd);
+		model.addAttribute("pinterest2cd", Pinterest2cd);
+		model.addAttribute("dinterest2cd", Dinterest2cd);
+		model.addAttribute("winterest2cd", Winterest2cd);
+		model.addAttribute("ninterest2cd", Ninterest2cd);
+		
+		
 		model.addAttribute("loggedInUser", member);
 		model.addAttribute("typeCode", typeCode);
 		model.addAttribute("onoffCode", onoffCode);
 		model.addAttribute("levelCode", levelCode);
 		model.addAttribute("dayCode", dayCode);
 		
-		return "/study/open";
+		return "/study/openComplete";
 	}
 	
 	
@@ -334,14 +363,7 @@ public class StudyController {
 		return "/study/join";
 	}
 	
-//	@RequestMapping("/pay")
-//	public String pay() {
-//		
-//		//결제 api 테스트 후 추가 --> 포인트 결제 or 포인트 충전 창으로 연결
-//		
-//		return "";
-//	}
-	
+
 	@RequestMapping("/review")
 	public String review() {
 
@@ -379,24 +401,49 @@ public class StudyController {
 	}
 	// 테스트 끝.
 	
-	@RequestMapping("/leveltest")
-	public String leveltest() {
-		
-		return "/study/leveltestTest";
-	}
 	
 	@RequestMapping("/leveltestSubmitTest")
-	public String leveltestSubmitTest(@ModelAttribute LeveltestList leveltests, Model model) {
+	public String leveltestSubmitTest(@ModelAttribute Study study, @ModelAttribute StudyHelper studyHelper, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException {
 		
 		log.info("leveltestSubmitTest() called...");
+		log.info(study.toString());
 		
-		log.info(leveltests.toString());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");	//if 24 hour format
+//	    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm"); 	// 12 hour format
+	    
+		String startDateStr = studyHelper.getStartDateStr();
+		String endDateStr = studyHelper.getEndDateStr();
+
+		String startTimeStr = studyHelper.getStartTimeStr();
+		String endTimeStr = studyHelper.getEndTimeStr();
+			
+		if(startTimeStr != "") {
+			Date startDate = dateFormat.parse(startDateStr);
+			Date endDate = dateFormat.parse(endDateStr);
+	
+			Date preStartTime = (Date)timeFormat.parse(startTimeStr);
+			Date preEndTime = (Date)timeFormat.parse(endTimeStr);
+			
+		    java.sql.Time startTime = new java.sql.Time(preStartTime.getTime());
+		    java.sql.Time endTime = new java.sql.Time(preEndTime.getTime());
 		
-		model.addAttribute("test", leveltests);
+			study.setStartDate(startDate);
+			study.setEndDate(endDate);
+			study.setStartTime(startTime);
+			study.setEndTime(endTime);
+		}
+
+		String studyId = sr.getNewStudyId(study.getTypeCode().getTypeCode(), study.getOnoffCode().getOnoffCode());
+		
+		study.setStudyId(studyId);
+		
+//		sr.save(study);
+		
+		model.addAttribute("study", study);
 		
 		
 		return "/study/test";
-
 	}
 
 }

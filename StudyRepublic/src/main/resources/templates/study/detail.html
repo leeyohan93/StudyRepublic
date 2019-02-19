@@ -400,10 +400,10 @@ layout:decorate="~{/layout/mainLayout}">
 
 				if (joinBtn.dataset.userType == "anonymous") {
 					alert("로그인 후 신청할 수 있어요!");
-					location = "/login";
-					window.location.replace = originUrl + location;
-					return;
-					// 로그인 후 스터디 가입 페이지 또는 상세 페이지로 이동하도록 처리할 것! ********
+// 					location = "/login";
+// 					window.location.replace = originUrl + location;					
+					// 로그인 후 스터디 가입 페이지로 이동하도록 처리할 것! ******** --> SecurityConfig.java 에서 처리 완료
+					// ==> 스터디 상세 페이지로 다시 이동해야 신청 권한 검증이 가능함. 처리 필요. 
 
 				} else if (joinBtn.dataset.userType == "authenticated") {
 					// 3) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우 --> 메시지	==> 예기치 못한 Ajax...

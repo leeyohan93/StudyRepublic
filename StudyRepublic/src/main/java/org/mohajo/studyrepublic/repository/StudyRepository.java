@@ -80,6 +80,9 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 	
 	@Query(value = "select s from Study s where s.studyId in ?1")
 	List<Study> getSelectedStudy(String[] selectedId);
+
+	@Query(value = "select if(number<100000, concat(prefix, lpad(number, 5, 0)), null) as new_study_id from (select substring(study_id, 1, 2) as prefix, substring(study_id, 3)+1 as number from study where type_code = :typeCode and onoff_code = :onoffCode order by study_id desc limit 1) sample", nativeQuery=true)
+	public String getNewStudyId(String typeCode, String onoffCode);
 	
 
 }

@@ -73,11 +73,12 @@ public class Study implements Serializable {
 	
 	@Temporal(TemporalType.DATE)					// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
 	@Column(nullable = false)
-	private Date startDate = new Date();			//시작일
+//	private Date startDate = new Date();			// --> input 입력값을 덮어쓰는 이유로 제거.
+	private Date startDate;			//시작일
 	
 	@Temporal(TemporalType.DATE)					// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
 	@Column
-	private Date endDate = new Date();				//종료일
+	private Date endDate;							//종료일
 	
 	@ManyToOne
 	@JoinColumn(name = "DAY_CODE", nullable = false)
@@ -95,7 +96,7 @@ public class Study implements Serializable {
 	private Date endTime;							//종료시각
 	
 	@Column(nullable = false)
-	private int enrollCapacity = 5;						//정원
+	private int enrollCapacity;						//정원
 	
 	@Column(nullable = false)
 	private int enrollActual = 1;						//현재인원

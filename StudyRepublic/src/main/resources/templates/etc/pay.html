@@ -13,7 +13,7 @@
 <body>
 
 
-
+<th:block th:if = "${memberpoint}">
 <input id = "id" type = "text" th:value = '${memberpoint.member.id}' style = "display:none">
 <input id = "nowpoint" type = "text" th:value = '${memberpoint.point}' style = "display:none">
 충전하실 금액을 입력해주세요. <input type = "number" id = "point"> <input type="button" value="충전" onclick="pay()" />
@@ -24,6 +24,7 @@
 <div th:text = '${memberpoint.point} + 보유포인트'></div>
 </div>
 
+</th:block>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript"
 		src="https://code.jquery.com/jquery-1.12.4.min.js"></script>

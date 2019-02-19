@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
+<!-- <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"> -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 참고:  https://jqueryui.com/sortable/#portlets -->
+    <!-- 설명:  jQuery UI 의 sortable - portlets 예제를 기반으로 수정 / 발전시킨 코드 -->
+    <title>스터디 오픈</title>
+</head>
+
+<th:block layout:fragment="customCss">
+
+    <style>
+    
+        /********************************** basicInfo - CSS 시작 **********************************/    
+   		#basicInfoArea .ui-datepicker {
+			font-size: 12px;
+			width: auto;
+		}
+		
+		#basicInfoArea .ui-datepicker select.ui-datepicker-month {
+			width: 30%;
+			font-size: 11px;
+		}
+		
+		#basicInfoArea .ui-datepicker select.ui-datepicker-year {
+			width: 40%;
+			font-size: 11px;
+		}
+		
+		#basicInfoArea .input-title {
+			font-weight: bold;
+		}
+		
+		#basicInfoArea .hour-picker, .minute-picker {
+			width: 30px;
+		}
+		
+		#basicInfoArea .btn-enrollCapacity {
+			font: 400 13.3333px Arial white;
+			background-color: skyblue;
+			cursor: pointer !important;
+			border-radius: 50% !important;
+			text-align: center !important;
+			line-height: 1 !important;
+			/* 		    height: 1em; */
+			/* 		  	width: 1em; */
+			display: block;
+			margin: 0 0;
+			background-color: #2CA8FF;
+			border: 0;
+			/* 		    color: #FFFFFF; */
+			padding: 7px 13px;
+			background-color: #2CA8FF;
+			border: 0;
+			color: #FFFFFF;
+			padding: 7px 13px;
+		}
+		
+		#basicInfoArea .btn-enrollCapacity:disabled {
+			/*             background-color: #eeeeee; */
+			
+		}
+		
+		#basicInfoArea .none-radio {
+			display: none;
+		}
+		
+		#basicInfoArea .btn-radio {
+			float: left;
+			cursor: pointer;
+			display: inline-block;
+			background-color: #e6e6e6;
+			background-repeat: no-repeat;
+			background-image: linear-gradient(#fff, #fff 25%, #e6e6e6);
+			padding: 5px 14px 6px;
+			margin: 0;
+			color: #333;
+			font-size: 13px;
+			line-height: normal;
+			border: 1px solid #ccc;
+			border-bottom-color: #bbb;
+			box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px
+				rgba(0, 0, 0, .05);
+			transition: .1s linear background-image;
+			overflow: visible;
+			box-sizing: border-box;
+			-webkit-font-smoothing: subpixel-antialiased;
+		}
+		
+		#basicInfoArea .btn-radio.disabled {
+			color: silver;
+			background-image: none !important;
+		}
+		
+		#basicInfoArea input:checked+.btn-radio {
+			border-color: #005077 !important;
+			-webkit-box-shadow: inset 0 1px 0 #00a7f6, 0 1px 0 rgba(0, 0, 0, .15)
+				!important;
+			box-shadow: inset 0 1px 0 #00a7f6, 0 1px 0 rgba(0, 0, 0, .15) !important;
+			color: #fff;
+			background-image: -webkit-linear-gradient(top, #008bce, #0073aa)
+				!important;
+			background-color: #0073aa !important;
+		}
+		
+		#basicInfoArea input {
+			border: 1px solid silver;
+		}
+		
+		#basicInfoArea span {
+			font-size: 1rem;
+		}
+		
+		#basicInfoArea .nav-pills>li>a {
+			border: none;
+		}
+		
+		#basicInfoArea 
+		
+		#ppinterest2cd, #ddinterest2cd, #wwinterest2cd, #nninterest2cd {
+		 	display: none; 
+		}
+
+        /********************************** basicInfo - CSS 끝 **********************************/
+    
+    	#smartEditorArea {
+    	}
+    
+        /********************************** leveltest - CSS 시작 **********************************/
+        #leveltestArea .leveltest-container {
+            width: 100%;
+            float: left;
+			/* padding-bottom: 100px; */
+            /* 참고:  https://stackoverflow.com/a/34471088 */
+            /* 문제:  .leveltest-toggle 을 더블클릭하면 컨테이너 내부의 텍스트가 셀렉트 되는 문제 발생 */
+            /* 해결:  아래의 스타일을 추가함. (본문 4줄에 해당하는 내용) */
+            /* 한계:  텍스트를 셀렉트 해야 할 경우에도 선택되지 않는 경우를 고려해보았으나, 어차피 sortable 적용으로 인해 선택이 불가하며 레벨테스트 취지에도 맞지 않으므로 아래처럼 적용하기로 함. */
+            /* 추가:  $(".leveltest-container").on('dbclick', function(e) { e.preventDefault(); return false; }); 처럼 script 단에서 처리하는 방법도 있음. */
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            display: block;
+            margin-top: 2em;
+            border: dashed 1px silver;
+            padding: 0.1em;
+            min-height: 400px;
+        }
+
+        #leveltestArea .leveltest {
+            margin: 0 0 0.5em 0;
+            padding: 0.3em;
+            border: 1px solid #c5c5c5;
+            border-radius: 3px;
+            background-color: white;
+        }
+
+        #leveltestArea .leveltest-placeholder {
+            border: 1px dotted black;
+            margin: 0 0 1em 0;
+            height: 50px;
+            
+        }
+
+        #leveltestArea input {
+            background-color: transparent;
+            border: dotted 1px;
+            display: inline-block;
+            height: 1.8em;
+        }
+
+        #leveltestArea input.question-content {
+            vertical-align: middle;
+        }
+
+        #leveltestArea input.question-edit {
+            width: 84%;
+            font-size: 0.95rem;
+        }
+
+        #leveltestArea input.question-choice-group {
+            margin-bottom: 0.3rem !important;
+        }
+
+        #leveltestArea input.question-choice-option {
+            width: 80%;
+            height: 1.6em;
+            font-size: 0.85rem;
+        }
+
+        #leveltestArea .question {
+            padding: 0.2em 0.3em;
+            margin-bottom: 0.5em;
+            position: relative;
+            border: 1px solid #dddddd;
+            background: #e9e9e9;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        #leveltestArea .question-numbering {
+            display: inline-block;
+            vertical-align: top;
+            height: 100%;
+            border: none;
+            width: 1.3em;
+            font-weight: bolder;
+            font-size: 1.3rem;
+        }
+
+        #leveltestArea .question-content {
+            display: inline-block;
+            width: 80%;
+            margin-right: 20px;
+            padding-block-end: 1px;
+            padding-block-start: 1px;
+            padding-bottom: 1px;
+            padding-top: 1px;
+        }
+
+        #leveltestArea .question-edit {
+            font-family: "Malgun Gothic";
+            font-size: 1rem;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        #leveltestArea .leveltest-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 0;
+            transform: translateY(-60%);
+        }
+
+        #leveltestArea .icon-minus::before {
+            content: "\f068";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 600;
+            color: black;
+            width: 100%;
+            padding: 0.2em 0.3em;
+        }
+
+        #leveltestArea .icon-plus::before {
+            content: "\f067";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 600;
+            color: black;
+            width: 100%;
+            padding: 0.2em 0.3em;
+        }
+
+        #leveltestArea .question-choice {
+            padding: 0.4em;
+        }
+
+        #leveltestArea .choice-numbering {
+            margin-right: 0.5rem;
+            margin-left: 1rem;
+        }
+
+        #leveltestArea .choice-numbering:after {
+            content: ")";
+        }
+
+        #leveltestArea .icon-remove {
+            display: none;
+        }
+
+        #leveltestArea .icon-remove:hover {
+            cursor: pointer;
+        }
+
+        #leveltestArea .icon-remove:after {
+            content: "\F00D";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 600;
+            color: black;
+            font-size: 0.8rem;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        #leveltestArea .question-choice-placeholder {
+            border-radius: 10px;
+            background-color: grey;
+            margin-left: 2rem;
+            padding: 0.2rem 0.7rem;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 0.7em;
+            font-weight: bold;
+            color: white;
+        }
+
+        #leveltestArea .question-answer {
+            font-size: 0.9em;
+            margin-left: 1em;
+        }
+
+        #leveltestArea .question-choice~.question-answer {
+            margin-left: 70%;
+        }
+
+        #leveltestArea input.question-answer-input {
+            width: 80%;
+            margin-left: 0.25em;
+        }
+
+        #leveltestArea select {
+            width: 4rem;
+            margin-left: 10px;
+        }
+
+        #leveltestArea .inline-block {
+            display: inline-block;
+        }
+
+        /********************************** leveltest - CSS 끝 **********************************/
+    </style>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    
+    <!-- Sortable (for leveltest) -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+	<!-- Smart Editor -->
+	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+
+	<!-- Datepicker -->
+<!-- 	<link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"> -->
+<!-- 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script> -->
+<!-- 	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> -->
+
+	<!-- 성호님 -->
+	<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+	
+</th:block>
+<!-- 			<th:block layout:fragment="bootCss"></th:block> -->
+<!-- 			<th:block layout:fragment="script"></th:block> -->
+<th:block layout:fragment="jquery"></th:block>
+<th:block layout:fragment="bootJs">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</th:block>
+
+<body>
+
+	
+
+    <div layout:fragment="main">
+        <div class="inner">
+            
+     	    <div class="progress-bar">
+	            <ul class="tab-title">
+	                <li class="tab-item">기본정보</li>
+	                <li class="tab-item">스터디소개</li>
+	                <li class="tab-item">레벨테스트</li>
+	                <li class="tab-item">개설완료</li>
+	            </ul>
+	        </div>
+            
+           <div id="tab-pane-container">
+            
+				<form id="basicForm">
+				
+		           <section class="tab-pane basicInfo-container" id="basicInfo-section">
+		           		
+		           		<div id="basicInfoArea">
+				            <div class="row input input-field-type">
+								<div class="col-md-2 input-title">유형</div>
+				                <div class="col-md-10 input-content" style="font-size: 0">
+			                        <label th:each="typeCode : ${typeCode}"><input type="radio" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode.typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label>
+<!-- <label th:each="typeCode : ${typeCode}"><input type="text" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label> -->
+				                    <span class="input-study-type-alert" style="display:none">알림!
+				                        프리미엄 스터디는 유료로 진행되는 강의형 스터디로, 인증 절차를 <br/>
+				                        완료한 강사 등급의 회원만 개설할 수 있습니다.<br/>
+				                        <a href="#">강사 등급 신청하기</a>
+				                    </span>
+				                </div>
+				            </div>
+				            <div class="row input input-field-onoff">
+				                <div class="col-md-2 input-title">진행방식</div>
+				                <div class="col-md-10 input-content">
+				                    <label th:each="onoffCode : ${onoffCode}"><input type="radio" class="none-radio" name="onoffCode.onoffCode" th:value="${onoffCode.onoffCode}"><span class="btn-radio" th:text="${onoffCode.codeValueKorean}"></span></label>
+				                </div>
+				            </div>
+				            <div class="row input input-field-location">
+				                <div class="col-md-2 input-title">지역</div>
+				                <div class="col-md-10 input-content">
+
+				                	<!-- 소스:  성호님 코드 -->
+									<div class="join-input100" style = "border: 0; margin: -10px 0px -19px 0px;">
+										<span class="label-input100">스터디 관심지역</span>
+									</div>
+									
+									<div class="join-input100" id = "loc" style = "float:left; height:50px;">
+										<div id="guide" style="color:#999;display:none;"></div>
+									<span class="focus-input100"></span>
+									
+									</div>
+									
+									<div class="join-form-btn" style = "float:left; margin: 0px 0px 0px 50px; width:12px" >	
+							 			<button type = "button" id = "addLoctaion" onclick = "addInterestLocation_join()"> + </button>
+									</div>
+
+				                </div>
+				            </div>
+				            <div class="row input input-field-period">
+				                <div class="col-md-2 input-title">기간</div>
+				                <div class="col-md-10 input-content">
+				                    <input type="date" name="startDateStr" id="input-study-startDate" class="input-date">부터 
+				                    <input type="date" name="endDateStr" id="input-study-endDate" class="input-date">까지 
+				                    (총 <input type="text" name="studyCount" id="input-study-studyCount" value="0">회)
+				                </div>
+				            </div>
+				            <div class="row input input-field-schedule">
+				                <div class="col-md-2 input-title">일시</div>
+				                <div class="col-md-10 input-content">
+				                    매주 <select name="dayCode.dayCode">
+				                            <option th:each="dayCode : ${dayCode}" th:value="${dayCode.dayCode}" th:text="${dayCode.codeValueKorean}"></option>
+				                            <option value="0">일(test)</option>
+				                        </select>요일 
+				                    <input type="text" name="startTimeStr" id="input-study-startTime">
+				                    <select class="apm-picker input-time" id="start-apm-picker">
+				                        <option value="AM">AM</option>
+				                        <option value="PM" selected>PM</option>
+				                    </select>
+				                    <select class="input-time" id="start-hour-picker">
+				                        <option value="0" hidden>00</option>
+				                        <option value="12">12</option>
+				                        <option value="1" selected>01</option>
+				                        <option value="2">02</option>
+				                        <option value="3">03</option>
+				                        <option value="4">04</option>
+				                        <option value="5">05</option>
+				                        <option value="6">06</option>
+				                        <option value="7">07</option>
+				                        <option value="8">08</option>
+				                        <option value="9">09</option>
+				                        <option value="10">10</option>
+				                        <option value="11">11</option>
+				                    </select>
+				                    <select class="input-time" id="start-minute-picker">
+				                        <option value="00">00</option>
+				                        <option value="10">10</option>
+				                        <option value="20">20</option>
+				                        <option value="30">30</option>
+				                        <option value="40">40</option>
+				                        <option value="50">50</option>
+				                    </select>
+				                    부터 
+				                    <input type="text" name="endTimeStr" id="input-study-endTime">
+				                    <select class="apm-picker input-time" id="end-apm-picker">
+				                        <option value="AM">AM</option>
+				                        <option value="PM" selected>PM</option>
+				                    </select>
+				                    <select class="input-time" id="end-hour-picker">
+				                        <option value="0" hidden>00</option>
+				                        <option value="12">12</option>
+				                        <option value="1">01</option>
+				                        <option value="2" selected>02</option>
+				                        <option value="3">03</option>
+				                        <option value="4">04</option>
+				                        <option value="5">05</option>
+				                        <option value="6">06</option>
+				                        <option value="7">07</option>
+				                        <option value="8">08</option>
+				                        <option value="9">09</option>
+				                        <option value="10">10</option>
+				                        <option value="11">11</option>
+				                    </select>
+				                    <select class="input-time" id="end-minute-picker">
+				                        <option value="00">00</option>
+				                        <option value="10">10</option>
+				                        <option value="20">20</option>
+				                        <option value="30">30</option>
+				                        <option value="40">40</option>
+				                        <option value="50">50</option>
+				                    </select>까지 
+				                    (<input type="text" name="timeDiff" id="input-study-timeDiff" value="60">분)
+				                </div>
+				            </div>
+				            <div class="row input input-field-enrollCapacity">
+				                <div class="col-md-2 input-title">모집인원</div>
+				                <div class="col-md-10 input-content">
+				                    <button id="btn-enrollCapacity-minus" class="btn-enrollCapacity">
+				                        &lt;
+				                    </button>
+				                    <input type="text" name="enrollCapacity" id="input-study-enrollCapacity">
+				                    <button id="btn-enrollCapacity-plus" class="btn-enrollCapacity">
+				                        &gt;
+				                    </button>
+				                </div>
+				            </div>
+				            <div class="row input input-field-interest">
+				                <div class="col-md-2 input-title">분야</div>
+				                <div class="col-md-10 input-content">
+				                
+				                	<!-- 성호님 코드 시작 -->
+            						<div class="wrap-input100_head validate-input" style="float: left;">
+										<span class="yshspan">강의희망분야 1차</span>
+									</div>
+									<div class="wrap-input100_head validate-input" id="2int" style="float: left; margin: 0; display: none">
+										<span class="yshspan">강의희망분야 2차</span>
+									</div>
+									<div class="select-input100" style="float: left; border: none; margin-bottom: 50px;">
+										<select class = "shsel" name="interest1cd" id="interest1cd" size='4' multiple='multiple' onchange="iinterest1(this)">
+											<option th:each="i1 :  ${interest1cd}" th:value="${i1.interest1Code}" th:text="${i1.codeValueKorean}"></option>
+										</select>
+									</div>
+			
+									<div class="select-input100_2" id="ddinterest2cd" style="float: left; border: none;">
+										<span class="dinterest2cd" name="dinterest2cd"> 
+											<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
+													<option th:each="di2 :  ${dinterest2cd}" th:value="${di2.interest2Code}" th:text="${di2.codeValueKorean}"></option>
+											</select>
+										</span>
+									</div>
+			
+									<div class="select-input100_2" id="nninterest2cd" style="float: left; border: none;">
+										<span class="ninterest2cd" name="ninterest2cd"> 
+											<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
+												<option th:each="ni2 :  ${ninterest2cd}" th:value="${ni2.interest2Code}" th:text="${ni2.codeValueKorean}"></option>
+											</select>
+										</span>
+									</div>
+			
+			
+									<div class="select-input100_2" id="ppinterest2cd" style="float: left; border: none;">
+										<span class="pinterest2cd" name="pinterest2cd">
+											<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
+												<option th:each="pi2 :  ${pinterest2cd}" th:value="${pi2.interest2Code}" th:text="${pi2.codeValueKorean}"></option>
+											</select>
+										</span>
+									</div>
+			
+									<div class="select-input100_2" id="wwinterest2cd" style="float: left; border: none;">
+										<span class="winterest2cd" name="winterest2cd">
+											<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
+												<option th:each="wi2 :  ${winterest2cd}" th:value="${wi2.interest2Code}" th:text="${wi2.codeValueKorean}"></option>
+											</select>
+										</span>
+									</div>
+									
+									<div class="wrap-input100_ validate-input">
+										<div id="interest1cd" name="interest1cd">
+											<div id="int1"></div>
+										</div>
+									</div>
+		
+									<div class="wrap-input100_ validate-input">
+										<div id="interest2cd" name="interest2cd">
+											<div id="int2"></div>
+										</div>
+									</div>
+				                	<!-- 성호님 코드 끝 -->
+									
+				                </div>
+				            </div>
+				            <div class="row input input-field-level">
+				                <div class="col-md-2 input-title">레벨</div>
+				                <div class="col-md-10 input-content">
+				                    <select name="levelCode.levelCode">
+				                        <option th:each="levelCode : ${levelCode}" th:value="${levelCode.levelCode}" th:text="${levelCode.codeValueKorean}"></option>
+				                    </select>
+				                </div>
+				            </div>
+				            <div class="row input input-field-price">
+				                <div class="col-md-2 input-title">가격</div>
+				                <div class="col-md-10 input-content">
+				                    회차 당 <input type="number" id="input-study-unitPrice">원<br/>
+				                    총 <input type="number" id="input-study-totalPrice">원
+				                </div>
+				            </div>
+				            <div class="row input input-field-hidden">
+						                리더 아이디 <input type="text" name="member.id" id="input-study-member" th:value="${loggedInUser.id}"><br/>
+			           	                리더 등급 <input type="text" id="input-study-member-gradeCode" th:value="${loggedInUser.gradeCD.gradeCode}"><br/>
+						                스터디 상태코드 <input type="text" name="studyStatusCode.studyStatusCode" id="input-study-studyStatusCode" value="O">
+				            </div>
+			            </div>
+			            
+					</section>
+		            
+		            
+					
+					<section class="tab-pane introduction-container" id="introduction-section">
+						
+						<div class="row info-text">
+							<h5>스터디를 소개해주세요!</h5>
+						</div>
+						
+						<div>
+							스터디명	<input type="text" name="name">
+						</div>
+						
+						<div id="smartEditorArea"> 
+							<!--  /********************************** Smart Editor - HTML 시작  **********************************/ -->
+							<div id="editor">
+								<div class="input">
+			<!-- 						<textarea name="content" id="smarteditor" rows="10" cols="100" style="width: 700px; height: 1000px;"></textarea> -->
+									<textarea name="introduction" id="smarteditor" rows="10" cols="100" style="width: 700px; height: 1000px;"></textarea>
+								</div>
+							</div>
+							<span class="previewBtn">
+								<button class="btn btn-default" name="writePreview" id="writePreview" type="button">미리보기</button>
+							</span>
+							<span class="registerBtn">
+								<button class="btn btn-default" name="boardRegister" id="boardRegister" type="submit">확인</button>
+							</span>
+							<!--  /********************************** Smart Editor - HTML 끝  **********************************/ -->
+						</div>
+						
+					</section>
+					
+				</form>
+				
+				<section class="tab-pane introduction-container" id="leveltest-section">
+				
+					<div class="row info-text">
+						<h5>레벨테스트를 추가하시려면 내용을 작성해주세요!</h5>
+					</div>
+					
+		            <div id="leveltestArea">
+		
+		                <!-- /********************************** leveltest - HTML 시작 **********************************/ -->
+		                <div class="leveltest-maker-container">
+		                    <button class="leveltest-maker multiple-choice-leveltest-maker">객관식
+		                        문제 블록</button>
+		                    <button class="leveltest-maker short-answer-leveltest-maker">주관식
+		                        문제 블록</button>
+		                </div>
+		
+		                <form id="leveltestForm">
+		                    <input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' />
+		
+		                    <div class="leveltest-container">
+		
+		                        <div class="leveltest">
+		
+		                            <div class="question">
+		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="MC">
+		                                <input class="numbering question-numbering" type="number" name="questionNumber" readonly value="1">
+		                                <span class="question-content">Feeds</span>
+		                                <input class="question-edit"name="content" type="text" style="display: none">
+		                                <span class='icon icon-plus leveltest-toggle'></span>
+		                            </div>
+		                            <div class="question-choice" style="display: none">
+		                                <input type="hidden" name="choice" value="">
+		                                <div class="question-choice-group">
+		                                    <span class="numbering choice-numbering">1</span>
+		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test1" />
+		                                </div>
+		                                <div class="question-choice-group">
+		                                    <span class="numbering choice-numbering">2</span>
+		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test2" />
+		                                </div>
+		                                <div class="question-choice-placeholder">보기를 추가하려면 클릭하세요!</div>
+		                            </div>
+		                            <div class="question-answer" style="display: none">
+		                                정답: <select name="correctAnswer">
+		                                    <option>1</option>
+		                                    <option>2</option>
+		                                </select>
+		                            </div>
+		
+		                        </div>
+		
+		                        <div class="leveltest">
+		
+		                            <div class="question">
+		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="SA">
+		                                <input class="numbering question-numbering" name="questionNumber" readonly value="2">
+		                                <span class="question-content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam rem numquam tenetur. Laboriosam quam iure eos beatae ad pariatur, culpa molestiae accusamus corrupti quasi placeat maxime fugiat optio in nulla!</span>
+		                                <input class="question-edit" name="content" type="text" style="display: none">
+		                                <span class="icon icon-plus leveltest-toggle"></span>
+		                            </div>
+		                            <div class="question-answer" style="display: none">
+		                                정답: <input name="correctAnswer" class="question-answer-input" type="text" value="nulla">
+		                            </div>
+		
+		                        </div>
+		                    </div>
+		                </form>
+		                <!-- /********************************** leveltest - HTML 끝 **********************************/ -->
+		
+		                <a id="submit-btn" href="/study/leveltestSubmitTest">제출하기</a>
+		            </div>
+	            
+	            </section>
+            </div>
+            
+        </div>
+    </div>
+
+
+	<th:block layout:fragment="customScript">
+	
+	
+	    <script>
+	    
+			var enrollCapacityMax = 50;
+			var enrollCapacityMin = 2;
+            var editor_object = [];
+
+	    
+	        // 참고:  https://theqoop.tistory.com/295
+	        // 설명:  $(document).ready(function() {}); 과 같으나, 편의상 (document).ready 부분을 생략해서 쓴 것. (아래 1줄)
+	        $(function () {
+	
+	        	
+	        	/* leveltest */
+	            enableSortable();
+	            enableToggle();
+	            makeQuestion();
+	            addQuestionChoice();
+	            removeQuestionChoiceOption();
+	            submitLeveltests();
+	
+	            /* basicInfo */
+     	        calcStudyCount();
+	            calcTimeDiff();
+	            setEnrollCapacityByButton();
+	            setEnrollCapacityByInput();
+	            enableTimeInput();
+	            showInputField();
+              	$('#input-study-enrollCapacity').attr("value", 7);
+	            
+	            /* Tab menu */
+	            enableTabs();
+
+	            
+			/********************************** Smart Editor - Script 시작 **********************************/
+	 	        // var editor_object = [];
+
+			    nhn.husky.EZCreator.createInIFrame({
+			        oAppRef: editor_object,
+			        elPlaceHolder: "smarteditor",
+			        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+			        htParams : {
+			            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseToolbar : true,            
+			            // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseVerticalResizer : true,    
+			            // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseModeChanger : true,
+			            // 기본 글꼴 설정
+			            SE2M_FontName: {
+			    			htMainFont: {'id': '굴림','name': '굴림','size': '14','url': '','cssUrl': ''} 
+			    		}
+			        }
+			    });
+			    
+			    enableSmartEditorFunction();
+	        });
+	
+	        function enableSmartEditorFunction() {
+	    	
+			    //전송버튼 클릭이벤트
+			    $("#boardRegister").click(function(){
+			        //id가 smarteditor인 textarea에 에디터에서 대입
+			        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+		              
+			        $("#boardWriteForm").submit();
+		            
+			    });
+		    
+			    //미리보기
+			    $('#writePreview').click(function(){
+		
+			    	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+			        window.open("preview","자식창","writh=400,height=300,left=300,top=50");
+		
+			    });
+	        }
+        	/********************************** Smart Editor - Script 끝 **********************************/
+	        
+        	
+	        /********************************** leveltest - Script 시작 **********************************/
+	        function enableSortable() {
+	
+	            console.log('Entered enableSortable()...');
+	
+	            $(".leveltest-container").sortable({
+	                handle: ".question, .question-choice, .question-answer",
+	                cancel: ".leveltest-toggle, .question-edit, .question-choice-option, .question-answer > select, .question-answer-input",
+	                placeholder: "leveltest-placeholder",
+	                stop: addNumberToQuestions
+	            });
+	        }
+	
+	        function addNumberToQuestions() {
+	
+	            console.log('Entered addNumberToQuestions()...');
+	
+	            // 참고:  https://stackoverflow.com/questions/3546659/how-can-i-count-the-number-of-children
+	            // 설명:  해당 요소의 개수를 구할 때는 셀렉터로 선택한 후 length 를 호출하면 된다.
+	            for (let i = 0; i < $('.leveltest').length; i++) {
+	                $($('.leveltest')[i]).find('.question-numbering').val(i + 1);
+	            }
+	        }
+	
+	        function enableToggle() {
+	
+	            // 참고:  https://stackoverflow.com/a/40949843, https://stackoverflow.com/a/9331127, https://codepedia.info/click-event-for-dynamic-button-jquery/
+	            // 원본:  $(".leveltest-toggle").on( "click", function() {
+	            // 문제:  맨 마지막에 추가되는 요소의 인덱스를 기준으로, 짝/홀수의 요소만 토글되는 에러 발생.
+	            // 원인:  DOM 에 새로 추가되는 요소에는 이벤트가 적용되지 않아 발생한 내부적인 에러로 추정. 이벤트가 발생하는 모든 요소를 감싸는 부모 요소에 이벤트를 등록하면 해결된다고 한다. (ex. document, body 등)
+	            // 해결:  코드를 아래처럼 변경함. (1줄에 해당)
+	            $(".leveltest-container").on("click", ".leveltest-toggle", function () {
+	
+	                    console.log('Entered enableToggle()...');
+	
+	                    var icon = $(this);
+	                    var $qContent = icon.siblings(".question-content");
+	                    var $qEdit = icon.siblings(".question-edit");
+	                    var text = "";
+	
+	                    icon.toggleClass("icon-plus icon-minus");
+	                    icon.closest(".leveltest").find(".question-choice, .question-answer").toggle();
+	
+	                    if ($qContent.css('display') != 'none') {
+	                        text = $qContent.text();
+	                        $qEdit.val(text);
+	
+	                    } else {
+	                        text = $qEdit.val();
+	                        $qContent.text(text);
+	                    }
+	
+	                    $qContent.toggle();
+	                    $qEdit.toggle();
+	                });
+	        }
+	
+	        function makeQuestion() {
+	
+	            $('.leveltest-maker').on('click', function () {
+	
+	                console.log('Entered makeQuestion()...');
+	
+	                var $newQuestion = "";
+	                var nextNumber = $('.leveltest').length + 1;
+	
+	                if ($(this).hasClass("multiple-choice-leveltest-maker")) {
+	                    $newQuestion = $("<div class='leveltest'><div class='question'><input type='hidden' name='leveltestTypeCode.leveltestTypeCode' value='MC'><input class='numbering question-numbering' name='questionNumber' readonly value='" +
+	                        nextNumber + "'>&nbsp;<span class='question-content'>+ 를 클릭해서 객관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-choice' style='display:none'><input type='hidden' name='choice' value=''><div class='question-choice-group'><span class='numbering choice-numbering'>1</span>&nbsp;<input class='question-choice-option' type='text' value='Lorem'/></div><div class='question-choice-group'><span class='numbering choice-numbering'>2</span>&nbsp;<input class='question-choice-option' type='text' value='ipsum'/></div><div class='question-choice-placeholder'>보기를 추가하려면 클릭하세요!</div></div><div class='question-answer' style='display:none'>정답: <select name='correctAnswer'><option>1</option><option>2</option></select></div></div>");
+	
+	                } else {
+	                    $newQuestion = $("<div class='leveltest'><div class='question'><input type='hidden' name='leveltestTypeCode.leveltestTypeCode' value='SA'><input class='numbering question-numbering' name='questionNumber' readonly value='" +
+	                        nextNumber + "'>&nbsp;<span class='question-content'>+ 를 클릭해서 주관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-answer' style='display:none'>정답: <input name='correctAnswer' class='question-answer-input' type='text' value='nulla'></div></div>");
+	
+	                }
+	                $('.leveltest-container').append($newQuestion);
+	            });
+	        }
+	
+	        function addQuestionChoice() {
+	
+	            $('.leveltest-container').on('click', '.question-choice-placeholder', function () {
+	
+	                console.log('Entered addQuestionChoice()...');
+	
+	                var nextNumber = $(this).prev().find('.choice-numbering').text() - 0 + 1;
+	
+	                if (nextNumber <= 5) {
+	                    var $newChoiceOption = $("<div class='question-choice-group'><span class='numbering choice-numbering'>" + nextNumber + "</span>&nbsp;<input class='question-choice-option' type='text' placeholder='보기의 내용을 입력하세요'/><span class='icon icon-remove'></span></div>");
+	
+	                    // 참고:  http://blog.naver.com/PostView.nhn?blogId=oihijkoh&logNo=220958834611&parentCategoryNo=&categoryNo=3&viewDate=&isShowPopularPosts=true&from=search
+	                    // 원본:  $(this).prepend($newChoiceOption);
+	                    // 문제:  prepend 함수를 사용해서 newChoiceOption 이 question-choice-placeholder 에 생성 되었음.
+	                    // 해결:  before 함수로 변경.
+	                    // 정리:  before - (prepend - 요소 - append) - after
+	                    $(this).before($newChoiceOption);
+	                    $(this).parent().next().find("select").append("<option>" + nextNumber + "</option>");
+	                    // console.log($(this).parent().next().find("select"));
+	
+	                    if (nextNumber === 5) {
+	                        $(this).remove();
+	                    }
+	
+	                } else {
+	                    return false;
+	                }
+	
+	            });
+	        }
+	
+	        function removeQuestionChoiceOption() {
+	
+	            $('.leveltest-container').on('mouseenter mouseleave', '.question-choice-group', function () {
+	
+	                console.log('Entered removeQuestionChoiceOption()... 1');
+	
+	                $(this).find('.icon-remove').toggleClass("inline-block");
+	            });
+	
+	            $('.leveltest-container').on('click', '.icon-remove', function () {
+	
+	                console.log('Entered removeQuestionChoiceOption()... 2');
+	
+	                var $questionChoiceGroups = $(this).parent().parent().children('.question-choice-group');
+	                var removedNumber = $(this).siblings('.choice-numbering').text() - 0;
+	                var totalAfterRemoved = $questionChoiceGroups.length - 1;
+	
+	                // 참고:  https://stackoverflow.com/a/18355410
+	                // 확인:  $.when($(this).parent().remove()).then(console.log('지우기 완료'));
+	                $(this).parent().parent().next().find("option:last").remove();
+	                $(this).parent().remove();
+	
+	                if (removedNumber !== totalAfterRemoved + 1) {
+	                    // 원본:  for(let i=removedNumber-1; i < totalAfterRemoved; i++) {
+	                    // 문제:  $questionChoiceGroups 에 저장된 요소 배열은 삭제된 요소를 포함하기에 인덱스가 안 맞았음.
+	                    for (let i = removedNumber; i <= totalAfterRemoved; i++) {
+	                        $questionChoiceGroups[i].getElementsByClassName('choice-numbering')[0].textContent = i;
+	                    }
+	                }
+	
+	                if (totalAfterRemoved === 4) {
+	                    // 1번:  $questionChoiceGroups.last().after("<div class='question-choice-placeholder'>보기를 추가하려면 클릭하세요!</div>");
+	                    // 문제: 5)번 보기를 지웠을 때는 동작하지 않음.
+	                    // 2번:  $questionChoiceGroups.eq(3).after("<div class='question-choice-placeholder'>보기를 추가하려면 클릭하세요!</div>");
+	                    // 문제: 5)번 보기를 지우지 않았을 때는 동작하지 않음. 
+	                    $questionChoiceGroups.parent().append("<div class='question-choice-placeholder'>보기를 추가하려면 클릭하세요!</div>");
+	                }
+	            });
+	
+	        }
+	
+	        // CSS
+	        // - toggle 효과에 애니메이션을 추가한다. --> 별로라서 안 함.
+	        // - input 요소의 입력칸을 투명하게 바꾼다. --> 적용 완료
+	        // https://freefrontend.com/css-input-text/ 참고하기
+	        // - input 요소의 height 를 컨텐츠 높이에 맞춘다. (작성중)
+	        // https://stackoverflow.com/questions/30520858/dynamically-adjust-html-text-input-width-to-content/30520997
+	        // $('input').on('keypress', function() {
+	        //   console.log($(this).val().length);
+	        //   // $(this).css("height", ($(this).val().length + 1)*);
+	        // });
+	        // - span 과 input 의 font-size, font-style 등을 동일하게 맞춘다.
+	        // - input 글자 수 제한
+	
+	        // insert 를 고려하여 input 요소의 name 을 설정한다.
+	        // 참고:  http://noveloper.github.io/blog/spring/2015/02/16/how-mapping-to-model-arrayvalue.html, https://lge920904.tistory.com/137
+	
+	        // 페이지 이동 시 DOM 까지 저장한다.
+	        // 참고:  https://stackoverflow.com/a/25532647, https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro/494348#494348
+	
+	        // 자바 스크립트로 세션에 값 저장하기
+	        // 참고:  https://lemonnism.tistory.com/5
+	
+	        //  3. question-choice-group 동적으로 생성 by tab --> by button
+	        //  answer 도 같이 생성되어야 한다.
+	        //  hover 시 삭제 버튼이 나와야 한다.
+	    
+	    
+	        function submitLeveltests() {
+	
+	            // .leveltest 의 동적 추가로 인해 상위 요소와 연결시켜야 할 수도 있음.
+	            $("#submit-btn").on("click", function (e) {
+	
+	                e.preventDefault();
+	
+	                // 1. leveltest submit 전처리 
+	                
+	                // 참고:  http://noveloper.github.io/blog/spring/2015/02/16/how-mapping-to-model-arrayvalue.html, https://tinkerbellbass.tistory.com/43, https://lge920904.tistory.com/137
+	                // 의문:  왜 꼭 each 를 써야 하는지?
+	                $(".leveltest").each(function (index) {
+	                    $(this).find("input[name='leveltestTypeCode.leveltestTypeCode']").attr("name", "leveltests[" + index + "].leveltestTypeCode.leveltestTypeCode");
+	                    $(this).find("input[name=questionNumber]").attr("name", "leveltests[" + index + "].questionNumber");
+	                    $(this).find("input[name=content]").attr("name", "leveltests[" + index + "].content");
+	                    $(this).find("input[name=correctAnswer]").attr("name", "leveltests[" + index + "].correctAnswer");
+	
+	                    var $choiceOption = $(this).find("input[class=question-choice-option]");
+	                    var choiceStr = "";
+	
+	                    for (let i = 0; i < $choiceOption.length; i++) {
+	                        choiceStr += ($choiceOption[i].value + ';');
+	                    }
+	
+	                    $(this).find("input[name=choice]").attr("value", choiceStr);
+	                    $(this).find("input[name=choice]").attr("name", "leveltests[" + index + "].choice");
+	                });
+	                
+	                // 2. SmartEditor submit 전처리
+			        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+					
+	                // 3. basicInfo submit 전처리
+	                if($("#basicForm #input-study-totalPrice").val() != "") {
+	                	$("#basicForm #input-study-totalPrice").attr("name", "price.price");
+	                }
+	                
+	                
+	                
+	                $("form").attr("action", "/study/leveltestSubmitTest");
+	                $("form").attr("method", "get");
+// 	                $("form:not(#search)").submit();
+					$("#basicForm").submit();
+	
+	            });
+	        }
+	        /********************************** leveltest - Script 끝 **********************************/
+	
+	        
+   	        /********************************** basicInfo - Script 시작 **********************************/
+   	        
+	        // type, onoff 선택에 따라, 입력 폼의 상태를 visible 로 바꾸는 함수
+	        function showInputField() {
+	        	// 1) 유형 선택만 보여준다.
+	            $('#basicInfoArea .input:not(.input-field-type)').hide();
+	
+	        	// 2) 유형을 선택하면 개설자의 등급을 판별하여 출력화면을 조정한다.
+	            $('#basicInfoArea .input-field-type input').on('click', function() {
+	                if(this.value == "P") {
+	                    if($('#input-study-member-gradeCode').val() != "T") {
+	                        $('#basicInfoArea .input-study-type-alert').css("display", "block");
+							$("#basicInfoArea .type-p").addClass("disabled");
+	                        $('#basicInfoArea .input:not(.input-field-type)').hide();
+	                        return;
+	                    }
+	                    $('#basicInfoArea .input-study-type-alert').css("display", "none");
+	                    $('#basicInfoArea .input-field-price').removeAttr("blinded");
+	                } else {
+	                    $('#basicInfoArea .input-study-type-alert').css("display", "none");
+	                    $('#basicInfoArea .input-field-price').attr("blinded", "");
+	                }
+	                if($('#basicInfoArea .input-field-onoff input:checked').val()){
+	                    $('#basicInfoArea [blinded]').hide();
+	                    $('#basicInfoArea .input:not([blinded])').show();
+	                } else {
+	                    $('#basicInfoArea .input-field-onoff').show();
+	                }
+	            });
+	
+	            $('#basicInfoArea .input-field-onoff input').on('click', function() {
+	                if(this.value == "O") {
+	                    $('#basicInfoArea .input-field-location').attr("blinded", "");
+	                } else {
+	                    $('#basicInfoArea .input-field-location').removeAttr("blinded");
+	                }
+	                $('#basicInfoArea [blinded]').hide();
+	                $('#basicInfoArea .input:not([blinded])').show();
+	            });
+	        }        
+	
+	        // (작성 예정) 1차 셀렉트박스의 선택에 따라, 2차 셀렉트 박스의 옵션을 출력하는 함수
+	
+	
+	        // datepicker 기능 시작. ////////////////////////////////////////////////////////////////////////////////////////////////
+	        function disableNonMatchingDays(date) {
+	            //  new Date() 사용해서 날짜로 변환하지 않으면 .getDay() 함수를 쓸 수 없다:
+	            // Uncaught TypeError: $(...).val(...).getDay is not a function
+	            var chosenDay = new Date($('#input-study-startDate').val()).getDay();
+	            var day = date.getDay();
+	            if (day != chosenDay) {
+	                return [false];
+	            } else return [true];
+	            // else문 미작성 시 발생하는 에러:
+	            // jquery-ui.js:9323 Uncaught TypeError: Cannot read property '0' of undefined
+	        }
+	        // datepicker 기능 끝. ////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	        // studyCount 를 계산해서 hidden input 태그에 입력하는 함수 
+	        function calcStudyCount() {
+	            $('#basicInfoArea .input-date').on('change', function() {
+	            var startDate = new Date($('#input-study-startDate').val());
+	            var endDate = new Date($('#input-study-endDate').val());
+	            var dayDiff = (endDate - startDate) /1000 /60 /60 /24;
+	            var studyCount = (dayDiff / 7) + 1;
+	            
+	            if(isNaN(studyCount)) {
+	                $('#input-study-studyCount').val(0);
+	            } else {
+	                $('#input-study-studyCount').val(studyCount);
+	            }
+	            });
+	        }
+	
+	        // 시간 입력폼 구현
+	        function enableTimeInput() {
+	            // Hour 선택 제한 1 (AM: 00~11, PM: 12~11)
+	            $('#basicInfoArea .apm-picker').on("change", function() {
+	
+	                var idArr = this.id.split('-');
+	                var hour = $('#' + idArr[0] + '-hour-picker')[0];
+	                console.log('hour = ' + hour);
+	                console.log("$('#' + this.id).val() = " + $('#' + this.id).val());
+	
+	                if($('#' + this.id).val() == 'AM') {
+	                    hour[0].removeAttribute("hidden");
+	                    hour[1].setAttribute("hidden", "");
+	                    if(hour[1].selected == true) {
+	                        hour[0].setAttribute("selected", "");
+	                        hour.value = hour[0].value;
+	                    }
+	                } else {
+	                    hour[1].removeAttribute("hidden");
+	                    hour[0].setAttribute("hidden", "");
+	                    if(hour[0].selected) {
+	                        hour[1].setAttribute("selected", "");
+	                        hour.value = hour[1].value;
+	                    }
+	                }
+	                
+	            });
+	            // Hour 선택 제한 2 (startTime 이후의 시간만 endTime 에서 선택 가능)
+	            
+	        }
+	
+	        // timeDiff 를 계산해서 hidden input 태그에 입력하는 함수
+	        function calcTimeDiff() {
+	            $('#basicInfoArea .input-time').on('change', function() {
+	                var startApm = $('#start-apm-picker').val();
+	                var startHour = $('#start-hour-picker').val();
+	                var startMinute = $('#start-minute-picker').val();
+	                var startTime = new Date('1900/01/01 ' + startHour + ":" + startMinute + " " + startApm);
+	
+	                var endApm = $('#end-apm-picker').val();
+	                var endHour = $('#end-hour-picker').val();
+	                var endMinute = $('#end-minute-picker').val();
+	                var endTime = new Date('1900/01/01 ' + endHour + ":" + endMinute + " " + endApm);
+	
+	                var timeDiff = (endTime - startTime)/1000/60;
+	
+	                $('#input-study-timeDiff').val(timeDiff);
+	            });
+	        }
+	
+	        // 모집인원 설정 기능 시작. ////////////////////////////////////////////////////////////////////////////////////////////////
+	        // <, > 을 클릭하여 모집인원을 설정할 수 있는 함수
+	        function setEnrollCapacityByButton() {
+	        	
+	            $('.btn-enrollCapacity').on('click', function (event) {
+	                event.preventDefault();
+	                var enrollCapacity = $('#input-study-enrollCapacity').val() - 0;
+	                switch ($(this).attr('id')) {
+	                    case "btn-enrollCapacity-plus":
+	                        if(enrollCapacity < enrollCapacityMax) {
+	                            enrollCapacity += 1;
+	                        }
+	                        break;
+	                    case "btn-enrollCapacity-minus":
+	                        if(enrollCapacity > enrollCapacityMin) {
+	                            enrollCapacity -= 1;
+	                        }
+	                        break;
+	                }
+	                $('#input-study-enrollCapacity').attr("value", enrollCapacity);
+	                setEnrollCapacityBtnDisabled();
+	            });
+	        }
+	        // 태그에 직접 입력하여 모집인원을 설정할 수 있는 함수
+	        function setEnrollCapacityByInput() {
+	            $('#input-study-enrollCapacity').on({
+	                // input 태그에서 엔터 입력 시 < 버튼을 클릭하는 문제를 제어
+	                keyup: function(event) {
+	                    if(event.keyCode == 13) {
+	                        event.preventDefault();
+	                        this.blur();
+	                    }
+		                var enrollCapacity = $('#input-study-enrollCapacity').val() - 0;
+		                $('#input-study-enrollCapacity').attr("value", enrollCapacity);
+	                },
+	                change: function() {
+	                    if(this.value > enrollCapacityMax){
+	                        this.value = enrollCapacityMax;
+	                        
+	                    } else if(this.value < enrollCapacityMin) {
+	                        this.value = enrollCapacityMin;
+	                        
+	                    }
+		                var enrollCapacity = $('#input-study-enrollCapacity').val() - 0;
+		                $('#input-study-enrollCapacity').attr("value", enrollCapacity);
+	                    setEnrollCapacityBtnDisabled();
+	                }
+	                
+	            });
+	        }
+	        function setEnrollCapacityBtnDisabled () {
+                var enrollCapacity = $('#input-study-enrollCapacity').val() - 0;
+                
+	        	if(enrollCapacity == enrollCapacityMin) {
+                	$('#btn-enrollCapacity-minus').addClass('disabled', '');
+                } else {
+                	$('#btn-enrollCapacity-minus').removeClass('disabled');
+                }
+	        	
+	        	if(enrollCapacity == enrollCapacityMax) {
+                	$('#btn-enrollCapacity-plus').addClass('disabled', '');
+                } else {
+                	$('#btn-enrollCapacity-plus').removeClass('disabled');
+                }
+	        }
+	        function setEnrollCapacityMaxByType () {
+	        	
+	        }
+	        // 모집인원 설정 기능 끝. ////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	        // (작성 예정) 가격 계산하는 함수
+	        
+	        /********************************** basicInfo - Script 끝 **********************************/
+	        
+	        function enableTabs() {
+	          
+	        	// 참고:	https://kitt.hodsden.org/blog/2013/07/5_3_ways_hide_element_css
+	        	
+	        	console.log('Entered enableTabs()...');
+	        	
+	        	//0: 기본정보, 1: 소개, 2: 레벨테스트
+	        	var $tabPanes = $('.tab-pane');
+	        	
+				$('ul.tab-title li').click(function(){
+
+					if($($tabPanes[$(this).index()]).css("opacity") != 0) {
+						$($tabPanes[$(this).index()]).css({
+							"opacity": "0", "position": "absolute"
+						});
+					} else {
+						$($tabPanes[$(this).index()]).css({
+							"opacity": "100", "position": "static"
+						});						
+					}
+				});
+	        }
+	        
+	        
+	        // 관심지역: 성호님 코드 시작
+	        function addInterestLocation_join() {
+	           	
+	           	new daum.Postcode({
+	                   oncomplete: function(data) {
+
+	                       var roadAddr = data.roadAddress; // 도로명 주소 변수
+	                       var jibunAddress = data.jibunAddress;
+	                       var road = data.roadname;
+	                       var sido = data.sido;
+	                       var sigungu = data.sigungu;
+	                       var dong = data.bname;
+	                       var upmyeonli = data.bname1;
+	                       
+	                       var dongaddress = sido + "" + sigungu  + "" + dong + "" + upmyeonli;
+	                       var doroaddress = sido + sigungu + road;
+	                       
+	                       var extraRoadAddr = ''; // 참고 항목 변수
+	       					
+	                       if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+	                           extraRoadAddr += data.bname;
+	                       }
+
+	                       if(data.buildingName !== '' && data.apartment === 'Y'){
+	                          extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                       }
+
+	                       var guideTextBox = document.getElementById("guide");
+	                       
+	                       if(data.autoRoadAddress) {
+	                           var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+	                           guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+	                           guideTextBox.style.display = 'block';
+
+	                       } else {
+	                           guideTextBox.innerHTML = '';
+	                           guideTextBox.style.display = 'none';
+	                          	
+	                        var locValue = "<input class = 'memberinterest' type = 'text' id = 'interestlocation" +count+ 
+	                       	"' name = 'studyLocation[" + count + 
+	                        "].interestLocation'> <button type ='button' class = 'memberinterest' id = 'del" + count + "' value = '삭제' onclick = 'deleteLocation_join(" + count + ")'>X</button>"
+	                       	$('#loc').append(locValue);
+
+	                       	document.getElementById("loc").style.height = "100%";
+	                       	
+	    /*                     	var locText = "<div id = 'selloc' ><ul><li>" +dongaddress+ "</li></ul></div>"
+	                       	$('#loc').append(locText); */
+	                       	                 	
+	                       	document.getElementById("interestlocation"+count).value = dongaddress;
+	                       					
+	       					count++;
+	       					
+	                       }
+	                   } 
+	               }).open();
+	           }
+	           
+	           function deleteLocation_join(num) {
+		       		var standard = num;
+		       		$('#interestlocation' + standard).remove(); 
+		       		$('#del' + standard).remove(); 
+		       		
+		       		if(document.getElementsByClassName("memberinterest").length == 0 ) {
+		       			document.getElementById("loc").style.height = "50px";
+		       		}
+
+	           } 
+	        // 관심지역: 성호님 코드 끝
+	        
+	        
+   	        // 관심분야: 성호님 코드 시작
+
+        	var Allselect_Box = document.getElementsByClassName("select-input100_2");
+        
+			var interestArr = [ "데이터베이스", "네트워크보안", "응용프로그래밍", "웹프로그래밍" ];
+			var count = 0;
+
+			var ssinterest1 = "";
+			var ppinterest2cd = document.getElementById("ppinterest2cd")
+			var checkNum = 0;
+
+			function iinterest1(obj) {
+				document.getElementById('2int').style.display = 'inline-block';
+				ssinterest1 = obj.options[obj.selectedIndex].text;
+				for (var i = 0; i < Allselect_Box.length; i++) {
+					Allselect_Box[i].style.display = 'none';
+					if (ssinterest1 == interestArr[i]) {
+						checkNum = i;
+					}
+				}
+				Allselect_Box[checkNum].style.display = 'inline-block';
+			}
+
+			var iinterest2List = new Array();
+			var sselectedinterest2 = "";
+			var aaddInterest2List;
+			var interestInput = "";
+			var interestDelete = "";
+
+			function iinterest2(obj) {
+				var target = document.getElementById("int2");
+				uniqueinterest2List = iinterest2List;
+
+				if (~sselectedinterest2
+						.indexOf(obj.options[obj.selectedIndex].text)) {
+					alert("이미 선택한 분야입니다.");
+				} else {
+					iinterest2List
+							.push(obj.options[obj.selectedIndex].text);
+					sselectedinterest2 += iinterest2List[iinterest2List.length - 1];
+
+					aaddinterestListValue = "<input type = 'text' id = 'isel" + count +  "' name = 'tutorinterest[" + count + "].interest2CD'></input> <input type = 'button' value = '삭제' id = 'idel"
+							+ count
+							+ "' onclick = 'deleteInterest("
+							+ count + ")'>";
+					$('#int2').append(aaddinterestListValue);
+
+					document.getElementById('isel' + count).value = obj.options[obj.selectedIndex].value;
+
+					aaddInterest2List = "<div id = 'liisel" + count +  "'class = 'ysh'><span class = 'yshspan'>"
+							+ sinterest1
+							+ " > "
+							+ iinterest2List[iinterest2List.length - 1]
+							+ "</span> <input class = 'yshbtn' type = 'button' value = 'X' id = 'liidel"
+							+ count
+							+ "' onclick = 'deleteInterest("
+							+ count + ")'></div>";
+					$('#int2').append(aaddInterest2List);
+
+					interestInput = document.getElementById('isel' + count);
+					interestInput.style.display = 'none';
+					interestDelete = document
+							.getElementById('idel' + count);
+					interestDelete.style.display = 'none';
+
+					count++;
+				}
+
+			}
+
+			function deleteInterest(num) {
+				sselectedinterest2 = sselectedinterest2.replace(
+						iinterest2List[num], "") // 중복금지차원
+				$('#isel' + num).remove();
+				$('#idel' + num).remove();
+				$('#liisel' + num).remove();
+				$('#liidel' + num).remove();
+
+			}
+			// 관심분야: 성호님 코드 끝
+	    </script>
+	
+	</th:block>
+
+</body>
+
+</html>
