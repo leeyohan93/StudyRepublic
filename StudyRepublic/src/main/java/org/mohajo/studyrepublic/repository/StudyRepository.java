@@ -81,5 +81,10 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 	@Query(value = "select s from Study s where s.studyId in ?1")
 	List<Study> getSelectedStudy(String[] selectedId);
 	
+	@Query(value = "SELECT MID(post_date,1,7) period, COUNT(*) as count FROM study GROUP BY period order by period desc;",nativeQuery=true)
+	List<Object[]> getStudyCount();
+	@Query(value = "SELECT MID(post_date,1,4) period, COUNT(*) as count FROM study GROUP BY period order by period desc;",nativeQuery=true)
+	List<Object[]> getStudyCountYear();
+	
 
 }
