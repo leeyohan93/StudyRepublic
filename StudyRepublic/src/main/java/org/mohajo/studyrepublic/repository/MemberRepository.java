@@ -4,6 +4,7 @@ package org.mohajo.studyrepublic.repository;
 
 import java.util.List;
 
+import org.mohajo.studyrepublic.domain.AnalyticsDTO;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.Study;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -71,7 +72,15 @@ public interface MemberRepository extends JpaRepository<Member, String>, Queryds
 	@Query(value = "select * from member where  grade_code=:gradeCode",nativeQuery=true)
 	List<Member> getTutorMember(String gradeCode);
 	
-
+	@Query(value = "SELECT MID(registration_date,1,7) period, COUNT(*) as count FROM member GROUP BY period order by period desc",nativeQuery=true)
+	List<Object[]> getMemberCount();
+	@Query(value = "SELECT MID(registration_date,1,7) period, COUNT(*) as count FROM member where grade_code='T' GROUP BY period order by period desc;",nativeQuery=true)
+	List<Object[]> getTutorCount();
+	
+	@Query(value = "SELECT MID(registration_date,1,4) period, COUNT(*) as count FROM member GROUP BY period order by period desc",nativeQuery=true)
+	List<Object[]> getMemberCountYear();
+	@Query(value = "SELECT MID(registration_date,1,4) period, COUNT(*) as count FROM member where grade_code='T' GROUP BY period order by period desc;",nativeQuery=true)
+	List<Object[]> getTutorCountYear();
 
 }
 

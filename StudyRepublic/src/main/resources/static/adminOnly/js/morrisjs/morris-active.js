@@ -1,6 +1,48 @@
 // Dashboard 1 Morris-chart
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+var countdata;
+$(function () {
+    $(document).ajaxSend(function (e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+});
 
-Morris.Area({
+$(document).ready(function () {
+
+	analytics();
+});
+
+function analyticsDate(i){
+	var today = new Date();
+	var year = today.getFullYear()-i;
+
+	return year+"";
+}
+
+function getMemberCount(i){
+	return countdata.member[2019];
+}
+
+
+function analytics(){
+	$.ajax({
+        type: 'post',
+        url: '/adminPage/analyticsGraph',
+        data: "data",
+
+        success: function (res) {
+        	countdata = res;
+        	showData();
+        },
+        error: function () {
+            alert("error");
+        }
+    });
+}
+
+
+/*Morris.Area({
         element: 'morris-area-chart',
         data: [{
             period: '2012',
@@ -52,58 +94,53 @@ Morris.Area({
         lineColors: ['#65b12d', '#933EC5 ', '#006DF0'],
         resize: true
         
-    });
-	
-Morris.Area({
-        element: 'extra-area-chart',
-        data: [{
-            period: '2010',
-            CSE: 50,
-            Accounting: 80,
-            Electrical: 200
-        }, {
-            period: '2011',
-            CSE: 130,
-            Accounting: 100,
-            Electrical: 80
-        }, {
-            period: '2012',
-            CSE: 80,
-            Accounting: 60,
-            Electrical: 70
-        }, {
-            period: '2013',
-            CSE: 70,
-            Accounting: 200,
-            Electrical: 140
-        }, {
-            period: '2014',
-            CSE: 180,
-            Accounting: 150,
-            Electrical: 140
-        }, {
-            period: '2015',
-            CSE: 105,
-            Accounting: 100,
-            Electrical: 80
-        },
-         {
-            period: '2016',
-            CSE: 250,
-            Accounting: 150,
-            Electrical: 200
-        }],
-        xkey: 'period',
-        ykeys: ['CSE', 'Accounting', 'Electrical'],
-        labels: ['CSE', 'Accounting', 'Electrical'],
-        pointSize: 3,
-        fillOpacity: 0,
-        pointStrokeColors:['#006DF0', '#933EC5', '#65b12d'],
-        behaveLikeLine: true,
-        gridLineColor: '#e0e0e0',
-        lineWidth: 1,
-        hideHover: 'auto',
-        lineColors: ['#006DF0', '#933EC5', '#65b12d'],
-        resize: true
-        
-    });
+    });*/
+	function showData() {
+	Morris.Area({
+		element : 'extra-area-chart',
+		data : [ {
+			period : analyticsDate(0),
+			회원 : countdata.member[analyticsDate(0)]!=null?countdata.member[analyticsDate(0)]:0,
+			강사 : countdata.tutor[analyticsDate(0)]!=null?countdata.tutor[analyticsDate(0)]:0,
+			스터디 : countdata.study[analyticsDate(0)]!=null?countdata.study[analyticsDate(0)]:0
+		}, {
+			period : analyticsDate(1),
+			회원 : countdata.member[analyticsDate(1)]!=null?countdata.member[analyticsDate(1)]:0,
+			강사 : countdata.tutor[analyticsDate(1)]!=null?countdata.tutor[analyticsDate(1)]:0,
+			스터디 : countdata.study[analyticsDate(1)]!=null?countdata.study[analyticsDate(1)]:0
+		}, {
+			period : analyticsDate(2),
+			회원 : countdata.member[analyticsDate(2)]!=null?countdata.member[analyticsDate(2)]:0,
+			강사 : countdata.tutor[analyticsDate(2)]!=null?countdata.tutor[analyticsDate(2)]:0,
+			스터디 : countdata.study[analyticsDate(2)]!=null?countdata.study[analyticsDate(2)]:0
+		}, {
+			period : analyticsDate(3),
+			회원 : countdata.member[analyticsDate(3)]!=null?countdata.member[analyticsDate(3)]:0,
+			강사 : countdata.tutor[analyticsDate(3)]!=null?countdata.tutor[analyticsDate(3)]:0,
+			스터디 : countdata.study[analyticsDate(3)]!=null?countdata.study[analyticsDate(3)]:0
+		}, {
+			period : analyticsDate(4),
+			회원 : countdata.member[analyticsDate(4)]!=null?countdata.member[analyticsDate(4)]:0,
+			강사 : countdata.tutor[analyticsDate(4)]!=null?countdata.tutor[analyticsDate(4)]:0,
+			스터디 : countdata.study[analyticsDate(4)]!=null?countdata.study[analyticsDate(4)]:0
+		}, {
+			period : analyticsDate(5),
+			회원 : countdata.member[analyticsDate(5)]!=null?countdata.member[analyticsDate(5)]:0,
+			강사 : countdata.tutor[analyticsDate(5)]!=null?countdata.tutor[analyticsDate(5)]:0,
+			스터디 : countdata.study[analyticsDate(5)]!=null?countdata.study[analyticsDate(5)]:0
+		} ],
+		xkey : 'period',
+		ykeys : [ '회원', '강사', '스터디' ],
+		labels : [ '회원', '강사', '스터디' ],
+		pointSize : 3,
+		fillOpacity : 0,
+		pointStrokeColors : [ '#006DF0', '#933EC5', '#65b12d' ],
+		behaveLikeLine : true,
+		gridLineColor : '#e0e0e0',
+		lineWidth : 1,
+		hideHover : 'auto',
+		lineColors : [ '#006DF0', '#933EC5', '#65b12d' ],
+		resize : true
+
+	});
+}
