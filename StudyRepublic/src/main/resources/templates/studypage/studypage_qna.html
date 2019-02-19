@@ -10,74 +10,249 @@
 </head>
 <body>
 	<div id="right" layout:fragment="right">
-		<table>
-			<tr>
-				<td>프로필 사진</td>
-				<td>작성자</td>
-				<td>제목</td>
-				<td>작성일시</td>
-			</tr>
-			<tr th:each="fasq : ${findQnaboardInfoByStudyId}">
-				<td th:text = "${fasq.studyMember.member.profileSaveName}"></td>
-				<td th:text = "${fasq.studyMember.member.nickname}"></td>
-				<td th:text = "${fasq.title}"></td>
-				<td th:text = "${#dates.format(fasq.date, 'yyyy/MM/dd HH:mm:ss')}"></td>
-			</tr>
-		</table>
+	<th:block layout:fragment="customCss">
+	<style>
+	  	table{
+	  		margin-bottom: 1%;
+	  		background-color: #ffe300b5;
+	  	}
+	  	.contentForm{
+	  		padding-left: 5%;
+	  	}
+	  	.contentDate{
+	  		display: inline-block;
+	  	}
+	  	.contentWriteDate{
+ 	  		display: inline-block;
+		    width: 100%;
+		    text-align: center;
+		    font-size: 75%;
+	  	}
+	  	.content{
+	  	    width: 95%;
+		    margin-top: 5%;
+		    margin-bottom: 3%;
+	  	}
+	  	.contentReplyForm{
+	  	    width: 95%;
+		    border: gray 1px;
+		    border-style: inset;
+		    border-radius: 10px;
+		    padding : 1%;
+		    padding-left : 2%;
+		    padding-right: 2%;
+			background-color: #73737333;
+	  	}
+	  	#contentReply{
+	  		margin-bottom: 2%;
+	  	}
+	  	.contentReplyWriteForm{
+	  		width:100%;
+	  		display: inline-flex;
+	  	}
+	  	.userProfile{
+	  		width: 8%;
+	  		display: inline-block;
+	  	}
+	  	.contentReplyWriteDiv{
+	  		width: 70%;
+	  		display: inline-block;
+	  		background-color: white;
+	  	}
+	  	.contentReplyWriteInput{
+	  		width: 100%;
+	  		background-color: white;
+	  	}
+	  	.replyButton{
+	  		width: 18%;
+	  		display: inline-block !important;
+	  		margin-left: 4%;
+	  		color: snow !important;
+	  	}
+	  	.contentModifyAndDelete div{
+	  		display: inline-block;
+	  	}
+	  	#writeButtonSpace{
+	  		text-align: right;
+	  	}
+	  	.btn-dark{
+	  	    background-color: dimgrey;
+	  	}
+	  	#writeButton{
+	  		padding-left: 3%;
+    		padding-right: 2%;
+    		color: snow !important;
+	  	}
+	  	.rightLeft{
+			width: 25%;
+	  		text-align: left;
+	  		padding-left: 2%;
+	  	}
+		.rightMiddle{
+	  		width: 60%;
+	  		text-align: left;
+	  	}
+	  	.rightRight{
+	  		width: 15%;
+	  		text-align: center;
+	  	}
+	  	.btn-dark{
+	  		border : 0px;
+	  	}
+		.rightContent{
+		    height: 20%;
+		    width: 100%;
+		    padding-top: 20px;
+		    padding-bottom: 20px;
+		    border: gray 1px;
+		    border-style: inset;
+	 	    border-radius: 10px;
+		    margin-bottom: 1%;
+	  	}
+	  	.rightTitle{
+	  		display: inline-block;
+	  	}
+		#right{
+	  		heigth: 100%;
+	  	}
+	  	input[type="submit"]:hover,
+	  	input[type="reset"]:hover,
+	  	input[type="button"]:hover,
+	  	button:hover,
+	  	.button:hover{
+	  		color : white !important;
+	  		box-shadow: none;
+	  	}
+	  	.dateFont{
+	  		font-weight: bold;
+	  	}
+	  	.profileBoxPhotoIamge{
+	  		border-radius: 100%;
+		    width: 20%;
+		    display: inline-block;
+	  	}
+	  	.profileName{
+	  		display: inline-block;
+	  		padding-left: 5%
+	  	}
+	  	#boardName{
+	  		padding: 1%;
+	  		font-weight: bolder;
+	  	}
+  	</style>
+	</th:block> 
+		<div id="rightContent">
+			<div id="boardName">
+				>>질문 및 답변
+			</div>
+			<div th:each="fasq : ${findQnaboardInfoByStudyId}">
+				<div class="rightContent rightAll" >
+					<div><input type="hidden" th:value="${fasq.number}" name="number">
+					</div>
+					<div class="rightLeft rightTitle"
+						><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${fasq.studyMember.member.profileSaveName}}"
+						><div class="profileName" th:text = "${fasq.studyMember.member.nickname}"></div
+					></div
+					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasq.number}" data-toggle="collapse" class="boardList"
+							th:text="${fasq.title}" th:id="${fasq.number}"></a
+					></div
+					><div class="rightRight rightTitle contentWriteDate">
+							<div class="" th:text="${#dates.format(fasq.date, 'yyyy/MM/dd')}"></div>
+							<div class="" th:text="${#dates.format(fasq.date, 'HH:mm:ss')}+' 작성'"></div>
+					</div>
+					<div class="collapse contentForm" th:id="'write'+${fasq.number}">
+						<input type="hidden" th:id="${fasq.number}">
+						<div class="content" th:text="${fasq.content}">
+						</div>
+						<div class="contentReplyForm"
+							><div class="contentReply" th:text="${fasq.studyQnaboardReply}">
+							
+							</div>
+							<div class="contentReplyWriteForm"
+								><div class="userProfile">프</div
+								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
+								><button type="button" class="btn btn-dark replyButton">댓글 작성</button
+							></div
+						></div>
+						<div class="contentModifyAndDelete">
+							<div class="contentModify">
+								<button type="button" class="btn btn-dark modifyButton">수정</button>
+							</div>
+							<div class="contentDelete">
+								<button type="button" class="btn btn-dark deleteButton">삭제</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="writeButtonSpace">
+			<button type="button" class="btn btn-dark" id="writeButton">글쓰기</button>
+		</div>
+		<div id="pagingButtons">
+			<span></span> <span></span> <span></span> <span></span>
+		</div>
+		<script>
+			$(document).ready(function() {
+								var token = $("meta[name='_csrf']").attr("content");
+								var header = $("meta[name='_csrf_header']").attr("content");
+								$(function() {
+									$(document).ajaxSend(
+											function(e, xhr, options) {
+												xhr.setRequestHeader(header,token);
+											});
+								});
+
+								$(".boardList").on("click", function() {
+													var StudyNoticeboard = {
+														studyId : "BB00001",
+														id : "aaa123",
+														number : this.id
+													}
+
+													$.ajax({
+																type : "POST",
+																contentType : "application/json; charset=UTF-8",
+																url : "/StudyPage/Noticeboard/show",
+																data : JSON.stringify(StudyNoticeboard),
+																dataType : "json",
+																success : function(data) {
+																	console.log(StudyNoticeboard.number)
+																	console.log(data);
+																	console.log("success");
+																	/**
+																	 *설명 : 덧글만 따로 뽑아내기 위한 Ajax
+																	 *주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
+																	 */
+																	$.ajax({
+																				type : "POST",
+																				contentType : "application/json; charset=UTF-8",
+																				url : "/StudyPage/Noticeboard/replyshow",
+																				data : JSON.stringify(StudyNoticeboard),
+																				dataType : "json",
+																				success : function(data) {
+																					data.forEach(function(list) {
+																								console.log(list);
+																					});
+																					console.log("success");
+																					
+																				},error : function() {
+																					alert("error");
+																				}
+																			});
+																},error : function() {
+																	alert("error");
+																}
+															});
+												});
+								$("#writeButton").on("click", function(){
+									//tip! : 버튼에 href 링크 넣기
+									$(location).attr('href',  '/StudyPage/Write?board=Noticeboard');
+								});
+							});	//readyEnd
+							
+		</script>
 	</div>
-<script>
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-		$(function() {
-		    $(document).ajaxSend(function(e, xhr, options) {
-		        xhr.setRequestHeader(header, token);
-		    });
-		});
-		
-		$(".boardList").on("click", function(){
-			
-			var StudyNoticeboard = {
-					studyId : "BB00001",
-					id : "aaa123",
-					number : this.title
-				}
-			
-			extra = this;
-			
-			$.ajax({
-				type:"POST",
-				contentType: "application/json; charset=UTF-8",
-				url:"/StudyPage/Noticeboard/show",
-				data: JSON.stringify(StudyNoticeboard),
-				dataType: "json",
-				success: function(data){
-						console.log(StudyNoticeboard.number)
-						console.log(data);
-						console.log("success");
-						/**
-						*설명 : 덧글만 따로 뽑아내기 위한 Ajax
-						*주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
-						*/
-						$.ajax({
-							type:"POST",
-							contentType: "application/json; charset=UTF-8",
-							url:"/StudyPage/Noticeboard/replyshow",
-							data: JSON.stringify(StudyNoticeboard),
-							dataType: "json",
-							success: function(data){
-									data.forEach(function(list){
-										console.log(list);
-									});
-									console.log("success");
-							},error: function() {
-								alert("error");
-							}
-						});
-				},error: function() {
-					alert("error");
-				}
-			});
-		});
 </script>
 </body>
 </html>

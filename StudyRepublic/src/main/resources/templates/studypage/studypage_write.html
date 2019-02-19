@@ -199,6 +199,7 @@
 	        oAppRef: editor_object,
 	        elPlaceHolder: "smarteditor",
 	        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+	        fCreater: "createSEditor2",
 	        htParams : {
 	            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
 	            bUseToolbar : true,            
@@ -211,8 +212,6 @@
 	    			htMainFont: {'id': '굴림','name': '굴림','size': '14','url': '','cssUrl': ''} 
 	    		}
 	        }
-	    
-	
 	    });
 	    
 	    //미리보기
@@ -232,6 +231,12 @@
 	            
 	    });
 	});
+	
+	//사진 버튼을 클릭할 경우, 파일 path를 받아와서 파일에 표기한다.
+	function pasteHTML(filepath){
+	    var sHTML = '<img src="${request.getContextPath()}'+filepath+'">';
+	    editor_object.getById["smarteditor"].exec("PASTE_HTML", [sHTML]);
+	}
     </script>
     <script>
     	$(document).ready(function(){

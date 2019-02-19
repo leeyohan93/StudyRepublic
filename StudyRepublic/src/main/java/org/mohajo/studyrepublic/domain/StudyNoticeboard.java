@@ -33,7 +33,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "study_noticeboard")
-public class StudyNoticeboard extends StudyBoard implements Serializable{
+public class StudyNoticeboard /*extends StudyBoard*/ implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -55,7 +55,7 @@ public class StudyNoticeboard extends StudyBoard implements Serializable{
 	@Column
 	private String location;
 	
-	/*@Column(name = "study_id")
+	@Column(name = "study_id")
 	private String studyId;
 	@Column
 	private int number;
@@ -77,7 +77,7 @@ public class StudyNoticeboard extends StudyBoard implements Serializable{
 		@JoinColumn(name="study_id", referencedColumnName="studyId", insertable=false, updatable=false),
 		@JoinColumn(name="id", referencedColumnName="id", insertable=false, updatable=false)
 	})
-	private StudyMember studyMember;*/
+	private StudyMember studyMember;
 	
 	@OneToMany
 	@JoinColumn(name="study_noticeboard_id")

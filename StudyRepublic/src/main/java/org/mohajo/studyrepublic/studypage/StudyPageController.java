@@ -2,9 +2,11 @@ package org.mohajo.studyrepublic.studypage;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.tomcat.util.json.JSONParser;
 import org.mohajo.studyrepublic.domain.InquireBoard;
@@ -28,6 +30,8 @@ import org.mohajo.studyrepublic.repository.StudyQnaboardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -41,6 +45,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
 
@@ -49,6 +55,7 @@ import lombok.extern.java.Log;
 @Log
 @Controller
 @RequestMapping(value="/StudyPage")
+@SessionAttributes("studyId")	//studyId 라는 이름으로 저장되는 model.attribute는 세션에 저장됨.
 public class StudyPageController {
 
 	static private StudyPagePredicate predicate = new StudyPagePredicate();
@@ -89,31 +96,26 @@ public class StudyPageController {
 	StudyQnaboardFileRepository studyQnaboardFileRepository;
 	@Autowired
 	StudyQnaboardReplyRepository studyQnaboardReplyRepository;
-
-	@PostMapping("/Main")
-	public String studyPageMain(Model model , @RequestParam("studyId") String studyId ) {
-		// extra varialbe
-		/*String studyId = "BB00001";*/
-		String id = SecurityContextHolder.getContext().getAuthentication().getName();/*"aaa123";*/
+	
+	@RequestMapping("/Main")
+	public String studyPageMain(Model model, @Param("studyId") String studyId) {
 		
+		//Id를 추출한다. 로그인 상태가 아닐 경우, anonymousUser를 넣는다.
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		System.out.println(studyId);
-		/*
-		 * 이 주석 코드는 로그인 기능이 활성화 된 후 체크할 예정임.
-		 * 
-		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		 * String userId = auth.getName();
-		 * 
-		 * log.info(userId); if(userId.isEmpty()|| userId.equals("")||
-		 * userId.equals("anonymousUser")) { return "studypage/Error"; }
-		 */
-
-		if (studyId.isEmpty() || studyId.equals("")) {
-			log.info(studyId.isEmpty() + "/" + studyId);
-			return "studypage/Error";
+		//userId = "aaa123";
+		//String studyId = "123";
+		
+		//유저가 로그인 상태가 아니거나, studyId가 null일 경우
+		if(userId.equals("anonymousUser")||studyId==null) {
+			log.info("I'm not Login! OR studyId is null");
+			return "studypage/error";
 		}
-
-		// StudyPagePredicate pridicate = new StudyPagePredicate();
+		
+		//생성되는 각 페이지 마다, 다른 결과를 보여줄려면 해당 페이지마다 studyId를 식별할 수 있는것이 있어야 함.
+		//session으로 연결할 경우 해당 페이지마다 식별이 어려울 것이기 때문에, model을 통한 값 전달 및 링크 전송을 통한 값 전달을 실행함.
+		//session으로 하는 방법도 있지만, 그렇게 할 경우 여러페이지의 페이지를 띄우더라도 결국은 session에 남은 하나의 페이지만 관리 될 수 있음.
+		System.out.println(studyId);
 
 		try {
 			model.addAttribute("findbystudymember", predicate.findByThisStudyMemberPredicate(studyId, smr));
@@ -121,6 +123,8 @@ public class StudyPageController {
 					predicate.studyNoticeResultPredicate(studyId, 3, studyNoticeboardRepository));
 			model.addAttribute("studyqnaboard3result",
 					predicate.studyQnaResultPredicate(studyId, 3, studyQnaboardRepository));
+			model.addAttribute("studyId", studyId);
+			model.addAttribute("studyMemberInfo", smr.findByStudyIdAndId(studyId, userId));
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -223,6 +227,8 @@ public class StudyPageController {
 		studyNoticeboard.setId(id);
 		studyNoticeboard.setStudyId("BB00001");
 		
+		
+		
 		model.addAttribute("memberid", id);
 		
 		switch(boardName) {		
@@ -247,10 +253,15 @@ public class StudyPageController {
 	
 	//미리보기
 	@RequestMapping(value="/StudypagePreview")
-	public String studypage_preview() {
+	public String studypagePreview() {
 		
 		log.info("들어오긴 하냐?");
 		System.out.println("더 울어라 젊은 인생아");
 		return "studypage/studypage_preview";
+	}
+	
+	@RequestMapping(value="/PhotoUpload")
+	public String studypagePhotoupload() {
+		return "/photoupload";
 	}
 }

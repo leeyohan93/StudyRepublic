@@ -4,45 +4,157 @@
 <head>
 <meta charset="UTF-8">
 <title>스터디 관리 페이지 입니다.</title>
+<th:block layout:fragment="customCSS">
+	<style>
+		div#checkLeft{
+			display: inline-block;
+		}
+		div.userBox>div{
+			display: inline-block;
+		}
+		
+		div.userBox{
+			padding-top: 2%;
+			padding-bottom: 2%;
+			width:100%;
+		}
+		#allCheckbox{
+			padding-top: 4%;
+			padding-bottom: 4%;
+		}
+		#allCheckboxLeft{
+			width: 15%;
+			display: inline-block;
+		}
+		#allCheckboxRight{
+			width: 85%;
+			display: inline-block;
+			text-align: left;
+		}
+		.checkBoxDiv{
+			width: 15%
+		}
+		.userImageDiv{
+			text-align: left;
+			width: 60%;
+		}
+		.getOutButtonDiv{
+			width: 25%;
+		}
+		.userImage{
+			width : 40px;
+	  		height: 40px;
+	  		border-radius:100%;
+		}
+		input{
+			vertical-align: middle;
+			width:20px;
+			height:20px;
+		}
+		#getOutSelectMemberButton{
+			display:flex;
+			padding-left: 5%;
+			padding-top: 5%;
+			padding-bottom: 1%;
+		}
+		.userNickName{
+			padding-left: 2%;
+		}
+		button{
+		
+		}
+		#tab3{
+			padding:7%;
+		}
+		#managementNotice{
+			background-color: white;
+			text-align: left;
+		}
+		#managementh5{
+			font-weight: bold;
+		}
+		#managementp{
+			font-weight: 400;
+		}
+	</style>
+</th:block>
 </head>
 <body>
     <div id="right" layout:fragment="right">
                 <div id="management">
 	                <div class="card text-center">
-					  <div class="card-header">
-					    <ul class="nav nav-tabs card-header-tabs">
-					      <li class="nav-item">
-					        <a class="nav-link active" href="#">스터디원 관리</a>
-					      </li>
-					      <li class="nav-item">
-					        <a class="nav-link" href="#">가입 신청 관리</a>
-					      </li>
-					      <li class="nav-item">
-					        <a class="nav-link" href="#">스터디 해체</a>
-					      </li>
-					    </ul>
-					  </div>
-					  <div class="card-body">
-					    <table>
-				        	<tr th:each="findStudyMemberLEME : ${findStudyMemberLEMEbyStudyIdANDStudyStatusCode}">
-				        		<!-- <td th:text="${findStudyMember}"></td> -->
-				        		<td th:text="${findStudyMemberLEME.member.profileSaveName}"></td>
-				        		<td th:text="${findStudyMemberLEME.member.nickname}"></td>
-				        	</tr>
-					    </table>
-					    <table>
-					    	<tr th:each="findStudyMemberWA : ${findStudyMemberWAbyStudyIdANDStudyStatusCode}">
-					    		<td th:text="${findStudyMemberWA.member.profileSaveName}"></td>
-					    		<td th:text="${findStudyMemberWA.member.nickname}"></td>
-					    		<td th:text="${findStudyMemberWA}"></td>
-					    	</tr>
-					    </table>
+					  <nav class="nav nav-tabs" id="myTab" role="tablist">
+						  <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="nav-home" aria-selected="true">스터디원 관리</a>
+						  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="nav-profile" aria-selected="false">가입 신청 관리</a>
+						  <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="nav-contact" aria-selected="false">스터디 해체</a>
+					  </nav>
+					  <div class="tab-content" id="nav-tabContent">
+					    <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="nav-home-tab">
+					    	<form id="" action=""
+					    		><div id="allCheckbox"
+					    			><div id="allCheckboxLeft"
+					    				><input type="checkbox" id="userAllSelect" name="userAllSelect" value="userAllSelect"></input></div
+					    			><div id="allCheckboxRight"
+					    				>All Select / Deselect</div
+					    		></div
+					    		><div class="userBox" th:each="findStudyMemberLEME : ${findStudyMemberLEMEbyStudyIdANDStudyStatusCode}"
+					    			><div class="checkBoxDiv"
+					    				><input type="checkBox" class="userCheckBox" name="userSelect" value="findStudyMemberLEME.member.nickname"
+					    			></div
+					    			><div class="userImageDiv"
+					    				><img class="userImage" th:src = "@{'/member_image/'+${findStudyMemberLEME.member.profileSaveName}}"
+					    				><font color="black" class="userNickName" th:text="${findStudyMemberLEME.member.nickname}"></font
+					    			></div
+					    			><div class="getOutButtonDiv"
+					    				><button class="getOutButton">내보내기</button
+					    			></div
+					    		></div
+					    		><div id="getOutSelectMemberButton">
+					    			<button>선택 된 대상 내보내기</button>
+					    		</div
+					    	></form>
+					    </div>
+					    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="nav-profile-tab">
+					    	 <table>
+						    	<tr th:each="findStudyMemberWA : ${findStudyMemberWAbyStudyIdANDStudyStatusCode}">
+						    		<td th:text="${findStudyMemberWA.member.profileSaveName}"></td>
+						    		<td th:text="${findStudyMemberWA.member.nickname}"></td>
+						    		<td th:text="${findStudyMemberWA}"></td>
+						    	</tr>
+						    </table>
+					    </div>
+					    <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="nav-contact-tab">
+					    	<div id="managementNotice">
+					    		<h5 id=managementh5><font color="black">스터디를 해체하시겠습니까?</font></h5></br></br>
+					    		<p id="managementp">- 스터디를 해체하면 다시 복구할 수 없습니다.<br><br>
+					    		</p><br><br>
+					    	</div>
+					    	<div>
+					    		<button>스터디 해체하기</button>
+					    	</div>
+					    </div>
 					  </div>
 					</div>
 				</div>
 				<script>
+					//체크시 전체 선택, 모두 해제시 체크 해제
+					$(document).ready(function(e){
+						$('#userAllSelect').on("click", function(){
+							 $( '.userCheckBox' ).prop( 'checked', this.checked );
+						});
+						
+						var extraVar = $('.userCheckBox');
+						extraVar.on("click", function(){
+							for(var count=0; count<extraVar.length; count++){
+								if(extraVar[count].checked===true){
+									return 0;
+								}
+							}
+							$('#userAllSelect')[0].checked=false;
+						});
+					});
             //탭 변경시 포커스 바뀌도록 함
-            $(document).ready(function(e){
+          /*   $(document).ready(function(e){
                 $(".nav-item").on("click", function(){
                     var value = this;
                     var thisClassName = value.children[0].className;
@@ -53,7 +165,7 @@
                         this.children[0].className="nav-link active";
                     }
                 })
-            });
+            }); */
         </script>
 	</div>
 </body>
