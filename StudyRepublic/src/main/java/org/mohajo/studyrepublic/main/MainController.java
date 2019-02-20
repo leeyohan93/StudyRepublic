@@ -62,12 +62,12 @@ public class MainController {
 		model.addAttribute("premiumPopularTag", mainService.getPremiumPopularTag());
 		model.addAttribute("basicPopularTag", mainService.getBasicPopularTag());
 		
-		model.addAttribute("interest1cd", mainService.getInterest1Code());
-		model.addAttribute("interest2cd", mainService.getInterest2Code());
-		model.addAttribute("pinterest2cd", mainService.getPInterest2Code());
-		model.addAttribute("dinterest2cd", mainService.getDInterest2Code());
-		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
-		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
+//		model.addAttribute("interest1cd", mainService.getInterest1Code());
+//		model.addAttribute("interest2cd", mainService.getInterest2Code());
+//		model.addAttribute("pinterest2cd", mainService.getPInterest2Code());
+//		model.addAttribute("dinterest2cd", mainService.getDInterest2Code());
+//		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
+//		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
 		
 		membercontroller.getSession(authentication,hs,member);
 		
@@ -76,7 +76,6 @@ public class MainController {
 		
 		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);	
 		model.addAttribute("joiningStudy", joiningStudy);
-		System.out.println("조이닝스터디: "  + joiningStudy.toString());
 		
 
 		

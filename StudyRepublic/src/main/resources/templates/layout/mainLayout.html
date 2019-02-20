@@ -73,7 +73,7 @@
 			
 
 				
-				<div id = "logout" sec:authorize="hasRole('N')">
+				<div id = "logout" sec:authorize="hasAnyRole('N','W','T')">
 						
 						
 
@@ -243,23 +243,27 @@
 						</option>
 					</select> <span class="interestClass" name="dinterest2cd" id="dinterest2cd"><select
 						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
+						 <option value="" disabled selected hidden>2차관심분야</option>
 							<option th:each="di2 :  ${dinterest2cd}"
 								th:value="${di2.interest2Code}" th:text="${di2.codeValueKorean}">
 							</option>
 					</select></span> <span class="interestClass" name="ninterest2cd" id="ninterest2cd">
 						<select class="custom-select mr-sm-2" size='1'
 						onchange="interest2(this)">
+						<option value="" disabled selected hidden>2차관심분야</option>
 							<option th:each="ni2 :  ${ninterest2cd}"
 								th:value="${ni2.interest2Code}" th:text="${ni2.codeValueKorean}">
 							</option>
 					</select>
 					</span> <span class="interestClass" name="pinterest2cd" id="pinterest2cd"><select
 						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
+						<option value="" disabled selected hidden>2차관심분야</option>
 							<option th:each="pi2 :  ${pinterest2cd}"
 								th:value="${pi2.interest2Code}" th:text="${pi2.codeValueKorean}">
 							</option>
 					</select></span> <span class="interestClass" name="winterest2cd" id="winterest2cd"><select
 						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
+						<option value="" disabled selected hidden>2차관심분야</option>
 							<option th:each="wi2 :  ${winterest2cd}"
 								th:value="${wi2.interest2Code}" th:text="${wi2.codeValueKorean}">
 							</option>

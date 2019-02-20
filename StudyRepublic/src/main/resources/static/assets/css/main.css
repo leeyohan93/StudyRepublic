@@ -3224,7 +3224,6 @@ input::-moz-focus-inner {
 	-ms-appearance: none;
 	appearance: none;
 	background-color: transparent;
-	border: none;
 	border-radius: 0;
 	color: inherit;
 	display: inline-block;
@@ -3233,6 +3232,9 @@ input::-moz-focus-inner {
 	text-decoration: none;
 	width: 13em;
 	height: 2em;
+	border-bottom-style: dotted;
+    border-bottom-color: white;
+    border-bottom-width: 1px;
 }
 		
 		
