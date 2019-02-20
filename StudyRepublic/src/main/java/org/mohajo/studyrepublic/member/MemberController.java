@@ -194,6 +194,15 @@ public class MemberController {
 		return "sign_up";
 	}
 	
+/*	public Member member (String id) {
+		
+		Member member = memberrepository.findById(id).get();
+		System.out.println("멤버레퍼짓토리" + memberrepository);
+		
+		return member;
+	}
+	*/
+	
 	@PostMapping("/member/findPassword")
 	@ResponseBody
 	public Map <Object, Object> findPassword(@RequestParam String messageNumber, @RequestParam String phonenumber, Model model) {		
@@ -315,6 +324,10 @@ public class MemberController {
 		      
 		      }
 		   }
+	   
+	   public void memberp() {
+		   System.out.println("되라 - " + memberrepository);
+	   }
 	
 	
 }

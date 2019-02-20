@@ -40,8 +40,8 @@ public class payController {
 	@Autowired
 	MemberPointRepository  memberpointrepository;
 	
-	@RequestMapping("/pay")
-	public String pay(Model model) {
+	@RequestMapping("/member/point/charge")
+	public String chargePoint(Model model) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -49,15 +49,43 @@ public class payController {
 		MemberPoint memberpoint = memberpointrepository.inqueryPoint(id);
 		model.addAttribute("memberpoint", memberpoint);
 		
-		return "etc/pay";
+		return "member/pointCharge";
+		
 	}
 	
-	@PostMapping("/kakaopay")
+/*	@PostMapping("/member/kakaopay")
 	@ResponseBody
-	public Map <Object, Object> pointCharge (@RequestParam int plusPoint, @RequestParam String id, Model model) {
+	public Map <Object, Object> KakaoPay (@RequestParam String plusPoint, @RequestParam String id, Model model) {
 		
 		System.out.println("충전 아이디: " + id);
 		
+		int plus_point = Integer.parseInt(plusPoint);
+		
+		Map<Object, Object> map = new HashMap <Object, Object> ();
+		
+		MemberPoint memberpoint = memberpointrepository.inqueryPoint(id);
+		
+		int afterPoint = memberpoint.getPoint() + plus_point;
+		memberpoint.setPoint(afterPoint);
+		System.out.println("보유 포인트 : " + memberpoint.getPoint());
+		System.out.println("충전 포인트: " + plus_point);
+		System.out.println("충전 후 포인트 : " + afterPoint);
+		map.put("chargingPoint",afterPoint);
+		
+		memberpointrepository.save(memberpoint);
+		model.addAttribute("afterPoint", memberpoint);
+		
+		
+		return map;
+	}*/
+	
+	@PostMapping("/member/kakaopay")
+	@ResponseBody
+	public Map <Object, Object> KakaoPay (@RequestParam int plusPoint, @RequestParam String id, Model model) {
+		
+		System.out.println("충전 아이디: " + id);
+		
+		/*int plus_point = Integer.parseInt(plusPoint);*/
 		
 		Map<Object, Object> map = new HashMap <Object, Object> ();
 		

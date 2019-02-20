@@ -1,8 +1,15 @@
 package org.mohajo.studyrepublic.security;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,8 +19,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -51,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/login", "/member/signup","/member/insert","/member/checkid","/member/checknick","/member/findPassword","/member/successAuth","/member/modifyPassword","/tutor/profile").anonymous()
 		.antMatchers("/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**").permitAll()
-		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/tutor/inquery","/tutor/file/**","/tutor/delete/**","/chat/studyChat").hasAnyRole("N","W","T","A")
+		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/tutor/inquery","/tutor/file/**","/tutor/delete/**","/chat/studyChat","/member/point/charge").hasAnyRole("N","W","T","A")
 		.antMatchers("/tutor").hasAnyRole("T","A")
 		.antMatchers("/admin/**","/adminPage/**").hasRole("A");
 
@@ -62,7 +72,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.formLogin()
 		.loginPage("/login")
 		.successHandler(new LoginSuccessHandler())
+/*		.successHandler(new CustomLoginSuccessHandler())*/
+/*		.successHandler(new CustomAuthenticationSuccessHandler())*/
+		.failureHandler(new CustomAuthenticationFailureHandler())
 		.defaultSuccessUrl("/index");
+		
+	
 		
 		
 		http
@@ -131,6 +146,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
+    
+    @Bean
+    public CustomAuthenticationSuccessHandler successhandler() 		{
+    	return new CustomAuthenticationSuccessHandler();
+ 
+    }
+    
+    @Bean 
+    CustomAuthenticationFailureHandler failurehandler() {
+    	CustomAuthenticationFailureHandler customLoginFailure = new CustomAuthenticationFailureHandler();
+    	return customLoginFailure;
+    }
+    
+/*    @Bean
+    MemberRepository memberrepository() {
+    	return memberrepository();
+    }*/
+    
+    
+    
+/*    @Autowired
+    public SimpleUrlAuthenticationFailureHandler failure() {
+		return null;
+    	
+    }*/
+    
+   
     
     
 /*    private Filter ssoFilter() {
