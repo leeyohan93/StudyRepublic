@@ -306,7 +306,6 @@ public class StudyController {
 		
 		List<TypeCD> typeCode = tcr.findAll();
 		List<OnoffCD> onoffCode = ocr.findAll();
-		List<LevelCD> levelCode = lcr.findAll();
 		List<DayCD> dayCode = dcr.findAll();
 		
 		List<Interest1CD> interest1cd = i1cdr.findAll();
@@ -327,10 +326,9 @@ public class StudyController {
 		model.addAttribute("loggedInUser", member);
 		model.addAttribute("typeCode", typeCode);
 		model.addAttribute("onoffCode", onoffCode);
-		model.addAttribute("levelCode", levelCode);
 		model.addAttribute("dayCode", dayCode);
 		
-		return "/study/openComplete";
+		return "/study/open";
 	}
 	
 	
