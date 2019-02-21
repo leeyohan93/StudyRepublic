@@ -50,11 +50,11 @@
 						<div class="col-sm-3">
 							<h5>popular Tags</h5>
 							<div th:with="popularTag = ${premiumPopularTag}">
-								<a th:text="${popularTag[0].codeValueEnglish}" href="#"
-									class="btn btn-outline-primary" role="button"></a><br> <br>
-								<a th:text="${popularTag[1].codeValueEnglish}" href="#"
+								<a th:text="${popularTag[0].codeValueEnglish}" th:href="'search?name=&typeCode.typeCode=B&onoffCode.onoffCode=All&searchDate=&levelCode.levelCode=All&interest='+${popularTag[0].interest2Code}"
+									class="btn btn-outline-primary" role="button" ></a><br> <br>
+								<a th:text="${popularTag[1].codeValueEnglish}" th:href="'search?name=&typeCode.typeCode=B&onoffCode.onoffCode=All&searchDate=&levelCode.levelCode=All&interest='+${popularTag[1].interest2Code}"
 									class="btn btn-outline-secondary" role="button"></a><br> <br>
-								<a th:text="${popularTag[2].codeValueEnglish}" href="#"
+								<a th:text="${popularTag[2].codeValueEnglish}" th:href="'search?name=&typeCode.typeCode=B&onoffCode.onoffCode=All&searchDate=&levelCode.levelCode=All&interest='+${popularTag[2].interest2Code}"
 									class="btn btn-outline-success" role="button"></a><br> <br>
 							</div>
 						</div>
@@ -65,10 +65,9 @@
 									th:src="'images/'+${study.studyInterest[0].interest2code.interest2Code}+'.jpg'"
 									alt="" /> <img th:unless="${study != null}"
 									src="images/pic01.jpg">
-								</span> <a href="#">
-									<h6
-										th:text="${study != null}?
-									${study.name}:'아직 인증된 강의가 존재하지 않습니다.'"></h6>
+								</span> <a th:href="${study != null}?
+										'/study/detail/'+${study.studyId}:'#'">
+									<h6 th:text="${study != null}?${study.name}:'아직 인증된 강의가 존재하지 않습니다.'"></h6>
 									<div class="content">
 										<p
 											th:text="${study != null}?
@@ -85,7 +84,8 @@
 									th:src="'images/'+${study.studyInterest[0].interest2code.interest2Code}+'.jpg'"
 									alt="" /> <img th:unless="${study != null}"
 									src="images/pic01.jpg">
-								</span> <a href="#">
+								</span> <a th:href="${study != null}?
+										'/study/detail/'+${study.studyId}:'#'">
 									<h6
 										th:text="${study != null}?
 									${study.name}:'아직 인증된 강의가 존재하지 않습니다.'"></h6>
@@ -122,11 +122,11 @@
 						<div class="col-sm-3">
 							<h5>popular Tags</h5>
 							<div th:with="popularTag = ${basicPopularTag}">
-								<a th:text="${popularTag[0].codeValueEnglish}" href="#"
+								<a th:text="${popularTag[0].codeValueEnglish}" th:href="'search?name=&typeCode.typeCode=P&onoffCode.onoffCode=All&searchDate=&levelCode.levelCode=All&interest='+${popularTag[0].interest2Code}"
 									class="btn btn-outline-primary" role="button"></a><br> <br>
-								<a th:text="${popularTag[1].codeValueEnglish}" href="#"
+								<a th:text="${popularTag[1].codeValueEnglish}" th:href="'search?name=&typeCode.typeCode=P&onoffCode.onoffCode=All&searchDate=&levelCode.levelCode=All&interest='+${popularTag[0].interest2Code}"
 									class="btn btn-outline-secondary" role="button"></a><br> <br>
-								<a th:text="${popularTag[2].codeValueEnglish}" href="#"
+								<a th:text="${popularTag[2].codeValueEnglish}" th:href="'search?name=&typeCode.typeCode=P&onoffCode.onoffCode=All&searchDate=&levelCode.levelCode=All&interest='+${popularTag[0].interest2Code}"
 									class="btn btn-outline-success" role="button"></a><br> <br>
 							</div>
 						</div>
@@ -137,7 +137,8 @@
 									th:src="'images/'+${study.studyInterest[0].interest2code.interest2Code}+'.jpg'"
 									alt="" /> <img th:unless="${study != null}"
 									src="images/pic01.jpg">
-								</span> <a href="#">
+								</span> <a th:href="${study != null}?
+										'/study/detail/'+${study.studyId}:'#'">
 									<h6
 										th:text="${study != null}?
 									${study.name}:'아직 인증된 강의가 존재하지 않습니다.'"></h6>
@@ -157,7 +158,8 @@
 									th:src="'images/'+${study.studyInterest[0].interest2code.interest2Code}+'.jpg'"
 									alt="" /> <img th:unless="${study != null}"
 									src="images/pic01.jpg">
-								</span> <a href="#">
+								</span> <a th:href="${study != null}?
+										'/study/detail/'+${study.studyId}:'#'">
 									<h6
 										th:text="${study != null}?
 									${study.name}:'아직 인증된 강의가 존재하지 않습니다.'"></h6>

@@ -12,9 +12,7 @@
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
 	type="text/css">
-<div layout:fragment="bootCss">
-	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
-</div>
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" layout:fragment="bootCss">
 <div layout:fragment="customCss"></div>
 <div layout:fragment="bootJs">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -162,7 +160,7 @@
 				<div id = "logout" sec:authorize="hasRole('A')">						
 						<ul>
 						<li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li>
-						<li id = "loginli"><a th:href="@{/admin/index}">관리자페이지</a></li>	
+						<li id = "loginli"><a th:href="@{/adminPage/index}">관리자페이지</a></li>	
 						<li id = "loginli" th:text = ${session.nickname}+'님' ></li>
 						<li id = "loginimg"><img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%;"></li>
 						</ul>
@@ -247,23 +245,27 @@
 						</option>
 					</select> <span class="interestClass" name="dinterest2cd" id="dinterest2cd"><select
 						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
+						 <option value="" disabled selected hidden>2차관심분야</option>
 							<option th:each="di2 :  ${dinterest2cd}"
 								th:value="${di2.interest2Code}" th:text="${di2.codeValueKorean}">
 							</option>
 					</select></span> <span class="interestClass" name="ninterest2cd" id="ninterest2cd">
 						<select class="custom-select mr-sm-2" size='1'
 						onchange="interest2(this)">
+						<option value="" disabled selected hidden>2차관심분야</option>
 							<option th:each="ni2 :  ${ninterest2cd}"
 								th:value="${ni2.interest2Code}" th:text="${ni2.codeValueKorean}">
 							</option>
 					</select>
 					</span> <span class="interestClass" name="pinterest2cd" id="pinterest2cd"><select
 						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
+						<option value="" disabled selected hidden>2차관심분야</option>
 							<option th:each="pi2 :  ${pinterest2cd}"
 								th:value="${pi2.interest2Code}" th:text="${pi2.codeValueKorean}">
 							</option>
 					</select></span> <span class="interestClass" name="winterest2cd" id="winterest2cd"><select
 						class="custom-select mr-sm-2" size='1' onchange="interest2(this)">
+						<option value="" disabled selected hidden>2차관심분야</option>
 							<option th:each="wi2 :  ${winterest2cd}"
 								th:value="${wi2.interest2Code}" th:text="${wi2.codeValueKorean}">
 							</option>

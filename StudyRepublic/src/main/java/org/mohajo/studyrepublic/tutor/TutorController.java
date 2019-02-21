@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +25,15 @@ import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberRoles;
+import org.mohajo.studyrepublic.domain.PageDTO;
+import org.mohajo.studyrepublic.domain.PageMaker;
+import org.mohajo.studyrepublic.domain.StudyMember;
+import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TutorCareer;
 import org.mohajo.studyrepublic.domain.TutorInterest;
 import org.mohajo.studyrepublic.domain.TutorUploadFile;
+import org.mohajo.studyrepublic.domain.TypeCD;
 import org.mohajo.studyrepublic.fileupload.MyUploadForm;
 import org.mohajo.studyrepublic.repository.CareerCDRepository;
 import org.mohajo.studyrepublic.repository.EducationCDRepository;
@@ -35,6 +41,8 @@ import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.MemberRolesRepository;
+import org.mohajo.studyrepublic.repository.StudyMemberRepository;
+import org.mohajo.studyrepublic.repository.StudyViewRepository;
 import org.mohajo.studyrepublic.repository.TutorCareerRepository;
 import org.mohajo.studyrepublic.repository.TutorInterestRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
@@ -42,6 +50,8 @@ import org.mohajo.studyrepublic.repository.TutorUploadFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -49,9 +59,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -81,6 +91,15 @@ public class TutorController implements Serializable {
 	TutorCareerRepository tutorcareerrepository;
 	@Autowired
 	TutorInterestRepository tutorinterestrepository;
+	
+	@Autowired
+	TypeCD typeCd;
+	
+	@Autowired
+	StudyViewRepository svr;
+	
+	@Autowired
+	StudyMemberRepository smr;
 
 
 	@RequestMapping("/tutor")
@@ -187,7 +206,7 @@ public class TutorController implements Serializable {
 		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		
 		Resource resource = defaultresourceloader
-				.getResource("file:src\\main\\resources\\static\\tutorFileUpload");
+				.getResource("file:src\\main\\resources\\static\\tutorFileUpload\\" + member.getId());
 		
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
 		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
@@ -222,9 +241,11 @@ public class TutorController implements Serializable {
 			fileOriginName = name;
 			// Client File Name
 			String sourceFileNameExtension = FilenameUtils.getExtension(fileOriginName).toLowerCase();
+				
 			String fileSaveName = RandomStringUtils.randomAlphanumeric(32) + "." + sourceFileNameExtension;
 
 			System.out.println("Client File Name = " + name);
+			System.out.println("fileSaveName: " + fileSaveName );
 
 			if (fileSaveName != null && fileSaveName.length() > 0) {
 				try {
@@ -252,7 +273,7 @@ public class TutorController implements Serializable {
 					tutoruploadfile.setTutorfileSavename(fileSaveName);
 					String fullUrl = uploadRootPath + "\\" + fileSaveName;
 					tutoruploadfile.setTutorFileFullUrl(fullUrl);
-					String partUrl = "\\tutorFileUpload\\" + fileSaveName;
+					String partUrl = "\\tutorFileUpload\\" + member.getId() + "\\" + fileSaveName;
 
 					tutoruploadfile.setTutorfilePartUrl(partUrl);
 					tutoruploadfile.setMember(member);
@@ -323,9 +344,12 @@ public class TutorController implements Serializable {
 
 		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		
-		Resource resource = defaultresourceloader
-				.getResource("file:src\\main\\resources\\static" + tutoruploadfile.getTutorfilePartUrl());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
 		
+		Resource resource = defaultresourceloader
+				.getResource("file:src\\main\\resources\\static" +tutoruploadfile.getTutorfilePartUrl());
+				
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
 		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
 
@@ -405,14 +429,74 @@ public class TutorController implements Serializable {
 	tutorrepository.deleteById(tutor.getTutorNumber());
 	
 	
-	
 
 		System.out.println("강사신청삭제완료!");
 		return "redirect:/index";
 	}
 	
+	@GetMapping("/tutor/profile/{typeCode}")
+	public String goTutorProfile(@RequestParam String id, @PathVariable("typeCode") String typeCode, PageDTO pageDto, Model model) {
+	/*	 */
+		/*typeCode = "p";*/
+		
+		Tutor tutor = tutorrepository.findByTutor(id);
+			
+		model.addAttribute("tutor", tutor);
+
+		List<StudyMember> studyActivity = smr.findTutorActivityById(id);
+		model.addAttribute("studyActivity", studyActivity);
+		
+		Member modifyuser = memberrepository.findById(id).get();
+		model.addAttribute("mdu",modifyuser);
+		
+		int tutor_number = tutor.getTutorNumber();
+		System.out.println(tutor_number);
+		
+		List<TutorCareer> selectedtutorcareer = tutorcareerrepository.selectedtutorcareer(tutor_number);
+		model.addAttribute("selectedtutorcareer", selectedtutorcareer);
+		
+		
+		return "tutor/tutor_profile";
+		
+	}
 	
-	   @RequestMapping(value = "/uploadOneFile", method = RequestMethod.GET)
+/*	@RequestMapping("/list/{typeCode}")
+	public String list(@PathVariable("typeCode") String typeCode, PageDTO pageDto, Model model) {
+		// P/B --> p, b 로 변함. 왜지.
+
+		// 날짜 동적 쿼리 쓸 때 참고:
+		// new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01")
+		
+		typeCode = "p";
+		
+		System.out.println("list() called...");
+		
+		Pageable page = pageDto.makePageable(0, "post_date");
+		System.out.println(page.toString());
+		
+		
+		
+		//스터디 리스트 조회 페이지로 이동
+			//분야코드, 스터디 (진행상태, 요일)
+			//완료, 해체 불포함
+		
+		//// Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "postDate");
+		// Pageable paging = pageDto.makePageable(0, "postDate");	//(ERROR) java.sql.SQLSyntaxErrorException: Unknown column 'sv.postDate' in 'order clause'
+		// pageDto.setSize(2);	//변화 없음
+		
+
+//		Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "post_date");
+		// Page<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
+		Page<StudyView> list = svr.selectValidStudyViewByTypeCode(typeCode, page);
+		
+		model.addAttribute("pagedList", new PageMaker<>(list));
+		model.addAttribute("typeCode", typeCode);
+
+		return "study/list";
+	}*/
+	
+	
+/*	   @RequestMapping(value = "/uploadOneFile", method = RequestMethod.GET)
 	   public String uploadOneFileHandler(Model model) {
 	 
 	      MyUploadForm myUploadForm = new MyUploadForm();
@@ -501,5 +585,5 @@ public class TutorController implements Serializable {
 		      return "uploadResult";
 		   }
 	
-
+*/
 }

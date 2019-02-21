@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 
 		.authorizeRequests()
-		.antMatchers("/login", "/member/signup","/member/insert","/member/checkid","/member/checknick").anonymous()
+		.antMatchers("/login", "/member/signup","/member/insert","/member/checkid","/member/checknick","/member/findPassword","/member/successAuth","/member/modifyPassword","/tutor/profile").anonymous()
 		.antMatchers("/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**").permitAll()
 		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/tutor/inquery","/tutor/file/**","/tutor/delete/**","/chat/studyChat").hasAnyRole("N","W","T","A")
 		.antMatchers("/tutor").hasAnyRole("T","A")
