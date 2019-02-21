@@ -101,7 +101,7 @@
 													<a class="Primary mg-b-10" href="#" data-toggle="modal"
 														th:data-target="'#'+${freeBoard.freeBoardId}"
 														style="color: blue; margin-top: 0; padding: 0px;
-														 background: none;" th:text="${freeBoard.title}"></a>
+														 background: none;" th:text="${#strings.length(freeBoard.title)<=30}?${freeBoard.title}:${#strings.substring(freeBoard.title,0,30)+'...'}"></a>
 												</div>
 												
 												<div th:id="${freeBoard.freeBoardId}"
@@ -139,7 +139,7 @@
 													<a class="Primary mg-b-10" href="#" data-toggle="modal"
 														th:data-target="'#'+${requestBoard.requestBoardId}"
 														style="color: blue; margin-top: 0; padding: 0px;
-														 background: none;" th:text="${requestBoard.title}"></a>
+														 background: none;" th:text="${#strings.length(requestBoard.title)<=30}?${requestBoard.title}:${#strings.substring(requestBoard.title,0,30)+'...'}"></a>
 												</div>
 												
 												<div th:id="${requestBoard.requestBoardId}"
@@ -177,7 +177,7 @@
 													<a class="Primary mg-b-10" href="#" data-toggle="modal"
 														th:data-target="'#'+${inquireBoard.inquireBoardId}"
 														style="color: blue; margin-top: 0; padding: 0px;
-														 background: none;" th:text="${inquireBoard.title}"></a>
+														 background: none;" th:text="${#strings.length(inquireBoard.title)<=30}?${inquireBoard.title}:${#strings.substring(inquireBoard.title,0,30)+'...'}"></a>
 												</div>
 												
 												<div th:id="${inquireBoard.inquireBoardId}"
@@ -244,7 +244,7 @@
 								<a data-dismiss="modal" href="#">Cancel</a>
 								<!-- <a id="permission-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
 								<input type="submit"
-									class="btn btn-custon-rounded-four btn-primary"
+									class="btn btn-custon-rounded-four btn-primary"S
 									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
 									value="Process">
 							</div>

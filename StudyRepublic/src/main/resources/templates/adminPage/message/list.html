@@ -83,12 +83,12 @@
 											<td th:text="${message.sendId}"></td>
 											<td th:text="${message.receiveId}"></td>
 											<!-- <td th:if="${#strings.length(message.messageContent)>=5}" th:text="${#strings.substring(message.messageContent,0,6)+'...'}"> -->
-											<td th:if="${#strings.length(message.messageContent)>=5}">
+											<td>
 												<div class="modal-area-button">
 													<a class="Primary mg-b-10" href="#" data-toggle="modal"
 														th:data-target="'#'+${message.messageSendId}"
 														style="color: blue; margin-top: 0; padding: 0px;
-														 background: none;" th:text="${#strings.substring(message.messageContent,0,6)+'...'}"></a>
+														 background: none;" th:text="${#strings.length(message.messageContent)>=30}?${#strings.substring(message.messageContent,0,30)+'...'}:${message.messageContent}"></a>
 												</div>
 												
 												<div th:id="${message.messageSendId}"
@@ -109,7 +109,6 @@
 													</div>
 												</div>
 											</td>
-											<td th:unless="${#strings.length(message.messageContent)>=5}" th:text="${message.messageContent}"></td>
 											<td th:text="${message.messageDate}"></td>
 											<td th:text="${message.messageDelete}"></td>
 											</tr>  
