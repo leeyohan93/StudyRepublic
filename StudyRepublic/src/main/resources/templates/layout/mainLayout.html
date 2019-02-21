@@ -75,7 +75,7 @@
 			
 
 				
-				<div id = "logout" sec:authorize="hasRole('N')">
+				<div id = "logout" sec:authorize="hasAnyRole('N','W','T')">
 						
 						
 
@@ -105,31 +105,33 @@
 						
 							<div>
 						<ul>
+						<!-- 스터디를 선택할 수 있는 실질적인 목록을 구현한 부분으로 보인다. session에서 studyName값을 받아와서 출력하고, List에서 해당되는 내용을 선택할(변화를 감지할) 경우 joinStudy(this)를 실행 한다.-->
 						<li style = "top:14px; text-overflow: ellipsis;">
-						<select name = "joinStudy" id = "joinStudy" onchange = "joinStudy(this)" style ="border:solid 1px #b6babd; width:110px;height:auto; padding: 0 0 0 5px; background-position: calc(98%) center;" >
-						<option th:each = "joinSt : ${session.studyNameList}"th:value="${joinSt}" th:text="${joinSt}"></option>
-						</select>
+							<select name = "joinStudy" id = "joinStudy" style ="border:solid 1px #b6babd; width:110px;height:auto; padding: 0 0 0 5px; background-position: calc(98%) center;" >
+								<!-- <option th:each = "joinSt : ${session.studyNameList}"th:value="${joinSt}" th:text="${joinSt}"></option> -->
+								<option value="참여중인 스터디">참여중인 스터디</option>
+								<option th:each = "joinSt : ${session.studyNameAndStudyId.keySet()}" th:value="${joinSt}" th:text="${joinSt}"></option>
+							</select>
 						</li>
 						</ul>
 						</div>
-
-				
 						
-						<div th:each = "joinStId : ${session.studyIdList}" style = "display:none">
+						<!-- 세션에서 studyId 및 studyName의 List를 받아온다. studyId > joiningStudyId / studyName > joiningStudyName -->
+						<!-- 수정 사유 : 개발자 도구에서 studyId에 대한 정보 조회가 가능하기 때문에  -->
+						<!-- <div th:each = "joinStId : ${session.studyIdList}" style = "display:none">
 							<input class = "joiningStudyId" type = "text" th:value = "${joinStId}">					
 						</div>
-						
 						<div th:each = "joinStName : ${session.studyNameList}" style = "display:none">
 							<input class = "joiningStudyName" type = "text" th:value = "${joinStName}">					
-						</div>
+						</div> -->
 						
 						
 						
 						<!-- 스터디페이지 이동관련 폼 -->
 						<div style = "display:none">
 						<form id = "moveStudy" action = "/StudyPage/Main" method = "post">
-						
 						<input id = "studyId" name ="studyId">
+						<!-- 아래 구문이 없으면, POST 전송시 접근 권한 문제가 발생한다. POST형식의 구분 사용시 모두 명시하도록 하자... -->
 						<input type="hidden" th:name="${_csrf.parameterName}"
 						th:value="${_csrf.token}" />
 						
@@ -362,38 +364,72 @@
 	<script th:src="@{/datepicker/js/i18n/datepicker.en.js}"></script>
 	<div layout:fragment="customScript"></div>
 
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		$(document).ready(function(){
+			//studyName 값을 가지고 있는 .joiningStudyId요소의 정보를 담는다.
+			var studyName = /*[[ ${session.studyNameAndStudyId.keySet()} ]]*/;
+			//studyName의 요소가 담고 있는 크기만큼, studyText에 배열 공간을 할당한다.
+			var studyNameAndStudyId = /*[[ ${session.studyNameAndStudyId.values()} ]]*/
+			
+			
+			$('#joinStudy').on('change', function joinStudy() {		//스터디페이지이동..js
+				
+				//studyText에 있는 studyName이 obj(현재는 셀렉트 박스)의 value 값과 같을 때, joinStudyListValue에 해당되는 joingStudyId 리스트의 StudyId 값을 배치한다.
+				for ( var i = 0; i < studyName.length; i++) {
+					if ( studyName[i] == this.options[this.selectedIndex].value) {
+						console.log(studyName[i]);
+						console.log(this.options[this.selectedIndex].value);
+						console.log("클릭한 것 = " + studyName[i]);
+						document.getElementById('studyId').value = studyNameAndStudyId[i];
+						var gsWin = window.open('/StudyPage/Main',studyNameAndStudyId[i],'width=1000,height=800');
+						      var moveStudy =document.getElementById('moveStudy');
+						      moveStudy.action = '/StudyPage/Main';
+						      moveStudy.target = studyNameAndStudyId[i];
+						      moveStudy.method = "post";
+						      moveStudy.submit();	
+					}
+				}
+			});
+		});
+		/*]]>*/
+	</script>
+
 	<script>
 	
+	/* //studyId 값을 가지고 있는 .joiningStudyId요소의 정보를 담는다.
 	var joiningStudyId = document.getElementsByClassName("joiningStudyId");
+	//studyName 값을 가지고 있는 .joiningStudyId요소의 정보를 담는다.
 	var joiningStudyText = document.getElementsByClassName("joiningStudyName");
-	
+	//studyName의 요소가 담고 있는 크기만큼, studyText에 배열 공간을 할당한다.
 	var studyText = new Array(joiningStudyText.length);
 	
 	var joinStudyListText = "";
 	var joinStudyListValue = "";
-	
 
-	
-	function joinStudy(obj) {		/* 스터디페이지이동..js  */
+	function joinStudy(obj) {		//스터디페이지이동..js
 		
+		//studyText 배열에 studyName들을 담는다.
 		for ( var i = 0; i < studyText.length; i++) {
-				studyText[i] = joiningStudyText[i].value;
+			studyText[i] = joiningStudyText[i].value;
 		}
-		
+		//studyText에 있는 studyName이 obj(현재는 셀렉트 박스)의 value 값과 같을 때, joinStudyListValue에 해당되는 joingStudyId 리스트의 StudyId 값을 배치한다.
 		for ( var i = 0; i < studyText.length; i++) {
 			if ( studyText[i] == obj.options[obj.selectedIndex].value) {
 				joinStudyListValue = joiningStudyId[i].value
 			}
 		}
-		/* document.getElementById('studyId').style.display = 'none'; */
+		//document.getElementById('studyId').style.display = 'none';
+		//그리고 그것을 form의 id가 studyId인 selector의 value 값으로 배치하고, submit 한다.
 		document.getElementById('studyId').value = joinStudyListValue
 		document.getElementById('moveStudy').submit();
 		
-
-		
-	}
+	} */
 	
-
+	$(document).ready(function(){
+		
+	});
+	
 	$(function(){
 		$('.info').mouseenter(function(){
 			document.getElementById('displaying').style.visibility = 'visible';

@@ -3,6 +3,7 @@
  */
 package org.mohajo.studyrepublic.main;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -74,13 +75,26 @@ public class MainController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		
-		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);	
-		model.addAttribute("joiningStudy", joiningStudy);
-		System.out.println("조이닝스터디: "  + joiningStudy.toString());
+		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);
+		HashMap <String, String> studyNameAndStudyId = new HashMap<>();
 		
+		for(StudyMember joiningStudyObject : joiningStudy) {
+			Study extraValue = joiningStudyObject.getStudy();
+			studyNameAndStudyId.put(extraValue.getName(), extraValue.getStudyId());
+		}
+		
+		//아래부분 사용하지 않는 걸로 사료되어 주석 처리함. 2019.02.20 - sangyong.shin
+		//model.addAttribute("joiningStudy", studyNameAndStudyIdjoiningStudy);
+		System.out.println("조이닝스터디: "  + studyNameAndStudyId/*joiningStudy*/.toString());
+		
+		//membercontroller.getSession_Study(auth, hs, joiningStudy);
+		for( String s : studyNameAndStudyId.keySet()) {
+			System.out.println(s);
+		}
 
-		
-		membercontroller.getSession_Study(auth, hs, joiningStudy);
+		if(auth!=null) {
+			 hs.setAttribute("studyNameAndStudyId", studyNameAndStudyId);
+		}
 	}
 	
 	@RequestMapping("/search")

@@ -4,83 +4,108 @@
 <head>
 <meta charset="UTF-8">
 <title>스터디 관리 페이지 입니다.</title>
-<th:block layout:fragment="customCSS">
-	<style>
-		div#checkLeft{
-			display: inline-block;
-		}
-		div.userBox>div{
-			display: inline-block;
-		}
-		
-		div.userBox{
-			padding-top: 2%;
-			padding-bottom: 2%;
-			width:100%;
-		}
-		#allCheckbox{
-			padding-top: 4%;
-			padding-bottom: 4%;
-		}
-		#allCheckboxLeft{
-			width: 15%;
-			display: inline-block;
-		}
-		#allCheckboxRight{
-			width: 85%;
-			display: inline-block;
-			text-align: left;
-		}
-		.checkBoxDiv{
-			width: 15%
-		}
-		.userImageDiv{
-			text-align: left;
-			width: 60%;
-		}
-		.getOutButtonDiv{
-			width: 25%;
-		}
-		.userImage{
-			width : 40px;
-	  		height: 40px;
-	  		border-radius:100%;
-		}
-		input{
-			vertical-align: middle;
-			width:20px;
-			height:20px;
-		}
-		#getOutSelectMemberButton{
-			display:flex;
-			padding-left: 5%;
-			padding-top: 5%;
-			padding-bottom: 1%;
-		}
-		.userNickName{
-			padding-left: 2%;
-		}
-		button{
-		
-		}
-		#tab3{
-			padding:7%;
-		}
-		#managementNotice{
-			background-color: white;
-			text-align: left;
-		}
-		#managementh5{
-			font-weight: bold;
-		}
-		#managementp{
-			font-weight: 400;
-		}
-	</style>
-</th:block>
+
 </head>
 <body>
     <div id="right" layout:fragment="right">
+    	<th:block layout:fragment="customCSS">
+			<style>
+				div#checkLeft{
+					display: inline-block;
+				}
+				div.userBox>div{
+					display: inline-block;
+				}
+				
+				div.userBox{
+					padding-top: 2%;
+					padding-bottom: 2%;
+					width:100%;
+				}
+				#allCheckbox{
+					padding-top: 4%;
+					padding-bottom: 4%;
+				}
+				#allCheckboxLeft{
+					width: 15%;
+					display: inline-block;
+				}
+				#allCheckboxRight{
+					width: 85%;
+					display: inline-block;
+					text-align: left;
+				}
+				.checkBoxDiv{
+					width: 15%
+				}
+				.userImageDiv{
+					text-align: left;
+					width: 50%;
+				}
+				.getOutButtonDiv{
+					width: 35%;
+				}
+				.userImage{
+					width : 40px;
+			  		height: 40px;
+			  		border-radius:100%;
+				}
+				input{
+					vertical-align: middle;
+					width:20px;
+					height:20px;
+				}
+				#getOutSelectMemberButton{
+					display:flex;
+					padding-left: 5%;
+					padding-top: 5%;
+					padding-bottom: 1%;
+				}
+				.userNickName{
+					padding-left: 2%;
+				}
+				#tab3{
+					padding:7%;
+				}
+				#managementNotice{
+					background-color: white;
+					text-align: left;
+				}
+				#managementh5{
+					font-weight: bold;
+				}
+				#managementp{
+					font-weight: 400;
+				}
+				.okButton{
+					margin-right: 5%;
+				}
+				.btn-dark{
+					background-color: dimgrey;
+					padding-left: 3%;
+		    		padding-right: 2%;
+		    		color: snow !important;
+		    		border-color: white;
+				}
+				.getOutButtonDiv{
+					text-align: right;
+				}
+				.getOutButtonDiv>Button{
+					margin-right: 5% !important;
+				}
+				#getOutSelectMemberButton>Button{
+					margin-right: 2% !important;
+				}
+				input[type="submit"]:hover,
+			  	input[type="reset"]:hover,
+			  	input[type="button"]:hover,
+			  	button:hover,
+			  	.button:hover{
+			  		color : white !important;
+			  		box-shadow: none;
+			  	}
+			</style>
+	</th:block>
                 <div id="management">
 	                <div class="card text-center">
 					  <nav class="nav nav-tabs" id="myTab" role="tablist">
@@ -93,35 +118,53 @@
 					    	<form id="" action=""
 					    		><div id="allCheckbox"
 					    			><div id="allCheckboxLeft"
-					    				><input type="checkbox" id="userAllSelect" name="userAllSelect" value="userAllSelect"></input></div
+					    				><input type="checkbox" class="userAllSelect" name="userAllSelect" value="userAllSelect"></input></div
 					    			><div id="allCheckboxRight"
 					    				>All Select / Deselect</div
 					    		></div
 					    		><div class="userBox" th:each="findStudyMemberLEME : ${findStudyMemberLEMEbyStudyIdANDStudyStatusCode}"
 					    			><div class="checkBoxDiv"
-					    				><input type="checkBox" class="userCheckBox" name="userSelect" value="findStudyMemberLEME.member.nickname"
+					    				><input type="checkBox" class="userCheckBox" name="userSelect" th:value="${findStudyMemberLEME.member.nickname}"
 					    			></div
 					    			><div class="userImageDiv"
 					    				><img class="userImage" th:src = "@{'/member_image/'+${findStudyMemberLEME.member.profileSaveName}}"
-					    				><font color="black" class="userNickName" th:text="${findStudyMemberLEME.member.nickname}"></font
+					    				><font color="black" class="userNickName"    th:text="${findStudyMemberLEME.member.nickname}"></font
 					    			></div
 					    			><div class="getOutButtonDiv"
-					    				><button class="getOutButton">내보내기</button
+					    				><button class="getOutButton btn btn-dark">내보내기</button>
 					    			></div
 					    		></div
 					    		><div id="getOutSelectMemberButton">
-					    			<button>선택 된 대상 내보내기</button>
+					    			<button class="btn btn-dark">선택 된 대상 내보내기</button>
 					    		</div
 					    	></form>
 					    </div>
 					    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="nav-profile-tab">
-					    	 <table>
-						    	<tr th:each="findStudyMemberWA : ${findStudyMemberWAbyStudyIdANDStudyStatusCode}">
-						    		<td th:text="${findStudyMemberWA.member.profileSaveName}"></td>
-						    		<td th:text="${findStudyMemberWA.member.nickname}"></td>
-						    		<td th:text="${findStudyMemberWA}"></td>
-						    	</tr>
-						    </table>
+				    	 	<form id="" action=""
+					    		><div id="allCheckbox"
+					    			><div id="allCheckboxLeft"
+					    				><input type="checkbox" class="userAllSelect2" name="userAllSelect" value="${findStudyMemberLEME.member.nickname}"></input></div
+					    			><div id="allCheckboxRight"
+					    				>All Select / Deselect</div
+					    		></div
+					    		><div class="userBox" th:each="findStudyMemberWA : ${findStudyMemberWAbyStudyIdANDStudyStatusCode}"
+					    			><div class="checkBoxDiv"
+					    				><input type="checkBox" class="userCheckBox2" name="userSelect" th:value="${findStudyMemberWA.member.nickname}"
+					    			></div
+					    			><div class="userImageDiv"
+					    				><img class="userImage" th:src = "@{'/member_image/'+${findStudyMemberWA.member.profileSaveName}}"
+					    				><font color="black" class="userNickName" th:text="${findStudyMemberWA.member.nickname}"></font
+					    			></div
+					    			><div class="getOutButtonDiv"
+					    				><button class="okButton btn btn-dark" th:value="${findStudyMemberLEME.member.nickname}">수락</button
+					    				><button class="denytton btn btn-dark" th:value="${findStudyMemberLEME.member.nickname}">거절</button
+					    			></div
+					    		></div
+					    		><div id="getOutSelectMemberButton">
+					    			<button id="selectAllOkButton" class="btn btn-dark">수락</button>
+					    			<button id="selctAllDenyButton" class="btn btn-dark">거절</button>
+					    		</div
+					    	></form>
 					    </div>
 					    <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="nav-contact-tab">
 					    	<div id="managementNotice">
@@ -130,27 +173,63 @@
 					    		</p><br><br>
 					    	</div>
 					    	<div>
-					    		<button>스터디 해체하기</button>
+					    		<button class="btn btn-dark">스터디 해체하기</button>
 					    	</div>
 					    </div>
 					  </div>
 					</div>
 				</div>
-				<script>
+			<script>
 					//체크시 전체 선택, 모두 해제시 체크 해제
 					$(document).ready(function(e){
-						$('#userAllSelect').on("click", function(){
+						$('.userAllSelect').on("click", function(){
 							 $( '.userCheckBox' ).prop( 'checked', this.checked );
 						});
 						
 						var extraVar = $('.userCheckBox');
 						extraVar.on("click", function(){
-							for(var count=0; count<extraVar.length; count++){
-								if(extraVar[count].checked===true){
-									return 0;
+							var count=0;
+							
+							for(var i=0; i<extraVar.length; i++){
+								if(extraVar[i].checked===true){
+									console.log(extraVar[i].checked);
+									count++;
 								}
 							}
-							$('#userAllSelect')[0].checked=false;
+							console.log(count);
+							console.log(extraVar.length	);
+							
+							if(count==extraVar.length){
+								$('.userAllSelect')[0].checked=true;	
+							}else{
+								$('.userAllSelect')[0].checked=false;
+							}
+						});
+						
+						
+						$('.userAllSelect2').on("click", function(){
+							 $( '.userCheckBox2' ).prop( 'checked', this.checked );
+						});
+						
+						var extraVar2 = $('.userCheckBox2');
+						extraVar2.on("click", function(){
+							var count=0;
+							
+							for(var i=0; i<extraVar2.length; i++){
+								if(extraVar2[i].checked===true){
+									console.log(extraVar2[i].checked);
+									count++;
+								}
+							}
+							console.log(count);
+							console.log(extraVar2.length	);
+							
+							if(count==extraVar2.length){
+								$('.userAllSelect2')[0].checked=true;	
+							}else{
+								$('.userAllSelect2')[0].checked=false;
+							}
+							
 						});
 					});
             //탭 변경시 포커스 바뀌도록 함
