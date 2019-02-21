@@ -4,9 +4,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.maven.shared.invoker.SystemOutHandler;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.domain.SendMessage;
+import org.mohajo.studyrepublic.domain.Tutor;
+import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.MemberRolesRepository;
 import org.mohajo.studyrepublic.repository.SendMessageRepository;
+import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +38,13 @@ public class AdminMemberController {
 	AdminMemberService adminMemberService;
 	@Autowired
 	SendMessageRepository sendMessageRepository;
+	@Autowired
+	MemberRepository memberRepository;
+	@Autowired
+	MemberRolesRepository memberRoleRepository;
+	@Autowired
+	TutorRepository tutorRepository;
+	
 	
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
@@ -80,8 +93,82 @@ public class AdminMemberController {
 	
 	@RequestMapping("/changeGrade")
 	public String changeGrade(Model model,String changeGrade, String[] selectedId,HttpServletRequest request) {
+		 	
+		for(String receiveId : selectedId) {
+	 	
+	// 권한테이블에 등급추가.	
+		MemberRoles memberroles = new MemberRoles();
+		memberroles.setRoleName(changeGrade);				
+		List<MemberRoles> roles = memberRoleRepository.findByRole(receiveId);	
+		roles.add(memberroles);	
+		Member member = memberRepository.findById(receiveId).get();
+		member.setRoles(roles);
+		
+		System.out.println("-- 등급 : " + member.getGradeCD().getGradeCode());
+		
+		System.out.println((member.getGradeCD().getGradeCode().equals("N")));
+		
+	// T나 W로 권한 변경 시 default 값으로 tutor 테이블에 데이터를 생성한다. 
+		Tutor tutor= new Tutor();
+		
+		
+	switch (changeGrade) {
+	
+	// T나 W로 권한 변경 시 default 값으로 tutor 테이블에 데이터를 생성한다. 	
+	
+	case "T":
+		if(member.getGradeCD().getGradeCode().equals("W")) {
+		// 권한테이블에 W권한 삭제.	
+		memberRoleRepository.deleteTutorWait(receiveId);	
+		}
+		
+		else if(member.getGradeCD().getGradeCode().equals("N")) {
+		// 권한테이블에 N권한 삭제.	
+		memberRoleRepository.deleteNormal(receiveId);
+			
+		// tutor 테이블에 tutor 등록.
+	
+		tutor.setMember(member);
+		tutorRepository.save(tutor);
+		}
+		break;
+	
+	case "W":
+		if(member.getGradeCD().getGradeCode().equals("T")) {	// 현재신분이 강사인 사람들은 강사을삭제한다. (등급하락)
+		// 권한테이블에서 T권한 삭제.	
+			memberRoleRepository.deleteTutor(receiveId);	
+		}
+		else if (member.getGradeCD().getGradeCode().equals("N")) {	// 현재신분이 일반인 사람들은 일반권한을 삭제하고 W권한을 부여한다.
+		// 권한테이블에서 N권한 삭제.				
+			memberRoleRepository.deleteNormal(receiveId);	
+			tutor.setMember(member);
+			tutorRepository.save(tutor);
+		}
+		break;
+		
+	
+	case "N":
+				
+		Tutor DeletedTutor = tutorRepository.findByTutor(receiveId);
+		tutorRepository.deleteById(DeletedTutor.getTutorNumber()); // 강사정보 삭제		
+		
+		if(member.getGradeCD().getGradeCode().equals("T")) {			
+			memberRoleRepository.deleteTutor(receiveId);					
+		} 
+		else if(member.getGradeCD().getGradeCode().equals("W")) {
+			memberRoleRepository.deleteTutorWait(receiveId);
+		}
+		break;
+		
+	default:
+		
+		break;
+		}		
+		memberRepository.save(member);	
+		}
+		
 		 adminMemberService.changeGrade(selectedId,changeGrade);
-//		 return "redirect:/adminPage/member/list";
+		 	 
 		 return "redirect:"+request.getHeader("Referer");
 	}
 	

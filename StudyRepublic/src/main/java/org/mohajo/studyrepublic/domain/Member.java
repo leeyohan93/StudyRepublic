@@ -3,6 +3,7 @@ package org.mohajo.studyrepublic.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -91,12 +92,16 @@ public class Member implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name = "member_interest_id")
 	private List<MemberInterest> memberInterest;
-	
-	
+		
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name = "id")
 	private List <InterestLocation> interestlocation;
 
+
+
+	
+	
+	
 	/**
 	 * Add sangyong.shin
 	 */

@@ -13,13 +13,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mohajo.studyrepublic.domain.GradeCD;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.domain.SendMessage;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TutorCareer;
 import org.mohajo.studyrepublic.domain.TutorInterest;
 import org.mohajo.studyrepublic.domain.TutorUploadFile;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.MemberRolesRepository;
 import org.mohajo.studyrepublic.repository.SendMessageRepository;
 import org.mohajo.studyrepublic.repository.TutorCareerRepository;
 import org.mohajo.studyrepublic.repository.TutorInterestRepository;
@@ -65,6 +68,11 @@ public class AdminTutorController {
 	TutorInterestRepository tutorinterestrepository;
 	@Autowired
 	TutorRepository tutorRepository;
+	@Autowired
+	MemberRolesRepository memberrolerepository;
+	
+	
+	
 	
 	
 	@RequestMapping("/list")
@@ -90,8 +98,27 @@ public class AdminTutorController {
 			sendmessage.setReceiveId(receiveId);
 			sendmessage.setMessageContent(messageContent);
 			sendMessageRepository.save(sendmessage);
+				
+			
+		// 권한테이블에 T권한 등록.
+			MemberRoles memberroles = new MemberRoles();
+			memberroles.setRoleName("T");				
+			Member member = memberRepository.findById(receiveId).get();
+			List<MemberRoles> roles = memberrolerepository.findByRole(receiveId);	
+			roles.add(memberroles);								
+			member.setRoles(roles);
+			
+		// 권한테이블에 W권한 삭제.	
+			memberrolerepository.deleteTutorWait(receiveId);
+
+			
+			memberRepository.save(member);
+											
 		}
-		adminMemberService.changeGrade(selectedId,"T");
+		
+		
+			adminMemberService.changeGrade(selectedId,"T");
+			
 		return "redirect:/adminPage/tutor/list";
 //		return "redirect:"+request.getHeader("Referer");
 	}
@@ -104,6 +131,26 @@ public class AdminTutorController {
 			sendmessage.setReceiveId(receiveId);
 			sendmessage.setMessageContent(messageContent);
 			sendMessageRepository.save(sendmessage);
+			
+			//권한테이블에 N권한 등록.
+			MemberRoles memberroles = new MemberRoles();
+			memberroles.setRoleName("N");				
+			Member member = memberRepository.findById(receiveId).get();
+			List<MemberRoles> roles = memberrolerepository.findByRole(receiveId);	
+			roles.add(memberroles);								
+			member.setRoles(roles);
+			
+			// 권한테이블에 W권한 삭제.	
+			memberrolerepository.deleteTutorWait(receiveId);
+			
+			memberRepository.save(member);
+			
+			// Tutor 테이블에서 거절당한 사람의 데이터 삭제
+			Tutor tutor = tutorRepository.findByTutor(receiveId);
+			tutorRepository.deleteById(tutor.getTutorNumber());
+			
+			tutorRepository.save(tutor);
+			
 		}
 		adminMemberService.changeGrade(selectedId,"N");
 		return "redirect:/adminPage/tutor/list";

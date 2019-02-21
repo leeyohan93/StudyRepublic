@@ -43,6 +43,7 @@
 		IMP.init("imp18113186");
 		var data = {};
 		var afterPoint = "";
+		/* var id = "" ;document.getElementById("id").value; */
 
 		function pay() {
 			
@@ -53,7 +54,7 @@
 				merchant_uid : 'merchant_' + new Date().getTime(),
 				name : 'StudyRepublic 포인트 결제',
 				amount : $('#point').val(),
-				id : id,
+				id : $('#id').val(),
 //				buyer_email : '${member.email}',
 //				buyer_name : '${member.id}',
 //				buyer_tel : '',
@@ -64,7 +65,7 @@
 			}, function(rsp) {
 				if (rsp.success) {
 					
-					data.id = $('#id').val();
+					data.id = $('#point').val();
 					data.plusPoint = $('#point').val();
 					
 					$.ajax({

@@ -6,13 +6,12 @@ import java.util.List;
 
 import org.mohajo.studyrepublic.domain.AnalyticsDTO;
 import org.mohajo.studyrepublic.domain.Member;
-import org.mohajo.studyrepublic.domain.Study;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -34,7 +33,13 @@ public interface MemberRepository extends JpaRepository<Member, String>, Queryds
 	
 	@Query(value = "select count(*) from member where nickname = :nickname", nativeQuery = true)
 	int checkNick(String nickname);
-
+	
+/*	@Query (value = "SELECT * FROM member where MEMBER_STATUS_CODE != 'P' AND MEMBER_STATUS_CODE != 'E' AND id = :id", nativeQuery = true)
+	Member findMember(String id);*/
+	
+	@Query (value = "SELECT * FROM member where id = :id", nativeQuery = true)
+	Member findMember(String id);
+	
 	@Query(value = "select * from recommend_tutor_member",nativeQuery=true)
 	List<Member> getRecommendTutorMember();
 	

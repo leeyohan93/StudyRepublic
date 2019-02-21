@@ -62,6 +62,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -167,18 +168,7 @@ public class TutorController implements Serializable {
 		member.setGradeCD(new GradeCD("W"));
 		member.setRoles(roles);
 		
-		
-		
-		
-
-
-/*		List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities()); 
-		updatedAuthorities.add(new SimpleGrantedAuthority("W")); //add your role here [e.g., new SimpleGrantedAuthority("ROLE_NEW_ROLE")] 
-*/
-	
-		
-		
-		
+		memberrolesrepository.deleteNormal(id);
 
 		memberrepository.save(member);
 //		memberrolesrepository.save(memberroles);
@@ -422,14 +412,24 @@ public class TutorController implements Serializable {
 	@PostMapping("/tutor/delete/inquery")
 	public String deleteTutor(@ModelAttribute Tutor tutor) throws IOException {
 		
-	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	String id = auth.getName();	
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();	
 		
-	memberrolesrepository.deleteTutorWait(id);	
-	tutorrepository.deleteById(tutor.getTutorNumber());
+		memberrolesrepository.deleteTutorWait(id);	
+		tutorrepository.deleteById(tutor.getTutorNumber());
+		
+		MemberRoles memberroles = new MemberRoles();
+		memberroles.setRoleName("N");				
+		Member member = memberrepository.findById(id).get();
+		List<MemberRoles> roles = memberrolesrepository.findByRole(id);	
+		roles.add(memberroles);								
+		member.setRoles(roles);
+		member.setGradeCD(new GradeCD("N"));
+		
+		memberrolesrepository.deleteTutorWait(id);
+		
+		memberrepository.save(member);
 	
-	
-
 		System.out.println("강사신청삭제완료!");
 		return "redirect:/index";
 	}
@@ -460,43 +460,10 @@ public class TutorController implements Serializable {
 		
 	}
 	
-/*	@RequestMapping("/list/{typeCode}")
-	public String list(@PathVariable("typeCode") String typeCode, PageDTO pageDto, Model model) {
-		// P/B --> p, b 로 변함. 왜지.
 
-		// 날짜 동적 쿼리 쓸 때 참고:
-		// new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01")
-		
-		typeCode = "p";
-		
-		System.out.println("list() called...");
-		
-		Pageable page = pageDto.makePageable(0, "post_date");
-		System.out.println(page.toString());
-		
-		
-		
-		//스터디 리스트 조회 페이지로 이동
-			//분야코드, 스터디 (진행상태, 요일)
-			//완료, 해체 불포함
-		
-		//// Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "postDate");
-		// Pageable paging = pageDto.makePageable(0, "postDate");	//(ERROR) java.sql.SQLSyntaxErrorException: Unknown column 'sv.postDate' in 'order clause'
-		// pageDto.setSize(2);	//변화 없음
-		
-
-//		Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "post_date");
-		// Page<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
-		Page<StudyView> list = svr.selectValidStudyViewByTypeCode(typeCode, page);
-		
-		model.addAttribute("pagedList", new PageMaker<>(list));
-		model.addAttribute("typeCode", typeCode);
-
-		return "study/list";
-	}*/
 	
 	
-/*	   @RequestMapping(value = "/uploadOneFile", method = RequestMethod.GET)
+	   @RequestMapping(value = "/uploadOneFile", method = RequestMethod.GET)
 	   public String uploadOneFileHandler(Model model) {
 	 
 	      MyUploadForm myUploadForm = new MyUploadForm();
@@ -585,5 +552,5 @@ public class TutorController implements Serializable {
 		      return "uploadResult";
 		   }
 	
-*/
+
 }
