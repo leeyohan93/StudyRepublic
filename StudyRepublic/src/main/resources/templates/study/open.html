@@ -42,10 +42,6 @@
     	
     	} 
     	
-    	#basicInfoArea .input-title {
-    		padding-top: 0.3rem;
-    	}
-    	
     	#basicInfoArea input {
     		border: solid 1px blue !important;
    		    display: inline-block !important;
@@ -63,7 +59,30 @@
 		    padding: unset;
     	}
     
-        /********************************** basicInfo - CSS 시작 **********************************/    
+        /********************************** basicInfo - CSS 시작 **********************************/
+        
+        /* Air Datepicker CSS */
+        
+        .only-timepicker .datepicker--nav,
+		.only-timepicker .datepicker--content {
+		    display: none;
+		}
+		
+		.only-timepicker .datepicker--time {
+		    border-top: none;
+		}
+        
+        .time-input-container input, .input-field-period input {
+        	cursor: default;
+        	padding: unset;
+        	width: 10em;
+        }
+        
+        #input-study-timeDiff, #input-study-studyCount {
+        	width: 4em;
+        }
+        
+        /*    
    		#basicInfoArea .ui-datepicker {
 			font-size: 12px;
 			width: auto;
@@ -78,9 +97,11 @@
 			width: 40%;
 			font-size: 11px;
 		}
+		*/
 		
 		#basicInfoArea .input-title {
 			font-weight: bold;
+    		padding-top: 0.3rem;
 		}
 		
 		#basicInfoArea .hour-picker, .minute-picker {
@@ -195,12 +216,6 @@
 			border: 1px solid silver !important;
 		    width: 100% !important;
 		    margin-top: 1rem;
-		}
-		
-		#basicInfoArea .yshbtn, #basicInfoArea .memberinterest {
-			background-color: silver !important;
-			border-radius: 50% !important;
-			text-align: center;
 		}
 				
 
@@ -432,14 +447,14 @@
            	z-index: -1;
         }
         
+        .tab-title li:before {
+        	width:100%;
+   			left: 50%;
+        }
+        
         .tab-title li:first-of-type:before {
         	width:50%;
    			left: 0;
-        }
-        
-        .tab-title li:after {
-        	width:100%;
-   			left: 50%;
         }
         
         .tab-title li:last-of-type:after {
@@ -456,9 +471,10 @@
 			border-color: rgb(35,154,235);
 		}
 		
-		.tab-title li.active:before {
-			background-color: rgb(35,154,235);
-		}
+/* 		.tab-title li.active:before/* , .tab-title li.active:not(:nth-of-type(1)):after */ { */
+/* /* 			background-color: rgb(35,154,235); */ */
+/* 			background-color: red; */
+/* 		} */
 		
 		.icon-circle {
 	       	width: 16px;
@@ -538,25 +554,25 @@
 					
                     <li class="tab-item">
 						<a href="#basicInfo-section" data-toggle="tab">
-							<div class="icon-circle"><i class="ti-user"></i></div>
+<!-- 							<div class="icon-circle"><i class="ti-user"></i></div> -->
 							기본정보
 						</a>
 					</li>
                     <li class="tab-item">
 						<a href="#introduction-section" data-toggle="tab">
-							<div class="icon-circle"><i class="ti-settings"></i></div>
+<!-- 							<div class="icon-circle"><i class="ti-settings"></i></div> -->
 							스터디소개
 						</a>
 					</li>
                     <li class="tab-item">
 						<a href="#leveltest-section" data-toggle="tab">
-							<div class="icon-circle"><i class="ti-map"></i></div>
+<!-- 							<div class="icon-circle"><i class="ti-map"></i></div> -->
 							레벨테스트
 						</a>
 					</li>
                     <li class="tab-item">
 						<a href="#" data-toggle="tab">
-							<div class="icon-circle"><i class="ti-map"></i></div>
+<!-- 							<div class="icon-circle"><i class="ti-map"></i></div> -->
 							개설완료
 						</a>
 					</li>
@@ -567,7 +583,7 @@
             
 				<form id="basicForm">
 				
-		           <section class="tab-pane basicInfo-container ghost" id="basicInfo-section">
+		           <section class="tab-pane basicInfo-container" id="basicInfo-section">
 		           		
 		           		<div id="basicInfoArea">
 				            <div class="row input input-field-type">
@@ -617,90 +633,38 @@
 				            <div class="row input input-field-period">
 				                <div class="col-md-2 input-title">기간</div>
 				                <div class="col-md-10 input-content">
-				                    <input type="date" name="startDateStr" id="input-study-startDate" class="input-date">부터 
-				                    <input type="date" name="endDateStr" id="input-study-endDate" class="input-date">까지 
-				                    (총 <input type="text" name="studyCount" id="input-study-studyCount" value="0">회)
+				                    <input type="text" name="startDateStr" id="input-study-startDate" class="input-date" placeholder="날짜 선택" readonly>부터 
+				                    <input type="text" name="endDateStr" id="input-study-endDate" class="input-date" placeholder="날짜 선택" readonly>까지 
+				                    (총 <input type="text" name="studyCount" id="input-study-studyCount" readonly>회)
 				                </div>
 				            </div>
 				            <div class="row input input-field-schedule">
 				                <div class="col-md-2 input-title">일시</div>
 				                <div class="col-md-10 input-content">
 				                	<div class="row">
-				                    	매주
+				                    	매주&nbsp;
 				                    	<select name="dayCode.dayCode">
 				                            <option th:each="dayCode : ${dayCode}" th:value="${dayCode.dayCode}" th:text="${dayCode.codeValueKorean}"></option>
 				                        </select>요일
 			                        </div>
-			                       	<div class="row">
-					                    <input type="text" name="startTimeStr" id="input-study-startTime">
-					                    <select class="apm-picker input-time" id="start-apm-picker">
-					                        <option value="AM">AM</option>
-					                        <option value="PM" selected>PM</option>
-					                    </select>
-					                    <select class="input-time" id="start-hour-picker">
-					                        <option value="0" hidden>00</option>
-					                        <option value="12">12</option>
-					                        <option value="1" selected>01</option>
-					                        <option value="2">02</option>
-					                        <option value="3">03</option>
-					                        <option value="4">04</option>
-					                        <option value="5">05</option>
-					                        <option value="6">06</option>
-					                        <option value="7">07</option>
-					                        <option value="8">08</option>
-					                        <option value="9">09</option>
-					                        <option value="10">10</option>
-					                        <option value="11">11</option>
-					                    </select>
-					                    <select class="input-time" id="start-minute-picker">
-					                        <option value="00">00</option>
-					                        <option value="10">10</option>
-					                        <option value="20">20</option>
-					                        <option value="30">30</option>
-					                        <option value="40">40</option>
-					                        <option value="50">50</option>
-					                    </select>
+			                       	<div class="row time-input-container">
+					                    <input type="text" name="startTimeStr" class="only-time" id="input-study-startTime" placeholder="시간 선택" readonly>
 					                   	 부터 
-					                    <input type="text" name="endTimeStr" id="input-study-endTime">
-					                    <select class="apm-picker input-time" id="end-apm-picker">
-					                        <option value="AM">AM</option>
-					                        <option value="PM" selected>PM</option>
-					                    </select>
-					                    <select class="input-time" id="end-hour-picker">
-					                        <option value="0" hidden>00</option>
-					                        <option value="12">12</option>
-					                        <option value="1">01</option>
-					                        <option value="2" selected>02</option>
-					                        <option value="3">03</option>
-					                        <option value="4">04</option>
-					                        <option value="5">05</option>
-					                        <option value="6">06</option>
-					                        <option value="7">07</option>
-					                        <option value="8">08</option>
-					                        <option value="9">09</option>
-					                        <option value="10">10</option>
-					                        <option value="11">11</option>
-					                    </select>
-					                    <select class="input-time" id="end-minute-picker">
-					                        <option value="00">00</option>
-					                        <option value="10">10</option>
-					                        <option value="20">20</option>
-					                        <option value="30">30</option>
-					                        <option value="40">40</option>
-					                        <option value="50">50</option>
-					                    </select>까지 
-					                    (<input type="text" name="timeDiff" id="input-study-timeDiff" value="60">분)
+					                    <input type="text" name="endTimeStr" class="only-time" id="input-study-endTime" placeholder="시간 선택" readonly>
+					                  	 까지
+
+					                    (<input type="text" name="timeDiff" id="input-study-timeDiff" readonly>분)
 				                    </div>
 				                </div>
 				            </div>
 				            <div class="row input input-field-enrollCapacity">
 				                <div class="col-md-2 input-title">모집인원</div>
 				                <div class="col-md-10 input-content">
-				                    <button id="btn-enrollCapacity-minus" class="btn-enrollCapacity">
+				                    <button id="btn-enrollCapacity-minus" class="btn-enrollCapacity" onkeydown="return (event.keyCode!=13)">
 				                        &lt;
 				                    </button>
 				                    <input type="text" name="enrollCapacity" id="input-study-enrollCapacity">
-				                    <button id="btn-enrollCapacity-plus" class="btn-enrollCapacity">
+				                    <button id="btn-enrollCapacity-plus" class="btn-enrollCapacity" onkeydown="return (event.keyCode!=13)">
 				                        &gt;
 				                    </button>
 				                </div>
@@ -784,7 +748,7 @@
 				                <div class="col-md-10 input-content">
 				                    <select name="levelCode.levelCode">
 				                    	<option value="H">상</option>
-				                    	<option value="M">중</option>
+				                    	<option value="M" selected="selected">중</option>
 				                    	<option value="L">하</option>
 				                    </select>
 				                </div>
@@ -825,12 +789,6 @@
 									<textarea name="introduction" id="smarteditor" rows="10" cols="100" style="width: 700px; height: 1000px;"></textarea>
 								</div>
 							</div>
-							<span class="previewBtn">
-								<button class="btn btn-default" name="writePreview" id="writePreview" type="button">미리보기</button>
-							</span>
-							<span class="registerBtn">
-								<button class="btn btn-default" name="boardRegister" id="boardRegister" type="submit">확인</button>
-							</span>
 							<!--  /********************************** Smart Editor - HTML 끝  **********************************/ -->
 						</div>
 						
@@ -857,53 +815,53 @@
 		                <form id="leveltestForm">
 		                    <input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' />
 		
-		                    <div class="leveltest-container">
+<!-- 		                    <div class="leveltest-container"> -->
 		
-		                        <div class="leveltest">
+<!-- 		                        <div class="leveltest"> -->
 		
-		                            <div class="question">
-		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="MC">
-		                                <input class="numbering question-numbering" type="number" name="questionNumber" readonly value="1">
-		                                <span class="question-content">Feeds</span>
-		                                <input class="question-edit"name="content" type="text" style="display: none">
-		                                <span class='icon icon-plus leveltest-toggle'></span>
-		                            </div>
-		                            <div class="question-choice" style="display: none">
-		                                <input type="hidden" name="choice" value="">
-		                                <div class="question-choice-group">
-		                                    <span class="numbering choice-numbering">1</span>
-		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test1" />
-		                                </div>
-		                                <div class="question-choice-group">
-		                                    <span class="numbering choice-numbering">2</span>
-		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test2" />
-		                                </div>
-		                                <div class="question-choice-placeholder">보기를 추가하려면 클릭하세요!</div>
-		                            </div>
-		                            <div class="question-answer" style="display: none">
-		                                정답: <select name="correctAnswer">
-		                                    <option>1</option>
-		                                    <option>2</option>
-		                                </select>
-		                            </div>
+<!-- 		                            <div class="question"> -->
+<!-- 		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="MC"> -->
+<!-- 		                                <input class="numbering question-numbering" type="number" name="questionNumber" readonly value="1"> -->
+<!-- 		                                <span class="question-content">Feeds</span> -->
+<!-- 		                                <input class="question-edit"name="content" type="text" style="display: none"> -->
+<!-- 		                                <span class='icon icon-plus leveltest-toggle'></span> -->
+<!-- 		                            </div> -->
+<!-- 		                            <div class="question-choice" style="display: none"> -->
+<!-- 		                                <input type="hidden" name="choice" value=""> -->
+<!-- 		                                <div class="question-choice-group"> -->
+<!-- 		                                    <span class="numbering choice-numbering">1</span> -->
+<!-- 		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test1" /> -->
+<!-- 		                                </div> -->
+<!-- 		                                <div class="question-choice-group"> -->
+<!-- 		                                    <span class="numbering choice-numbering">2</span> -->
+<!-- 		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test2" /> -->
+<!-- 		                                </div> -->
+<!-- 		                                <div class="question-choice-placeholder">보기를 추가하려면 클릭하세요!</div> -->
+<!-- 		                            </div> -->
+<!-- 		                            <div class="question-answer" style="display: none"> -->
+<!-- 		                                정답: <select name="correctAnswer"> -->
+<!-- 		                                    <option>1</option> -->
+<!-- 		                                    <option>2</option> -->
+<!-- 		                                </select> -->
+<!-- 		                            </div> -->
 		
-		                        </div>
+<!-- 		                        </div> -->
 		
-		                        <div class="leveltest">
+<!-- 		                        <div class="leveltest"> -->
 		
-		                            <div class="question">
-		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="SA">
-		                                <input class="numbering question-numbering" name="questionNumber" readonly value="2">
-		                                <span class="question-content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam rem numquam tenetur. Laboriosam quam iure eos beatae ad pariatur, culpa molestiae accusamus corrupti quasi placeat maxime fugiat optio in nulla!</span>
-		                                <input class="question-edit" name="content" type="text" style="display: none">
-		                                <span class="icon icon-plus leveltest-toggle"></span>
-		                            </div>
-		                            <div class="question-answer" style="display: none">
-		                                정답: <input name="correctAnswer" class="question-answer-input" type="text" value="nulla">
-		                            </div>
+<!-- 		                            <div class="question"> -->
+<!-- 		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="SA"> -->
+<!-- 		                                <input class="numbering question-numbering" name="questionNumber" readonly value="2"> -->
+<!-- 		                                <span class="question-content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam rem numquam tenetur. Laboriosam quam iure eos beatae ad pariatur, culpa molestiae accusamus corrupti quasi placeat maxime fugiat optio in nulla!</span> -->
+<!-- 		                                <input class="question-edit" name="content" type="text" style="display: none"> -->
+<!-- 		                                <span class="icon icon-plus leveltest-toggle"></span> -->
+<!-- 		                            </div> -->
+<!-- 		                            <div class="question-answer" style="display: none"> -->
+<!-- 		                                정답: <input name="correctAnswer" class="question-answer-input" type="text" value="nulla"> -->
+<!-- 		                            </div> -->
 		
-		                        </div>
-		                    </div>
+<!-- 		                        </div> -->
+<!-- 		                    </div> -->
 		                </form>
 		                <!-- /********************************** leveltest - HTML 끝 **********************************/ -->
 		
@@ -952,15 +910,14 @@
 	            addQuestionChoice();
 	            removeQuestionChoiceOption();
 	            submitLeveltests();
+	            notifyLeveltest();
 	
 	            /* basicInfo */
-     	        calcStudyCount();
-	            calcTimeDiff();
 	            setEnrollCapacityByButton();
 	            setEnrollCapacityByInput();
-	            enableTimeInput();
 	            showInputField();
               	$('#input-study-enrollCapacity').attr("value", 7);
+              	calculatePrice();
 	            
 	            /* Tab menu */
 	            enableTabs();
@@ -987,32 +944,25 @@
 			        }
 			    });
 			    
-			    enableSmartEditorFunction();
 	        });
 	
-	        function enableSmartEditorFunction() {
-	    	
-			    //전송버튼 클릭이벤트
-			    $("#boardRegister").click(function(){
-			        //id가 smarteditor인 textarea에 에디터에서 대입
-			        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
-		              
-			        $("#boardWriteForm").submit();
-		            
-			    });
-		    
-			    //미리보기
-			    $('#writePreview').click(function(){
-		
-			    	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
-			        window.open("preview","자식창","writh=400,height=300,left=300,top=50");
-		
-			    });
-	        }
         	/********************************** Smart Editor - Script 끝 **********************************/
 	        
         	
 	        /********************************** leveltest - Script 시작 **********************************/
+	        function notifyLeveltest() {
+        		
+	            console.log('Entered notifyLeveltest()...');
+
+        		if($('#leveltestForm').children().length <= 1) {
+        			$('#leveltestForm').append("<span class='leveltest-notification'>문제를 추가해보세요!</span>");
+        		} else {
+        			$('.leveltest-notification').remove();
+        		}
+        		
+        		// 삭제 시에도 메서드 추가할 것.
+        	}
+	        
 	        function enableSortable() {
 	
 	            console.log('Entered enableSortable()...');
@@ -1283,6 +1233,175 @@
 	
 	
 	        // datepicker 기능 시작. ////////////////////////////////////////////////////////////////////////////////////////////////
+      
+	        
+	        $('#input-study-startDate').datepicker({
+	            language: 'en'
+	            , minDate: new Date()
+	            , onSelect: function onSelect(fd, date) {
+	            	var day = date.getDay();
+	            	$("select[name='dayCode.dayCode'] option:eq(" + day + ")").attr("selected", "selected");
+			    	
+	            	var endDatepicker = $('#input-study-endDate').datepicker().data('datepicker');
+	            	endDatepicker.update({
+						minDate: new Date(date.getTime() + (7*24*60*60*1000)) 
+			    	});
+	            	var startDate = new Date($('#input-study-startDate').val());
+		            var endDate = new Date($('#input-study-endDate').val());
+		            var dayDiff = (endDate - startDate) /1000 /60 /60 /24;
+		            var studyCount = Math.floor((dayDiff / 7) + 1);
+		            
+		            if(dayDiff < 0 || isNaN(studyCount)) {
+// 		                $('#input-study-endDate').attr("value", "");
+		                $('#input-study-studyCount').val("");
+		                endDatepicker.removeDate(endDate);
+		                
+		            } else {
+		                $('#input-study-studyCount').val(studyCount);
+		            }	            
+		        }
+	        });
+	        
+	        $('#input-study-endDate').datepicker({
+	            language: 'en'
+           		, minDate: new Date()
+	        	, onSelect: function onSelect() {
+		            var startDate = new Date($('#input-study-startDate').val());
+		            var endDate = new Date($('#input-study-endDate').val());
+		            var dayDiff = (endDate - startDate) /1000 /60 /60 /24;
+		            var studyCount = Math.floor((dayDiff / 7) + 1);
+		            
+		            if(dayDiff < 0 || isNaN(studyCount)) {
+// 		                $('#input-study-endDate').removeAttr();	//?
+		                
+		            } else {
+		                $('#input-study-studyCount').val(studyCount);
+		            }
+	        	}
+	        });
+	    	
+	        // studyCount 를 계산해서 hidden input 태그에 입력하는 함수 
+	        function calcStudyCount() {
+// 	            $('#basicInfoArea .input-date').on('change', function() {
+				
+// 		            var startDate = new Date($('#input-study-startDate').val());
+// 		            var endDate = new Date($('#input-study-endDate').val());
+// 		            var dayDiff = (endDate - startDate) /1000 /60 /60 /24;
+// 		            var studyCount = Math.floor((dayDiff / 7) + 1);
+		            
+// 		            if(dayDiff < 0 && isNaN(studyCount)) {
+// 		                $('#input-study-studyCount').val(0);
+// 		                $('#input-study-endDate').removeAttr("value");
+		                
+// 		            } else {
+// 		                $('#input-study-studyCount').val(studyCount);
+// 		            }
+// 	            });
+	        }
+	        
+	        // 문제:  timepicker 활성화 상태에서 엔터를 누르면 모집인원이 감소함 
+	        	
+	        
+	        $('#input-study-startTime').datepicker({
+			    dateFormat: ' '
+			    , timepicker: true
+			    , timeFormat: 'hh:ii aa'
+			    , startDate: new Date('2019/02/21 02:00 pm')
+			    , classes: 'only-timepicker'
+			    , minutesStep: '10'
+			    , dateTimeSeparator: ''
+			    , onSelect: function onSelect(fd, d, picker) {
+			    	
+			    	
+/* 			    	시작시각을 선택한다.
+			    	종료시각의 최소값을 설정한다.
+			    	종료시각을 선택한다.
+			    	차이를 계산한다.
+			    	
+			    	시작시각을 재선택한다.
+			    	종료시각의 최소값을 설정한다.
+			    		(시작시각이 종료시각 보다 미래인 경우)
+			    		종료시각을 시작시각과 같게 한다. (+ 1시간이면 더 좋다.)
+			    	차이를 계산한다. */
+			    	
+			    	
+			    	var endTimepicker = $('#input-study-endTime').datepicker().data('datepicker');
+					var selectedEndDate = endTimepicker.selectedDates[0];
+					
+					console.log('d = ' + d);
+					console.log('selectedEndDate = ' + selectedEndDate);
+					
+					
+			    	endTimepicker.update({
+		        		minDate: d
+			    	});
+			    	
+			    	if(selectedEndDate == undefined) {
+			    		return;
+			    		
+			    	} else {
+				    	
+						d = new Date(d.setSeconds(0));
+			    		selectedEndDate = new Date(selectedEndDate.setSeconds(0));   		
+				    	var startTime = d.getTime();
+				    	var endTime = selectedEndDate.getTime();
+				    	
+				    	var timeDiff;
+				    	
+			    		timeDiff = Math.round( ((endTime - startTime)/1000/60)/10 )*10;
+				    	
+				    	if(timeDiff < 0) {
+							
+// 							endTimepicker.selectDate(new Date(startTime + 1*60*60*1000));
+							endTimepicker.removeDate();
+							return;
+				    	}
+				    	
+				    	$('#input-study-timeDiff').val(timeDiff);
+			    		
+			    	}
+			    }
+			});
+	        
+	        $('#input-study-endTime').datepicker({
+			    dateFormat: ' '
+			    , timepicker: true
+			    , timeFormat: 'hh:ii aa'
+		    	, startDate: new Date('2019/02/21 03:00 pm')
+			    , classes: 'only-timepicker'
+			    , minutesStep: '10'
+	        	, minHours: '14'
+			    , dateTimeSeparator: ''
+			    , onSelect: function onSelect(fd, d, picker) {
+
+			    	var startTimepicker = $('#input-study-startTime').datepicker().data('datepicker');
+					var selectedStartDate = startTimepicker.selectedDates[0];
+			    	
+					console.log('d = ' + d);
+					console.log('selectedStartDate = ' + selectedStartDate);
+					
+			    	if(selectedStartDate == undefined) {
+			    		return;
+			    		
+			    	} else {
+				    	
+						d = new Date(d.setSeconds(0));
+			    		selectedStartDate = new Date(selectedStartDate.setSeconds(0));
+			    		
+				    	var endTime = d.getTime();
+				    	var startTime = selectedStartDate.getTime();
+				    	
+				    	var timeDiff;
+	
+			    		timeDiff = Math.round( ((endTime - startTime)/1000/60)/10 )*10;
+			    		$('#input-study-timeDiff').val(timeDiff);
+			    		
+			    	}
+			    }
+
+			});
+	        
+	        /*
 	        function disableNonMatchingDays(date) {
 	            //  new Date() 사용해서 날짜로 변환하지 않으면 .getDay() 함수를 쓸 수 없다:
 	            // Uncaught TypeError: $(...).val(...).getDay is not a function
@@ -1294,6 +1413,7 @@
 	            // else문 미작성 시 발생하는 에러:
 	            // jquery-ui.js:9323 Uncaught TypeError: Cannot read property '0' of undefined
 	        }
+	        */
 	        // datepicker 기능 끝. ////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	        // studyCount 를 계산해서 hidden input 태그에 입력하는 함수 
@@ -1302,7 +1422,7 @@
 	            var startDate = new Date($('#input-study-startDate').val());
 	            var endDate = new Date($('#input-study-endDate').val());
 	            var dayDiff = (endDate - startDate) /1000 /60 /60 /24;
-	            var studyCount = (dayDiff / 7) + 1;
+	            var studyCount = Math.floor((dayDiff / 7) + 1);
 	            
 	            if(isNaN(studyCount)) {
 	                $('#input-study-studyCount').val(0);
@@ -1312,55 +1432,55 @@
 	            });
 	        }
 	
-	        // 시간 입력폼 구현
-	        function enableTimeInput() {
-	            // Hour 선택 제한 1 (AM: 00~11, PM: 12~11)
-	            $('#basicInfoArea .apm-picker').on("change", function() {
+// 	        // 시간 입력폼 구현
+// 	        function enableTimeInput() {
+// 	            // Hour 선택 제한 1 (AM: 00~11, PM: 12~11)
+// 	            $('#basicInfoArea .apm-picker').on("change", function() {
 	
-	                var idArr = this.id.split('-');
-	                var hour = $('#' + idArr[0] + '-hour-picker')[0];
-	                console.log('hour = ' + hour);
-	                console.log("$('#' + this.id).val() = " + $('#' + this.id).val());
+// 	                var idArr = this.id.split('-');
+// 	                var hour = $('#' + idArr[0] + '-hour-picker')[0];
+// 	                console.log('hour = ' + hour);
+// 	                console.log("$('#' + this.id).val() = " + $('#' + this.id).val());
 	
-	                if($('#' + this.id).val() == 'AM') {
-	                    hour[0].removeAttribute("hidden");
-	                    hour[1].setAttribute("hidden", "");
-	                    if(hour[1].selected == true) {
-	                        hour[0].setAttribute("selected", "");
-	                        hour.value = hour[0].value;
-	                    }
-	                } else {
-	                    hour[1].removeAttribute("hidden");
-	                    hour[0].setAttribute("hidden", "");
-	                    if(hour[0].selected) {
-	                        hour[1].setAttribute("selected", "");
-	                        hour.value = hour[1].value;
-	                    }
-	                }
+// 	                if($('#' + this.id).val() == 'AM') {
+// 	                    hour[0].removeAttribute("hidden");
+// 	                    hour[1].setAttribute("hidden", "");
+// 	                    if(hour[1].selected == true) {
+// 	                        hour[0].setAttribute("selected", "");
+// 	                        hour.value = hour[0].value;
+// 	                    }
+// 	                } else {
+// 	                    hour[1].removeAttribute("hidden");
+// 	                    hour[0].setAttribute("hidden", "");
+// 	                    if(hour[0].selected) {
+// 	                        hour[1].setAttribute("selected", "");
+// 	                        hour.value = hour[1].value;
+// 	                    }
+// 	                }
 	                
-	            });
-	            // Hour 선택 제한 2 (startTime 이후의 시간만 endTime 에서 선택 가능)
+// 	            });
+// 	            // Hour 선택 제한 2 (startTime 이후의 시간만 endTime 에서 선택 가능)
 	            
-	        }
+// 	        }
 	
-	        // timeDiff 를 계산해서 hidden input 태그에 입력하는 함수
-	        function calcTimeDiff() {
-	            $('#basicInfoArea .input-time').on('change', function() {
-	                var startApm = $('#start-apm-picker').val();
-	                var startHour = $('#start-hour-picker').val();
-	                var startMinute = $('#start-minute-picker').val();
-	                var startTime = new Date('1900/01/01 ' + startHour + ":" + startMinute + " " + startApm);
+// 	        // timeDiff 를 계산해서 hidden input 태그에 입력하는 함수
+// 	        function calcTimeDiff() {
+// 	            $('#basicInfoArea .input-time').on('change', function() {
+// 	                var startApm = $('#start-apm-picker').val();
+// 	                var startHour = $('#start-hour-picker').val();
+// 	                var startMinute = $('#start-minute-picker').val();
+// 	                var startTime = new Date('1900/01/01 ' + startHour + ":" + startMinute + " " + startApm);
 	
-	                var endApm = $('#end-apm-picker').val();
-	                var endHour = $('#end-hour-picker').val();
-	                var endMinute = $('#end-minute-picker').val();
-	                var endTime = new Date('1900/01/01 ' + endHour + ":" + endMinute + " " + endApm);
+// 	                var endApm = $('#end-apm-picker').val();
+// 	                var endHour = $('#end-hour-picker').val();
+// 	                var endMinute = $('#end-minute-picker').val();
+// 	                var endTime = new Date('1900/01/01 ' + endHour + ":" + endMinute + " " + endApm);
 	
-	                var timeDiff = (endTime - startTime)/1000/60;
+// 	                var timeDiff = (endTime - startTime)/1000/60;
 	
-	                $('#input-study-timeDiff').val(timeDiff);
-	            });
-	        }
+// 	                $('#input-study-timeDiff').val(timeDiff);
+// 	            });
+// 	        }
 	
 	        // 모집인원 설정 기능 시작. ////////////////////////////////////////////////////////////////////////////////////////////////
 	        // <, > 을 클릭하여 모집인원을 설정할 수 있는 함수
@@ -1432,11 +1552,44 @@
 	        }
 	        // 모집인원 설정 기능 끝. ////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	        // (작성 예정) 가격 계산하는 함수
 	        function calculatePrice() {
 	        	
 	        	console.log('Entered calculatePrice()...');
+				
+	        	$('.input-field-price input').on('change', function() {
 
+					var id = $(this).attr("id");
+					var $target;
+					var price;
+					var studyCount = $('#input-study-studyCount').val();
+					
+					switch(id){
+						case "input-study-unitPrice":
+							$target = $('#input-study-totalPrice');
+							price = $(this).val() * (studyCount-0);
+// 							$target.val(price);
+							break;
+							
+						case "input-study-totalPrice":
+							$target = $('#input-study-unitPrice');
+							price = ($(this).val() / (studyCount-0)).toFixed(2);
+// 							$target.val(price.toFixed(2));
+							break;
+					}
+					
+					if(studyCount == "") {
+						console.log('널뛰기');
+						$target.val("");
+						return false;
+					}
+					
+	        	});
+	        	
+	        	$('#input-study-studyCount').on('change', function() {
+	        		
+	        		
+	        		
+	        	});
 	        }
 	        
 	        /********************************** basicInfo - Script 끝 **********************************/
@@ -1447,9 +1600,12 @@
 	        	
 	        	console.log('Entered enableTabs()...');
 	        	
-// 	        	//0: 기본정보, 1: 소개, 2: 레벨테스트
+// 	        	//0: 기본정보, 1: 소개, 2: 레벨테스트, 3. 개설완료
+	        	var $tabItems = $('.tab-item');
 	        	var $tabPanes = $('.tab-pane');
+	        	
 	        	$tabPanes.addClass("ghost");
+	        	$($tabPanes[0]).removeClass("ghost");
 	        	
 				$('ul.tab-title li').click(function(){
 
@@ -1464,6 +1620,9 @@
 // 					}
 		        	$tabPanes.addClass("ghost");
 					$($tabPanes[$(this).index()]).removeClass("ghost");
+					
+					$($tabItems[$(this).index()]).addClass("active");
+					$($tabPanes[$(this).index()]).addClass("active");
 				});
 	        }
 	        
@@ -1579,7 +1738,7 @@
 							.push(obj.options[obj.selectedIndex].text);
 					sselectedinterest2 += iinterest2List[iinterest2List.length - 1];
 
-					aaddinterestListValue = "<input type = 'text' id = 'isel" + count +  "' name = 'tutorinterest[" + count + "].interest2CD'></input> <input type = 'button' value = '삭제' id = 'idel"
+					aaddinterestListValue = "<input type = 'text' id = 'isel" + count +  "' name = 'studyInterest[" + count + "].interest2code'></input> <input type = 'button' value = '삭제' id = 'idel"
 							+ count
 							+ "' onclick = 'deleteInterest("
 							+ count + ")'>";

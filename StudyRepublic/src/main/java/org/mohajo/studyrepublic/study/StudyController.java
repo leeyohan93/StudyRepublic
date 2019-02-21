@@ -4,13 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.mohajo.studyrepublic.domain.DayCD;
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
-import org.mohajo.studyrepublic.domain.LevelCD;
 import org.mohajo.studyrepublic.domain.LeveltestList;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.OnoffCD;
@@ -286,7 +286,7 @@ public class StudyController {
 	
 	/**
 	 * @author	이미연
-	 * @return	스터디 개설 1단계 (/study/openBasic.html)
+	 * @return	스터디 개설 (/study/open.html)
 	 */
 	@RequestMapping("/open")
 	public String open(Model model) {
@@ -406,20 +406,25 @@ public class StudyController {
 		log.info("leveltestSubmitTest() called...");
 		log.info(study.toString());
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");	//if 24 hour format
-//	    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm"); 	// 12 hour format
+		// 참고:  https://stackoverflow.com/a/2009224
+		// 설명:   "unparseable date" exception can here only be thrown by SimpleDateFormat#parse()
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		// 문제:  AM, PM 을 파싱하지 못하는 에러 - a 는 한국 기준 '오전/오후', 미국 기준 'AM/PM'
+		// 해결:  Locale 을 지정
+		// 참고:  https://stackoverflow.com/a/3618809, https://bvc12.tistory.com/168
+	    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.US);
 	    
-		String startDateStr = studyHelper.getStartDateStr();
-		String endDateStr = studyHelper.getEndDateStr();
+		String startDateStr = studyHelper.getStartDateStr().trim();
+		String endDateStr = studyHelper.getEndDateStr().trim();
 
-		String startTimeStr = studyHelper.getStartTimeStr();
-		String endTimeStr = studyHelper.getEndTimeStr();
-			
+		String startTimeStr = studyHelper.getStartTimeStr().trim();
+		String endTimeStr = studyHelper.getEndTimeStr().trim();
+		
 		if(startTimeStr != "") {
 			Date startDate = dateFormat.parse(startDateStr);
 			Date endDate = dateFormat.parse(endDateStr);
-	
+
 			Date preStartTime = (Date)timeFormat.parse(startTimeStr);
 			Date preEndTime = (Date)timeFormat.parse(endTimeStr);
 			
@@ -436,8 +441,9 @@ public class StudyController {
 		
 		study.setStudyId(studyId);
 		
-//		sr.save(study);
+		sr.save(study);
 		
+		log.info(study.toString());
 		model.addAttribute("study", study);
 		
 		
