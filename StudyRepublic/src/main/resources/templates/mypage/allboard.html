@@ -1,21 +1,500 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<!-- 	layout:decorate="~{/layout/mainLayout}"> -->
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>내가쓴 게시판 내역</title>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" th:href="@{/assets/css/main.css}">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
+	type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+
+<style>
+.tab-link {display:inline-block;cursor:pointer}
+.tab-content {display:none}
+.tab-content.on {display:block}
+
+
+.dropdown-toggle::after {
+	border: none !important;
+}
+
+
+
+</style>
 
 </head>
 	
 
 <body>
 
-	<h3>내가 쓴 모든 게시물</h3>	
+<div id="main" layout:fragment="main">
+<div class="inner">
+
+<a class="tab-link on" data-type="tab-1">자유게시판</a>
+<a class="tab-link" data-type="tab-2">문의게시판</a>
+<a class="tab-link" data-type="tab-3">요청게시판</a>
+ 
+<div id="tab-1" class="tab-content on">
+	자유게시판
+	<table class="table table-striped">
+		<tr>
+			
+		</tr>
+	
+		<tr th:each=" fbr : ${fbr}">
+		    
+		    <td th:text="${fbr.title}"></td>
+		    
+			
+		<td> <div class="dropdown">
+		   	
+		   <a class="dropdown-toggle" data-toggle="dropdown" th:text="${fbr.member.nickname}"></a>
+		      
+		  
+		    <div class="dropdown-menu">
+		    
+		      <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${fbr.member.id}" >쪽지쓰기</a>
+		     
+      		 		
+		      <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${fbr.member.id}" >유저정보</a>
+		     
+	    	</div>
+		  </div></td>
+		  
+		    <td th:text="${fbr.date}"></td>
+			<td th:text="${fbr.likeCount}"></td>
+			<td th:text="${fbr.hit}"></td>
+		</tr>
+	</table>
+</div>
+		    
+
+	
+	
+	<!-- 모달창 쪽지쓰기창 시작 -->   
+	 <div class="modal" id="messagewrite">
+		      	<div class="modal-dialog">
+		      		<div class="modal-content">
+		      		
+				        <div class="modal-header">
+				          <h4 class="modal-title">쪽지쓰기</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        
+				        
+				        <div class="modal-body">
+				          <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
+                        <div class="card border-primary rounded-0">
+                            <div class="card-header p-0">
+                                <div class="bg-info text-white text-center py-2">
+                                    <h3><i class="fa fa-envelope"></i> </h3>
+                                    <p class="m-0">쪽지쓰기</p>
+                                </div>
+                            </div>
+                            <div class="card-body p-3">
+
+                               
+                                <div class="form-group">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fa fa-user text-info"></i></div>
+                                        </div>
+                                       <input type="text" class="form-control" id="receiveId" name="receiveId" placeholder="받는사람을 입력해주세요." value="" required/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fa fa-comment text-info"></i></div>
+                                        </div> 
+                                        <textarea class="form-control" name="messageContent" id="messageContent" placeholder="내용을 입력해주세요." required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                               	    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+                                    <input type="button" value="전송하기" data-toggle="modal" data-target="#completemessage" class="btn btn-info btn-block rounded-0 py-2" onclick ="gomessage()">
+                                </div>
+         						 <span><a class="btn btn-info btn-block rounded-0 py-2" id="modimember" th:href="@{receiveMessage}" role="button">취소</a></span>
+                                        
+                                 
+                            </div>
+
+                        </div>
+                    </form>
+				        </div>
+				        
+				  
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>
+						      		
+		      		
+		      		</div>
+		      	</div>
+		      </div>
+		      
+		      <!-- 모달창 쪽지쓰기창 끝 -->
+		       <!-- 모달창 완료 메세지 -->
+		      <div class="modal" id="completemessage">
+		    
+    			<div class="modal-dialog modal-sm">
+      				<div class="modal-content">
+      
+			        <!-- Modal body -->
+			        <div class="modal-body">
+			         	쪽지가 전송되었습니다.
+			        </div>
+			        <!-- Modal footer -->
+			        <div class="modal-footer">
+			          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+      
+        
+        
+        
+		      
+		      <!-- 모달창 유저정보 시작 -->
+				<div class="modal" id="memberinfo">
+				  <div class="modal-dialog">
+				    <div class="modal-content" style="background-color:white";>
+				
+				      <!-- Modal Header -->
+				      <div class="modal-header">
+				        <h4 class="modal-title">Modal Heading</h4>
+				        <button type="button" class="close" data-dismiss="modal">&times;</button>
+				      </div>
+				
+				      <!-- Modal body -->
+				      <div class="modal-body">
+				       <input type="text" id="memberInfo" name="memberInfo" value= />
+				      
+				       </div>
+				
+				      <!-- Modal footer -->
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				      </div>
+				
+				    </div>
+				  </div>
+				</div>
+				
+				  <!-- 모달창 유저정보 끝 -->
+		      
+
+<div id="tab-2" class="tab-content">
+	문의게시판
+	<table class="table table-striped">
+		<tr th:each=" ibr : ${ibr}">
+	    	<td th:text="${ibr.title}"></td>
+	   	 <!-- 드랍다운시작  -->
+				
+			<td> 
+				<div class="dropdown">
+		  		 <a class="dropdown-toggle" data-toggle="dropdown" th:text="${ibr.member.nickname}"></a>
+		 		   <div class="dropdown-menu">
+		   		    <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${ibr.member.id}" >쪽지쓰기</a>
+		      		<a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${ibr.member.id}" >유저정보</a>
+	    			</div>
+	 			</div>
+	 		</td>
+			<!-- 드랍다운 끝 -->
+			<td th:text="${ibr.date}"></td>
+			<td th:text="${ibr.likeCount}"></td>
+		<td th:text="${ibr.hit}"></td>
+	</tr>
+	</table>
+</div>
+	
+	 <div class="modal" id="messagewrite">
+		      	<div class="modal-dialog">
+		      		<div class="modal-content">
+		      		
+				        <div class="modal-header">
+				          <h4 class="modal-title">쪽지쓰기</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        
+				        
+				        <div class="modal-body">
+				          <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
+                        <div class="card border-primary rounded-0">
+                            <div class="card-header p-0">
+                                <div class="bg-info text-white text-center py-2">
+                                    <h3><i class="fa fa-envelope"></i> </h3>
+                                    <p class="m-0">쪽지쓰기</p>
+                                </div>
+                            </div>
+                            <div class="card-body p-3">
+
+                               
+                                <div class="form-group">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fa fa-user text-info"></i></div>
+                                        </div>
+                                       <input type="text" class="form-control" id="receiveId" name="receiveId" placeholder="받는사람을 입력해주세요." value="" required/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fa fa-comment text-info"></i></div>
+                                        </div> 
+                                        <textarea class="form-control" name="messageContent" id="messageContent" placeholder="내용을 입력해주세요." required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                               	    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+                                    <input type="button" value="전송하기" data-toggle="modal" data-target="#completemessage" class="btn btn-info btn-block rounded-0 py-2" onclick ="gomessage()">
+                                </div>
+         						 <span><a class="btn btn-info btn-block rounded-0 py-2" id="modimember" th:href="@{receiveMessage}" role="button">취소</a></span>
+                                        
+                                 
+                            </div>
+
+                        </div>
+                    </form>
+				        </div>
+				        
+				  
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>
+						      		
+		      		
+		      		</div>
+		      	</div>
+		      </div>
+		      
+		      <!-- 모달창 쪽지쓰기창 끝 -->
+		       <!-- 모달창 완료 메세지 -->
+		      <div class="modal" id="completemessage">
+		    
+    			<div class="modal-dialog modal-sm">
+      				<div class="modal-content">
+      
+			        <!-- Modal body -->
+			        <div class="modal-body">
+			         	쪽지가 전송되었습니다.
+			        </div>
+			        <!-- Modal footer -->
+			        <div class="modal-footer">
+			          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+      
+        
+        
+        
+		      
+		      <!-- 모달창 유저정보 시작 -->
+				<div class="modal" id="memberinfo">
+				  <div class="modal-dialog">
+				    <div class="modal-content" style="background-color:white";>
+				
+				      <!-- Modal Header -->
+				      <div class="modal-header">
+				        <h4 class="modal-title">Modal Heading</h4>
+				        <button type="button" class="close" data-dismiss="modal">&times;</button>
+				      </div>
+				
+				      <!-- Modal body -->
+				      <div class="modal-body">
+				       <input type="text" id="memberInfo" name="memberInfo" value=>
+				      
+				       </div>
+				
+				      <!-- Modal footer -->
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				      </div>
+				
+				    </div>
+				  </div>
+				</div>
+				
+				  <!-- 모달창 유저정보 끝 -->
+	
+
+		   	
+		      
+		  
+		    
+		     
+      		 		
+		     
+				
+
+
+
+<div id="tab-3" class="tab-content">
+	요청게시판
+
+	<table class="table table-striped">
+	<tr th:each=" rbr : ${rbr}">
+	    <td th:text="${rbr.title}"></td>
+	    
+		   	
+<td> <div class="dropdown">
+		   <a class="dropdown-toggle" data-toggle="dropdown" th:text="${rbr.member.nickname}"></a>
+		    <div class="dropdown-menu">
+		      <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${rbr.member.id}" >쪽지쓰기</a>
+		      <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${rbr.member.id}" >유저정보</a>
+	    	</div>
+	 </div></td>
+		<td th:text="${rbr.date}"></td>
+		<td th:text="${rbr.likeCount}"></td>
+		<td th:text="${rbr.hit}"></td>
+	</tr>
+	</table>
+</div>
+		     <div class="modal" id="messagewrite">
+		      	<div class="modal-dialog">
+		      		<div class="modal-content">
+		      		
+				        <div class="modal-header">
+				          <h4 class="modal-title">쪽지쓰기</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        
+				        
+				        <div class="modal-body">
+				          <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
+                        <div class="card border-primary rounded-0">
+                            <div class="card-header p-0">
+                                <div class="bg-info text-white text-center py-2">
+                                    <h3><i class="fa fa-envelope"></i> </h3>
+                                    <p class="m-0">쪽지쓰기</p>
+                                </div>
+                            </div>
+                            <div class="card-body p-3">
+
+                               
+                                <div class="form-group">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fa fa-user text-info"></i></div>
+                                        </div>
+                                       <input type="text" class="form-control" id="receiveId" name="receiveId" placeholder="받는사람을 입력해주세요." value="" required/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fa fa-comment text-info"></i></div>
+                                        </div> 
+                                        <textarea class="form-control" name="messageContent" id="messageContent" placeholder="내용을 입력해주세요." required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                               	    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+                                    <input type="button" value="전송하기" data-toggle="modal" data-target="#completemessage" class="btn btn-info btn-block rounded-0 py-2" onclick ="gomessage()">
+                                </div>
+         						 <span><a class="btn btn-info btn-block rounded-0 py-2" id="modimember" th:href="@{receiveMessage}" role="button">취소</a></span>
+                                        
+                                 
+                            </div>
+
+                        </div>
+                    </form>
+				        </div>
+				        
+				  
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>
+						      		
+		      		
+		      		</div>
+		      	</div>
+		      </div>
+		      
+		      <!-- 모달창 쪽지쓰기창 끝 -->
+		       <!-- 모달창 완료 메세지 -->
+		      <div class="modal" id="completemessage">
+		    
+    			<div class="modal-dialog modal-sm">
+      				<div class="modal-content">
+      
+			        <!-- Modal body -->
+			        <div class="modal-body">
+			         	쪽지가 전송되었습니다.
+			        </div>
+			        <!-- Modal footer -->
+			        <div class="modal-footer">
+			          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+      
+        
+        
+        
+		      
+		      <!-- 모달창 유저정보 시작 -->
+				<div class="modal" id="memberinfo">
+				  <div class="modal-dialog">
+				    <div class="modal-content" style="background-color:white";>
+				
+				      <!-- Modal Header -->
+				      <div class="modal-header">
+				        <h4 class="modal-title">Modal Heading</h4>
+				        <button type="button" class="close" data-dismiss="modal">&times;</button>
+				      </div>
+				
+				      <!-- Modal body -->
+				      <div class="modal-body">
+				       <input type="text" id="memberInfo" name="memberInfo" value=>
+				      
+				       </div>
+				
+				      <!-- Modal footer -->
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				      </div>
+				
+				    </div>
+				  </div>
+				</div>
+				
+				  <!-- 모달창 유저정보 끝 -->
+	
+		      
+		  
+		     
+      		 		
+		     
+	    
+	    
+
+
+	
+
+
+
+
+
+
+	<!-- <h3>내가 쓴 모든 게시물</h3>	
 	<table class="table">
 	
 
@@ -43,9 +522,106 @@
 		<td th:text="${rbr.likeCount}"></td>
 		<td th:text="${rbr.hit}"></td>
 	</tr>
-	</table>
-		
+	</table> -->
+
+<script>
+
+$('#messagewrite').on('show.bs.modal', function(e) {
+    var receiveId = $(e.relatedTarget).data('receive-id');
+    $(e.currentTarget).find('input[name="receiveId"]').val(receiveId);
+});
+
+$('#memberinfo').on('show.bs.modal', function(e) {
+    var memberInfo = $(e.relatedTarget).data('member-info');
+    $(e.currentTarget).find('input[name="memberInfo"]').val(memberInfo);
+});
+
+function gomessage(){
 	
+	var form = document.modalmessage;
+	form.submit();
+	$('#completemessage').modal({backdrop: 'static'});
+	
+}
+
+
+/* // Get the modal
+var modal = document.getElementById('messagewrite');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];                                          
+
+// When the user clicks on the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+} */
+/* $('.popupmessage').click(function(event){
+	console.log('click');
+	popupOpen();
+	
+)};
+function popupOpen(){
+	var url ="/messagepopup";
+	var winWidth = 700;
+	var winHeight = 600;
+	var popupOption = "width="+winWidth+",height="+winHeigh;
+	window.open(url,"",popupOption);
+}
+	 */
+
+
+
+$('.tab-link').click(function(){
+    var tab_id = $(this).attr('data-type');
+    $('.tab-link').removeClass('on');
+    $('.tab-content').removeClass('on');
+    $(this).addClass('on');
+    $("#"+tab_id).addClass('on');
+});
+
+/* $.ajax({
+    
+	url: 'download_insert.jsp',
+    type: 'POST', 
+    data: ,
+    success:eventSuccess,
+    
+    error : function(data, status, err){
+    	
+    	consol.log(status + ":" + err);
+    }
+});
+
+function eventSuccess(data){
+	alert(data);
+	$('#automateone_Modal').modal('hide');
+
+}
+});
+
+ */
+
+
+</script>	
+	
+		
+</div>
+</div>	
 		
 		
 </body>

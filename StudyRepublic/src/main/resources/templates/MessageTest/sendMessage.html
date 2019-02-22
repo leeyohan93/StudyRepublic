@@ -5,9 +5,15 @@
 <head>
 <meta charset="UTF-8">
 <title>보낸쪽지함</title>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" th:href="@{/assets/css/main.css}">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
+	type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
 </head>
 <body>
 
@@ -29,9 +35,20 @@
 <div class="row" style="width: 86%">
 <div class="col-sm-9">
 <h2>보낸쪽지함</h2>
-<table th:inline ="text" class="table" border ="1">
+<form name="checkdelete" id="checkdelete" th:action = @{sendCheckdelete}>
+<input type="submit" value="삭제"/>
+
+<!-- 리스트 갯수별 정렬 -->
+<select class="messageSelect">
+	<option value="5" th:selected="${pageDTO.size} == '5'">5개씩 보기</option>
+	<option value="10" th:selected="${pageDTO.size} == '10'">10개씩 보기</option>
+	<option value="15" th:selected="${pageDTO.size} == '15'">15개씩 보기 </option>
+</select> 
+
+<table th:inline ="text" class="table" border ="1" th:with="list=${sendList.list}">
 	<tr>
 		<!-- <td>번호</td> -->
+		<td scope="col"><input class="allCheck" id="allCheck" type="checkbox" /></td>
 		<td>받는사람</td>
 		<td>내용</td>
 		<td>날짜</td>
@@ -39,23 +56,92 @@
 	</tr>
 		
 	
-	<tr th:each = "send : ${sendmessagerepository}">
+	<tr th:each = "send : ${list}">
 	<!-- 	<td th:text=" ${send.messageSendId}"/> -->
+	    <td class="text_ct">
+		<input class="RowCheck" name="RowCheck" id="RowCheck" type="checkbox" th:value="${send.messageSendId}"/></td>
+	
 		<td th:text="${send.receiveId}"/>
-		<td th:text="${send.messageContent}"/>
+		
+		<td><a th:href="@{'/viewSendmessage/'(messageSendId=${send.messageSendId})}" th:text="${send.messageContent}" ></a></td>
+		
 		<td th:text="${send.messageDate}"/>
 		<td th:text="${send.messageDelete}"/>
 	</tr>	
 </table>
+</form>
+	
+	<nav>
+		<div>
+			<ul class="pagination">
+				<li class="page-item" th:if="${sendList.prevPage}"><a th:href="${sendList.prevPage.pageNumber}+ 1">  &nbsp&nbsp이전 </a></li>
+				<li class="page-item" th:each="page :${sendList.pageList}" th:classappend="${page.pageNumber == sendList.currentPageNum -1}?active: ''"><a th:href="${page.pageNumber} +1" > [[${page.pageNumber} + 1]]</a></li>
+				<li class="page-item" th:if="${sendList.nextPage}"><a th:href="${sendList.nextPage.pageNumber}+ 1">&nbsp&nbsp다음</a></li>	
+				
+			</ul>
+		</div>
+	</nav>
+
+
+			<form id="pageForm" th:action="@{sendMessage}" method="get">
+					<input type="hidden" name="page" th:value="${sendList.currentPageNum}">
+					<input type="hidden" name="size" th:value="${sendList.currentPage.pageSize}">
+			</form>
+			
+			<form id="listForm" th:action="@{sendMessageSelect}" method="get">						
+					<input type="hidden" name="listCount" id="listCount">
+			</form>
+						 
+
+
+
 	
 
 
+</div>
+</div>
+
+
 
 </div>
-	</div>
+
+<script type="text/javascript">
+		$(document).ready(function(){
+			
+			
+			 /*페이징*/
+			var pageForm = $("#pageForm");
+			var listForm = $("#listForm"); 
+			 
+			$(".pagination a").click(function(e){
+			
+				e.preventDefault();
+				pageForm.find('[name="page"]').val($(this).attr('href'));
+				pageForm.submit();
+				
+			});
+			
+		/*체크박스 전체선택*/
+		$('.allCheck').click(function(){
+			$('.RowCheck').prop('checked',this.checked);
+		});
+			
+		/*몇개씩보기 선택*/
+		$('.messageSelect').change(function(){
+			
+			 var listOpt = $(".messageSelect").val();
+			 listForm.find("[name='listCount']").val(listOpt);
+			 listForm.submit();
+		});
+		
+			
+			
+		});
+
+</script>
 
 
-</div>
+
 </div>
 </div>
 	

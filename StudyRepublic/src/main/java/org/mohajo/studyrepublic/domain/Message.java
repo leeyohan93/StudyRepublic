@@ -42,6 +42,5 @@ public class Message implements Serializable {
 	@Column(name="message_delete")
 	private String messageDelete="0";
 	
-	
 
 }

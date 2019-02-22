@@ -1,10 +1,14 @@
 package org.mohajo.studyrepublic.mypage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mohajo.studyrepublic.domain.Board;
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.InquireBoard;
+import org.mohajo.studyrepublic.domain.Interest1CD;
+import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.InterestLocation;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.RequestBoard;
@@ -12,6 +16,8 @@ import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.repository.FreeBoardRepository;
 import org.mohajo.studyrepublic.repository.InquireBoardRepository;
+import org.mohajo.studyrepublic.repository.Interest1CDRepository;
+import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.InterestLocationRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.RequestBoardRepository;
@@ -24,6 +30,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author 김준석
@@ -44,6 +52,10 @@ public class MypageController {
 	private StudyMemberRepository smr;
 	@Autowired
 	private InterestLocationRepository iir;
+	@Autowired
+	private Interest1CDRepository i1cdr;
+	@Autowired
+	private Interest2CDRepository i2cdr;
 	
 	/*@RequestMapping("/mypage")
 	public String userinfo(Model model) {
@@ -73,6 +85,24 @@ public class MypageController {
 		model.addAttribute("smr",studymemberbasic);
 		model.addAttribute("smr2",studymemberpremium);
 		model.addAttribute("smr3",studymemberCount);
+		
+		List<InterestLocation> interestlocation = iir.findInterestById(id) ; 
+		
+		model.addAttribute("iir",interestlocation);
+		
+	      List<Interest1CD> interest1cd = i1cdr.findAll();
+	      List<Interest2CD> interest2cd = i2cdr.findAll();
+	      List<Interest2CD> Pinterest2cd = i2cdr.Pinterest2List();
+	      List<Interest2CD> Dinterest2cd = i2cdr.Dinterest2List();
+	      List<Interest2CD> Winterest2cd = i2cdr.Winterest2List();
+	      List<Interest2CD> Ninterest2cd = i2cdr.Ninterest2List();
+
+	      model.addAttribute("interest1cd", interest1cd);
+	      model.addAttribute("interest2cd", interest2cd);
+	      model.addAttribute("pinterest2cd", Pinterest2cd);
+	      model.addAttribute("dinterest2cd", Dinterest2cd);
+	      model.addAttribute("winterest2cd", Winterest2cd);
+	      model.addAttribute("ninterest2cd", Ninterest2cd);
 		
 		
 		System.out.println(studymemberpremium); /*유저정보 데이터*/
@@ -146,8 +176,30 @@ public class MypageController {
 		return"mypage/testmypage";
 	}
 	
+	@RequestMapping(value="/scheduler")
+	public String scheduler(Model model) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		
+		return "mypage/myscheduler";
+	}
 	
-	
+	@RequestMapping("/schedulerApi")
+	@ResponseBody 
+	public Map <Object, Object> myscheduler(Model model) {      
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		List biginfo;
+		Map<Object, Object> map = new HashMap<Object, Object>();
+	   
+		biginfo = smr.findActivityById(id);
+	   
+	   map.put("biginfo", biginfo);
+	   
+	   return map;   
+	}
+
 	
 	
 	
