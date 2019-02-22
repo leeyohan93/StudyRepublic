@@ -1,6 +1,5 @@
 package org.mohajo.studyrepublic.security;
 
-import org.hibernate.Hibernate;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,9 @@ public class UserDetatilsServiceImpl implements UserDetailsService {
 		
 		
 		status = mr.findById(username).get().getMemberStatusCD().getMemberStatusCode();
+		
+		Member member = mr.findById(username).get();
+
 			
 			
 		System.out.println("회원상태: " + status);
@@ -46,6 +48,10 @@ public class UserDetatilsServiceImpl implements UserDetailsService {
 			return null;
 		} 
 		else {
+			System.out.println("진행중?");
+			System.out.println("아이디 : " + member.getId());
+			System.out.println("비번 : " + member.getPassword());
+			System.out.println("권한 : " + member.getRoles());
 					return
 					mr.findById(username)
 					.filter(m -> m != null)
@@ -60,6 +66,15 @@ public class UserDetatilsServiceImpl implements UserDetailsService {
 //	Hibernate.initialize();
 
 	}
+	
+/*    @Transactional
+    public UserDetails loadUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("User", "id", id)
+        );
+
+        return UserPrincipal.create(user);
+    }*/
 	
 
 }

@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -265,6 +266,13 @@ public class MemberController {
 		return "redirect:/index";
 	}
 	
+	@RequestMapping(value = "/socialLogin")
+	String socialLogin() {
+		return "sign_up";
+	}
+	
+
+	
 	
 
 	   
@@ -328,6 +336,9 @@ public class MemberController {
 	   public void memberp() {
 		   System.out.println("되라 - " + memberrepository);
 	   }
+	   
+	   
+
 	
 	
 }

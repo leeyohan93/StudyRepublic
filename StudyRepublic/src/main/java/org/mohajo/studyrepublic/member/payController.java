@@ -20,17 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-
-/**
- * @author 윤성호
- * @since 2019.01.22
- * @version
- * -기능1 추가
- * -기능2 추가
- * -기능3 추가
- */
-
 @Controller
 public class payController {
 
