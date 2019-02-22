@@ -34,8 +34,6 @@ public interface SendMessageRepository extends JpaRepository<SendMessage, Intege
 	@Query(value="update message_send set message_delete ='1' where message_send_id = :message_send_id", nativeQuery = true)
 	int sendmessagedelete(int message_send_id);
 	
-	@Query(value = "select s from SendMessage s where s.messageSendId in ?1")
-	List<SendMessage> getSelectedMessage(int[] selectedId);
 
 	@Query(value="update message_send set message_delete ='1' where message_send_id = :messageSendId and send_id=:id", nativeQuery = true)
 	void sendmessagedelete(int messageSendId,String id);*/
@@ -44,6 +42,8 @@ public interface SendMessageRepository extends JpaRepository<SendMessage, Intege
 	@Query(value="select * from message_send where message_send_id=:messageSendId and send_id=:id", nativeQuery=true)
 	List<SendMessage> findByMessageSendId(int messageSendId,String id);
 
+	@Query(value = "select s from SendMessage s where s.messageSendId in ?1")
+	List<SendMessage> getSelectedMessage(int[] selectedId);
 
 	
 }
