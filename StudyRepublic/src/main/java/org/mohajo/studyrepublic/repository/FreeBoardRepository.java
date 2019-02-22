@@ -37,21 +37,23 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, 
 
 		Date today = new Date();
 
-		Calendar cal = Calendar.getInstance();
-		cal.add(cal.DAY_OF_MONTH, -7);
-		Date weekDay = cal.getTime();
-		cal.add(cal.MONTH, -1);
-		Date monthDay = cal.getTime();
-		cal.add(cal.MONTH, -6);
-		Date sixMonthDay = cal.getTime();
+//		Calendar cal = Calendar.getInstance();
+//		cal.add(cal.DAY_OF_MONTH, -7);
+//		Date weekDay = cal.getTime();
+//		cal.add(cal.MONTH, -1);
+//		Date monthDay = cal.getTime();
+//		cal.add(cal.MONTH, -6);
+//		Date sixMonthDay = cal.getTime();
+//
+//		System.out.println(today);
+//		System.out.println(weekDay);
+//		System.out.println(monthDay);
+//		System.out.println(sixMonthDay);
 
-		System.out.println(today);
-		System.out.println(weekDay);
-		System.out.println(monthDay);
-		System.out.println(sixMonthDay);
-
+		
 
 		builder.and(freeboard.status.eq(0));
+		
 
 		if(searchType ==null && searchPeriod == null) {
 			return builder;
@@ -85,24 +87,32 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoard, Integer>, 
 			break;
 		}
 
-		System.out.println(searchType + "," + searchPeriod);
-		System.out.println(builder.and(freeboard.date.between(weekDay, today)));
-		System.out.println(builder.and(freeboard.title.like("%" + keyword +"%")).or(freeboard.content.like("%"+ keyword+ "%")));
+//		System.out.println(searchType + "," + searchPeriod);
+//		System.out.println(builder.and(freeboard.date.between(weekDay, today)));
+//		System.out.println(builder.and(freeboard.title.like("%" + keyword +"%")).or(freeboard.content.like("%"+ keyword+ "%")));
 
 		return builder;
 	}
+	
+
+	
+	
 
 	@Query(value = "select * from member m join freeboard f on m.id=f.id where m.id=:id", nativeQuery=true)
 	List<FreeBoard> findFreeBoardById(String id);
 
-
-	@Query(value = "select * from freeboard f where :fi > f.freeboard_id limit 1", nativeQuery=true)
+    //이전글
+	@Query(value = "select * from freeboard f where f.freeboard_id <:fi limit 1", nativeQuery=true)
 	FreeBoard beForeBoard(@Param("fi")int freeBoardId);
 
+	//다음글
 	@Query(value = "select * from freeboard f where f.freeboard_id >:fi limit 1", nativeQuery=true)
 	FreeBoard beAfterBoard(@Param("fi")int freeBoardId);
-
-
+    
+	
+	//첨부파일 숨김
+	@Query(value="select count(f.originName) from FreeBoardFile f where f.freeBoardId =:fi")
+	int fileCount(@Param("fi")int freeBoardId);
 
 
 

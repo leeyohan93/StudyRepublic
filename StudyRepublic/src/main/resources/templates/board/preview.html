@@ -13,31 +13,77 @@
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	
+	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 
+
+
+<style>
+
+#previewHead{
+ margin: 20px;
+}
+.previewForm{
+  text-align: center;
+}
+#pvTitle,#pvWrite,#pvContent{
+	height: 30px;
+    display: inline-block;
+    width: 443px;
+        border-bottom:1px solid #ccc;
+    text-align: left;
+}
+
+#pvWrite {
+height: 40px;
+padding-top: 10px;
+}
+
+#pvContent {
+    margin: 5px;
+  
+	
+}
+
+#previewContent {
+	resize: none;
+	width: 443px;
+	height: 441px;
+}
+#closePreview{
+	background-color: rgb(66, 161, 226);
+	color: white;
+	text-align: center;
+	display: inline-block;
+	margin: 20px;
+	cursor: pointer;
+	padding: 7px 2px 2px 2px;
+	width: 75px;
+	height: 42px;
+	
+	}
+</style>
 </head>
  <body>
 
-	<div class="contaniner text-center">
+	 <div class="previewForm">
 
-		<h3>작성중인 글을 미리 보여주는 화면입니다.</h3>
+		<h3 id="previewHead">작성중인 글을 미리 보여주는 화면입니다.</h3>
 		<div class="inbox">
-			<div>
+
+			<div id="pvTitle">
 				<span>제목 : </span><span id="previewTitle"></span>
 			</div>
-			<div>
+			<div id="pvWrite">
 				<span>작성자 : </span><span id="previewWriter"></span>
 			</div>
 
-			<div>
-			<textarea id="previewContent"
-				style="resize: none; width: 443px; height: 441px;" readonly></textarea>
+			<div id="pvContentForm">
+			<span id="pvContent">글 내용 </span>
+			<textarea id="previewContent" readonly utext=""></textarea>
 		    </div>
 		</div>
-		<button class="btn btn-default" id="closePreview" type="button">확인</button>
+		<button class="btn" id="closePreview" type="button">확인</button>
 		
 	</div>
 
@@ -48,13 +94,16 @@
   	
  var pvTitle = opener.document.getElementById("boardTitle").value;
 
- var pvId = opener.document.getElementById("boardWriter").value;
+ var pvId = opener.document.getElementById("boardNickname").value;
  
  var pvContent = opener.document.getElementById("smarteditor").value;
+
+ 
 
   $("#previewTitle").text(pvTitle);
   $("#previewWriter").text(pvId);
   $("#previewContent").text(pvContent);
+  
        
   $("#closePreview").click(function(){
 	
