@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
+
+<head>
+<meta charset="UTF-8">
+<title>보낸 쪽지 읽기</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" th:href="@{/assets/css/main.css}">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
+	type="text/css">
+	
+<style type="text/css">
+
+	.btn1{
+		background-color: green;
+	}
+
+</style>	
+	
+
+</head>
+<body>
+
+<div id="main" layout:fragment="main">
+<div class="inner">
+	<div class="row">
+	<nav class="col-md-2 d-none d-sm-block bg-light sidebar" style="height: 500px;">
+				<ul class="nav nav-pills flex-column">
+				
+					<li class="nav-item">
+						<a class="nav-link" href="/messageWrite">쪽지쓰기</a>
+						<a class="nav-link" href="/receiveMessage">받은쪽지함</a>
+						<a class="nav-link" href="/sendMessage">보낸쪽지함</a>
+					
+					</li>   	
+				</ul>
+	</nav>
+		<div class="col-md-10 messageview" th:each="viewsend :${viewSendMessage}">
+					
+                       <label>받는사람</label>
+                        <div class="border" th:text="${viewsend.receiveId}" style="width: 400px"></div><br>
+                     
+                      
+                      <label>보낸날짜</label>
+                        <div  class="border" th:text="${viewsend.messageDate}" style="width: 400px"></div><br>
+                     
+                     
+                      
+                        <label>내용</label>
+                 
+						<a class="btn btn-info"  style="margin-left: 46%;">신고</a>
+						<a class="btn btn-info" th:href="@{'/messageDelete'(messageSendId=${viewsend.messageSendId})}">삭제</a>
+                        <div  class="border" th:text="${viewsend.messageContent}" style="width: 600px; height: 200px;"></div><br>
+                      
+						
+						<a class="btn btn-info" th:href="@{'/sendMessage'}" style="margin-left:65%;">확인</a>
+		</div>
+      
+	
+
+
+
+
+
+	</div>
+</div>
+</div>
+
+</body>
+</html>

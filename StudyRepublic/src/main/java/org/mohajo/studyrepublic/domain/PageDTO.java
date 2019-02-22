@@ -69,7 +69,7 @@ public class PageDTO {
 	}
 
 	public void setSize(int size) {
-		this.size = size < 15 || size > DEFAULT_MAX_SIZE ? 15 :size;
+		this.size =  size > DEFAULT_MAX_SIZE ? 15 :size;
 	}
 
 
