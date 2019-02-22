@@ -15,6 +15,21 @@ spring:
         hibernate.format_sql: true # 형식화된 sql 문을 보여준다. Beautifier 기능이라고 생각하면 된다
         hibernate.enable_lazy_load_no_trans: true #Lazy Load 를 적용하기 위한 설정
         
+facebook:
+    client:
+      clientId: 414435175958787
+      clientSecret: a3da897ea6b7bd855c19701ba86bcc55
+      accessTokenUri: https://graph.facebook.com/oauth/access_token
+      userAuthorizationUri: https://www.facebook.com/dialog/oauth
+      tokenName: oauth_token
+      authenticationScheme: query
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://graph.facebook.com/me
+        
+  
+    
+        
       
 
     

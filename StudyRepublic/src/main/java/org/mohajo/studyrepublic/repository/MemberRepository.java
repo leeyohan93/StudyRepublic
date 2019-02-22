@@ -3,6 +3,7 @@ package org.mohajo.studyrepublic.repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.mohajo.studyrepublic.domain.AnalyticsDTO;
 import org.mohajo.studyrepublic.domain.Member;
@@ -86,6 +87,10 @@ public interface MemberRepository extends JpaRepository<Member, String>, Queryds
 	List<Object[]> getMemberCountYear();
 	@Query(value = "SELECT MID(registration_date,1,4) period, COUNT(*) as count FROM member where grade_code='T' GROUP BY period order by period desc;",nativeQuery=true)
 	List<Object[]> getTutorCountYear();
+	
+    Optional<Member> findByEmail(String email);
+
+    Boolean existsByEmail(String email);
 
 }
 
