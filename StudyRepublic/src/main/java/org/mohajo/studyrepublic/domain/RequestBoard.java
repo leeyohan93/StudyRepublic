@@ -17,6 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -48,8 +50,8 @@ public class RequestBoard{
 	protected String title;
 	protected String content;
 
-	@CreationTimestamp
-	protected Timestamp date;
+	@Temporal(TemporalType.TIMESTAMP)
+	protected Date date= new Date();
 	protected int notice;
 	protected int status;
 	protected int hit;
@@ -62,7 +64,7 @@ public class RequestBoard{
 	@JoinColumn(name="requestboard_id")
 	private List<RequestBoardReply> requestBoardReply;
 
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="requestboard_id")
 	private List<RequestBoardFile> requestBoardFile;
 	

@@ -44,9 +44,9 @@ public class WebSocketEventListener {
 		
 
 
-		log.info("소켓연결됬을때~");
-		StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
-		String username = stompHeaderAccessor.getUser().getName();
+//		log.info("소켓연결됬을때~");
+//		StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(event.getMessage());
+//		String username = stompHeaderAccessor.getUser().getName();
 		//      String username = (String) stompHeaderAccessor.getSessionAttributes().get("username");
 		//      log.info(username);
 		//      if(username != null) {

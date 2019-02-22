@@ -7,7 +7,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{/layout/mainLayout}"
+	layout:decorate="~{/layout/boardListLayout}"
 	>
 <head>
 
@@ -23,18 +23,171 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <style>
+#beforeAfter {
+	padding: 0px !important;
+	margin: 1px;
+}
+
+#viewForm {
+	border: 1px solid #ccc;
+}
+
+#goBeforeFreePage, #goAfterFreePage, #likeCountBtn, #viewRepotBtn {
+	background-color: white;
+	color: rgb(66, 161, 226);
+	border: 1px solid;
+	text-align: center;
+	display: inline-block;
+	margin: 0px;
+	cursor: pointer;
+	padding: 7px 2px 2px 2px;
+	width: 75px;
+	height: 42px;
+}
+
+#viewRow1, #viewRow2 {
+	padding: 20px 0px 5px 0px;
+	border-bottom: 1px solid #ccc;
+}
+
+#viewRow2 {
+	border: 0px;
+}
+
+#viewTitle {
+	font-size: 25px;
+}
+
+#boardName {
+	font-size: 20px;
+}
+
+#titleBar {
+	margin: 0px 15px;
+}
+
+#chatImgProfile, .commentProfile{
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+}
+
+#viewBoardId {
+	font-size: 18px;
+	padding: 10px 10px 0px 0px;
+}
+
+#viewBoardHit, #viewBoardDate {
+	padding: 10px;
+}
+
+.contentArea {
+	border: 1px solid #ccc;
+	margin-bottom: 20px;
+	height: auto;
+}
+
 #content {
 	resize: none;
 	width: 100%;
 	height: 400px;
 	padding: 12px 13px;
-	border: 1px solid #ccc;
 	border-radius: 4px;
-	font-size: 16px;
+	font-size: 18px;
 	overflow: auto;
 	word-break: break-all;
+}
+
+#likeReportForm {
+	padding: 10px;
+	text-align: center;
+}
+
+#likeCountBtn {
+	margin-left: 80px;
+}
+
+#viewRepotBtn {
+	float: right;
+}
+#viewRow4{
+ text-align: right;
+ padding: 0px !important;
+}
+#viewModify,#viewStatus,#boardList,#writeBtn{
+	
+	background-color: white;
+	color: rgb(66, 161, 226);
+	border: 1px solid;
+	text-align: center;
+	display: inline-block;
+	margin: 0px;
+	cursor: pointer;
+	padding: 7px 2px 2px 2px;
+	width: 75px;
+	height: 42px;
+}
+#replyCountForm{
+ font-size: 15px;
+ padding-left: 20px;
+}
+.boardReplyForm{
+ margin: 5px 20px 20px 20px;
+ border: 1px solid #ccc;
+}
+#commentInsertForm{
+margin: 0px;
+    height: 90px;
+}
+.input-group{
+
+}
+#registerContent{
+
+    border: 1px solid #ccc;
+    margin: 10px;
+    overflow: auto;
+	word-break: break-all;
+	width: 845px;
+}
+#commentInsertBtn{
+	background-color: white;
+	border: 1px solid #ccc;
+	text-align: center;
+	display: inline-block;
+    margin-top: 10px;
+	cursor: pointer;
+	padding: 7px 2px 2px 2px;
+	width: 75px;
+	height: 60px;
+
+}
+.commentArea{
+   padding: 10px;
+       height: 100px;
+}
+.commentContent{
+resize: none;
+    overflow: auto;
+	word-break: break-all;
+	width: 800px;
+	height: 50px;
+}
+.fileAccordion {
+ background-color: white;
+  color: rgb(66, 161, 226) !important;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.4s;
+  float : right;
+}
+.fileForm{
+  display: none;
+  text-align: right;
+  margin-top: 10px;
 }
 
 
@@ -42,182 +195,219 @@
 <body>
 
 	<div id="main" layout:fragment="main">
-		<div class="inner">
+     
+
+			<!-- 이전글 다음글 -->
+		<div class="inner" id="beforeAfter">
+
+			<a class="btn" role="button" id="goBeforeFreePage"
+				name="goBeforeFreePage"
+				th:href="@{'goBeforeFreePage'(freeBoardId=${freeBoard.freeBoardId})}">이전글
+				▼</a> <a class="btn" role="button" id="goAfterFreePage"
+				name="goAfterFreePage"
+				th:href="@{'goAfterFreePage'(freeBoardId=${freeBoard.freeBoardId})}">다음글
+				▲</a>
+		</div>
+
+		<!-- 이전글 다음글 끝-->
+
+		<div class="inner" id="viewForm">
 			<!-- 게시글내용 시작 -->
+			<!-- 게시판명  -->
+			<div id="viewRow1">
+				<span name="title" id="viewTitle">[[${freeBoard.title}]]</span> <span
+					id="titleBar">|</span> <span name="boardName" id="boardName">자유게시판</span>
 
-				<div class="beforeAfter">
-					<a class="btn btn-default" role="button" id="goBeforeFreePage"
-						name="goBeforeFreePage"
-						th:href="@{'goBeforeFreePage'(freeBoardId=${freeBoard.freeBoardId})}">이전글
-						▼</a> <a class="btn btn-default" role="button" id="goAfterFreePage"
-						name="goAfterFreePage"
-						th:href="@{'goAfterFreePage'(freeBoardId=${freeBoard.freeBoardId})}">다음글
-						▲</a>
+			</div>
+			<!--게시판명 끝  -->
+
+
+			<!--아이디 조회수 추천 날짜 파일업로드 -->
+			<div id="viewRow2">
+			   <img id="chatImgProfile" th:src="@{'/member_image/'+${freeBoard.member.profileSaveName}}" />
+			   <span id = "viewRow22"> 
+			   <span name="id" id="viewBoardId">[[${freeBoard.member.nickname}]]</span> <span
+					name="hit" id="viewBoardHit">조회수&nbsp[[${freeBoard.hit}]]</span>
+				<span name="date" id="viewBoardDate">[[${#dates.format(freeBoard.date,
+				'yyyy-MM-dd HH:mm')}]]</span>
+				</span>
+             
+             <span th:if="${fileExist != 0}" >
+            <button class="fileAccordion">첨부 파일  ▼</button>
+		    </span>
+			<div class= "fileForm" th:each = "frf : ${freeBoard.freeBoardFile}" >
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input type="hidden" name ="boardFileUrl" th:value="${frf.fullUrl}" />
+		    <a th:href = "@{'/board/boardFile'(fullUrl=${frf.fullUrl})}">[[${frf.originName}]]</a>
+		    </div>
+			</div>
+			<!--아이디 조호수 추천 날짜 파일업로드 끝  -->
+
+
+			<!--글내용 신고 추천 -->
+			<div class="contentArea">
+
+				<div name="content" id="content" th:utext="${freeBoard.content}"
+					readonly></div>
+				<div id="likeReportForm">
+					<a class="btn" role="button" id="likeCountBtn" name="likeCountBtn">추천&nbsp&nbsp<span
+						id="likeCount" name="likeCount"></span></a> <a class="btn"
+						role="button" id="viewRepotBtn" data-toggle="modal"
+						data-target="#reportModal">신고</a>
 				</div>
-
-				<!-- 게시판명  -->
-				<div class="row1">
-					<span name="title" id="title">[[${freeBoard.title}]]</span> <span
-						class="bar">|</span> <span name="boardName" id="boardName">자유게시판</span>
-						
-				</div>
-				<!--게시판명 끝  -->
-
-
-				<!--아이디 조회수 추천 날짜 -->
-				<div class="row2">
-					<span name="id" id="id">[[${freeBoard.member.nickname}]]</span> <span name="hit"
-						id="hit">조회수&nbsp[[${freeBoard.hit}]]</span> 
-					<spane name="date" id="date">[[${#dates.format(freeBoard.date,
-					'yyyy-MM-dd HH:mm')}]]</span>
-				</div>
-				<!--아이디 조호수 추천 날짜 끝  -->
-
-
-				<!--글내용 -->
-				<div class="contentArea">
-
-					<div name="content" id="content" th:utext="${freeBoard.content}"
-						readonly></div>
-
-				</div>
-				<!--글내용 끝  -->
-
-
-				<!--추천 신고 -->
-				<div class="row3">
-					<a class="btn btn-default" role="button" id="likeCountBtn"
-						name="likeCountBtn">추천&nbsp&nbsp<span id="likeCount" name="likeCount"></span></a>
-					<button type="button" class="btn btn-default" data-toggle="modal"
-						data-target="#reportModal">신고</button>
-				</div>
-				<!--추천 신고 끝  -->
-
-				<!-- 신고 modal  -->
-
-				         <div class="modal fade" id="reportModal" tabindex="-1">
-				          <div class="modal-dialog">
-				          <div class="modal-content">
-				           <div class="modal-header">
-				             <h3>신고하기</h3><br>
-				             <p>신고사유 선택 후 상세한 신고 내용을 함꼐 작성해 주시면 확인에 큰 도움이 됩니다.</p>             
-				               <button class="close" data-dismiss="modal">&times;</button>
-				           </div>
-				           <div class="modal-body" style="text-align: center;">			                
-				              <form>
-				              <input class="reportContent" type="text" value="신고자" readonly>
-				              <input class="reportContent" name="id" type="text" th:value="${freeBoard.Id}"readonly>
-				              <br>
-				              <input class="reportContent" type="text" value="신고일" readonly>
-				              <input class="reportContent" name="date" type="text" th:value="${#dates.format(freeBoard.date,'yyyy-MM-dd HH:mm')}"readonly>
-				              <br>
-				              <input class="reportContent" type="text" value="신고대상자" readonly>
-				              <input class="reportContent" name="target"type="text" th:value="${freeBoard.Id}"readonly>
-				              <br>
-				              <input class="reportContent" type="text" value="신고유형" readonly>
-				              <select id="reportWhyCD" name="reportWhyCD">
-				               <option value="1">영리목적 및 홍보성</option>
-				               <option value="2">불법정보</option>
-				               <option value="3">음란성 및 선정성</option>
-				               <option value="4">욕설 및 인신공격</option>
-				               <option value="5">개인정보노출</option>
-				               <option value="6">반복게시 및 도배</option>
-				               <option value="7">기타</option>				               				               
-				              </select>
-				              <br>
-				              <input class="reportContent" type="text" value="신고내용" readonly>
-				              <input class="reportContent" name="content" type="text" >
-				             
-				           </div>
-				           <div class="modal-footer">
-				             <button class="btn btn-default" data-dismiss="modal" type=button>취소</button>
-				             <input class="btn btn-default" type="submit" value="신고하기" data-toggle="model" data-target="#reportConfirm">
-				             </form>
-				           </div>
-				           
-				          </div>
-				          </div>
-				     
-				         </div>
-
-				<!--신고 modal 끝  -->
-                
-<!--                 신고 modal확인창  -->
-<!--                 <div class="modal fade" id="reportConfirm"> -->
-<!--                 <div class="modal-dialog"> -->
-<!--                 <div class="content"> -->
-<!--                 <div class="modal-body"> -->
-<!--                 <p>신고처리 가되었습니다.</p> -->
-<!--                 </div> -->
-                
-<!--                 </div> -->
-<!--                 </div> -->
-                
-<!--                 </div> -->
-                
-                <!--신고 modal확인창 끝  -->
-
-                <!--수정 삭제 목록 글쓰기  -->
-				<div class="row4">
-				
-                    <span th:if="${freeBoard.Id} eq ${memberId}">                
-					<a class="btn btn-default"
-						role="button" id="modify" name="modify">수정</a>
-					<a class="btn btn-default" role="button" id="status" name="status">삭제</a>
-					</span>
-					<a class="btn btn-default" role="button" id="list" name="list"
-						th:href="@{listFreeBoard}">목록</a> <a class="btn btn-default"
-						role="button" id="writeBtn" name="writeBtn"
-						th:href="@{writeBoard}">글쓰기</a>
-                  
-				</div>
-                
-                <!--수정 삭제 목록 글쓰기  끝--> 
-                
-                <form id="v1" th:action="@{deleteBoard}" method="get">
-                       <input type="hidden" name="freeBoardId" th:value="${freeBoard.freeBoardId}"/>  
-                       <input type="hidden" name="boardType" value="freeBoard">   
-                </form>
-                <form id="v2" th:action="@{modifyBoard}" method="get">
-                       <input type="hidden" name="freeBoardId" th:value="${freeBoard.freeBoardId}"/>  
-                       <input type="hidden" name="boardType" value="freeBoard">   
-                </form>
-				
-				<!-- 게시글 내용 끝 -->
-
+				<!--글내용 신고 추천 끝  -->
 				<!--  댓글  -->
-				<div class="boardReply">
-					<label for="content">댓글수&nbsp&nbsp<span name="replyCount"
-						id="replyCount"></span></label>
+                
+				
+                <div id="replyCountForm">
+				<label for="content">댓글수&nbsp&nbsp<span name="replyCount"
+					id="replyCount"></span></label>
+					</div>
+					
+             <div class="boardReplyForm">
+             
+					<div class="boardReplyList">
+						<div class="commentList"></div>
+					</div>
+
+					<div class="boardReplySecondList">
+						<div class="commentSecondList"></div>
+					</div>
+
+
+
 					<form id="commentInsertForm" name="commentInsertForm">
 						<div class="input-group">
 							<input type="hidden" name=freeBoardId
-								th:value="${freeBoard.freeBoardId}" /> <input type="hidden"
-								name="id" th:value="${freeBoard.member.id}" /> <input type="text"
-								class="form-control" id="registerContent" name="content"
-								placeholder="내용을 입력하세요."> <span class="input-group-btn">
-								<button class="btn btn-default" type="button"
+								th:value="${freeBoard.freeBoardId}" /> 
+								<input type="hidden"
+								name="id" th:value="${memberId}" /> 
+								
+								<textarea
+								type="text" class="form-control" id="registerContent"
+								name="content" placeholder="내용을 입력하세요."> </textarea>
+								<span class="input-group-btn">
+								<button class="btn" type="button"
 									id="commentInsertBtn" name="commentInsertBtn">등록</button>
 							</span>
+									
 						</div>
 					</form>
 				</div>
 
-				<div class="boardReplyList">
-					<div class="commentList"></div>
-				</div>
-				
-				<div class="boardReplySecondList">
-					<div class="commentSecondList"></div>
-				</div>
-				
-
 				<!--댓글끝 -->
 
 			</div>
-		
 
 
+
+
+
+			<!-- 신고 modal  -->
+
+			<div class="modal fade" id="reportModal" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h3>신고하기</h3>
+							<br>
+							<p>신고사유 선택 후 상세한 신고 내용을 함꼐 작성해 주시면 확인에 큰 도움이 됩니다.</p>
+							<button class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body" style="text-align: center;">
+							<form>
+								<input class="reportContent" type="text" value="신고자" readonly>
+								<input class="reportContent" name="id" type="text"
+									th:value="${freeBoard.Id}" readonly> <br> <input
+									class="reportContent" type="text" value="신고일" readonly>
+								<input class="reportContent" name="date" type="text"
+									th:value="${#dates.format(freeBoard.date,'yyyy-MM-dd HH:mm')}"
+									readonly> <br> <input class="reportContent"
+									type="text" value="신고대상자" readonly> <input
+									class="reportContent" name="target" type="text"
+									th:value="${freeBoard.Id}" readonly> <br> <input
+									class="reportContent" type="text" value="신고유형" readonly>
+								<select id="reportWhyCD" name="reportWhyCD">
+									<option value="1">영리목적 및 홍보성</option>
+									<option value="2">불법정보</option>
+									<option value="3">음란성 및 선정성</option>
+									<option value="4">욕설 및 인신공격</option>
+									<option value="5">개인정보노출</option>
+									<option value="6">반복게시 및 도배</option>
+									<option value="7">기타</option>
+								</select> <br> <input class="reportContent" type="text" value="신고내용"
+									readonly> <input class="reportContent" name="content"
+									type="text">
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-default" data-dismiss="modal" type=button>취소</button>
+							<input class="btn btn-default" type="submit" value="신고하기"
+								data-toggle="model" data-target="#reportConfirm">
+							</form>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+
+			<!--신고 modal 끝  -->
+
+			<!--                 신고 modal확인창  -->
+			<!--                 <div class="modal fade" id="reportConfirm"> -->
+			<!--                 <div class="modal-dialog"> -->
+			<!--                 <div class="content"> -->
+			<!--                 <div class="modal-body"> -->
+			<!--                 <p>신고처리 가되었습니다.</p> -->
+			<!--                 </div> -->
+
+			<!--                 </div> -->
+			<!--                 </div> -->
+
+			<!--                 </div> -->
+
+			<!--신고 modal확인창 끝  -->
+
+			
+
+			
+
+			<!-- 게시글 내용 끝 -->
+
+
+      
+		</div>
+        
+          <!--수정 삭제 목록 글쓰기  -->
+			<div class="inner" id="viewRow4">
+
+				<span th:if="${freeBoard.Id} eq ${memberId}"> <a
+					class="btn btn-default" role="button" id="viewModify" name="modify">수정</a>
+					<a class="btn btn-default" role="button" id="viewStatus" name="status">삭제</a>
+				</span> <a class="btn btn-default" role="button" id="boardList" name="list"
+					th:href="@{listFreeBoard}">목록</a> <a class="btn btn-default"
+					role="button" id="writeBtn" name="writeBtn" th:href="@{writeBoard}">글쓰기</a>
+
+			</div>
+			  
+		    
+			
+
+			<!--수정 삭제 목록 글쓰기  끝-->
+			
+			<form id="v1" th:action="@{deleteBoard}" method="get">
+				<input type="hidden" name="freeBoardId"
+					th:value="${freeBoard.freeBoardId}" /> <input type="hidden"
+					name="boardType" value="freeBoard">
+			</form>
+			<form id="v2" th:action="@{modifyBoard}" method="get">
+				<input type="hidden" name="freeBoardId"
+					th:value="${freeBoard.freeBoardId}" /> <input type="hidden"
+					name="boardType" value="freeBoard">
+			</form>
+        
+
+            <div id="list" layout:fragment="list"></div>
 
 
 
@@ -225,6 +415,7 @@
 
 <script th:inline="javascript">
  
+		
  //ajax사용하기위한 전역변수
  var token = $("meta[name='_csrf']").attr("content");
  var header = $("meta[name='_csrf_header']").attr("content");
@@ -232,7 +423,8 @@
  var freeBoardId = [[${freeBoard.freeBoardId}]];
  var likeCount = [[${freeBoard.likeCount}]];
  $(document).ready(function(){
-	
+	  
+	 
 	 //ajax사용
 	 $(document).ajaxSend(function(e, xhr, options) {
          xhr.setRequestHeader(header, token);
@@ -243,14 +435,18 @@
 
 	 
  //게시판삭제 버튼클릭
- $("#status").click(function(){
+ $("#viewStatus").click(function(){
+	
 	 $("#v1").submit();
+	
  });
  //게시판수정 버튼클릭
- $("#modify").click(function(){
+ $("#viewModify").click(function(){
+
 	$("#v2").submit(); 
  });
  
+
  //추천 클릭
  $("#likeCountBtn").click(function(){
 	 $.ajax({
@@ -301,13 +497,21 @@
          data : {'freeBoardId':freeBoardId},
          success : function(data){
              var a =''; 
-             $.each(data, function(key, value){ 
+             $.each(data, function(key, value){    
+            	 console.log(value.member.id);
+            	
+            	 console.log([[${memberId}]]);
                  a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                 a += '<div class="commentInfo'+value.freeBoardReplyId+'">'+' 작성자 : '+value.member.nickname+'&nbsp&nbsp&nbsp'+value.date;
+                 a += '<div class="commentInfo'+value.freeBoardReplyId+'"><img class="commentProfile" src="/member_image/'+value.member.profileSaveName+'" > '+value.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleTimeString(); 
                  a += '<a onclick="commentSecond('+value.freeBoardReplyId+');"> 답글 </a>';
+                 if(value.member.id == [[${memberId}]])
+                 {
                  a += '<a onclick="commentUpdate('+value.freeBoardReplyId+',\''+value.content+'\');"> 수정 </a>';
-                 a += '<a onclick="commentDelete('+value.freeBoardReplyId+');"> 삭제 </a> </div>';
-                 a += '<div class="commentContent'+value.freeBoardReplyId+'"> <p> 내용 : '+value.content +'</p>';
+                 a += '<a onclick="commentDelete('+value.freeBoardReplyId+');"> 삭제 </a>';
+                 }
+                 a += '</div>';
+                 
+                 a += '<div class="commentContent'+value.freeBoardReplyId+'"> <textarea class="commentContent" readonly> '+value.content +'</textarea>';
                  a += '</div></div>';
              });
              commentCount();
@@ -388,7 +592,10 @@
      $('.commentSecondList').html(a);
 	 
  }
-
+ //첨부파일 토글
+  $(".fileAccordion").click(function(){
+    $(".fileForm").toggle();
+  });
 
 
 

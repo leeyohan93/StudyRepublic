@@ -4,9 +4,12 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -29,8 +32,8 @@ public class Reply {
 
 	protected String id;
 	protected String content;
-	@CreationTimestamp
-	protected Timestamp date;
+	@Temporal(TemporalType.TIMESTAMP)
+	protected Date date= new Date();
 	@Column(name = "replygroup")
 	protected int replyGroup;
 	@Column(name = "replystep")

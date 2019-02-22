@@ -67,9 +67,15 @@ public class FreeBoard extends Board{
 	@JoinColumn(name="freeboard_id")
 	private List<FreeBoardReply> freeBoardReply;
 
-	@OneToMany
+/*	@OneToMany
+	@JoinColumn(name="freeboard_id")
+	private List<FreeBoardFile> freeBoardFile;*/
+	
+	
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="freeboard_id")
 	private List<FreeBoardFile> freeBoardFile;
+	
 
 	@ManyToOne
 	@JoinColumn(name="id",insertable=false, updatable=false)
