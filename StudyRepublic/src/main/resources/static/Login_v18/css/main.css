@@ -258,6 +258,33 @@ iframe {
   margin-bottom: 10px;
 }
 
+.wrap-input100_findpw {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  width: 70%;
+  height: 80px;
+  position: relative;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+/*   margin:auto; */
+  margin: auto;
+  margin-bottom:20px;
+  
+}
+
+.modal_head {
+	display:block; 
+	float:right;
+	height:20px;
+	width:100%;
+	margin-bottom:35px;
+}
+
 .join-input100 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -385,6 +412,17 @@ iframe {
   padding: 0 26px;
 }
 
+.input100_findpw {
+  display: block;
+  width: 100%;
+  background: transparent;
+  font-size: 12px;
+  color: #555555;
+  line-height: 1.2;
+  padding: 0 26px;
+}
+
+
 
 
 input.input100 {
@@ -467,10 +505,13 @@ input.radio100 {
   height: 48px;
 }
 
+
 .input100:focus + .focus-input100 + .label-input100 {
   top: 14px;
   font-size: 13px;
 }
+
+
 
 .has-val {
   height: 48px !important;
@@ -481,7 +522,9 @@ input.radio100 {
   font-size: 13px;
 }
 
-/*==================================================================
+
+
+
 [ Restyle Checkbox ]*/
 
 .input-checkbox100 {
@@ -489,6 +532,7 @@ input.radio100 {
 }
 
 .label-checkbox100 {
+  font-family: Poppins-Regular;
   font-size: 13px;
   color: #999999;
   line-height: 1.4;
@@ -501,6 +545,7 @@ input.radio100 {
 
 .label-checkbox100::before {
   content: "\f00c";
+  font-family: FontAwesome;
   font-size: 13px;
   color: transparent;
 
@@ -542,6 +587,19 @@ input.radio100 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.container-login100-form-btn_findpw {
+  width: 70%;
+  margin:auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  
 }
 
 
@@ -762,7 +820,7 @@ input[type = "radio"] {
 }
 
 
- select {
+select[class='shsel']:valid {
     width:200px;
     height:120px;
     font-size:14px;
@@ -774,6 +832,25 @@ input[type = "radio"] {
     background-image:none;
 /*     -o-appearance:none; */
 }
+
+select[class='point']:valid {
+
+    font-size:14px;
+    border:1px solid #ccc;
+    background-color:#f7f7f7;
+    background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg) no-repeat 95% 50%;
+     width: 200px;
+ 	 height: 100%;
+  	padding: .8em .5em;
+  	font-family: inherit;
+  	-webkit-appearance: none;
+  	-moz-appearance: none;
+  	appearance: none;
+
+
+}
+
+
 select::-ms-expand {
    display: none;            /* 화살표 없애기 for IE10, 11*/
 }
@@ -784,18 +861,7 @@ select option {
 }
 
 
-/* select option:checked,
-select option:hover { 
-    box-shadow: 0 0 10px 100px #c2c2c2 inset;  
-    color: #495057; *//* 글자회색 
-    color : rgb(179,220,248);
-    background-color:#f7f7f7;
-   
-    
-}
- */
- 
- select option:hover,
+ 	select option:hover,
     select option:focus,
     select option:active {
 /*      background: rgb(179,220,248); */
@@ -808,7 +874,8 @@ select option:hover {
         background-color: #d6d6d6 !important; /* for IE */
         color: #000000 !important;
     }
-
+    
+    
 
 
 

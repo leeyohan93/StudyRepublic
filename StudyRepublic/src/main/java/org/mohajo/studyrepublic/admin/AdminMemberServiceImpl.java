@@ -4,6 +4,8 @@ import java.lang.management.GarbageCollectorMXBean;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.mohajo.studyrepublic.domain.GradeCD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberStatusCD;
@@ -106,7 +108,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	}
 	
 	@Override
-	public List<Member> exiteMember(String[] selectedId){
+	public List<Member> exitMember(String[] selectedId){
 		List<Member> selectedMember = memberRepository.getSelectedMember(selectedId);
 		
 		for(int i=0; i<selectedMember.size(); i++) {
@@ -127,6 +129,15 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	public List<Member> getSearchMember(String[] grade,String[] status,String searchKey,String searchValue){
 		Iterable<Member> searchmember = memberRepository.findAll(AdminPredicate.searchMember(grade, status, searchKey, searchValue));
 		return Lists.newArrayList(searchmember);
+	}
+	
+	@Override
+	public Member findMember(String memberId) {
+		
+		Member member =  memberRepository.findMember(memberId);
+/*		System.out.println("똥마렵다" + memberRepository);*/
+		return member;
+
 	}
 	
 

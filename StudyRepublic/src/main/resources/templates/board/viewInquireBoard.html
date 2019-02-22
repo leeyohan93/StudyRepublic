@@ -8,8 +8,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{/layout/mainLayout}">
-	>
-<head>
+
 
 <title>게시판 글목록</title>
 <meta http-equiv="Content-Type" content="text/html" ; charset="utf-8" />
@@ -30,11 +29,9 @@
 	padding: 0px !important;
 	margin: 1px;
 }
-
 #viewForm {
 	border: 1px solid #ccc;
 }
-
 #goBeforeInquirePage, #goAfterInquirePage, #likeCountBtn, #viewRepotBtn {
 	background-color: white;
 	color: rgb(66, 161, 226);
@@ -47,49 +44,39 @@
 	width: 75px;
 	height: 42px;
 }
-
 #viewRow1, #viewRow2 {
 	padding: 20px 0px 5px 0px;
 	border-bottom: 1px solid #ccc;
 }
-
 #viewRow2 {
 	border: 0px;
 }
-
 #viewTitle {
 	font-size: 25px;
 }
-
 #boardName {
 	font-size: 20px;
 }
-
 #titleBar {
 	margin: 0px 15px;
 }
-
 #chatImgProfile, .commentProfile{
 	width: 40px;
 	height: 40px;
 	border-radius: 100%;
 }
-
 #viewBoardId {
 	font-size: 18px;
 	padding: 10px 10px 0px 0px;
 }
-
 #viewBoardHit, #viewBoardDate {
 	padding: 10px;
 }
-
 .contentArea {
 	border: 1px solid #ccc;
 	margin-bottom: 20px;
 	height: auto;
 }
-
 #content {
 	resize: none;
 	width: 100%;
@@ -100,16 +87,13 @@
 	overflow: auto;
 	word-break: break-all;
 }
-
 #likeReportForm {
 	padding: 10px;
 	text-align: center;
 }
-
 #likeCountBtn {
 	margin-left: 80px;
 }
-
 #viewRepotBtn {
 	float: right;
 }
@@ -133,7 +117,6 @@
 #inquireComment{
 float: left;
 }
-
 #replyCountForm{
  font-size: 15px;
  padding-left: 20px;
@@ -147,10 +130,8 @@ margin: 0px;
     height: 90px;
 }
 .input-group{
-
 }
 #registerContent{
-
     border: 1px solid #ccc;
     margin: 10px;
     overflow: auto;
@@ -167,7 +148,6 @@ margin: 0px;
 	padding: 7px 2px 2px 2px;
 	width: 75px;
 	height: 60px;
-
 }
 .commentArea{
    padding: 10px;
@@ -193,8 +173,6 @@ resize: none;
   text-align: right;
   margin-top: 10px;
 }
-
-
 </style>
 <body>
 
@@ -429,7 +407,6 @@ resize: none;
 	 //페이지 로딩시 댓글 목록 출력 
 	 commentList(); 
 	});
-
 	 
  //게시판삭제 버튼클릭
  $("#viewStatus").click(function(){
@@ -439,11 +416,9 @@ resize: none;
  });
  //게시판수정 버튼클릭
  $("#viewModify").click(function(){
-
 	$("#v2").submit(); 
  });
  
-
  //추천 클릭
  $("#likeCountBtn").click(function(){
 	 $.ajax({
@@ -593,9 +568,6 @@ resize: none;
   $(".fileAccordion").click(function(){
     $(".fileForm").toggle();
   });
-
-
-
      </script>
      </div>
     

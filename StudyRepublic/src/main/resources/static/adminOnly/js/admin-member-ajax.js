@@ -1,10 +1,10 @@
-
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 var selectedRow;
 var formData;
 var selectedId;
 var selectedEmail;
+var number;
 
 $(function() {
     $(document).ajaxSend(function(e, xhr, options) {
@@ -13,7 +13,7 @@ $(function() {
 });
 
 $(document).ready(function () {
-
+	// paging과 맞물려 사용 중지
     $("#unpause-process").click(function (event) {
         unpause();
     });
@@ -26,7 +26,19 @@ $(document).ready(function () {
     $("#exit-process").click(function (event) {
         exit();
     });
+    $(".changePassword-process").click(function (event) {
+    	changePassword();
+    });
+    //  전체 체크박스 추가
+    /*$("#memberStatus input#allCheck").click(function() {
+    	alert("a");
+	if ($("#memberStatus input#allCheck").prop("checked")) {
+		$("#memberStatus input[type=checkbox]").prop("checked", true);
+	} else {
+		$("#memberStatus input[type=checkbox]").prop("checked", false);
+	}*/
 });
+
 
 function makeSelected(){
     formData="";
@@ -47,7 +59,28 @@ function makeSelected(){
     })
     selectedEmail = selectedEmail.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
     
-    
+}
+
+function changePassword(number) {
+	formData = "";
+	var memberId= $("#"+number+" input[name='memberId']").val();
+	var memberEmail= $("#"+number+" input[name='memberEmail']").val();
+	var memberPhonenumber= $("#"+number+" input[name='memberPhonenumber']").val();
+	formData = {"memberId":memberId,"memberEmail":memberEmail,"memberPhonenumber":memberPhonenumber}
+	console.log(formData);
+
+	 $.ajax({
+	        type: 'post',
+	        url: '/adminPage/member/changePassword',
+	        traditional: true,
+	        data: formData,
+
+	        success: function (data) {
+	        },
+	        error :function(){
+	            alert("error");
+	        }
+	    });
 }
 
 function unpause(){
@@ -73,7 +106,6 @@ function unpause(){
 }
 
 function changeGrade(){
-
     makeSelected();
     var changeGrade= $("#changeGrade select[name='changeGrade']").val();
     formData = {"selectedId": selectedId, "selectedEmail": selectedEmail,"changeGrade":changeGrade};

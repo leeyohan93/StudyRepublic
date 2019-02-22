@@ -1,0 +1,240 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/adminLayout}">
+
+<head>
+<title>Study</title>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+ <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+	<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
+
+</head>
+<body>
+	<div layout:fragment="search" style="width: 500px; padding-left: 10px;">
+		<div class="form-group-inner">
+			<form action="search">
+			<div class="row">
+					<label class="login2 pull-left pull-left-pro">스터디 종류<span
+						class="basic-ds-n" style="margin: 0px 10px 5px 10px;"></span>
+					</label>
+					<div class="inline-checkbox-cs">
+						<label class="checkbox-inline i-checks pull-left"> 
+						<input type="checkbox" value="P" name="type"> 프리미엄</label> 
+						<label class="checkbox-inline i-checks pull-left">
+						<input type="checkbox" value="B" name="type"> 일반</label> 
+					</div>
+				</div>
+			<div class="row">
+					<label class="login2 pull-left pull-left-pro">스터디 상태<span
+						class="basic-ds-n" style="margin: 0px 10px 5px 10px;"></span>
+					</label>
+					<div class="inline-checkbox-cs" style="padding-top: 10px;">
+						<label class="checkbox-inline i-checks pull-left"> 
+						<input type="checkbox" value="O" name="status"> 모집중</label>
+						<label class="checkbox-inline i-checks pull-left"> 
+						<input type="checkbox" value="F" name="status"> 모집마감</label>
+						<label class="checkbox-inline i-checks pull-left"> 
+						<input type="checkbox" value="G" name="status"> 진행중</label>
+						<label class="checkbox-inline i-checks pull-left"> 
+						<input type="checkbox" value="C" name="status"> 완료</label>
+						<label class="checkbox-inline i-checks pull-left"> 
+						<input type="checkbox" value="D" name="status"> 해체</label>
+						
+					</div>
+				</div>
+				<div class="row">
+					<label class="login2 pull-left pull-left-pro">온오프 여부<span
+						class="basic-ds-n" style="margin: 0px 10px 5px 10px;"></span>
+					</label>
+					<div class="inline-checkbox-cs">
+						<label class="checkbox-inline i-checks pull-left"> 
+						<input type="checkbox" value="O" name="onoff"> 온라인</label> 
+						<label class="checkbox-inline i-checks pull-left">
+						<input type="checkbox" value="F" name="onoff"> 오프라인</label> 
+						<label class="checkbox-inline i-checks pull-left">
+						<input type="checkbox" value="B" name="onoff"> 온오프라인</label> 
+					</div>
+				</div>
+		<div class="row">
+			<label class="login2 pull-left pull-left-pro">검색어 <span
+				class="basic-ds-n" style="margin: 0px 10px 5px 10px;"></span></label>
+				<select name = searchKey class="custom-select mr-sm-2" style="margin-top: 8px;height: 30px;">
+					<option value="id">스터디코드</option>
+					<option value="name">스터디명</option>
+					<option value="leader">개설자</option>
+				</select>
+					<input type="text" name="searchValue" style="margin-left: 8px;height: 30px;"> 
+		</div>
+		<div class="row" style="margin-top: 10px">
+					<input type="submit"
+						class="btn btn-custon-rounded-four btn-primary"
+						style="background-color: #006DF0; padding: 10px 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+						value="Search">
+				</div>
+				</form>
+				</div>
+		</div>
+	<script>
+		
+	</script>
+	<h3 layout:fragment="title">Study</h3>
+	<!-- Static Table Start -->
+	<div class="data-table-area mg-b-15" layout:fragment="main">
+		<div class="container-fluid" style="padding-bottom: 0;">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="sparkline13-list">
+						<div class="sparkline13-hd">
+							<div class="main-sparkline13-hd">
+								<h1>Study Data Table</h1>
+							</div>
+						</div>
+						<div class="sparkline13-graph">
+							<div class="datatable-dashv1-list custom-datatable-overright">
+								<div id="toolbar">
+									<select class="form-control dt-tb">
+										<option value="">Export Basic</option>
+										<option value="all">Export All</option>
+										<option value="selected">Export Selected</option>
+									</select>
+								</div>
+								<table id="table" data-toggle="table" data-pagination="true"
+									data-search="true" data-show-columns="true"
+									data-show-pagination-switch="true" data-show-refresh="true"
+									data-key-events="true" data-show-toggle="true"
+									data-resizable="true" data-cookie="true"
+									data-cookie-id-table="saveId" data-show-export="true"
+									data-click-to-select="true" data-toolbar="#toolbar">
+									<thead>
+										<tr>
+											<th data-field="static" data-checkbox="true"></th>
+											<th data-field="No">No</th>
+											<th data-field="스터디코드">스터디코드</th>
+											<th data-field="스터디종류">스터디종류</th>
+											<th data-field="온/오프" data-editable="false">온/오프</th>
+											<th data-field="스터디명" data-editable="false">스터디명</th>
+											<th data-field="개설자" data-editable="false">개설자</th>
+											<!-- <th data-field="스터디원" data-editable="false">스터디원</th> -->
+											<th data-field="기간">기간</th>
+											<th data-field="상태">상태</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="study : ${studyList}" th:id="'row'+${studyStat.index}">
+											<td></td>
+											<td th:text="${studyStat.index}"></td>
+											<td th:text="${study.studyId}"></td>
+											<td th:text="${study.typeCode.codeValueKorean}"></td>
+											<td th:text="${study.onoffCode.codeValueKorean}"></td>
+											<td th:text="${study.name}"></td>
+											<td th:text="${study.member.id}"></td>
+											<!-- <td th:text="${study.enrollActual}+'/'+${study.enrollCapacity}"></td> -->
+											<td th:text="${study.startDate}+' ~ '+${study.endDate}"></td>
+											<td th:text="${study.studyStatusCode.codeValueKorean}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="padding-top: 0;">
+			<div class="modal-bootstrap shadow-inner mg-tb-30 responsive-mg-b-0"
+				style="padding-top: 0; margin: 0;">
+				<div class="modal-area-button">.
+				<a class="Primary mg-b-10" href="#" data-toggle="modal"
+						data-target="#Recovery" onclick="selected()">스터디 복원</a> 
+					<a class="Danger danger-color" href="#" onclick="selected()"
+						data-toggle="modal" data-target="#Disband">스터디 해체</a>
+				</div>
+			</div>
+			<div id="Recovery"
+				class="modal modal-edu-general default-popup-PrimaryModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<form id="recovery" action="recovery" method="post">
+							<input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}" />
+							<div class="modal-body">
+								<i class="educate-icon educate-checked modal-check-pro"></i>
+								<h2>스터디를 복원합니다.</h2>
+								<p>스터디의 상태를 결정해주세요.</p>
+								<select class="form-control custom-select-value"
+									name="changeStatus">
+									<option value="O">모집중</option>
+									<option value="F">모집마감</option>
+									<option value="G">진행중</option>
+									<option value="C">완료</option>
+								</select>
+								<div class="optionalId"></div>
+							</div>
+							<div class="modal-footer">
+								<a data-dismiss="modal" href="#">Cancel</a>
+								<!-- <a id="permission-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
+								<input type="submit"
+									class="btn btn-custon-rounded-four btn-primary"
+									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									value="Process">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="Disband"
+				class="modal modal-edu-general FullColor-popup-DangerModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<form id="disband" action="disband" method="post">
+							<input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}" />
+							<div class="modal-body">
+								<span
+									class="educate-icon educate-danger modal-check-pro information-icon-pro"></span>
+								<h2>스터디 해체</h2>
+								<p style="margin-bottom: 15px">스터디 해체를 진행합니다! 스터디 해체 이유를 쪽지로 보내주세요.</p>
+								<div class="optionalId"></div>
+								<div class="form-group">
+									<input type="hidden" name="sendId" th:value="${adminId}">
+									<label for="exampleFormControlTextarea1">Content</label>
+									<textarea name="messageContent" rows="3">당신의 스터디는 지금부로 해체.</textarea>
+								</div>
+								</div>
+							<div class="modal-footer danger-md">
+								<a data-dismiss="modal" href="#">Cancel</a>
+								<!-- <a id="disband-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
+								<input type="submit"
+									class="btn btn-custon-rounded-four btn-primary"
+									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									value="Process">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Static Table End -->
+	
+	 <script th:src="@{/adminOnly/js/admin-table-selected(customStudy).js}" layout:fragment="indexScript"></script>
+     <script th:src="@{/adminOnly/js/admin-study-ajax.js}" layout:fragment="indexScript2"></script>
+
+</body>
+
+
+
+
+
+</html>

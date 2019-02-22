@@ -25,7 +25,8 @@ layout:decorate="~{/layout/mainLayout}">
 <tr th:each="t : ${tutor}">
 <td th:text = "${t.tutorNumber}"></td>
 <td><a th:href="@{'/tutor/inquery'(id=${t.member.id})}"><p th:text = "${t.member.id}"></p></a></td>
-<td th:text = "${t.member.name}"></td>
+<td><a th:href="@{'/tutor/profile/p'(id=${t.member.id})}"><p th:text = "${t.member.nickname}"></p></a></td>
+<td th:text = "${t.member.nickname}"></td>
 <td th:text = "${t.educationCD.codeValueKorean}"></td>
 <td th:text = "${t.introduction}"></td>
 </tr>

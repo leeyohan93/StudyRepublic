@@ -173,7 +173,7 @@
 						</div>
 
 						<div class="select-input100" style="float: left; border: none;">
-							<select name="educationcd" id="educationcd" size='100'
+							<select class = "shsel"name="educationcd" id="educationcd" size='100'
 								multiple='multiple' onchange="education(this)">
 								<option th:each="e :  ${educationcd}"
 									th:value="${e.educationCode}" th:text="${e.codeValueKorean}">
@@ -182,7 +182,7 @@
 						</div>
 
 						<div class="select-input100" style="float: left; border: none;">
-							<select th:field="*{careercd}" size='4' multiple='multiple'
+							<select class = "shsel" th:field="*{careercd}" size='4' multiple='multiple'
 								onchange="career(this)">
 								<option th:each="c :  ${careercd}" th:value="${c.careerCode}"
 									th:text="${c.codeValueKorean}"></option>
@@ -193,7 +193,7 @@
 
 						<div class="select-input100"
 							style="float: left; border: none; margin-bottom: 50px;">
-							<select name="interest1cd" id="interest1cd" size='4'
+							<select class = "shsel" name="interest1cd" id="interest1cd" size='4'
 								multiple='multiple' onchange="iinterest1(this)">
 								<option th:each="i1 :  ${interest1cd}"
 									th:value="${i1.interest1Code}" th:text="${i1.codeValueKorean}">
@@ -203,7 +203,7 @@
 
 						<div class="select-input100_2" id="ddinterest2cd"
 							style="float: left; border: none;">
-							<span class="dinterest2cd" name="dinterest2cd"> <select
+							<span class="dinterest2cd" name="dinterest2cd"> <select class = "shsel"
 								size='4' multiple='multiple' onchange="iinterest2(this)">
 									<option th:each="di2 :  ${dinterest2cd}"
 										th:value="${di2.interest2Code}"
@@ -213,7 +213,7 @@
 
 						<div class="select-input100_2" id="nninterest2cd"
 							style="float: left; border: none;">
-							<span class="ninterest2cd" name="ninterest2cd"> <select
+							<span class="ninterest2cd" name="ninterest2cd"> <select class = "shsel"
 								size='4' multiple='multiple' onchange="iinterest2(this)">
 									<option th:each="ni2 :  ${ninterest2cd}"
 										th:value="${ni2.interest2Code}"
@@ -224,7 +224,7 @@
 
 						<div class="select-input100_2" id="ppinterest2cd"
 							style="float: left; border: none;">
-							<span class="pinterest2cd" name="pinterest2cd"><select
+							<span class="pinterest2cd" name="pinterest2cd"><select class = "shsel"
 								size='4' multiple='multiple' onchange="iinterest2(this)">
 									<option th:each="pi2 :  ${pinterest2cd}"
 										th:value="${pi2.interest2Code}"
@@ -234,7 +234,7 @@
 
 						<div class="select-input100_2" id="wwinterest2cd"
 							style="float: left; border: none;">
-							<span class="winterest2cd" name="winterest2cd"><select
+							<span class="winterest2cd" name="winterest2cd"><select class = "shsel"
 								size='4' multiple='multiple' onchange="iinterest2(this)">
 									<option th:each="wi2 :  ${winterest2cd}"
 										th:value="${wi2.interest2Code}"
@@ -596,7 +596,9 @@
 									&& fileFormValue != '') {
 								// ajax
 								$.ajax({
+
 									url : '/attachments',
+
 									type : 'POST',
 									data : fileData,
 									async : false,

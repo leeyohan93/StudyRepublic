@@ -78,3 +78,4 @@ public class StudyMember implements Serializable {
 		
 
 }
+

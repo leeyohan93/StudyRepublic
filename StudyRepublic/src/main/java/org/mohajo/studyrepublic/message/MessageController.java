@@ -11,6 +11,7 @@ package org.mohajo.studyrepublic.message;
 import java.io.Serializable;
 import java.util.List;
 
+import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.ReceiveMessage;
 import org.mohajo.studyrepublic.domain.SendMessage;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -81,6 +83,25 @@ public class MessageController {
 		sendmessagerepository.save(sendmessage);
 		
 		return "redirect:/sendMessage";
+	}
+	/*쪽지 삭제 미완성*/
+	@RequestMapping("/messageDelete")
+	public String messagedelete(@ModelAttribute SendMessage sendmessage, @ModelAttribute ReceiveMessage receivemessage) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+	
+
+		int exitresult = sendmessagerepository.sendmessagedelete(sendmessage.getMessageSendId());
+		
+		
+		System.out.println(123);
+		
+		return "redirect:receiveMessage";
+		
+		
+		
+
+		
 	}
 		
 		

@@ -238,6 +238,7 @@ Licensed under the BSD-2-Clause License.
             ret.x = index;
             if (this.options.xLabelFormat) {
               ret.label = this.options.xLabelFormat(ret);
+              
             }
           }
           total = 0;

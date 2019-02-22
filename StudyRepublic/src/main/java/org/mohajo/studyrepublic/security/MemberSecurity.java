@@ -38,7 +38,7 @@ public class MemberSecurity extends User {
 		this.member = member;
 	}
 	
-	//"{noop}" 
+
 	
 	private static List<GrantedAuthority> makeGrantedAuthority(List<MemberRoles> roles) {
 		List <GrantedAuthority> list = new ArrayList<>();	

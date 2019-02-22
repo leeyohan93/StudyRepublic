@@ -3,6 +3,7 @@
  */
 package org.mohajo.studyrepublic.main;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -62,19 +63,38 @@ public class MainController {
 		model.addAttribute("premiumPopularTag", mainService.getPremiumPopularTag());
 		model.addAttribute("basicPopularTag", mainService.getBasicPopularTag());
 		
-		model.addAttribute("interest1cd", mainService.getInterest1Code());
-		model.addAttribute("interest2cd", mainService.getInterest2Code());
-		model.addAttribute("pinterest2cd", mainService.getPInterest2Code());
-		model.addAttribute("dinterest2cd", mainService.getDInterest2Code());
-		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
-		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
+//		model.addAttribute("interest1cd", mainService.getInterest1Code());
+//		model.addAttribute("interest2cd", mainService.getInterest2Code());
+//		model.addAttribute("pinterest2cd", mainService.getPInterest2Code());
+//		model.addAttribute("dinterest2cd", mainService.getDInterest2Code());
+//		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
+//		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
 		
 		membercontroller.getSession(authentication,hs,member);
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
+		
 		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);
-		model.addAttribute("joiningStudy", joiningStudy);
+		HashMap <String, String> studyNameAndStudyId = new HashMap<>();
+		
+		for(StudyMember joiningStudyObject : joiningStudy) {
+			Study extraValue = joiningStudyObject.getStudy();
+			studyNameAndStudyId.put(extraValue.getName(), extraValue.getStudyId());
+		}
+		
+		//아래부분 사용하지 않는 걸로 사료되어 주석 처리함. 2019.02.20 - sangyong.shin
+		//model.addAttribute("joiningStudy", studyNameAndStudyIdjoiningStudy);
+		System.out.println("조이닝스터디: "  + studyNameAndStudyId/*joiningStudy*/.toString());
+		
+		//membercontroller.getSession_Study(auth, hs, joiningStudy);
+		for( String s : studyNameAndStudyId.keySet()) {
+			System.out.println(s);
+		}
+
+		if(auth!=null) {
+			 hs.setAttribute("studyNameAndStudyId", studyNameAndStudyId);
+		}
 	}
 	
 	@RequestMapping("/search")
@@ -84,7 +104,7 @@ public class MainController {
 		Pageable page = pageDTO.makePageable(0, "postDate");
 				
 		Page<Study> searchList = mainService.search(studyInfo, searchDate, location, interest, page);
-		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());
+//		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());
 //		model.addAttribute("list", searchList);
 		model.addAttribute("pagedList", new PageMaker(searchList));
 		model.addAttribute("typeCode", studyInfo.getTypeCode().getTypeCode());

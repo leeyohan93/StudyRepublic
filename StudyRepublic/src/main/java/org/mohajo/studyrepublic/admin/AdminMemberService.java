@@ -22,10 +22,16 @@ public interface AdminMemberService {
 
 	List<Member> unpauseMember(String[] selectedId);
 
-	List<Member> exiteMember(String[] selectedId);
+	List<Member> exitMember(String[] selectedId);
 
 	void changePassword(String memberId, String memberPhonenumber);
 
 	List<Member> getSearchMember(String[] grade, String[] status, String searchKey, String searchValue);
+
+	/**
+	 * @param memberId
+	 * @return
+	 */
+	Member findMember(String memberId);
 
 }
