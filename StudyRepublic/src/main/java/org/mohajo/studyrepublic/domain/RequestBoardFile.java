@@ -34,12 +34,16 @@ public class RequestBoardFile extends File{
 	@Column(name ="requestboard_id")
 	private int requestBoardId;
 	
-	@Column(name = "filenumber")
-	protected int fileNumber;
 	@Column(name = "originname")
 	protected String originName;
 	@Column(name = "savename")
 	protected String saveName;
+	@Column(name = "uploadpath")
+	private String uploadPath;
+	@Column(name= "parturl")
+	private String partUrl;
+	@Column(name= "fullurl")
+	private String fullUrl;
 	
 
 

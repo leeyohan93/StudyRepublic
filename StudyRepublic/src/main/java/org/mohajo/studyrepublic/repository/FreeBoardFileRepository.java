@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.mohajo.studyrepublic.domain.Board;
 import org.mohajo.studyrepublic.domain.FreeBoardFile;
+import org.mohajo.studyrepublic.domain.TutorUploadFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,5 +20,11 @@ import org.springframework.data.repository.query.Param;
  */
 
 public interface FreeBoardFileRepository extends JpaRepository<FreeBoardFile, Integer> {
+	
+
+	@Query(value = "select * from freeboard_file where fullurl = :fullUrl", nativeQuery = true)
+	FreeBoardFile findByfullUrl(String fullUrl);
+	
+	
 	
 }

@@ -1,8 +1,9 @@
 <!-- 
   @author 윤원식
-  @since 2019. 2. 2.
+  @since 2019. 1. 24.
   @version
-  -listRequestBoard.html 추가
+  -list.html 추가
+  -2.2 listRequestBoard.html 으로 이름변경
  -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -10,21 +11,24 @@
 <head>
 
 <title>게시판 글목록</title>
-<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html" ; charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
+<!-- modals CSS
+		============================================ -->
+<link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
 
 <style>
 .boardName {
-	margin: 50px 0px 20px 50px;
+	margin: 20px !important;
+}
+
+h3 {
+	
 }
 
 .boardNotice {
@@ -42,6 +46,16 @@
 	margin-right: 20px;
 }
 
+table {
+	table-layout: fixed
+}
+
+td {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
 #wrtieCountOption {
 	width: 100px;
 	height: 30px;
@@ -52,10 +66,27 @@
 	padding-right: 0;
 }
 
-.boardTableTh, .boardTableTd, .boardSearch {
+.boardSearch {
+	margin-top: 30px;
+}
+
+.boardTable {
+	margin: 0px;
+}
+
+.boardTable td, .boardTable th, .boardSearch {
 	text-align: center;
 }
 
+.boardTtile {
+	width: 40%;
+}
+
+.boardTable a {
+	color: black;
+	text-decoration: none !important;
+	border-bottom: none;
+}
 
 .boardWriteBtn {
 	text-align: right;
@@ -65,11 +96,12 @@
 	width: 150px;
 	height: 38px;
 	padding-left: 25px;
-	margin: 10px 10px 50px 0px;
+	margin-right: 10px;
 	font-size: 16px;
 	border-radius: 4px;
 	border: 1px solid #ccc;
 	display: inline-block;
+	font-size: 16px;
 }
 
 #boardSearchKeyword {
@@ -83,10 +115,9 @@
 }
 
 #boardSearchBtn {
-	width: 50px;
 	height: 40px;
 	font-weight: bold;
-	font-siez: 16px;
+	font-size: 16px;
 	background: white;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -98,14 +129,74 @@ span.listReplyCount {
 	color: red;
 }
 
-#listOption{
-  width: 100px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding-left: 10px;
+#listOption {
+	width: 100px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding-left: 10px;
 }
 
+#listBoardNotice, .listBoardFileExist {
+	display: none;
+}
 
+.pagination {
+	justify-content: center;
+	margin: 20px;
+}
+
+.pagination li {
+	padding: 0px;
+}
+
+.page-link {
+	color: black !important;
+}
+
+.page-item.active .page-link {
+	background-color: rgb(66, 161, 226) !important;
+	border-color: rgb(66, 161, 226) !important;
+	color: white !important;
+}
+
+#writeBtn {
+	background-color: white;
+	color: rgb(66, 161, 226); 
+	border : 1px solid !important;
+	text-align: center;
+	display: inline-block;
+	cursor: pointer;
+	border: 1px solid #ccc;
+	    width: 80px;
+    padding: 5px 0px;
+    font-size: 15px;
+}
+}
+
+.listReplyCount {
+	/*    font-size: 15px;
+    margin: 5px;
+    padding: 2px 7px;
+    border-radius: 100%;
+    border: 1px solid #ccc; */
+	
+}
+
+.boardDate {
+	width: 15%;
+}
+
+#fileImage {
+	width: 15px;
+}
+
+#boardWriteImage {
+	width: 15px !important;
+	margin: 0px 5px 2.5px 0px;
+}
+.todayWrite{
+  color: rgb(66, 161, 226);
+}
 </style>
 
 </head>
@@ -115,145 +206,252 @@ span.listReplyCount {
 	<div class="wrapper">
 		<div id="main" layout:fragment="main">
 			<div class="inner">
-					<!--게시판 타이틀  -->
-					<div class="boardName">
-						<h1>
-							<strong th:text="${boardName}"></strong>
-						</h1>
-					</div>
-					<!--게시판 타이틀 끝  -->
 
-					<!--공지 숨기기, 한페이지 갯수  -->
-					<div class="boardNotice">
-						<input id="boardNoticeCheckbox" type="checkbox" name="notice"><span
-							id="boardNoticeName">공지 숨기기</span> 
-							<select id="listOption" name="listOption" style="text-align: center" class="text-center">
-							<option value="15" th:selected="${pageDTO.size} == '15'">15개씩</option>							             
-							<option value="30" th:selected="${pageDTO.size} == '30'">30개씩</option>
-							<option value="50" th:selected="${pageDTO.size} == '50'">50개씩</option>
-						</select>
-					</div>
-					<!--공지 숨기기, 한페이지 갯수 끝  -->
-
-					<!--테이블  -->
-					<div th:with="result=${list.list}">
-						<div class="table">
-							<table
-								class="boardTable table table-bordered table-hover">
-								<thead>
-									<tr>
-										<th class="boardTableTh col-sm-1">번호</th>
-										<th class="boardTableTh col-sm-5">제목</th>
-										<th class="boardTableTh col-sm-2">작성자</th>
-										<th class="boardTableTh col-sm-2">작성일</th>
-										<th class="boardTableTh col-sm-1">조회수</th>
-										<th class="boardTableTh col-sm-1">추천</th>
-									</tr>
-								</thead>
-
-								<tbody>
-									<tr th:each="board:${result.content}">
-										<td class="boardTableTd col-sm-1">[[${board.requestBoardId}]]</td>
-										<td class="text-left col-sm-5"><a
-											th:href='${board.requestBoardId}' class="boardLink" >[[${board.title}]]</a>
-											<a th:href='${board.requestBoardId}' class="boardLink">
-											<span class="listReplyCount">([[${board.requestBoardReply.size()}]])</span></a>
-											</td>
-										<td class="boardTableTd col-sm-2">[[${board.member.nickname}]]</td>
-										<td class="boardTableTd col-sm-2">[[${#dates.format(board.date,'yyyy-MM-dd
-											HH:mm')}]]</td>
-										<td class="boardTableTd col-sm-1">[[${board.hit}]]</td>
-										<td class="boardTableTd col-sm-1">[[${board.likeCount}]]</td>
-
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<!--테이블 끝  -->
-
-
-						<div class="boardWriteBtn">
-							<a class="btn btn-primary" id="writeBtn" th:href="@{writeBoard}"
-								role="button">글쓰기</a>
-						</div>
-
-
-						<!-- 페이징   -->
-
-						<nav>
-							<div class="text-center">
-								<ul class="pagination">
-
-									<li th:if="${list.prevPage}"><a
-										th:href="${list.prevPage.pageNumber}+ 1"> 〈&nbsp&nbsp이전 </a>
-									<li th:each="p:${list.pageList}"
-										th:classappend="${p.pageNumber == list.currentPageNum -1}?active: '' "><a
-										th:href="${p.pageNumber} +1">[[${p.pageNumber} + 1]]</a></li>
-
-									<li th:if="${list.nextPage}"><a
-										th:href="${list.nextPage.pageNumber}+ 1"> 다음&nbsp&nbsp〉 </a>
-								</ul>
-							</div>
-						</nav>
-
-						<!--페이징 끝  -->
-
-
-						<!--검색기능  -->
-						<div class="boardSearch">
-
-							<select id="boardSearchPeriod">
-								<option value="allDay">전체기간</option>
-								<option value="weak">1주</option>
-								<option value="month">1개월</option>
-								<option value="sMonth">6개월</option>
-							</select> <select id="boardSearchType">
-								<option value="all" th:selected="${pageDTO.searchType} =='all'">제목+내용</option>
-								<option value="title"
-									th:selected="${pageDTO.searchType} =='title'">제목</option>
-								<option value="content"
-									th:selected="${pageDTO.searchType} =='content'">내용</option>
-								<option value="writer"
-									th:selected="${pageDTO.searchType} =='writer'">작성자</option>
-							</select> <input type="text" id="boardSearchKeyword"
-								th:value="${pageDTO.keyword}" placeholder="검색어를 입력해주세요.">
-
-							<button id="boardSearchBtn">검색</button>
-
-
-						</div>
-						<!--검색기능 끝 -->
-
-
-
-
-						<form id="f1" th:action="@{listRequestBoard}" method="get">
-							<input type="hidden" name="page" th:value=${list.currentPageNum}>
-							<input type="hidden" name="size"
-								th:value=${list.currentPage.pageSize}> <input
-								type="hidden" name="searchType" th:value=${pageDTO.searchType}>
-							<input type="hidden" name="keyword" th:value=${pageDTO.keyword}> 
-							<input type="hidden" name="boardType" value="requestBoard">
-						</form>
-						
-						<form id="f2" th:action="@{listWriteOption}" method="get">						
-						    <input type="hidden" name="listCount" id="listCount">
-						    <input type="hidden" name="boardType" value="requestBoard"> 
-						</form>
-
-					</div>
+				<!--게시판 타이틀  -->
+				<div class="boardName">
+					<h3>
+						<strong th:text="${boardName}"></strong>
+					</h3>
 				</div>
-	
+				<!--게시판 타이틀 끝  -->
+
+				<!--공지 숨기기, 한페이지 갯수  -->
+				<div class="boardNotice">
+					
+						<select id="listOption"
+						name="listOption" style="text-align: center" class="text-center">
+						<option value="15" th:selected="${pageDTO.size} == '15'">15개씩</option>
+						<option value="30" th:selected="${pageDTO.size} == '30'">30개씩</option>
+						<option value="50" th:selected="${pageDTO.size} == '50'">50개씩</option>
+					</select>
+				</div>
+				<!--공지 숨기기, 한페이지 갯수 끝  -->
+
+				<!--테이블  -->
+				<div th:with="result=${list.list}">
+
+
+					<div class="table table-hover boardTable">
+						<table class="boardTable">
+							<thead>
+								<tr>
+									<th class="">번호</th>
+									<th class="boardTtile">제목</th>
+									<th class="">작성자</th>
+									<th class="boardDate">작성일</th>
+									<th class="">조회수</th>
+									<th class="">추천</th>
+								</tr>
+							</thead>
+
+							<tbody class="boardTableBody">
+								<tr th:each="board:${result.content}">
+								
+									<td id="listBoardNotice">[[${board.notice}]]</td>
+									<td class="" id="listBoardId">[[${board.requestBoardId}]]</td>
+									
+
+									<td class="text-left boardTtile"><a
+										th:href='${board.requestBoardId}' class="boardLink">[[${board.title}]]</a>
+										<a th:href='${board.requestBoardId}' class="boardLink"> <span
+											class="listReplyCount" th:name=|${board.requestBoardReply.size()}|></span>
+											<span class="listDateConfirm"></span>
+											</a>
+									</td>
+									<td class="">[[${board.member.nickname}]]</td>
+									<td class="listBoardDate" th:name=|${board.date}|>[[${#dates.format(board.date,'yyyy-MM-dd
+										HH:mm')}]]</td>
+									<td class="">[[${board.hit}]]</td>
+									<td class="">[[${board.likeCount}]]</td>
+
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+					<!--테이블 끝  -->
+
+					<!--글쓰기 버튼  -->
+					<div class="boardWriteBtn">
+						<a class="btn" id="writeBtn" th:href="@{writeBoard}"
+							role="button"><img id= "boardWriteImage"src="/board/img/outline_create_black_18dp.png">글쓰기</a>
+					</div>
+
+					
+					<!--글쓰기 버튼 끝 -->
+
+					<!-- 페이징   -->
+
+
+					<nav>
+						<div class="pageForm">
+							<ul class="pagination">
+								<li class="page-item" th:if="${list.prevPage}"><a
+									class="page-link" th:href="${list.prevPage.pageNumber}+ 1">
+										〈&nbsp&nbsp이전 </a></li>
+								<li class="page-item" th:each="p:${list.pageList}"
+									th:classappend="${p.pageNumber == list.currentPageNum -1}?active: '' "><a
+									class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
+										+ 1]]</a></li>
+
+								<li class="page-item" th:if="${list.nextPage}"><a
+									class="page-link" th:href="${list.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!--페이징 끝  -->
+
+
+					<!--검색기능  -->
+					<div class="boardSearch">
+
+						<select id="boardSearchPeriod">
+							<option value="allDay"
+								th:selected="${pageDTO.searchPeriod} =='allDay'">전체기간</option>
+							<option value="weak"
+								th:selected="${pageDTO.searchPeriod} =='weak'">1주</option>
+							<option value="month"
+								th:selected="${pageDTO.searchPeriod} =='month'">1개월</option>
+							<option value="sMonth"
+								th:selected="${pageDTO.searchPeriod} =='sMonth'">6개월</option>
+						</select> <select id="boardSearchType">
+							<option value="all" th:selected="${pageDTO.searchType} =='all'">제목+내용</option>
+							<option value="title"
+								th:selected="${pageDTO.searchType} =='title'">제목</option>
+							<option value="content"
+								th:selected="${pageDTO.searchType} =='content'">내용</option>
+							<option value="writer"
+								th:selected="${pageDTO.searchType} =='writer'">작성자</option>
+						</select> <span> <input type="text" id="boardSearchKeyword"
+							th:value="${pageDTO.keyword}" placeholder="검색어를 입력해주세요.">
+							<button id="boardSearchBtn">검색</button>
+						</span>
+
+					</div>
+					<!--검색기능 끝 -->
 
 
 
 
+					<form id="f1" th:action="@{listRequestBoard}" method="get">
+						<input type="hidden" name="page" th:value=${list.currentPageNum}>
+						<input type="hidden" name="size"
+							th:value=${list.currentPage.pageSize}> <input
+							type="hidden" name="searchType" th:value=${pageDTO.searchType}>
+						<input type="hidden" name="keyword" th:value=${pageDTO.keyword}>
+						<input type="hidden" name="searchPeriod"
+							th:value=${pageDTO.searchPeriod}> <input type="hidden"
+							name="boardType" value="requestBoard">
+					</form>
 
-<script th:inline="javascript">
+					<form id="f2" th:action="@{listWriteOption}" method="get">
+						<input type="hidden" name="listCount" id="listCount"> <input
+							type="hidden" name="boardType" value="requestBoard">
+					</form>
+					
+					<form id="f3" th:action="@{listNoticeOption}" method="get">
+						<input type="hidden" name="boardType" value="requestBoard">
+					</form>
+					
+					
+
+				</div>
+			</div>
+
+
+
+ <script th:inline="javascript">
 
      $(document).ready(function() {
+
+    	 //댓글 존재할때만 리스트에 출력
+    	 replyListOutput();
+    	//파일업로드한 게시글은 리스트에 아이콘추가
+//     	 listFileExist();
+    	//오늘게시글 new표시 
+    	todayWrite();
+    	
+    	//공지 띄우기
+    	 $('.boardTableBody tr').each(function() {
+    		  
+    		 var noticeNumber = $(this).find("td:first").text();  
+    		
+    		 if(noticeNumber == 1){
+    			 $(this).find("td:nth-child(2)").text("공지");
+    			 $(this).find("td:nth-child(2)").css('color','red');
+			 
+    			  			 
+    		 }
+    		     		    
+    		});
+    	 
+    	 //파일업로드한 게시글은 리스트에 아이콘추가
+/*     	 $('.boardTableBody tr').each(function(){
+    		 var fileExist = $(this).find("td:nth-child(3)").text();
+ 			var fileExistLength = fileExist.length; 
+    		 if(fileExistLength > 2){
+    			 $(this).find("td:nth-child(3)").append('<img id="fileImage" src="/board/img/fileImage.png">');
+    			}
+    	 }); */
+    	 
+    	 //파일업로드한 게시글은 리스트에 아이콘추가
+    /* 	 function listFileExist(){
+    	 var listBoardFileExistLength = $('.listBoardFileExist').length;
+    	 for(var i =0;i<listBoardFileExistLength;i++){
+    		 var fileExist = $('.listBoardFileExist').eq(i).attr("name")
+    		 if(fileExist.length > 2){
+    			 console.log(fileExist);
+    			 $('.listReplyCount').eq(i).append('<img id="fileImage" src="/board/img/fileImage.png">');
+    		 }
+    	 }
+    	 }; */
+    	 
+    	
+    	 
+    	 //댓글 존재할때만 리스트에 출력
+    	 function replyListOutput(){
+    	 var listReplyCountLength= $(".listReplyCount").length;
+    	 
+    	 for(var i =0 ;i< listReplyCountLength;i++){
+    		 if($('.listReplyCount').eq(i).attr("name") > 0){
+    			 $('.listReplyCount').eq(i).append('<span>'+'['+$('.listReplyCount').eq(i).attr("name")+']'+'</span>'); 			 
+    		 }
+    	 }
+    	 };
+    	 
+    	 //오늘게시글 new표시
+    	 function todayWrite(){
+    	 var listBoardDate =$(".listBoardDate").length;
+    	 var listBoardDateFormate= $(".listBoardDate")
+    	 var today = new Date();
+    	
+    	 var todayAgo = new Date();
+    	 todayAgo.setTime(today.getTime()-(1*24*3600000))
+
+    	 var dateFormated = todayAgo.toISOString().substr(0,10);
+
+    	 console.log("오늘 날짜 :" +today);
+    	 console.log("하루전 날 출력: " + dateFormated);
+    	 
+    	 for(var i =0;i<listBoardDate; i++){
+    		 
+    		 if(dateFormated < listBoardDateFormate.eq(i).attr("name")){
+    		 console.log(listBoardDateFormate.eq(i).attr("name"));
+    		 $('.listDateConfirm').eq(i).append('<span class="todayWrite">'+"New"+'</span>');
+    		 };
+    	 };
+    	 };
+    	 
+    	
+
+    	 
 		var formObj = $("#f1");
 		var formLpt = $("#f2");
+		var formNpt = $("#f3");
+		
+		
         
 		//페이징
 		$(".pagination a").click(function(e) {
@@ -276,7 +474,6 @@ span.listReplyCount {
 			formObj.attr("action",[[@{'/board/viewBoard'}]]);
 			formObj.append("<input type='hidden' name='requestBoardId' value='"+ boardNo + "'>");
 			
-			
 			formObj.submit();
 		});
 		
@@ -286,8 +483,10 @@ span.listReplyCount {
 		$("#boardSearchBtn").click(function(e){
 			
 			var typeStr = $("#boardSearchType").find(":selected").val();
+			var typeDateStr = $("#boardSearchPeriod").find(":selected").val();
 			var keywordStr = $("#boardSearchKeyword").val();
 			
+			formObj.find("[name='searchPeriod']").val(typeDateStr);
 			formObj.find("[name='searchType']").val(typeStr);
 			formObj.find("[name='keyword']").val(keywordStr);
 			formObj.find("[name='page']").val("1");
@@ -318,7 +517,20 @@ span.listReplyCount {
 			formLpt.submit(); 
 		
 		});
+		
+		//공지숨기기
 
+// 		$('#boardNoticeCheckbox').change(function(){
+// 			if($('#boardNoticeCheckbox').is(":checked")){
+				
+// 				formNpt.submit();
+// 			}else{
+				
+// 				formLpt.submit();
+// 			}
+			
+			
+// 		})
 		
 		
 	
@@ -327,7 +539,7 @@ span.listReplyCount {
 	
 </script>
 		</div>
-		</div>
+	</div>
 
 
 </body>

@@ -57,11 +57,18 @@
  
     //채팅 팝업 (원식)
     $('#chatPage').click(function(){
-    	  	console.log("되냐");
     	var popOption = "width=460px, height=735px, top=100px, left=650px;"
         popOpen = window.open("/chat/studyChat","chatPage", popOption);
 
     });
+    //로그아웃 클릭시 팝업창 종료
+	$('.logoutConfirm').click(function(){
+		if(popOpen != null){ 
+			popOpen.close();
+		};
+		
+	})
+
     
     </script>
 				</div>
