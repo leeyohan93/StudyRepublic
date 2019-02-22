@@ -35,13 +35,48 @@
     	}
     	
     	#basicInfoArea input {
-    		border: solid 1px blue !important;
+/*     		border: solid 1px blue !important; */
    		    display: inline-block !important;
     	}
     	
     	#basicInfoArea .wrap-input100_container input:not(.yshbtn) {
     		display: none !important;
     	}
+    	
+    	.wrap-input100 {
+    		display: inline-block !important;
+    		width: fit-content !important;
+    		height: 65px !important;
+    		padding: unset !important;
+    	}
+    	
+    	.label-input100 {
+/* 		  font-size: 18px; */
+/* 		  color: #999999; */
+		  line-height: 1.2;
+/* 		  display: block; */
+/* 		  position: absolute; */
+/* 		  pointer-events: none; */
+/* 		  width: 100%; */
+/* 		  padding: 0 26px; */
+/* 		  left: 0; */
+		  top: 13px !important;
+	      font-size: 0.8rem !important;
+		}
+
+		.input100 {
+	        padding: 25% 0px 25% 15% !important;
+		    width: 9rem !important;
+		}
+		
+		.input100:focus {
+		  height: 48px !important;
+		}
+		
+		.input100:focus + .focus-input100 + .label-input100 {
+		  top: 5px !important;
+		  font-size: 13px;
+		}
     	
     	select:not(.shsel) {
    		    background-position: 100% center !important;
@@ -71,7 +106,8 @@
         }
         
         #input-study-timeDiff, #input-study-studyCount {
-        	width: 4em;
+        	width: 3em;
+       	    height: fit-content;
         }
         
         /*    
@@ -128,6 +164,10 @@
 	    	font: bolder 3rem Arial;
     	    height: initial;
     		width: 4rem;
+    		border-top: none !important;
+    		border-left: none !important;
+    		border-right: none !important;
+    		border-radius: 0px; 
 		}
 		
 		#basicInfoArea .none-radio {
@@ -188,8 +228,8 @@
 		      border-color: #2196F3;
 		}
 		
-		#basicInfoArea input {
-			border: 1px solid silver;
+		#basicInfoArea select[name='dayCode.dayCode'] {
+			background-image: none !important;
 		}
 		
 		#basicInfoArea span {
@@ -265,7 +305,7 @@
             user-select: none;
             display: block;
             margin-top: 2em;
-            border: dashed 1px silver;
+            border: solid 1px silver;
             padding: 0.1em;
             min-height: 400px;
         }
@@ -279,7 +319,7 @@
         }
 
         #leveltestArea .leveltest-placeholder {
-            border: 1px dotted black;
+/*             border: 1px dotted black; */
             margin: 0 0 1em 0;
             height: 50px;
             
@@ -446,24 +486,20 @@
         	margin-top: 2rem;
         }
         
-        
-        
-        
-        
-        
         .progress-nav-container {
         	width: 100%;
         	margin-top: 2rem;
+        	display: inline-block !important;
         }
         
-        .tab-title li {
-        	list-style-type: none;
-        	float: left;
-        	width: 25%;
-        	position: relative;
-        	text-align: center;
-        	padding-top: 15px;
-        }
+/*         .tab-title li { */
+/*         	list-style-type: none; */
+/*         	float: left; */
+/*         	width: 25%; */
+/*         	position: relative; */
+/*         	text-align: center; */
+/*         	padding-top: 15px; */
+/*         } */
         
 /*        	.tab-title li:before { */
 /*         	width:100%; */
@@ -535,42 +571,108 @@
 /* 		   font-weight: 900; */
 /* 		 } */
 		
+		/* Paper Bootstrap Wizard */
 		
-		#studyOpen .wizard-navigation .progress-with-circle {
-		  position: relative;
-		  top: 40px;
-		  z-index: 50;
-		  height: 4px;
-		}
-		#studyOpen .wizard-navigation .progress-with-circle .progress-bar {
-		  box-shadow: none;
-		  -webkit-transition: width .3s ease;
-		  -o-transition: width .3s ease;
-		  transition: width .3s ease;
-		}
 		
-	    .icon-circle {
-     		font-size: 20px;
-	        border: 3px solid gray;
-	        text-align: center;
-	        border-radius: 50%;
-	        color: inherit;
-	        font-weight: bold;
-	        width: 70px;
-	        height: 70px;
-	        background-color: white;
-	        margin: 0 auto;
-	        position: relative;
-	        top: -2px;
-	    }
+/* 	    .icon-circle { */
+/*      		font-size: 20px; */
+/* 	        border: 3px solid gray; */
+/* 	        text-align: center; */
+/* 	        border-radius: 50%; */
+/* 	        color: inherit; */
+/* 	        font-weight: bold; */
+/* 	        width: 70px; */
+/* 	        height: 70px; */
+/* 	        background-color: white; */
+/* 	        margin: 0 auto; */
+/* 	        position: relative; */
+/* 	        top: -2px; */
+/* 	    } */
 	    
-        .icon-circle [class*="ti-"]{
-            position: absolute;
-            z-index: 1;
-            left: 1px;
-            right: 0px;
-            top: 23px;
-        }
+/*         .icon-circle [class*="ti-"]{ */
+/*             position: absolute; */
+/*             z-index: 1; */
+/*             left: 1px; */
+/*             right: 0px; */
+/*             top: 23px; */
+/*         } */
+/*         .nav-pills .icon-circle.checked { */
+/* 		  border-color: #F3BB45; */
+/* 		} */
+		
+/*         .wizard-navigation .progress-with-circle { */
+/* 		    position: relative; */
+/* 		    top: 40px; */
+/* 		    z-index: 50; */
+/* 		    height: 4px; */
+/* 		} */
+		
+/* 		.wizard-navigation .progress-with-circle .progress-bar { */
+/* 		    box-shadow: none; */
+/* 		    -webkit-transition: width .3s ease; */
+/* 		    -o-transition: width .3s ease; */
+/* 		    transition: width .3s ease; */
+/* 		    background-color: rgb(35,154,235); */
+/* 		} */
+		
+/* 		.progress-bar{ */
+/* 		    float:left; */
+/* 		    width:0%; */
+/* 		    height:100%; */
+/* 		    font-size:12px; */
+/* 		    line-height:20px; */
+/* 		    color:#fff; */
+/* 		    text-align:center; */
+/* 		    background-color:#337ab7; */
+/* 		    -webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,0.15); */
+/* 		    box-shadow:inset 0 -1px 0 rgba(0,0,0,0.15); */
+/* 		    -webkit-transition:width .6s ease; */
+/* 		    -o-transition:width .6s ease; */
+/* 		    transition:width .6s ease */
+/* 		} */
+		
+/* 		.nav-before { */
+/* 			content: " "; */
+/*     		display: table; */
+/*     		box-sizing: border-box; */
+/* 		}       */
+		
+/* 		.nav-pills>li { */
+/* 		    float: left; */
+/* 		} */
+		
+/* 		.nav>li { */
+/* 		    position: relative; */
+/* 		    display: block; */
+/* 		        list-style: none; */
+/* 		}   */
+		
+/* 		.nav-pills > li > a:after { */
+/* 		    content: ''; */
+/* 		    width: 70px; */
+/* 		    height: 70px; */
+/* 		    border-radius: 50%; */
+/* 		    display: inline-block; */
+/* 		    position: absolute; */
+/* 		    right: -1px; */
+/* 		    top: -4px; */
+/* 		    transform: scale(0); */
+/* 		    transition: .2s all linear; */
+/* 		} */
+		
+/* 		.nav-pills > li.active > a:after { */
+/* 		    background-color: #F3BB45; */
+/* 		    content: ''; */
+/* 		    width: 70px; */
+/* 		    height: 70px; */
+/* 		    border-radius: 50%; */
+/* 		    display: inline-block; */
+/* 		    position: absolute; */
+/* 		    right: 58px; */
+/* 		    top: 13px; */
+/* 	        transform: scale(1); */
+/*    	    	transition: all 0.2s linear; */
+/* 		} */
 		       
     </style>
     
@@ -592,6 +694,9 @@
 	<!-- Smart Editor -->
 	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 	
+	<!-- Paper Bootstrap Wizard -->
+	<link href="/paperBootstrapWizard/assets/css/paper-bootstrap-wizard.css" rel="stylesheet" />
+	
 </th:block>
 <!-- 			<th:block layout:fragment="bootCss"></th:block> -->
 <!-- 			<th:block layout:fragment="script"></th:block> -->
@@ -606,7 +711,7 @@
 	
 
     <div layout:fragment="main">
-        <div class="inner" id="studyOpen">
+        <div class="inner wizard-card" id="studyOpen">
 	        
 	        <div class="row">
 	        	<h4>스터디 개설하기</h4>
@@ -617,14 +722,15 @@
 				<div class="progress-with-circle">
 				     <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" style="width: 21%;"></div>
 				</div>
-				<ul class="tab-item-container tab-title">
+				<ul class="tab-item-container tab-title nav nav-pills">
 					
                     <li class="tab-item active">
+                    	
 						<a href="#basicInfo-section" data-toggle="tab">
 							<div class="icon-circle">
 								<i class="ti-user"></i>
 							</div>
-							기본정보
+							<span>기본정보</span>
 						</a>
 					</li>
                     <li class="tab-item">
@@ -632,7 +738,7 @@
 							<div class="icon-circle">
 								<i class="ti-settings"></i>
 							</div>
-							스터디소개
+							<span>스터디소개</span>
 						</a>
 					</li>
                     <li class="tab-item">
@@ -640,7 +746,7 @@
 							<div class="icon-circle">
 								<i class="ti-map"></i>
 							</div>
-							레벨테스트
+							<span>레벨테스트</span>
 						</a>
 					</li>
                     <li class="tab-item">
@@ -648,7 +754,7 @@
 							<div class="icon-circle">
 								<i class="ti-map"></i>
 							</div>
-							개설완료
+							<span>개설완료</span>
 						</a>
 					</li>
                 </ul>
@@ -656,7 +762,7 @@
             
 			<div id="tab-pane-container tab-content">
             
-				<form id="basicForm">
+				<form id="basicForm" enctype="multipart/form-data">
 				
 		           <section class="tab-pane basicInfo-container ghost" id="basicInfo-section">
 		           		
@@ -704,25 +810,43 @@
 				            <div class="row input input-field-period">
 				                <div class="col-md-2 input-title">기간</div>
 				                <div class="col-md-10 input-content">
-				                    <input type="text" name="startDateStr" id="input-study-startDate" class="input-date" placeholder="날짜 선택" readonly>부터 
-				                    <input type="text" name="endDateStr" id="input-study-endDate" class="input-date" placeholder="날짜 선택" readonly>까지 
-				                    (총 <input type="text" name="studyCount" id="input-study-studyCount" readonly>회)
+				                	<div class="wrap-input100">
+				                    	<input type="text" name="startDateStr" id="input-study-startDate" class="input100 input-date" placeholder="시작일" readonly> 
+				                    	<span class="focus-input100"></span>
+<!-- 				                    	<span class="label-input100">시작일</span> -->
+				                    </div>
+				                    	부터
+				                    <div class="wrap-input100">
+				                    	<input type="text" name="endDateStr" id="input-study-endDate" class="input100 input-date" placeholder="종료일" readonly> 
+				                    	<span class="focus-input100"></span>
+<!-- 				                    	<span class="label-input100">종료일</span> -->
+				                    </div>
+				                    	까지
+				                    	(총 <input type="text" name="studyCount" id="input-study-studyCount" readonly value="0">회)
 				                </div>
 				            </div>
 
 				            <div class="row input input-field-schedule">
 				                <div class="col-md-2 input-title">일시</div>
 				                <div class="col-md-10 input-content">
-				                	<div class="row">
+				                	<div class="row col-md-auto">
 				                    	매주&nbsp;
-				                    	<select name="dayCode.dayCode">
+				                    	<select name="dayCode.dayCode" readonly onclick="return false">
 				                            <option th:each="dayCode : ${dayCode}" th:value="${dayCode.dayCode}" th:text="${dayCode.codeValueKorean}"></option>
 				                        </select>요일
 			                        </div>
-			                       	<div class="row time-input-container">
-					                    <input type="text" name="startTimeStr" class="only-time" id="input-study-startTime" placeholder="시간 선택" readonly>
+			                       	<div class="row col-md-auto time-input-container">
+			                       	   	<div class="wrap-input100">
+						                    <input type="text" name="startTimeStr" class="input100 only-time" id="input-study-startTime" placeholder="시작 시각" readonly>
+					                   	 	<span class="focus-input100"></span>
+<!-- 				                    		<span class="label-input100">시작 시각</span> -->
+				                    	</div>
 					                   	 부터 
-					                    <input type="text" name="endTimeStr" class="only-time" id="input-study-endTime" placeholder="시간 선택" readonly>
+					                   	 <div class="wrap-input100">
+						                    <input type="text" name="endTimeStr" class="input100 only-time" id="input-study-endTime" placeholder="종료 시각" readonly>
+					                  	 	<span class="focus-input100"></span>
+<!-- 				                    		<span class="label-input100">종료 시각</span> -->
+				                    	</div>
 					                  	 까지
 
 					                    (<input type="text" name="timeDiff" id="input-study-timeDiff" readonly>분)
@@ -735,7 +859,9 @@
 				                    <button id="btn-enrollCapacity-minus" class="btn-enrollCapacity">
 				                        &lt;
 				                    </button>
-				                    <input type="text" name="enrollCapacity" id="input-study-enrollCapacity">
+				                    <div class="wrap-input100">
+					                    <input type="text" name="enrollCapacity" id="input-study-enrollCapacity">
+				                    </div>
 				                    <button id="btn-enrollCapacity-plus" class="btn-enrollCapacity">
 				                        &gt;
 				                    </button>
@@ -836,14 +962,28 @@
 				            <div class="row input input-field-price">
 				                <div class="col-md-2 input-title">가격</div>
 				                <div class="col-md-10 input-content">
-				                    회차 당 <input type="number" id="input-study-unitPrice">원<br/>
-				                    총 <input type="number" id="input-study-totalPrice">원
+				                	<div>
+					                    	회차 당
+	   				                	<div class="wrap-input100">
+					                    	<input type="number" id="input100 input-study-unitPrice"> 
+					                    	<span class="focus-input100"></span>
+					                    </div>
+					                    	원
+				                    </div>
+				                    <div>
+					                    	총합
+					                    <div class="wrap-input100">
+					                    	<input type="number" id="input100 input-study-unitPrice"> 
+					                    	<span class="focus-input100"></span>
+					                    </div>
+					                    	원
+			                    	</div>
 				                </div>
 				            </div>
 				            <div class="row input input-field-hidden">
-						                리더 아이디 <input type="text" name="member.id" id="input-study-member" th:value="${loggedInUser.id}"><br/>
-			           	                리더 등급 <input type="text" id="input-study-member-gradeCode" th:value="${loggedInUser.gradeCD.gradeCode}"><br/>
-						                스터디 상태코드 <input type="text" name="studyStatusCode.studyStatusCode" id="input-study-studyStatusCode" value="O">
+						           <input type="hidden" name="member.id" id="input-study-member" th:value="${loggedInUser.id}"><br/>
+		           	                <input type="hidden" id="input-study-member-gradeCode" th:value="${loggedInUser.gradeCD.gradeCode}"><br/>
+					                <input type="hidden" name="studyStatusCode.studyStatusCode" id="input-study-studyStatusCode" value="O">
 				            </div>
 			            </div>
 			            
@@ -855,8 +995,12 @@
 							<h5>스터디를 소개해주세요!</h5>
 						</div>
 						
-						<div>
-							스터디명	<input type="text" name="name">
+						<div class="row">
+			                <div class="col-md-2 input-title">스터디명</div>
+                       	   	<div class="col-md-10 wrap-input100">
+			                    <input type="text" name="name" class="input100" id="input-study-name">
+		                   	 	<span class="focus-input100"></span>
+	                    	</div>
 						</div>
 						
 						<div id="smartEditorArea"> 
@@ -876,9 +1020,18 @@
 							<!--  /********************************** Smart Editor - HTML 끝  **********************************/ -->
 						</div>
 						
+				
+						<div id="file-container">
+							<input type="file" name="file" multiple>
+						</div>
+					
+						<input type="hidden" th:name="${_csrf.parameterName}"
+							th:value="${_csrf.token}" />
 					</section>
 					
 				</form>
+				
+						
 				
 				
 				<section class="tab-pane introduction-container ghost" id="leveltest-section">
@@ -947,10 +1100,12 @@
 		
 		                        </div>
 		                    </div>
+		                    <input type="hidden" name="hasLeveltest" value="0">
+							<input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}" />
 		                </form>
 		                <!-- /********************************** leveltest - HTML 끝 **********************************/ -->
-		
-		                <a id="submit-btn" href="/study/leveltestSubmitTest">제출하기</a>
+		                
 		            </div>
 	            
 	            </section>
@@ -959,7 +1114,7 @@
             <div class="wizard-footer prev-next-container">
                 <div class="pull-right">
                     <input type='button' class='btn btn-next btn-fill btn-warning btn-wd' name='next' value='다음' />
-                    <input type='button' class='btn btn-finish btn-fill btn-warning btn-wd' name='finish' value='개설' />
+                    <input type='button' class='btn btn-finish btn-fill btn-warning btn-wd' id="submit-btn" name='finish' value='개설' />
                 </div>
 
                 <div class="pull-left">
@@ -992,7 +1147,7 @@
 	            makeQuestion();
 	            addQuestionChoice();
 	            removeQuestionChoiceOption();
-	            submitLeveltests();
+	            submitForm();
 	            notifyLeveltest();
 	
 	            /* basicInfo */
@@ -1225,7 +1380,7 @@
 	        //  hover 시 삭제 버튼이 나와야 한다.
 	    
 	    
-	        function submitLeveltests() {
+	        function submitForm() {
 	
 	            // .leveltest 의 동적 추가로 인해 상위 요소와 연결시켜야 할 수도 있음.
 	            $("#submit-btn").on("click", function (e) {
@@ -1253,6 +1408,15 @@
 	                    $(this).find("input[name=choice]").attr("name", "leveltests[" + index + "].choice");
 	                });
 	                
+	                var hasLeveltest;
+	                
+	                if($(".leveltest").length == 0) {
+	                	hasLeveltest = 0;
+	                } else {
+	                	hasLeveltest = 1;
+	                }
+                	$(".leveltest input[name='hasLeveltest']").val();
+	                
 	                // 2. SmartEditor submit 전처리
 			        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
 					
@@ -1262,9 +1426,8 @@
 	                }
 	                
 	                
-	                
-	                $("form").attr("action", "/study/leveltestSubmitTest");
-	                $("form").attr("method", "get");
+	                $("form").attr("action", "/study/register");
+	                $("form").attr("method", "post");
 // 	                $("form:not(#search)").submit();
 					$("#basicForm").submit();
 	
@@ -1324,7 +1487,7 @@
         	    monthsShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
         	    today: '오늘',
         	    clear: '재선택',
-        	    dateFormat: 'mm/dd/yyyy',
+        	    dateFormat: 'yyyy/mm/dd',
         	    timeFormat: 'hh:ii aa',
         	    firstDay: 0
         	};
@@ -1332,6 +1495,19 @@
 	        var selectedDays = [];
 	        
 	     	$('#input-study-startDate').datepicker({
+				/* 
+	        		, range: true
+	        		, multipleDatesSeparator: ' ~ '
+	        		, toggleSelected: false
+	        		, onRenderCell: function(date, cellType) {
+	        	        if (cellType == 'day') {
+	        	        	var isDisabled = selectedDays.indexOf(date.getDay()) == -1;
+        	        	   return {
+        	                   disabled: isDisabled
+        	               }
+        	           }
+	        		}
+	        		*/
 	            language: 'ko'
 	            , minDate: new Date()
 	            , onSelect: function onSelect(fd, date) {
@@ -1359,22 +1535,6 @@
 	        });
 	        
 	        
-				/* 
-	        		language: 'ko'
-	        		, minDate: new Date()
-	        		, range: true
-	        		, multipleDatesSeparator: ' ~ '
-	        		, toggleSelected: false
-	        		, onRenderCell: function(date, cellType) {
-	        	        if (cellType == 'day') {
-	        	        	var isDisabled = selectedDays.indexOf(date.getDay()) == -1;
-	        	        	
-        	        	   return {
-        	                   disabled: isDisabled
-        	               }
-        	           }
-	        		}
-	        		*/
 	        
 	       $('#input-study-endDate').datepicker({
 	            language: 'ko'
@@ -1491,9 +1651,6 @@
 			    	var startTimepicker = $('#input-study-startTime').datepicker().data('datepicker');
 					var selectedStartDate = startTimepicker.selectedDates[0];
 			    	
-					console.log('d = ' + d);
-					console.log('selectedStartDate = ' + selectedStartDate);
-					
 			    	if(selectedStartDate == undefined) {
 			    		return;
 			    		
@@ -1620,12 +1777,14 @@
 					
 					switch(id){
 						case "input-study-unitPrice":
+							console.log('up 입장');
 							$target = $('#input-study-totalPrice');
 							price = $(this).val() * (studyCount-0);
 // 							$target.val(price);
 							break;
 							
 						case "input-study-totalPrice":
+							console.log('tp 입장');
 							$target = $('#input-study-unitPrice');
 							price = ($(this).val() / (studyCount-0)).toFixed(2);
 // 							$target.val(price.toFixed(2));
@@ -1658,26 +1817,40 @@
 // 	        	//0: 기본정보, 1: 소개, 2: 레벨테스트, 3. 개설완료
 	        	var $tabItems = $('.tab-item');
 	        	var $tabPanes = $('.tab-pane');
+	        	var width = 100 / $tabItems.length;
+	        	var $btnContainer = $('.prev-next-container');
 	        	
 	        	$tabPanes.addClass("ghost");
 	        	$($tabPanes[0]).removeClass("ghost");
+	        	$btnContainer.click(function() {
+	        		
+	        	});
+	        	
 	        	
 				$('ul.tab-title li').click(function(){
 
-// 					if($($tabPanes[$(this).index()]).css("opacity") != 0) {
-// 						$($tabPanes[$(this).index()]).css({
-// 							"opacity": "0", "position": "absolute"
-// 						});
-// 					} else {
-// 						$($tabPanes[$(this).index()]).css({
-// 							"opacity": "100", "position": "static"
-// 						});						
-// 					}
+					/* 탭 내용 */
 		        	$tabPanes.addClass("ghost");
 					$($tabPanes[$(this).index()]).removeClass("ghost");
 					
 					$($tabItems[$(this).index()]).addClass("active");
 					$($tabPanes[$(this).index()]).addClass("active");
+					
+					/* 이전, 다음, 제출 */
+					if($(this).index()+1 < $total-1) {
+						$($btnContainer).find('.btn-next').show();
+						$($btnContainer).find('.btn-finish').hide();
+						
+					} else {
+                        $($btnContainer).find('.btn-next').hide();
+                        $($btnContainer).find('.btn-finish').show();
+					}
+					
+					/* Progress bar */
+                    var move_distance = 100 / $total;
+                    move_distance = move_distance * $(this).index() + move_distance / 2;
+                    $btnContainer.find($('.progress-bar')).css({width: move_distance + '%'});
+                    $btnContainer.find($('.wizard-card .nav-pills li.active .icon-circle')).addClass('checked');
 				});
 	        }
 	        
@@ -1834,7 +2007,10 @@
 			}
 			// 관심분야: 성호님 코드 끝
 	    </script>
-	
+		<!--  Plugin for the Wizard -->
+		<script src="/paperBootstrapWizard/assets/js/jquery.bootstrap.wizard.js" type="text/javascript"></script>
+		<script src="/paperBootstrapWizard/assets/js/jquery.validate.min.js" type="text/javascript"></script>
+		
 	</th:block>
 
 </body>

@@ -1,7 +1,5 @@
 package org.mohajo.studyrepublic.security;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +18,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.multipart.MultipartResolver;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 import lombok.AllArgsConstructor;
@@ -53,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/login", "/member/signup","/member/insert","/member/checkid","/member/checknick").anonymous()
 		.antMatchers("/kakaopay", "/", "/signup","/StudyPage/**","/index","/member/**").permitAll()
-		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/tutor/inquery","/tutor/file/**","/tutor/delete/**","/chat/studyChat", "/study/open/**", "/study/join/**").hasAnyRole("N","W","T","A")
+		.antMatchers("/tutor/signup","/tutor/insert","/pay","/board/**","/tutor/inquery","/tutor/file/**","/tutor/delete/**","/chat/studyChat", "/study/register/**", "/study/open/**", "/study/join/**").hasAnyRole("N","W","T","A")
 		.antMatchers("/tutor").hasAnyRole("T","A")
 		.antMatchers("/admin/**","/adminPage/**").hasRole("A");
 
@@ -132,7 +130,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
-    
     
 /*    private Filter ssoFilter() {
     	CompositeFilter filter = new CompositeFilter();

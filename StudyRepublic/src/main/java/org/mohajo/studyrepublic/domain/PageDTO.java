@@ -28,9 +28,9 @@ public class PageDTO {
 	 */
 	public static final int DEFAULT_MAX_SIZE = 50;
 
-
 	private int page;
-	private int size=15;
+	private int DEFAULT_SIZE = 15;
+	private int size = DEFAULT_SIZE;
 	private String keyword;
 	private String searchType;
 	private String searchPeriod;
@@ -69,7 +69,7 @@ public class PageDTO {
 	}
 
 	public void setSize(int size) {
-		this.size = size < 15 || size > DEFAULT_MAX_SIZE ? 15 :size;
+		this.size = (size < DEFAULT_SIZE || size > DEFAULT_MAX_SIZE) ? DEFAULT_SIZE :size;
 	}
 
 

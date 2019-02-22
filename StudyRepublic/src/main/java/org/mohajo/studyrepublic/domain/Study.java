@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -102,7 +103,7 @@ public class Study implements Serializable {
 	private int enrollActual = 1;						//현재인원
 	
 	@Column(nullable = false)
-	private String introduction;					//소개
+	private String introduction;						//소개
 	
 	@Column
 	private int hasLeveltest = 0;						//레벨테스트 유무 (0/1)
@@ -113,21 +114,21 @@ public class Study implements Serializable {
 	@Column(nullable = false)
 	private Timestamp postDate = new java.sql.Timestamp(new Date().getTime());	//게시일
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name = "study_id", nullable = false)
 	private List<StudyInterest> studyInterest;			//분야
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name = "studyId")
 	private List<Review> review;
 	
 	///////////	아래는 Study 클래스를 상속하여 분리시킬 수도 있음 //////////////////////
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "study_id")
 	private StudyPrice price;							//가격
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name = "study_id")
 	private List<StudyLocation> studyLocation;			//지역
 	

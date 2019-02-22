@@ -1,13 +1,20 @@
 package org.mohajo.studyrepublic.study;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.DayCD;
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
@@ -17,7 +24,10 @@ import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.Study;
+import org.mohajo.studyrepublic.domain.StudyFile;
 import org.mohajo.studyrepublic.domain.StudyHelper;
+import org.mohajo.studyrepublic.domain.StudyInterest;
+import org.mohajo.studyrepublic.domain.StudyLocation;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberId;
 import org.mohajo.studyrepublic.domain.StudyView;
@@ -33,6 +43,9 @@ import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.OnoffCDRepository;
 import org.mohajo.studyrepublic.repository.PaymentRepository;
 import org.mohajo.studyrepublic.repository.ReviewRepository;
+import org.mohajo.studyrepublic.repository.StudyFileRepository;
+import org.mohajo.studyrepublic.repository.StudyInterestRepository;
+import org.mohajo.studyrepublic.repository.StudyLocationRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
@@ -40,6 +53,8 @@ import org.mohajo.studyrepublic.repository.StudyViewRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.mohajo.studyrepublic.repository.TypeCDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -51,6 +66,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import lombok.extern.java.Log;
 
@@ -113,6 +130,14 @@ public class StudyController {
 	@Autowired
 	Interest2CDRepository i2cdr;
 	
+	@Autowired
+	StudyFileRepository sfr;
+	
+	@Autowired
+	StudyInterestRepository sir;
+	
+	@Autowired
+	StudyLocationRepository slr;
 	
 	@Autowired
 	TypeCD typeCd;
@@ -400,15 +425,15 @@ public class StudyController {
 	// 테스트 끝.
 	
 	
-	@RequestMapping("/leveltestSubmitTest")
-	public String leveltestSubmitTest(@ModelAttribute Study study, @ModelAttribute StudyHelper studyHelper, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException {
+	@RequestMapping("/register")
+	public String leveltestSubmitTest(@ModelAttribute Study study, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 		
-		log.info("leveltestSubmitTest() called...");
+		log.info("register() called...");
 		log.info(study.toString());
 		
 		// 참고:  https://stackoverflow.com/a/2009224
 		// 설명:   "unparseable date" exception can here only be thrown by SimpleDateFormat#parse()
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		
 		// 문제:  AM, PM 을 파싱하지 못하는 에러 - a 는 한국 기준 '오전/오후', 미국 기준 'AM/PM'
 		// 해결:  Locale 을 지정
@@ -439,16 +464,96 @@ public class StudyController {
 
 		String studyId = sr.getNewStudyId(study.getTypeCode().getTypeCode(), study.getOnoffCode().getOnoffCode());
 		
+
 		study.setStudyId(studyId);
 		
-		sr.save(study);
+//		List<StudyInterest> studyInterests = study.getStudyInterest();
+//		
+//		for(StudyInterest studyInterest : studyInterests) {
+//			sir.save(studyInterest);
+//		}
+//		
+//		List<StudyLocation> studyLoccations = study.getStudyLocation();
+//		
+//		for(StudyLocation studyLocation : studyLoccations) {
+//			slr.save(studyLocation);
+//		}
 		
 		log.info(study.toString());
+		sr.save(study);
+
+		log.info("file = " + file.toString());
+		List<MultipartFile> files = mhsRequest.getFiles("file");
+		doUpload(mhsRequest, model, files, studyId);
+				
 		model.addAttribute("study", study);
 		
 		
 		return "/study/test";
 	}
 
+	private void doUpload(HttpServletRequest request, Model model, List<MultipartFile> files, String studyId) throws IOException {
+		
+		String fileOriginName = "";
+		
+		final DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
+		
+		Resource resource = defaultResourceLoader.getResource("file:src\\main\\resources\\static\\study\\" + studyId);
+		String uploadRootPath = resource.getFile().getAbsolutePath();	//예외처리 필요
+		
+		File file = new File(uploadRootPath);	//폴더생성용
+		
+		if(!file.exists()) {
+			file.mkdirs();
+		}
+		
+		List<File> uploadedFiles = new ArrayList<File>();	//test 
+		List<String> failedFiles = new ArrayList<String>();	//test
+		
+		for(MultipartFile fileData : files) {
+			String name = fileData.getOriginalFilename();
+			fileOriginName = name;
+			
+			String sourceFileNameExtension = FilenameUtils.getExtension(fileOriginName).toLowerCase();
+			
+			String fileSaveName = RandomStringUtils.randomAlphabetic(32) + "." + sourceFileNameExtension;
+			
+			if(fileSaveName != null && fileSaveName.length() > 0) {
+				
+				try {
+					File serverFile = new File(uploadRootPath + File.separator + fileSaveName);	//파일생성용
+					
+					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+					stream.write(fileData.getBytes());
+					stream.close();
+					
+					uploadedFiles.add(serverFile);	//test
+					
+					StudyFile studyFile = new StudyFile();
+					studyFile.setStudyId(studyId);
+					studyFile.setStudyfileOriginname(fileOriginName);
+					studyFile.setStudyfileSavename(fileSaveName);
+					studyFile.setStudyfileParturl("\\study\\" + studyId + "\\" + fileSaveName);
+					studyFile.setStudyfileFullurl(uploadRootPath + "\\" + fileSaveName);
+					
+					log.info(studyFile.toString());
+					
+					sfr.save(studyFile);
+					
+				} catch(Exception e) {
+					System.out.println("Error Write file: " + name);
+					failedFiles.add(name);
+				}
+			}
+		}
+		
+		model.addAttribute("uploadedFiles", uploadedFiles);
+		model.addAttribute("failedFiles", failedFiles);
+		
+		log.info(uploadedFiles.toString());
+		log.info(failedFiles.toString());
+	}
+	
+	
 }
 	

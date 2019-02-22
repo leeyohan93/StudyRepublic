@@ -969,8 +969,10 @@ input[type="button"]:focus {
   margin: 0 auto;
   color: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
+  border: none;
   position: relative;
-  top: -32px;
+/*   top: -32px; */
+  top: -5px;
   z-index: 100;
 }
 .nav-pills > li > a:after {
@@ -991,26 +993,26 @@ input[type="button"]:focus {
   outline: 0 !important;
   cursor: pointer;
 }
-.nav-pills > li.active > a:after {
-  content: '';
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  display: inline-block;
-  position: absolute;
-  right: 5px;
-  top: -2px;
-  -webkit-transform: scale(1);
-  -moz-transform: scale(1);
-  -o-transition: scale(1);
-  -ms-transform: scale(1);
-  transform: scale(1);
-  -webkit-transition: all 0.2s linear;
-  -moz-transition: all 0.2s linear;
-  -o-transition: all 0.2s linear;
-  -ms-transition: all 0.2s linear;
-  transition: all 0.2s linear;
-}
+/* .nav-pills > li.active > a:after { */
+/*   content: ''; */
+/*   width: 70px; */
+/*   height: 70px; */
+/*   border-radius: 50%; */
+/*   display: inline-block; */
+/*   position: absolute; */
+/*   right: 5px; */
+/*   top: -2px; */
+/*   -webkit-transform: scale(1); */
+/*   -moz-transform: scale(1); */
+/*   -o-transition: scale(1); */
+/*   -ms-transform: scale(1); */
+/*   transform: scale(1); */
+/*   -webkit-transition: all 0.2s linear; */
+/*   -moz-transition: all 0.2s linear; */
+/*   -o-transition: all 0.2s linear; */
+/*   -ms-transition: all 0.2s linear; */
+/*   transition: all 0.2s linear; */
+/* } */
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
@@ -1033,6 +1035,59 @@ input[type="button"]:focus {
   -o-transition: all 0.2s linear;
   -ms-transition: all 0.2s linear;
   transition: all 0.2s linear;
+}
+
+.wizard-card {
+  min-height: 410px;
+  box-shadow: 0 20px 16px -15px rgba(0, 0, 0, 0.57);
+}
+.wizard-card .picture-container {
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+}
+.wizard-card .icon-circle {
+  font-size: 20px;
+  border: 4px solid #F3F2EE;
+  text-align: center;
+  border-radius: 50%;
+  color: rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+  width: 20px;
+  height: 20px;
+  background-color: #FFFFFF;
+  margin: 0 auto;
+  position: relative;
+  top: -3px;
+  z-index: 100;
+  
+}
+.wizard-card .icon-circle [class*="ti-"] {
+  position: absolute;
+  z-index: 1;
+  left: 1px;
+  right: 0px;
+  top: 23px;
+}
+.wizard-card .nav-pills li.active .icon-circle {
+   border-color: rgb(35,154,235);
+/*    width: 70px; */
+/*    height: 70px; */
+/*    top: -32px; */
+}
+
+.wizard-card .nav-pills li.active .icon-circle:after {
+   font-family: "Font Awesome 5 Free";
+   vertical-align: middle;
+   text-align: center;
+   font-weight: 900;
+   top: 50%;
+   transform: translateX(-25%) translateY(-25%);
+   position: absolute;
+}
+
+.wizard-card .nav-pills li:nth-of-type(1).active .icon-circle:after {
+   content: "\f303";
 }
 
 .tooltip {
@@ -1177,36 +1232,6 @@ input[type="button"]:focus {
   transform: translateY(-10px);
 }
 
-.wizard-card {
-  min-height: 410px;
-  box-shadow: 0 20px 16px -15px rgba(0, 0, 0, 0.57);
-}
-.wizard-card .picture-container {
-  position: relative;
-  cursor: pointer;
-  text-align: center;
-}
-.wizard-card .icon-circle {
-  font-size: 20px;
-  border: 3px solid #F3F2EE;
-  text-align: center;
-  border-radius: 50%;
-  color: rgba(0, 0, 0, 0.2);
-  font-weight: 600;
-  width: 70px;
-  height: 70px;
-  background-color: #FFFFFF;
-  margin: 0 auto;
-  position: relative;
-  top: -2px;
-}
-.wizard-card .icon-circle [class*="ti-"] {
-  position: absolute;
-  z-index: 1;
-  left: 1px;
-  right: 0px;
-  top: 23px;
-}
 .wizard-card .picture {
   width: 106px;
   height: 106px;
@@ -1224,6 +1249,32 @@ input[type="button"]:focus {
 }
 .wizard-card .picture-src {
   width: 100%;
+}
+.wizard-card .picture:hover {
+  border-color: rgb(35,154,235);
+}
+.wizard-card .nav-pills > li.active > a:after {
+  background-color: rgb(35,154,235);
+}
+.wizard-card .nav-pills > li.active > a {
+  color: rgb(35,154,235);
+}
+/* .wizard-card .nav-pills > li.active > a > span { */
+/* 	position: absolute; */
+/*     width: 100px; */
+/*     display: inline-block; */
+/*     top: -50px; */
+/*     left: 0.5px; */
+/* } */
+.wizard-card .nav-pills .icon-circle.checked {
+  border-color: rgb(35,154,235);
+}
+.wizard-card .choice.active .card-checkboxes {
+  color: rgb(35,154,235);
+}
+.wizard-card .wizard-navigation .progress-bar {
+  background-color: rgb(35,154,235) !important;
+  height: 4px;
 }
 .wizard-card[data-color="azure"] .picture:hover {
   border-color: #7A9E9F;
@@ -1298,7 +1349,7 @@ input[type="button"]:focus {
   background-color: #F3BB45;
 }
 .wizard-card[data-color="red"] .picture:hover {
-  border-color: #EB5E28;
+  border-color: ;
 }
 .wizard-card[data-color="red"] .nav-pills > li.active > a:after {
   background-color: #EB5E28;
@@ -1315,6 +1366,7 @@ input[type="button"]:focus {
 .wizard-card[data-color="red"] .wizard-navigation .progress-bar {
   background-color: #EB5E28;
 }
+
 .wizard-card .picture input[type="file"] {
   cursor: pointer;
   display: block;
@@ -1358,6 +1410,8 @@ input[type="button"]:focus {
 }
 .wizard-card .wizard-navigation {
   position: relative;
+  display: inline-block;
+  height: 100px;
 }
 .wizard-card .wizard-navigation .progress-with-circle {
   position: relative;
