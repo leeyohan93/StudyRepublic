@@ -25,6 +25,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	List<StudyMember> findTutorActivityById(String id);
 //	List<StudyMember> findTutorActivityByStudyMemberId(StudyMemberId studyMemberId);
 
+
 	
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기 */
 	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where s1.study_status_code='O'",nativeQuery=true)
@@ -33,7 +34,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기(카운터방식으로) */
 	@Query(value="select count(*) from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where  type_code='B' and s1.study_status_code='G'",nativeQuery=true)
 	int studycount(String id); 
-	
+	/*회원의 모든 스터디 정보 가져오기*/
 	@Query(value="select * from study_member sm join study s on sm.study_id=s.study_id where sm.id= :id",nativeQuery=true)
 	List<StudyMember> findBasicByList(String id);
 	
@@ -53,6 +54,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	/*위에꺼에 맴버상태넣지않은것*/
 	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.id = :id",nativeQuery=true)
 	List<StudyMember> findStudyMemberStatus(String id);
+
 
 	//noticeboard에서 클릭한 글과 관련된 사람의 정보를 가져오는 쿼리
 	@Query(value="select *\r\n" + 

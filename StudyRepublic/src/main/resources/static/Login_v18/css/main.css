@@ -525,7 +525,6 @@ input.radio100 {
 
 
 
-/*==================================================================
 [ Restyle Checkbox ]*/
 
 .input-checkbox100 {
@@ -533,6 +532,7 @@ input.radio100 {
 }
 
 .label-checkbox100 {
+  font-family: Poppins-Regular;
   font-size: 13px;
   color: #999999;
   line-height: 1.4;
@@ -545,6 +545,7 @@ input.radio100 {
 
 .label-checkbox100::before {
   content: "\f00c";
+  font-family: FontAwesome;
   font-size: 13px;
   color: transparent;
 
@@ -831,6 +832,25 @@ select[class='shsel']:valid {
     background-image:none;
 /*     -o-appearance:none; */
 }
+
+select[class='point']:valid {
+
+    font-size:14px;
+    border:1px solid #ccc;
+    background-color:#f7f7f7;
+    background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg) no-repeat 95% 50%;
+     width: 200px;
+ 	 height: 100%;
+  	padding: .8em .5em;
+  	font-family: inherit;
+  	-webkit-appearance: none;
+  	-moz-appearance: none;
+  	appearance: none;
+
+
+}
+
+
 select::-ms-expand {
    display: none;            /* 화살표 없애기 for IE10, 11*/
 }
@@ -841,17 +861,6 @@ select option {
 }
 
 
-/* select option:checked,
-select option:hover { 
-    box-shadow: 0 0 10px 100px #c2c2c2 inset;  
-    color: #495057; *//* 글자회색 
-    color : rgb(179,220,248);
-    background-color:#f7f7f7;
-   
-    
-}
- */
- 
  	select option:hover,
     select option:focus,
     select option:active {
@@ -865,7 +874,8 @@ select option:hover {
         background-color: #d6d6d6 !important; /* for IE */
         color: #000000 !important;
     }
-
+    
+    
 
 
 

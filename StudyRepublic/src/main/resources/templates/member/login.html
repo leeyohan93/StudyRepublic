@@ -110,20 +110,32 @@ layout:decorate="~{/layout/mainLayout}">
                <div class="wrap-input100 validate-input" data-validate = "아이디를 입력해주세요.">
                   <input class="input100" type="text" id="username" name="username">
                   <span class="focus-input100"></span>
-                  <span class="label-input100">ID</span>
+                  <span class="label-input100" style = "top:15px">ID</span>
                </div>
                
                
                <div class="wrap-input100 validate-input" data-validate="비밀번호를 입력해주세요.">
                   <input class="input100" type="password" id="password" name="password">
                   <span class="focus-input100"></span>
-                  <span class="label-input100">Password</span>
+                  <span class="label-input100" style =  "top:15px">Password</span>
                </div>
                
                
                <span th:if="${param.error != null}" class="login100-form-title-error p-b-43">
                   		아이디 또는 비밀번호가 일치하지 않습니다.
                </span>
+               
+<!--                 <span th:text = "${pauseMSG}" class="login100-form-title-error p-b-43">
+                  		
+               </span>-->
+               
+                <span th:text = "${exceptionmsgname}" class="login100-form-title-error p-b-43">
+                  		
+               </span> 
+               
+<!--               <span th:if="${param.data == null}" class="login100-form-title-error p-b-43">
+                  		정지된 회원입니다.
+               </span> -->
                
 
                <div class="flex-sb-m w-full p-t-3 p-b-32">
@@ -287,6 +299,7 @@ layout:decorate="~{/layout/mainLayout}">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    
    <script>
+   
    
    var token = $("meta[name='_csrf']").attr("content");
    var header = $("meta[name='_csrf_header']").attr("content");

@@ -23,8 +23,7 @@ import lombok.ToString;
 @MappedSuperclass
 public class File {
 	
-	@Column(name = "filenumber")
-	protected int fileNumber;
+
 	@Column(name = "originname")
 	protected String originName;
 	@Column(name = "savename")

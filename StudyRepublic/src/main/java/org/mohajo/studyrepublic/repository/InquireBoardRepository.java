@@ -30,6 +30,8 @@ public interface InquireBoardRepository extends JpaRepository<InquireBoard, Inte
 		BooleanBuilder builder = new BooleanBuilder();
 
 		QInquireBoard inquireBoard = QInquireBoard.inquireBoard;
+		
+		builder.and(inquireBoard.status.eq(0));
 
 		if(searchType ==null ) {
 			return builder;
@@ -46,7 +48,7 @@ public interface InquireBoardRepository extends JpaRepository<InquireBoard, Inte
 			builder.and(inquireBoard.content.like("%" + keyword + "%"));
 			break;
 		case "writer":
-			builder.and(inquireBoard.id.like("%" + keyword + "%"));
+			builder.and(inquireBoard.member.nickname.like("%" + keyword + "%"));
             break;
 		}
 
@@ -60,5 +62,21 @@ public interface InquireBoardRepository extends JpaRepository<InquireBoard, Inte
 
 	@Query(value = "select * from member m join inquireboard i on m.id=i.id where m.id=:id",nativeQuery=true)
 	List<InquireBoard>findInquireBoardById(String id);
+	
+	//이전글
+	@Query(value = "select * from inquireboard f where f.inquireboard_id <:fi limit 1", nativeQuery=true)
+	InquireBoard beForeBoard(@Param("fi")int inquireBoardId);
+
+	//다음글
+	@Query(value = "select * from inquireboard f where f.inquireboard_id >:fi limit 1", nativeQuery=true)
+	InquireBoard beAfterBoard(@Param("fi")int inquireBoardId);
+
+
+//	//첨부파일 숨김
+//	@Query(value="select count(f.originName) from InquireboardFile f where f.inquireBoardId =:fi")
+//	int fileCount(@Param("fi")int inquireBoardId);
+//	
+
+
 
 }

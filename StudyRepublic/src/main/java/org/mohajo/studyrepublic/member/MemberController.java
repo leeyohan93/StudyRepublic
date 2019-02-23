@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -194,6 +195,15 @@ public class MemberController {
 		return "sign_up";
 	}
 	
+/*	public Member member (String id) {
+		
+		Member member = memberrepository.findById(id).get();
+		System.out.println("멤버레퍼짓토리" + memberrepository);
+		
+		return member;
+	}
+	*/
+	
 	@PostMapping("/member/findPassword")
 	@ResponseBody
 	public Map <Object, Object> findPassword(@RequestParam String messageNumber, @RequestParam String phonenumber, Model model) {		
@@ -256,6 +266,13 @@ public class MemberController {
 		return "redirect:/index";
 	}
 	
+	@RequestMapping(value = "/socialLogin")
+	String socialLogin() {
+		return "sign_up";
+	}
+	
+
+	
 	
 
 	   
@@ -315,6 +332,13 @@ public class MemberController {
 		      
 		      }
 		   }
+	   
+	   public void memberp() {
+		   System.out.println("되라 - " + memberrepository);
+	   }
+	   
+	   
+
 	
 	
 }

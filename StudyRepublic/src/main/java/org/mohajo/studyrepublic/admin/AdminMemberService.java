@@ -28,4 +28,10 @@ public interface AdminMemberService {
 
 	List<Member> getSearchMember(String[] grade, String[] status, String searchKey, String searchValue);
 
+	/**
+	 * @param memberId
+	 * @return
+	 */
+	Member findMember(String memberId);
+
 }

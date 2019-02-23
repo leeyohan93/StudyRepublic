@@ -29,6 +29,10 @@ public interface RequestBoardRepository extends JpaRepository<RequestBoard, Inte
 		BooleanBuilder builder = new BooleanBuilder();
 
 		QRequestBoard requestBoard = QRequestBoard.requestBoard;
+		
+		builder.and(requestBoard.status.eq(0));
+		
+		
 
 		if(searchType ==null ) {
 			return builder;
@@ -45,13 +49,14 @@ public interface RequestBoardRepository extends JpaRepository<RequestBoard, Inte
 			builder.and(requestBoard.content.like("%" + keyword + "%"));
 			break;
 		case "writer":
-			builder.and(requestBoard.id.like("%" + keyword + "%"));
+			builder.and(requestBoard.member.nickname.like("%" + keyword + "%"));
             break;
 		}
 
 		
 		return builder;
 	}
+	
 	
 	@Query(value = "select * from member m join requestboard f on m.id=f.id where m.id=:id", nativeQuery=true)
 	List<RequestBoard> findRequestBoardById(String id);
@@ -61,6 +66,18 @@ public interface RequestBoardRepository extends JpaRepository<RequestBoard, Inte
 	RequestBoard findByrequestBoardId(@Param("be") int beforeRequestBoard);
 
 
+	//이전글
+		@Query(value = "select * from requestBoard f where f.requestBoard_id <:fi limit 1", nativeQuery=true)
+		RequestBoard beForeBoard(@Param("fi")int requestBoardId);
+
+		//다음글
+		@Query(value = "select * from requestBoard f where f.requestBoard_id >:fi limit 1", nativeQuery=true)
+		RequestBoard beAfterBoard(@Param("fi")int requestBoardId);
+
+
+		//첨부파일 숨김
+		@Query(value="select count(f.originName) from RequestBoardFile f where f.requestBoardId =:fi")
+		int fileCount(@Param("fi")int requestBoardId);
 	
 
 	

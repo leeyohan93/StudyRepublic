@@ -29,6 +29,6 @@ public class ReceiveMessage extends Message implements Serializable{
 	@Column(name="message_receive_id" , nullable=false)
 	private int messageReceiveId;
 	
-
+    
 
 }
