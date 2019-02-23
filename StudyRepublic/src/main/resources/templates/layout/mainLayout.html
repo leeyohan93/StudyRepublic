@@ -108,7 +108,10 @@
 							<select name = "joinStudy" id = "joinStudy" style ="border:solid 1px #b6babd; width:110px;height:auto; padding: 0 0 0 5px; background-position: calc(98%) center;" >
 								<!-- <option th:each = "joinSt : ${session.studyNameList}"th:value="${joinSt}" th:text="${joinSt}"></option> -->
 								<option value="참여중인 스터디">참여중인 스터디</option>
-								<option th:each = "joinSt : ${session.studyNameAndStudyId.keySet()}" th:value="${joinSt}" th:text="${joinSt}"></option>
+								<!-- 세션 체크 후 값이 없을 경우 500 에러가 뜨는 것을 방지함. 대신에 세션값은 없음..index에서만 생성되기 때문에. shin-sangyong  -->
+								<span th:if = "${session.studyNameAndStudyIdMap}!=null">
+									<option th:each = "joinSt : ${session.studyNameAndStudyIdMap.keySet()}" th:value="${joinSt}" th:text="${joinSt}"></option>
+								</span>
 							</select>
 						</li>
 						</ul>
@@ -368,30 +371,43 @@
 
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
+		var stu;
 		$(document).ready(function(){
 			//studyName 값을 가지고 있는 .joiningStudyId요소의 정보를 담는다.
-			var studyName = /*[[ ${session.studyNameAndStudyId.keySet()} ]]*/;
-			//studyName의 요소가 담고 있는 크기만큼, studyText에 배열 공간을 할당한다.
-			var studyNameAndStudyId = /*[[ ${session.studyNameAndStudyId.values()} ]]*/
-			
+			var studyNameAndStudyIdMap = /*[[ ${session.studyNameAndStudyIdMap} ]]*/;
+			console.log("시작");
 			
 			$('#joinStudy').on('change', function joinStudy() {		//스터디페이지이동..js
 				
 				//studyText에 있는 studyName이 obj(현재는 셀렉트 박스)의 value 값과 같을 때, joinStudyListValue에 해당되는 joingStudyId 리스트의 StudyId 값을 배치한다.
-				for ( var i = 0; i < studyName.length; i++) {
+				
+				if(this.selectedIndex!=0){
+					var selectStudyName = this.options[this.selectedIndex].value;
+					console.log(selectStudyName);
+					
+					document.getElementById('studyId').value = studyNameAndStudyIdMap[selectStudyName];
+					var gsWin = window.open('/StudyPage/Main', studyNameAndStudyIdMap[selectStudyName],'width=1100,height=700');
+					var moveStudy =document.getElementById('moveStudy');
+					moveStudy.action = '/StudyPage/Main';
+					moveStudy.target = studyNameAndStudyIdMap[selectStudyName];
+					moveStudy.method = "post";
+					moveStudy.submit();
+				}
+				
+				/* for ( var i = 0; i < studyName.length; i++) {
 					if ( studyName[i] == this.options[this.selectedIndex].value) {
 						console.log(studyName[i]);
 						console.log(this.options[this.selectedIndex].value);
 						console.log("클릭한 것 = " + studyName[i]);
-						document.getElementById('studyId').value = studyNameAndStudyId[i];
-						var gsWin = window.open('/StudyPage/Main',studyNameAndStudyId[i],'width=1000,height=800');
+						document.getElementById('studyId').value = studyNameAndStudyIdMap[i];
+						var gsWin = window.open('/StudyPage/Main', studyNameAndStudyIdMap[i],'width=1100,height=700');
 						      var moveStudy =document.getElementById('moveStudy');
 						      moveStudy.action = '/StudyPage/Main';
-						      moveStudy.target = studyNameAndStudyId[i];
+						      moveStudy.target = studyNameAndStudyIdMap[i];
 						      moveStudy.method = "post";
 						      moveStudy.submit();	
 					}
-				}
+				} */
 			});
 		});
 		/*]]>*/

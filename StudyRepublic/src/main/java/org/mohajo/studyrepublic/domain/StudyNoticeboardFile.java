@@ -25,7 +25,7 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "study_noticeboard_file")
-public class StudyNoticeboardFile extends StudyBoardFile{
+public class StudyNoticeboardFile /*extends StudyBoardFile*/{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,4 +36,11 @@ public class StudyNoticeboardFile extends StudyBoardFile{
 	
 	@Column(name = "study_noticeboard_id")
 	private int studyNoticeboardId;
+	
+	@Column(name = "filenumber")
+	private int fileNumber;
+	@Column(name = "originname")
+	private String originName;
+	@Column(name = "savename")
+	private String saveName;
 }

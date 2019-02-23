@@ -156,14 +156,21 @@
 		}
 	  </style>
 	  <div class="rightContent rightAll" >
-		<form id="boardWriteForm" th:action="@{/StudyPage/Register}" method="post">
+		<form id="boardWriteForm" th:action="@{/StudyPage/Register}" enctype="multipart/form-data"  method="post">
 		<!-- 제목 -->
 		  <div>
 			<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
 			<!-- <input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/> -->
-		  </div>
-		  <input name = "id" th:value = "${memberid}">
-	
+		  </div
+		  	>
+		  	 <input id="datepicker" width="276" />
+			    <script>
+			        $('#datepicker').datepicker({
+			            uiLibrary: 'bootstrap4'
+			        });
+			    </script>
+		  	<input type="file" name="file" multiple="multiple">
+		  <!-- 받는 컨트롤러에서 넣는것을 각각 해줘야 한다. 배열로해서  -->
 		  <!-- 스마트 에디터 적용 글내용 -->
 		  <div id = "editor">
 		    <div>
@@ -226,7 +233,7 @@
 	    $("#boardRegister").click(function(){
 	        //id가 smarteditor인 textarea에 에디터에서 대입
 	        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
-	              
+	        alert("???");
 	        $("#boardRegister").submit();
 	            
 	    });

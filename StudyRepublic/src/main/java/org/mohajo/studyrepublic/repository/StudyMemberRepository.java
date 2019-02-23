@@ -109,6 +109,8 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	@Query( value = "select  *from study_member sm left join study s using (study_id)where id=:id and (sm.study_member_status_code = 'ME'  or sm.study_member_status_code = 'LE')", nativeQuery = true)
 	List <StudyMember> joinedstudymember(String id);
 	
-	/*@Query(value = "")*/
-	
+	@Query(value="select *\r\n" + 
+			"from study_member\r\n" + 
+			"where (study_member_status_code = :le or study_member_status_code=:me) and (study_id = :studyId and id=:id)", nativeQuery=true)
+	StudyMember findStudyMemberLEMEbyStudyIdAndId(String studyId, String id, String le, String me);
 }

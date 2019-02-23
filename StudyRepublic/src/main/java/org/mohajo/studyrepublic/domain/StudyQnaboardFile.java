@@ -1,5 +1,6 @@
 package org.mohajo.studyrepublic.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -23,7 +24,7 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "study_qnaboard_file")
-public class StudyQnaboardFile extends StudyBoardFile{
+public class StudyQnaboardFile implements Serializable /*extends StudyBoardFile*/{
 
 	@Id
 	@Column(name = "study_qnaboard_file_id")
@@ -31,4 +32,11 @@ public class StudyQnaboardFile extends StudyBoardFile{
 	
 	@Column(name = "study_qnaboard_id")
 	private int studyQnaboardId;
+	
+	@Column(name = "filenumber")
+	private int fileNumber;
+	@Column(name = "originname")
+	private String originName;
+	@Column(name = "savename")
+	private String saveName;
 }

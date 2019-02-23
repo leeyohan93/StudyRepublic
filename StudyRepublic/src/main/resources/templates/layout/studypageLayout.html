@@ -30,17 +30,44 @@
 	<nav id="menu" layout:fragment="menu"></nav>
 	<div id="main" layout:fragment="main"
 		><div class="inner"
-			><div id="left" layout:fragment="left"
-				><a th:href="@{/StudyPage/Main}">home</a></br>
-				<a th:href="@{/StudyPage/Noticeboard}">공지사항</a></br>
-				<a th:href="@{/StudyPage/Fileshareboard}">파일 공유</a></br>
-				<a th:href="@{/StudyPage/Qnaboard}">질문 및 답변</a></br>
-				<a th:href="@{#}"><!-- 에러 때문에 일단은 주석 처리 "@{/StudyPage/VideoCalling}" -->화상 통화</a></br>
-				<a id ="chatPage" th:href="@{#}">채팅</a></br>
-				<a th:href="@{/StudyPage/Management}">관리</a></br>
-				<a th:href="@{#}">탈퇴</a></br>
-				<!-- <a th:href="@{#}">신고</a></br> -->
-			</div
+			><style>
+					#leftDown{
+						text-align:center;
+					}
+					.class{
+						font-size: 70%;
+					    font-weight: 900;
+					    padding: 0px;
+					}
+					button{
+						padding: 0px;
+						font-size: 0.8em;
+						background-color: black;
+					}
+				</style><div id="left" layout:fragment="left"
+				>
+				<div id="leftTop"><div id="studyTitleDiv"
+					></div
+				></div
+				><div id="leftDown">
+					<button class="check" value="/StudyPage/Main">home</button></br>
+					<button class="check" value="/StudyPage/Noticeboard">공지사항</button></br>
+					<button class="check" value="/StudyPage/Fileshareboard">파일 공유</button></br>
+					<button class="check" value="/StudyPage/Qnaboard">질문 및 답변</button></br>
+					<!-- <button th:href="@{#}">@{/StudyPage/VideoCalling}"화상 통화</button></br> -->
+					<button class="check" id ="chatPage" th:href="@{#}">채팅</button></br
+					><!-- <button class="check" th:if="${studyIdAndStatusCode.get('javascript:window.name')}=='리더'" value="/StudyPage/Management">관리</button></br> -->
+					<!-- <button th:unless="${session.studyIdAndStatusCode.get('javascript:window.name')}=='승인'"  th:href="@{#}">탈퇴</button></br> -->
+					<!-- <a th:href="@{#}">신고</a></br>
+					-->
+					<!-- <button class="check" th:if="${session.studyIdAndStatusKoreanMap.get('BB00001')}=='리더'">관리</button> -->
+					<!-- <button class="check" th:if="${session.studyIdAndStatusKoreanMap.get('BB00001')}=='리더'">관리</button>  -->
+					<form action="/index" id="formAction">
+						<input type="hidden" name="" value=""></input>
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+					</form>
+				</div
+			></div
 			><div id="right" layout:fragment="right"
 				><div id="noticeBoard"></div
 				><div id="joinMember"></div
@@ -52,6 +79,61 @@
 				</div>
 				
 	        <script>
+/* 	        $('document').ready(function(){
+	        	$('.check').on('click', function(e){
+	        		var form = $('#formAction');
+	        		form.action = this.value;
+	        		form[0].name = "studyId";
+	        		form[0].value = window.name;
+	        		console.log(form.action + '/' + form[0].name + '/' + form[0].value);
+	        		alert("폼액션 - " + form.action);
+	        		alert("");
+//	        		form.submit();
+	        		$('#formAction').submit();
+	        	});
+	        }); */
+	        
+	        var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(function() {
+				$(document).ajaxSend(
+						function(e, xhr, options) {
+							xhr.setRequestHeader(header,token);
+						});
+			});
+			var d;
+	        $('document').ready(function(){
+	        	
+	        	var studyInfo =  window.name;
+		        console.log(studyInfo)
+	        	
+	        	$.ajax({
+					type : "POST",
+					contentType : "application/json; charset=UTF-8",
+					url : "/StudyPage/PowerCheck",
+					data : studyInfo,
+					dataType : "json",
+					success : function(data) {
+						console.log("실행됨");
+						d = data;
+						$("#leftDown").append("<button class='check' value='" + data[0] + "'>" + data[1] + "</button></br>");
+						$('.check').on('click', function(e){
+			        		
+			        		form = $('#formAction')[0];
+			        		form.method = "POST";
+			        		form.action = this.value;
+			        		form[0].name = "studyId";
+			        		form[0].value = window.name;
+			        		console.log(form.action + '/' + form[0].name + '/' + form[0].value);
+			        		form.submit();
+			        	});
+					},error : function(data) {
+						console.log(data);
+					}
+				});
+	        	
+	        	
+	        });
       
     var popOpen;
  

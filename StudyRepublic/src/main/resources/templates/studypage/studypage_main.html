@@ -190,7 +190,7 @@
 			 	<div class="boardName">	
 						>>최근 공지사항
 				</div>
-				<div th:each="fasn : ${studynoticeboard3result}">
+				<div th:each="fasn : ${studynoticeboard3result}" th:if="${fasn}!=null"><!-- 공지사항 게시판의 내용을 가져오는 부분  -->
 					<div class="rightContent rightAll" >
 						<div><input type="hidden" th:value="${fasn.number}" name="number">
 						</div>
@@ -231,10 +231,10 @@
 				</div
 			></div
 			><div id="joinMember"
-				><div class="profileBoxshow">
+				><div class="profileBoxshow"><!-- 참여중인 사람에 대한 정보를 보여주는 공간 -->
 								참여중인 멤버
 				</div>
-				<div><div class="profileBox" th:each="fbsm : ${findbystudymember}">
+				<div><div class="profileBox" th:each="fbsm : ${findbystudymember}" th:if="${fbsm}">
                				<div th:each="member : ${fbsm.Member}">
                					<div class="profileBoxPhoto">
                						<img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${member.profileSaveName}}">
@@ -245,11 +245,11 @@
                 	</div>
                 </div
                 ><div id="double">
-                    <div id="qnaBoard">
+                    <div id="qnaBoard"><!-- 질문 및 답변 게시판의 내용을 보여주는 공간 -->
                        	<div class="boardName">	
 							>>질문 및 답변
 						</div>
-						<div th:each="fasq : ${studyqnaboard3result}">
+						<div th:each="fasq : ${studyqnaboard3result}" th:if="${fasq}">
 							<div class="rightContent rightAll" >
 								<div><input type="hidden" th:value="${fasq.number}" name="number">
 								</div>
@@ -269,9 +269,9 @@
 									<div class="content" th:text="${fasq.content}">
 									</div>
 									<div class="contentReplyForm"
-										><div class="contentReply" th:text="${fasq.studyQnaboardReply}">
-										
-										</div>
+										><!-- <div class="contentReply" th:if="${fasq.studyQnaboardReply}!=null"
+											><div th:each="fasqReply :${fasq.studyQnaboardReply}">너 뭐냐?</div
+										></div> -->
 										<div class="contentReplyWriteForm"
 											><div class="userProfile">프</div
 											><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
@@ -290,7 +290,7 @@
 							</div>
                         </div>
                      </div>
-                     <div id="ing">
+                     <div id="ing"><!-- 스터디 진행률을 보여주는 바 -->
                      	<div id="progressPercent"
                      		><font color="white" id="studyPlayingRate">스터디 진행률</font
                      	></div

@@ -3,10 +3,13 @@
  */
 package org.mohajo.studyrepublic.main;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
 
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.PageDTO;
@@ -75,25 +78,30 @@ public class MainController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		
-		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);
-		HashMap <String, String> studyNameAndStudyId = new HashMap<>();
+		List <StudyMember> studyMemberList = studymemberrepository.joinedstudymember(id);
+		HashMap <String, String> studyNameAndStudyIdMap = new HashMap<>();
+		HashMap <String, String> studyIdAndStatusKoreanMap = new HashMap<>();
 		
-		for(StudyMember joiningStudyObject : joiningStudy) {
-			Study extraValue = joiningStudyObject.getStudy();
-			studyNameAndStudyId.put(extraValue.getName(), extraValue.getStudyId());
+		for(StudyMember studyMember : studyMemberList) {
+			Study studyDomain = studyMember.getStudy();
+			studyNameAndStudyIdMap.put(studyDomain.getName(), studyDomain.getStudyId());
+			studyIdAndStatusKoreanMap.put(studyDomain.getStudyId(), studyMember.getStudyMemberStatusCode().getCodeValueKorean());
 		}
+		
+		System.out.println(studyIdAndStatusKoreanMap.get("BB00001"));
 		
 		//아래부분 사용하지 않는 걸로 사료되어 주석 처리함. 2019.02.20 - sangyong.shin
 		//model.addAttribute("joiningStudy", studyNameAndStudyIdjoiningStudy);
-		System.out.println("조이닝스터디: "  + studyNameAndStudyId/*joiningStudy*/.toString());
+		System.out.println("스터디 Map: "  + studyNameAndStudyIdMap/*joiningStudy*/.toString());
+		System.out.println("스터디별 권한: " + studyIdAndStatusKoreanMap.toString());
 		
 		//membercontroller.getSession_Study(auth, hs, joiningStudy);
-		for( String s : studyNameAndStudyId.keySet()) {
+		for( String s : studyNameAndStudyIdMap.keySet()) {
 			System.out.println(s);
 		}
-
 		if(auth!=null) {
-			 hs.setAttribute("studyNameAndStudyId", studyNameAndStudyId);
+			 hs.setAttribute("studyNameAndStudyIdMap", studyNameAndStudyIdMap);
+			 hs.setAttribute("studyIdAndStatusKoreanMap", studyIdAndStatusKoreanMap);
 		}
 	}
 	
