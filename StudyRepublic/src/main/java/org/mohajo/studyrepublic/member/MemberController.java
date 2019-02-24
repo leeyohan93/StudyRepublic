@@ -282,6 +282,12 @@ public class MemberController {
 		         
 		   		 session.setAttribute("nickname", member.getNickname());
 		         session.setAttribute("memberimg", member.getProfileSaveName());
+		         
+		         MemberPoint memberpoint = memberpointrepository.inqueryPoint(member.getId());		         
+		         session.setAttribute("memberpoint", memberpoint.getPoint());
+		         System.out.println("보유포인트: " + memberpoint.getPoint());
+		         
+		         
 		         	System.out.println("멤버 객체 ID 조회 : " + member.getId());
 					List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(member.getId());		
 					System.out.println("멤버테스트: " + member);

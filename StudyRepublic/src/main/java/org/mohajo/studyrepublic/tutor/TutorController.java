@@ -11,10 +11,13 @@ import java.io.Serializable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -52,7 +55,11 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -102,6 +109,7 @@ public class TutorController implements Serializable {
 	@Autowired
 	StudyMemberRepository smr;
 
+	private static final String ROLE_PREFIX = "ROLE_";
 
 	@RequestMapping("/tutor")
 	public String tutorInfo(Model model) {
@@ -155,7 +163,7 @@ public class TutorController implements Serializable {
 
 	@RequestMapping("/tutor/insert")
 	public String insertTutor(Model model, @ModelAttribute Tutor tutor, MultipartHttpServletRequest request,
-			@RequestParam MultipartFile file) throws Exception {
+		@RequestParam MultipartFile file, HttpSession session) throws Exception {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -167,6 +175,25 @@ public class TutorController implements Serializable {
 		roles.add(memberroles);
 		member.setGradeCD(new GradeCD("W"));
 		member.setRoles(roles);
+		
+		
+		Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>(); 
+		
+		
+			authoritySet.add(new SimpleGrantedAuthority(ROLE_PREFIX + "W"));
+		
+		
+		Authentication newAuth = new UsernamePasswordAuthenticationToken(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), "", authoritySet);
+	
+		System.out.println("roles" + roles);
+//		auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("권한체크: " + newAuth.getAuthorities());
+		SecurityContext securityContext = SecurityContextHolder.getContext(); 
+		securityContext.setAuthentication(newAuth);
+/*		auth.setAuthenticated(true);*/
+		session = request.getSession(); 
+		session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+		
 		
 		memberrolesrepository.deleteNormal(id);
 

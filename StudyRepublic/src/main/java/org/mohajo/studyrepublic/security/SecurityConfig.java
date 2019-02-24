@@ -75,18 +75,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/tutor").hasAnyRole("T", "A")
 				.antMatchers("/admin/**", "/adminPage/**").hasRole("A");
 
-		http.formLogin().loginPage("/login").successHandler(new LoginSuccessHandler())
+		http.formLogin()
+		.loginPage("/login")
+		.successHandler(new LoginSuccessHandler())
+		.failureHandler(new CustomAuthenticationFailureHandler())
+		.defaultSuccessUrl("/index");
 
-				.failureHandler(new CustomAuthenticationFailureHandler()).defaultSuccessUrl("/index");
+		http
+		.exceptionHandling()
+		.accessDeniedPage("/accessDenied");
 
-		http.exceptionHandling().accessDeniedPage("/accessDenied");
-
-		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+		http.logout()
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				/* .invalidateHttpSession(true) */
-				.logoutSuccessUrl("/index").deleteCookies("JSESSIONID", "remember-me").invalidateHttpSession(true);
+				.logoutSuccessUrl("/index").deleteCookies("JSESSIONID", "remember-me")
+				.invalidateHttpSession(true);
 
-		http.rememberMe().key("member").rememberMeParameter("remember-me").userDetailsService(memberservice)
-				.tokenRepository(persistentTokenRepository()).tokenValiditySeconds(60 * 60 * 24);
+		http.
+		rememberMe()
+		.key("member")
+		.rememberMeParameter("remember-me")
+		.userDetailsService(memberservice)
+				.tokenRepository(persistentTokenRepository())
+				.tokenValiditySeconds(60 * 60 * 24);
 
 		// 스마트에디터 관련 설정
 		http.headers().frameOptions().sameOrigin();
