@@ -3,6 +3,8 @@
  layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
 <title>스터디 관리 페이지 입니다.</title>
 
 </head>
@@ -115,8 +117,9 @@
 					  </nav>
 					  <div class="tab-content" id="nav-tabContent">
 					    <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="nav-home-tab">
-					    	<form id="" action=""
-					    		><div id="allCheckbox"
+					    	<!-- tab1 에서 사람들을 관리하는 부분임. check 된 내용에 대해서 처리하는 javscript 및 ajax 처리가 필요함 -->
+					    	<!-- 버튼 클릭의 경우에는 해당되는 버튼이 가지는 닉네임에 대한 처리를 하도록 한다. 그리고 페이지를 조작하는 사이에 DB 상에서 닉네임이 없어지는 경우를 대비해서 예외 처리를 실시한다.  -->
+					    	<div id="allCheckbox"
 					    			><div id="allCheckboxLeft"
 					    				><input type="checkbox" class="userAllSelect" name="userAllSelect" value="userAllSelect"></input></div
 					    			><div id="allCheckboxRight"
@@ -128,16 +131,16 @@
 					    			></div
 					    			><div class="userImageDiv"
 					    				><img class="userImage" th:src = "@{'/member_image/'+${findStudyMemberLEME.member.profileSaveName}}"
-					    				><font color="black" class="userNickName"    th:text="${findStudyMemberLEME.member.nickname}"></font
+					    				><font color="black" class="userNickName" th:text="${findStudyMemberLEME.member.nickname}"></font
 					    			></div
 					    			><div class="getOutButtonDiv"
-					    				><button class="getOutButton btn btn-dark">내보내기</button
+					    				><button class="getOutButton btn btn-dark" th:name="${findStudyMemberLEME.member.nickname}">내보내기</button
 					    			></div
 					    		></div
 					    		><div id="getOutSelectMemberButton">
-					    			<button class="btn btn-dark">선택 된 대상 내보내기</button>
+					    			<button class="btn btn-dark" id = "selectedAllGetOutButton">선택 된 대상 내보내기</button>
 					    		</div
-					    	></form>
+					    	>
 					    </div>
 					    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="nav-profile-tab">
 				    	 	<form id="" action=""
@@ -181,12 +184,28 @@
 					</div>
 				</div>
 			<script>
+					var studyId;
+					var nickName;
+					var getoutUserInfo;
+					var contentCheck;
+					var contentCheck2 = new Array();
 					//체크시 전체 선택, 모두 해제시 체크 해제
+					var token = $("meta[name='_csrf']").attr("content");
+					var header = $("meta[name='_csrf_header']").attr("content");
+					$(function() {
+						$(document).ajaxSend(
+								function(e, xhr, options) {
+									xhr.setRequestHeader(header,token);
+								});
+					});
+					
 					$(document).ready(function(e){
+						//tab1 에서 All select/Deselect를 할 경우 해당 되는 내용들이 모두 체크 되거나, 풀리도록 처리하는 함수.
 						$('.userAllSelect').on("click", function(){
 							 $( '.userCheckBox' ).prop( 'checked', this.checked );
 						});
 				
+						//tab1에서 CheckBox 1개를 클릭했을 때, checkbox 상황을 확인해서, 모두 체크일 경우 All select를 체크하고 아니면 체크 해체하는 함수
 						var extraVar = $('.userCheckBox');
 						extraVar.on("click", function(){
 							var count=0;
@@ -207,11 +226,11 @@
 							}
 						});
 						
-						
+						//tab2 체크박스 전체 선택/해체 함수
 						$('.userAllSelect2').on("click", function(){
 							 $( '.userCheckBox2' ).prop( 'checked', this.checked );
 						});
-						
+						//tab2 체크박스 상태 감지 함수
 						var extraVar2 = $('.userCheckBox2');
 						extraVar2.on("click", function(){
 							var count=0;
@@ -231,6 +250,97 @@
 								$('.userAllSelect2')[0].checked=false;
 							}
 							
+						});
+						
+						//tab1에서 내보내기 버튼 클릭시 단일 인자를 삭제하는 함수
+						$(".getOutButton").on("click", function(){
+							studyId =  window.name;
+							nickName = this.name;
+					        console.log("창 테스트 : " + studyId);
+					        console.log("버튼 테스트 : " + nickName);
+					        
+					        getoutUserInfo = new Array();
+					        console.log("버튼 테스트 : " + getoutUserInfo);
+					        
+					        getoutUserInfo = {studyId, nickName};
+					        console.log("버튼 테스트 : " + getoutUserInfo);
+					        
+					        var thisContent = this;
+					        
+				        	$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/GetoutUser",
+								data : JSON.stringify(getoutUserInfo),
+								dataType : "json",
+								success : function(data) {
+									console.log("실행됨");
+									if(data==true){
+										console.log("완전 성공");
+										thisContent.parentElement.parentElement.outerHTML = "";
+									}else{
+										console.log("잘못 된 시도 발생")
+										window.location.reload();
+									}
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
+						});
+						
+						//tab1 에서 선택 된 요소를 모두 삭제하는 함수
+						$('#selectedAllGetOutButton').on("click", function(){
+							var allUserCheckBox = $(".userCheckBox");
+							var checkedUserInfoMapList= new Array();
+							var checkedElementList = new Array();
+							var studyId = window.name;
+							var checkedCount = 0;
+							for(let count = 0; count<allUserCheckBox.length; count++){
+								if(allUserCheckBox[count].checked == true){
+									//체크 돼있는거면
+									let nickName = allUserCheckBox[count].value;
+									
+									checkedUserInfoMapList[checkedCount] = {studyId, nickName};
+									
+									console.log(checkedUserInfoMapList);
+									//contentCheck = checkedUserInfoMapList;
+									contentCheck2[checkedCount] = allUserCheckBox[count];
+									checkedElementList[checkedCount] = allUserCheckBox[count];
+									checkedCount++;
+								}
+							}
+							//전송한 리스트에 상응하는 element를 저장한 것을 기준으로 성공 여부에 따라서 해당 요소를 지우기 위해서 해당 알고리즘을 추가함.
+							//리턴 받은 boolean List의 길이만큼 반복하고, if문으로 booleanlist의 요소가 true인지 확인한다. 그리고 true일 경우
+							//해당 booleanList번호에 상응하는 요소를 remove한다.
+							/* for(let count = 0; count<checkedElementList.length; count++){
+									//체크 돼있는거면
+									console.log(checkedElementList[count]);
+									checkedElementList[count].parentElement.parentElement.remove();
+							} */
+							$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/SelectedAllGetout",
+								data : JSON.stringify(checkedUserInfoMapList),
+								dataType : "json",
+								success : function(data) {
+									console.log("실행됨");
+									console.log(data.length);
+									contentCheck = data;
+									for(let listCount=0; listCount<data.length; listCount++){
+										if(data[listCount]==true){
+											console.log("삭제하는 인자 : " + checkedElementList[listCount].parentElement.parentElement);
+											checkedElementList[listCount].parentElement.parentElement.remove();
+										}else{
+											console.log("??");
+										}
+									}
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
 						});
 					});
             

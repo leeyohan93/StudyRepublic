@@ -36,7 +36,12 @@ public class StudyMember implements Serializable {
 		@Column(insertable=false, updatable=false)
 		private String studyId;
 		
-		@ManyToOne(cascade=CascadeType.ALL) 
+		/**
+		 * @author 신상용
+		 * CasCadeType.All로 인해서 StudyMember에서  StudyMemberStatusCD 값을 바꾸는 행위가, studyMemberStatusCD 테이블의 변경으로 이어지면서 Constraint가 적용됨.
+		 * StudyMember 테이블의 변경이 StudyMemberStatusCD 테이블로의 변경이 이뤄질 필요가 없기 때문에 해당 부분 주석 처리함.
+		 */
+		@ManyToOne/*(cascade=CascadeType.ALL) */
 		@JoinColumn(name = "study_member_status_code")
 		private StudyMemberStatusCD studyMemberStatusCode;
 		

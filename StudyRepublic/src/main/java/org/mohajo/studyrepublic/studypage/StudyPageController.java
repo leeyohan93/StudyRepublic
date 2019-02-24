@@ -8,7 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyMember;
+import org.mohajo.studyrepublic.domain.StudyMemberStatusCD;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboardReply;
 import org.mohajo.studyrepublic.domain.StudyQnaboard;
@@ -209,7 +212,7 @@ public class StudyPageController {
 		String studyId = "BB00001";
 		String id = "aaa123";
 		
-		model.addAttribute("findStudyMemberLEMEbyStudyIdANDStudyStatusCode", smr.findStudyMemberLEMEbyStudyIdANDStudyStatusCode(studyId, "LE", "ME"));
+		model.addAttribute("findStudyMemberLEMEbyStudyIdANDStudyStatusCode", smr.findStudyMemberbyStudyIdANDStudyStatusCode(studyId,"ME"));
 		model.addAttribute("findStudyMemberWAbyStudyIdANDStudyStatusCode", smr.finStudyMemberWAbyStudyIdANDStudyStatusCode(studyId, "WA"));
 		return "studypage/studypage_management";
 	}
@@ -321,6 +324,87 @@ public class StudyPageController {
 		log.info("들어오긴 하냐?");
 		System.out.println("더 울어라 젊은 인생아");
 		return "studypage/studypage_preview";
+	}
+	
+	@RequestMapping(value="/GetoutUser")
+	@ResponseBody
+	public boolean getoutUser(@RequestBody HashMap getoutUserInfo) {
+		String studyId = (String)getoutUserInfo.get("studyId");
+		String nickName = (String)getoutUserInfo.get("nickName");
+		log.info(studyId + "/" + nickName);
+		StudyMember studyMember = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "ME");
+		if(studyMember != null) {
+			log.info("조회에 성공함");
+			log.info("닉네임 : " + studyMember.getMember().getNickname()
+					+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
+			String id = studyMember.getId();
+			log.info("아이디 : " + id);
+			try {
+				log.info("try 진입");
+				studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD("EX"));
+				smr.save(studyMember);
+				log.info("update까지 성공함.");
+				return true;
+			}catch(Exception e) {
+				log.info("실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+				e.printStackTrace();
+				return false;
+			}
+		}else {
+			log.info("조회에 실패함");
+			return false;
+		}
+	}
+	
+	@RequestMapping(value="/SelectedAllGetout")
+	@ResponseBody
+	public List selectedAllGetout(@RequestBody List<HashMap> checkedList) {
+		
+		List sqlResultList = new ArrayList();
+		String studyId;
+		String nickName;
+		for (HashMap hashMap : checkedList) {
+			studyId = (String)hashMap.get("studyId");
+			nickName = (String)hashMap.get("nickName");
+			try {
+				log.info("첫번째 try 진입");
+				StudyMember studyMember = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "ME");
+				if(studyMember != null) {
+					log.info("조회에 성공함");
+					log.info("닉네임 : " + studyMember.getMember().getNickname()
+							+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
+					String id = studyMember.getId();
+					log.info("아이디 : " + id);
+					try {
+						log.info("두번째 try 진입");
+						studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD("EX"));
+						smr.save(studyMember);
+						log.info("update까지 성공함.");
+						sqlResultList.add(true);
+					}catch(Exception e) {
+						log.info("두번째 try 실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+						e.printStackTrace();
+						sqlResultList.add(false);
+					}
+				}else {
+					sqlResultList.add(false);
+				}
+			}
+			catch(Exception e){
+				log.info("첫번째 try 실패");
+				e.printStackTrace();
+				sqlResultList.add(false);
+			}
+			
+			//이하 테스트 코드
+			/*log.info(studyId + "/" + nickName);
+			sqlResultList.add(true);
+			log.info("리스트에 값이 추가 됨.");*/
+		}
+		
+		//extraTest
+		
+		return sqlResultList;
 	}
 	
 	@RequestMapping(value="/PhotoUpload")
