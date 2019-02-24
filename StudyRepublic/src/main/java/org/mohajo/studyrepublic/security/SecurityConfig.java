@@ -127,28 +127,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 
-
 	@Bean
 	public CustomAuthenticationFailureHandler failurehandler() {
 		CustomAuthenticationFailureHandler customLoginFailure = new CustomAuthenticationFailureHandler();
 		return customLoginFailure;
 	}
 
-	
-	@Bean
-	@ConfigurationProperties("facebook.client")
-	AuthorizationCodeResourceDetails facebook()
-	{
-		return new AuthorizationCodeResourceDetails();
-	}
 
-	@Bean
-	@ConfigurationProperties("facebook.resource")
-	ResourceServerProperties facebookResource()
-	{
-		return new ResourceServerProperties();
-	}
-	
 	
 
 

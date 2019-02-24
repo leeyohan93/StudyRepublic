@@ -11,9 +11,11 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberPoint;
+import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.security.MemberSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -42,6 +44,10 @@ public class MemberController {
 	
 	@Autowired
 	private MemberPointRepository memberpointrepository;
+		
+	@Autowired
+	StudyMemberRepository studymemberrepository;
+	
 		
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
@@ -271,12 +277,32 @@ public class MemberController {
 		return "sign_up";
 	}
 	
-
+	
+	   public void createSession(HttpSession session, Member member) {	
+		         
+		   		 session.setAttribute("nickname", member.getNickname());
+		         session.setAttribute("memberimg", member.getProfileSaveName());
+		         
+					List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(member.getId());		
+					System.out.println("멤버테스트: " + member);
+					System.out.println("조이닝스터디테스트 : " + joiningStudy);
+					HashMap <String, String> studyNameAndStudyId = new HashMap<>();
+					
+					for(StudyMember joiningStudyObject : joiningStudy) {
+						Study extraValue = joiningStudyObject.getStudy();
+						studyNameAndStudyId.put(extraValue.getName(), extraValue.getStudyId());
+					}
+					
+					System.out.println("session아 제대로 찍히니? : " + session);		
+							
+					session.setAttribute("studyNameAndStudyId", studyNameAndStudyId);
+		         
+		   }
 	
 	
 
 	   
-	   public void getSession(Authentication auth, HttpSession session, Member member) {
+/*	   public void getSession(Authentication auth, HttpSession session, Member member) {
 		      if(auth!=null && session.getAttribute("userId")==null) {
 		         
 		    	 MemberSecurity sc = (MemberSecurity)auth.getPrincipal();
@@ -289,7 +315,7 @@ public class MemberController {
 		         session.setAttribute("memberimg", member.getProfileSaveName());
 		      
 		      }
-		   }
+		   }*/
 	   
 	   public void getSession_Study(Authentication auth, HttpSession session, List<StudyMember> studymember) {
 		      if(auth!=null && session.getAttribute("userId")==null) {
@@ -312,10 +338,7 @@ public class MemberController {
 				
 				for(int i = 1; i < listSize + 1; i++) {
 					studyNameList.add(i, studymember.get(i-1).getStudy().getName());
-				}
-				
-				
-				
+				}		
 				
 				List <String> studyIdList = new ArrayList<>(); 
 				
@@ -327,8 +350,6 @@ public class MemberController {
 		    	  
 		         session.setAttribute("studyNameList", studyNameList);
 		         session.setAttribute("studyIdList",studyIdList);
-		         
-		         
 		      
 		      }
 		   }

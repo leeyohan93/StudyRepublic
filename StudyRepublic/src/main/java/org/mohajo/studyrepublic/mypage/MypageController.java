@@ -76,6 +76,7 @@ public class MypageController {
 		
 		Member user = mbr.findById(id).get();
 		model.addAttribute("mbr",user);
+		model.addAttribute("userId", user.getId());
 		
 		List<StudyMember> studymemberbasic = smr.findstudyall(id); 
 		List<StudyMember> studymemberpremium = smr.findstudyall2(id); 

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{/layout/mainLayout}">
+	layout:decorate="~{/layout/mainLayout}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!-- layout:decorate="~{/layout/mainLayout}" -->
 <head>
 <meta charset="UTF-8">
@@ -130,25 +131,32 @@
 <div class="inner">
 	
 	<div class="container-fluid">
+	
+	
+	
 		<div class="row">
 			<nav class="col-md-2 sidebar" style="height: 500px;">
-				<ul class="nav nav-pills flex-column">
-					<li class="nav-item">
-						프리미엄등급신청
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">신청하기</a>
-						<a class="nav-link" href="#">신청현황</a>
-					</li>   	
-				</ul>
 				
+
 				<ul class="nav nav-pills flex-column">
 					<li class="nav-item">
+						프리미엄등급신청                        
+					</li>			
+
+ 	
+					<li class="nav-item">   <!-- -->
+						<a sec:authorize="hasRole('N')" class="nav-link" href="/tutor/signup">신청하기</a>
+						<a sec:authorize="hasAnyRole('W','T')" class="nav-link" href="/tutor/inquery">신청현황</a>
+					</li>  
+			
+				</ul>		
+				
+				<ul class="nav nav-pills flex-column" >
+					<li class="nav-item" sec:authorize="hasRole('T')">
 						강사페이지
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">강사프로필</a>
-						<a class="nav-link" href="#">프리미엄<br>스터디<br>개설내역</a>
+					<li class="nav-item" >
+						<a class="nav-link" th:href="@{'/tutor/profile/p'(id=${userId})}" >강사프로필</a>
 					</li>   	
 				</ul>
 			</nav>

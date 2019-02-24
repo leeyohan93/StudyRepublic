@@ -105,7 +105,7 @@
 								<br>
 								<div th:each="member : ${recommendTutorMember}"
 									class="list-group">
-									<a th:text="${member.nickname}" href="#" class="list-group-item">aaa123</a>
+									<a th:text="${member.nickname}" th:href="@{'/tutor/profile/p'(id=${member.id})}" class="list-group-item">aaa123</a>
 								</div>
 							</article>
 						</div>
