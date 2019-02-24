@@ -33,7 +33,6 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "study_fileshareboard")
-@PrimaryKeyJoinColumn(name="study_fileshareboard_id")
 public class StudyFileshareboard /*extends StudyBoard*/ implements Serializable{
 
 	

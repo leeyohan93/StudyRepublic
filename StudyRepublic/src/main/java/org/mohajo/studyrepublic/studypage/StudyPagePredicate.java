@@ -14,6 +14,7 @@ import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyQnaboard;
+import org.mohajo.studyrepublic.domain.StudyQnaboardReply;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
@@ -95,6 +96,18 @@ public class StudyPagePredicate {
 		builder.and(studyqnaboard.studyId.like(studyId));
 		Pageable pageable = PageRequest.of(0, listCount, Sort.Direction.DESC, "studyId");
 		Page p = sqb.findAll(builder, pageable);
+		
+		List<StudyQnaboard> l = p.getContent();
+		System.out.println("실행에 들어감");
+		for(StudyQnaboard sqb2 : l) {
+			System.out.println("실행에 들어감2");
+			//해당 부분에서 예외가 발생한다. sqb2.getStudyQnaboardReply()
+			/*System.out.println(":" + sqb2.getStudyQnaboardReply());
+			for(StudyQnaboardReply sqbr : sqb2.getStudyQnaboardReply()) {
+				System.out.println("실행에 들어감3");
+				System.out.println(sqbr.getId() + "|||" + sqbr.getStudyId());
+			}*/
+		}
 		
 		return p.getContent();
 	}

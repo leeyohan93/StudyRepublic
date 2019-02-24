@@ -282,27 +282,36 @@ public class MemberController {
 		         
 		   		 session.setAttribute("nickname", member.getNickname());
 		         session.setAttribute("memberimg", member.getProfileSaveName());
-		         
+		         	System.out.println("멤버 객체 ID 조회 : " + member.getId());
 					List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(member.getId());		
 					System.out.println("멤버테스트: " + member);
 					System.out.println("조이닝스터디테스트 : " + joiningStudy);
-					HashMap <String, String> studyNameAndStudyId = new HashMap<>();
+					HashMap <String, String> studyNameAndStudyIdMap = new HashMap<>();
+					HashMap <String, String> studyIdAndStatusKoreanMap = new HashMap<>();
 					
-					for(StudyMember joiningStudyObject : joiningStudy) {
-						Study extraValue = joiningStudyObject.getStudy();
-						studyNameAndStudyId.put(extraValue.getName(), extraValue.getStudyId());
+					
+					for(StudyMember studyMember : joiningStudy) {
+				         Study studyDomain = studyMember.getStudy();
+				         studyNameAndStudyIdMap.put(studyDomain.getName(), studyDomain.getStudyId());
+				         studyIdAndStatusKoreanMap.put(studyDomain.getStudyId(), studyMember.getStudyMemberStatusCode().getCodeValueKorean());
+						
 					}
 					
-					System.out.println("session아 제대로 찍히니? : " + session);		
+					System.out.println("스터디 Map: "  + studyNameAndStudyIdMap/*joiningStudy*/.toString());
+				    System.out.println("스터디별 권한: " + studyIdAndStatusKoreanMap.toString());
+					
+					System.out.println("session아 제대로 찍히니? : " + session);
+					System.out.println("TEST1111111111111111111111111");
 							
-					session.setAttribute("studyNameAndStudyId", studyNameAndStudyId);
+					session.setAttribute("studyNameAndStudyIdMap", studyNameAndStudyIdMap);
+					session.setAttribute("studyIdAndStatusKoreanMap", studyIdAndStatusKoreanMap);
 		         
 		   }
 	
 	
 
 	   
-/*	   public void getSession(Authentication auth, HttpSession session, Member member) {
+	   public void getSession(Authentication auth, HttpSession session, Member member) {
 		      if(auth!=null && session.getAttribute("userId")==null) {
 		         
 		    	 MemberSecurity sc = (MemberSecurity)auth.getPrincipal();
@@ -315,7 +324,7 @@ public class MemberController {
 		         session.setAttribute("memberimg", member.getProfileSaveName());
 		      
 		      }
-		   }*/
+		   }
 	   
 	   public void getSession_Study(Authentication auth, HttpSession session, List<StudyMember> studymember) {
 		      if(auth!=null && session.getAttribute("userId")==null) {
