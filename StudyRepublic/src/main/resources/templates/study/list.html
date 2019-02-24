@@ -3,98 +3,171 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{/layout/mainLayout}">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
 <title>Study List View</title>
 <style layout:fragment="customCss">
+.heading {
+	font-size: 0.9vm;
+	font: bold;
+	display: block;
+	left: 20%;
+	margin-top: 10px
+}
+.tiles{
+	margin-top: 0px;
+	margin-left: auto;
+    margin-right: auto;
+    display:inline-block;
+    text-align: center;
+}
 
-	.heading {
-		font-size: 0.9vm;
-		font: bold;
-		display: inline-block;
-		left: 20%;
-	}
-	
-	h2 {
-		font-size: 0.3vm;
-	}
+h2 {
+	font-size: 0.3vm;
+}
 </style>
 </head>
 <body>
-
-
-	<!-- 스터디 목록 스타일: 게시판형, 카드형 고려중 -->
-	<!-- 게시판형으로 우선 작업 -->
-
-	<div id="studyList" layout:fragment="main">
-		<div class="inner">
+	<div id="main" layout:fragment="main">
+	<div class="inner">
 			<div class="heading">
 				<h3 th:if="${typeCode} eq 'p'">프리미엄 스터디</h3>
-				<h3 th:unless="${typeCode} eq 'p'">일반 스터디</h3>
+				<h3 th:if="${typeCode} eq 'b'">일반 스터디</h3>
+				<h3 th:if="${typeCode} eq 'All'">전체 스터디</h3>
+				<th:block th:if="${search}!=null">
+				<p th:text="|검색조건  - 스터디명 : , 스터디타입 : ${typeCode} , 온오프 : ${onoffCode} , 래밸 : ${levelCode}|" style="font-weight: bold;font-style: italic;"></p>
+				</th:block>
 				<hr>
-				<h3>찾아보기</h3>
 			</div>
-			<div class="body">
-				<table class="table table-striped table-hover" th:with="list=${pagedList.list}">
-					<tr>
-						<th>No.</th>
-						<th>스터디명</th>
-						<th th:if="${typeCode} eq 'p'">리더</th>
-						<th>기간</th>
-						<th>일시</th>
-						<th>인원</th>
-					</tr>
-					<tr th:each="study : ${list}">
-						<td>no</td>
-						<td><a th:href="@{'/study/detail/' + ${study.studyId}}" th:text="${study.name}">study name</a>&nbsp;<i class="tag btn-primary" th:text="${study.studyStatusCode.codeValueKorean}">status</i></td>
-						<th:block th:if="${typeCode} eq 'p'">
-							<td th:text="${study.member.name}">leader</td>
-						</th:block>
-						<!-- 					@Temporal 지정 안 해줬을 때 -->
-						<!-- 	    			<td th:text="|${#dates.format(study.startDate, 'yyyy-MM-dd')}~${#dates.format(study.endDate, 'yyyy-MM-dd')}|">period</td> -->
-						<td th:text="|${study.startDate}~${study.endDate}|">period</td>
-						<td th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</td>
-						<td th:text="|${study.enrollActual}/${study.enrollCapacity}|">n/m</td>
-					</tr>
-				</table>
-				
-				<!-- 페이지 번호 출력 -->
-				<nav>
-					<div>
-						<ul class="pagination">
-							<li class="page-item" th:if="${pagedList.prevPage}"><a th:href="${pagedList.prevPage.pageNumber}">[[${pagedList.prevPage}]]</a></li>
-							<li class="page-item" th:classappend="${page.pageNumber == pagedList.currentPageNum -1}? active: ''" th:each="page : ${pagedList.pageList}"><a th:href="${page.pageNumber}+1">[[${page.pageNumber}+1]]</a></li>
-							<li class="page-item" th:if="${pagedList.nextPage}"><a th:href="${pagedList.nextPage.pageNumber}">[[${pagedList.nextPage}]]</a></li>
-						</ul>
-					</div>
-				</nav>
-				
-				<!-- 페이지 번호를 통해 이동 1 -->
-				<form id="pageForm" th:action="@{'/study/list/' + ${typeCode}}" method="get">
-					<input type="hidden" name="page" th:value="${pagedList.currentPageNum}">
-					<input type="hidden" name="size" th:value="${pagedList.currentPage.pageSize}">
-				</form>
+			<div class="tiles" th:with="list=${pagedList.list}">
+				<div class="card-container" th:each="study : ${list}">
+					<div class="card">
+						<div class="front">
+							<div class="cover">
+								<img th:src="'/images/'+${study.studyInterest[0].interest2code.interest2Code}+'.jpg'" >
+								<div class="studyType" th:text="${typeCode} eq 'p'?${study.typeCode.codeValueKorean}:${study.typeCode.codeValueKorean}"></div>
+								<div class="studyOnoff" th:text="${study.onoffCode.codeValueKorean}"></div>
+							</div>
+							<div class="profile_box">
+								<div class="user">
+									<img class="img-circle" src="/images/pic02.jpg" />
+								</div>
+								<th:block th:if="${typeCode} eq 'p'">
+									<p class="profession" th:text="${study.member.name}" style="margin-bottom: 2px; font-weight: bold;">CEO</p>
+									<p class="profession" th:text="${study.member.nickname}">CEO</p>
+								</th:block>
+								<th:block th:unless="${typeCode} eq 'p'">
+									<p class="profession" th:text="${study.member.nickname}">CEO</p>
+								</th:block>
+							</div>
+							<h6 class="name" th:text="${study.name}">John Marvel</h6>
+							<div class="content">
+								<div class="main">
+									<p class="text-center" th:text="${typeCode} eq 'p'?|￦${study.price.price}" style="color: #ff005a; font-weight: bold;"></p><br>
+									<p class="text-center" th:text="|${study.startDate}~${study.endDate}|+' '+${study.dayCode.codeValueKorean}"></p>
+									<p class="text-center" th:text="'관심분야 : '+${study.studyInterest[0].interest2code.codeValueKorean}+' / 레벨 : '+${study.levelCode.codeValueKorean}"></p>
+									<i class="tag btn-primary" th:text="${study.studyStatusCode.codeValueKorean}" style="color: blue; float: right;"></i>									
+								</div>
+							</div>
+						</div>
+						<!-- end front panel -->
+						<div class="back">
+							<div class="header">
+								<h5 class="motto">스터디 간략상세</h5>
+							</div>
+							<div class="content">
+								<div class="main">
+									<p th:text="${study.introduction}" style="margin-bottom: 10px; height: 40px;overflow: hidden;"></p>
+									<p th:text="|일시 : ${study.startDate}~${study.endDate}|" style="margin-bottom: 3px;"></p>
+									<p th:utext="|시간 : 매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|" style="margin-bottom: 3px;"></p>
+									<p th:text="${study.onoffCode.codeValueKorean}!='온라인'?|지역 : ${study.studyLocation[0].interestLocation}|:''" style="margin-bottom: 3px;"></p>
+									<div class="stats-container">
+										<div class="stats">
+											<h6 th:text="|${study.enrollActual}/${study.enrollCapacity}|"></h6>
+											<p>정원</p>
+										</div>
+										<div class="stats">
+											<h6 th:text="${study.hasLeveltest==1?'있음':'없음'}"></h6>
+											<p>레벨테스트</p>
+										</div>
+										<div class="stats">
+											<h6 th:text="${study.levelCode.codeValueKorean}"></h6>
+											<p>난이도</p>
+										</div>
+									</div>
 
+								</div>
+							</div>
+							<div class="footer">
+								<div class="social-links text-center">
+									<a href="#">신청</a>
+									<a th:href="@{'/study/detail/' + ${study.studyId}}">상세</a>
+								</div>
+							</div>
+						</div>
+						<!-- end back panel -->
+					</div>
+					<!-- end card -->
+				</div>
+				<!-- end card-container -->
 			</div>
 			
+
+			<!-- 페이지 번호 출력 -->
+            <nav>
+               <div>
+                  <ul class="pagination">
+                     <li class="page-item" th:if="${pagedList.prevPage}"><a th:href="${pagedList.prevPage.pageNumber}">[[${pagedList.prevPage}]]</a></li>
+                     <li class="page-item" th:classappend="${page.pageNumber == pagedList.currentPageNum -1}? active: ''" th:each="page : ${pagedList.pageList}"><a th:href="${page.pageNumber}+1">[[${page.pageNumber}+1]]</a></li>
+                     <li class="page-item" th:if="${pagedList.nextPage}"><a th:href="${pagedList.nextPage.pageNumber}">[[${pagedList.nextPage}]]</a></li>
+                  </ul>
+               </div>
+            </nav>
+            
+            <!-- 페이지 번호를 통해 이동 1 -->
+            <th:block th:if="${search}!=null">
+            <form id="pageForm" th:action="@{/search}" method="get">
+               <input type="hidden" name="page" th:value="${pagedList.currentPageNum}">
+               <input type="hidden" name="size" th:value="${pagedList.currentPage.pageSize}">
+               <input type="hidden" name="name" th:value="${name}">
+               <input type="hidden" name="typeCode.typeCode" th:value="${typeCode}">
+               <input type="hidden" name="onoffCode.onoffCode" th:value="${onoffCode}">
+               <input type="hidden" name="searchDate" th:value="${searchDate}">
+               <input type="hidden" name="levelCode.levelCode" th:value="${levelCode}">
+               <th:block th:each="loc:${location}">
+                <input type="hidden" name="location" th:value="${loc}">
+               </th:block>
+               <th:block th:each="inter:${interest}">
+                <input type="hidden" name="interest" th:value="${inter}">
+               </th:block>
+            </form>
+            </th:block>
+            
+            <th:block th:unless="${search}!=null">
+            <form id="pageForm" th:action="@{'/study/list/' + ${typeCode}}" method="get">
+               <input type="hidden" name="page" th:value="${pagedList.currentPageNum}">
+               <input type="hidden" name="size" th:value="${pagedList.currentPage.pageSize}">
+            </form>
+            </th:block>
+            
+
+         </div>
+         
+      </div>
+   
+   <div layout:fragment="customScript">   
+      <script th:inline="javascript">
+         $(document).ready(function() {
+            
+            var pageForm = $("#pageForm");
+            $(".pagination a").click(function(e) {
+               e.preventDefault();
+               pageForm.find('[name="page"]').val($(this).attr('href'));
+               pageForm.submit();
+            });
+            
+         });
+      </script>
+
 		</div>
-	</div>
-	
-	<div layout:fragment="customScript">	
-		<script th:inline="javascript">
-			$(document).ready(function() {
-				
-				var pageForm = $("#pageForm");
-				$(".pagination a").click(function(e) {
-					e.preventDefault();
-					pageForm.find('[name="page"]').val($(this).attr('href'));
-					pageForm.submit();
-				});
-				
-			});
-		</script>
-	
-	</div>
 </body>
 </html>

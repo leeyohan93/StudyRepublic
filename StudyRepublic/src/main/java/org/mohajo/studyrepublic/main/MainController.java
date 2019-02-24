@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
@@ -24,6 +25,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import groovy.util.logging.Log;
 
 /**
  * @author 이요한
@@ -46,22 +49,31 @@ public class MainController {
 	
 	@RequestMapping("/index")
 	public void index(Model model, Member member, Authentication authentication, HttpSession hs) {
+		List<Interest2CD> basicPopularTagList = mainService.getBasicPopularTag();
+		String[] basicPopularTag = new String[basicPopularTagList.size()];
+		for(int i=0; i<basicPopularTagList.size(); i++) {
+			basicPopularTag[i]=basicPopularTagList.get(i).getInterest2Code();
+		}
+		
 //		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
-		List<PopularStudy> premiumStudy = mainService.getPopularPremiumStudy();
+//		List<PopularStudy> premiumStudy = mainService.getPopularPremiumStudy();
 //		List<Study> basicStudy = mainService.getPopularBasicStudy();
-		List<PopularStudy> basicStudy = mainService.getPopularBasicStudy();
-		
-		for(int i=0; i<premiumStudy.size(); i++) {
-			model.addAttribute("popularPremiumStudy"+i,premiumStudy.get(i));
-		}
-		
-		for(int i=0; i<basicStudy.size(); i++) {
-			model.addAttribute("popularBasicStudy"+i,basicStudy.get(i));
-		}
+//		List<PopularStudy> basicStudy = mainService.getPopularBasicStudy(basicPopularTag);
+//		
+//		for(int i=0; i<premiumStudy.size(); i++) {
+//			model.addAttribute("popularPremiumStudy"+i,premiumStudy.get(i));
+//			System.out.println(premiumStudy.get(i).toString());
+//		}
+//		
+//		for(int i=0; i<basicStudy.size(); i++) {
+//			model.addAttribute("popularBasicStudy"+i,basicStudy.get(i));
+//		}
+		model.addAttribute("popularPremiumStudy", mainService.getPopularPremiumStudy());
+		model.addAttribute("popularBasicStudy", mainService.getPopularBasicStudy(basicPopularTag));
 		
 		model.addAttribute("recommendTutorMember", mainService.getRecommendTutorMember());
 		model.addAttribute("premiumPopularTag", mainService.getPremiumPopularTag());
-		model.addAttribute("basicPopularTag", mainService.getBasicPopularTag());
+		model.addAttribute("basicPopularTag", basicPopularTagList);
 		
 //		model.addAttribute("interest1cd", mainService.getInterest1Code());
 //		model.addAttribute("interest2cd", mainService.getInterest2Code());
@@ -99,16 +111,25 @@ public class MainController {
 	
 	@RequestMapping("/search")
 //	public String search(Study studyInfo,String searchDate,String[] location, String[] interest, Model model){
-	public String search(Study studyInfo, String searchDate,String[] location, String[] interest, PageDTO pageDTO, Model model){
+	public String search(Study studyInfo, String searchDate,String[] location, String[] interest, PageDTO pageDto, Model model){
 		
-		Pageable page = pageDTO.makePageable(0, "postDate");
-				
+		Pageable page = pageDto.studyMakePageable(0, 2, "postDate");
 		Page<Study> searchList = mainService.search(studyInfo, searchDate, location, interest, page);
 //		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());
 //		model.addAttribute("list", searchList);
-		model.addAttribute("pagedList", new PageMaker(searchList));
+		model.addAttribute("pagedList", new PageMaker<>(searchList));
 		model.addAttribute("typeCode", studyInfo.getTypeCode().getTypeCode());
-
+		
+		model.addAttribute("search", 1);
+		model.addAttribute("name", studyInfo.getName());
+		model.addAttribute("onoffCode",studyInfo.getOnoffCode().getOnoffCode());
+		model.addAttribute("searchDate",searchDate);
+		model.addAttribute("levelCode",studyInfo.getLevelCode().getLevelCode());
+		if(location!=null)
+			model.addAttribute("location", location);
+		if(interest!=null)
+			model.addAttribute("interest", interest);
+		
 		return "study/list";
 	}
 	
