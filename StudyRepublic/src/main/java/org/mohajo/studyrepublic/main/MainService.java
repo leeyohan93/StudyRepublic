@@ -20,7 +20,7 @@ public interface MainService {
 	public List<PopularStudy> getPopularPremiumStudy();
 	public List<Member> getRecommendTutorMember();
 //	public List<Study> getPopularBasicStudy();
-	public List<PopularStudy> getPopularBasicStudy();
+	public List<PopularStudy> getPopularBasicStudy(String[] popularTag);
 	public void getRecommendNomalMember();
 	public List<Interest2CD> getPremiumPopularTag();
 	public List<Interest2CD> getBasicPopularTag();
@@ -39,7 +39,7 @@ public interface MainService {
 	 * @return
 	 */
 	public Page<Study> search(Study studyInfo, String searchDate, String[] location, String[] interest, Pageable pageable);
-	
+
 }
 
 
