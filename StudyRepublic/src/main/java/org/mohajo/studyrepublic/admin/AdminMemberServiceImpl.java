@@ -131,6 +131,15 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 		return Lists.newArrayList(searchmember);
 	}
 	
+	@Override
+	public Member findMember(String memberId) {
+		
+		Member member =  memberRepository.findMember(memberId);
+/*		System.out.println("똥마렵다" + memberRepository);*/
+		return member;
+
+	}
+	
 
 	
 }

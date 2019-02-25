@@ -23,7 +23,7 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "study_fileshareboard_file")
-public class StudyFileshareboardFile extends StudyBoardFile{
+public class StudyFileshareboardFile /*extends StudyBoardFile*/{
 
 	
 	@Id
@@ -33,4 +33,11 @@ public class StudyFileshareboardFile extends StudyBoardFile{
 	
 	@Column(name = "study_fileshareboard_id")
 	private int studyFileshareboardId;
+	
+	@Column(name = "filenumber")
+	private int fileNumber;
+	@Column(name = "originname")
+	private String originName;
+	@Column(name = "savename")
+	private String saveName;
 }

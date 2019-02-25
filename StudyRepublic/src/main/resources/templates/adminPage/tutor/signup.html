@@ -1,0 +1,266 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/adminLayout}">
+
+<head>
+<title>Tutor</title>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+ <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+	<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
+
+</head>
+<body>
+	<th:block layout:fragment="search">
+	<div style="padding-top: 0;">
+			<div class="modal-bootstrap shadow-inner mg-tb-30 responsive-mg-b-0"
+				style="padding-top: 0; margin: 0;">
+				<div class="modal-area-button">
+					<a class="Primary mg-b-10" href="#" data-toggle="modal"
+						data-target="#Permission">강사신청 허가</a> 
+					<a class="Danger danger-color" href="#"
+						data-toggle="modal" data-target="#Prohibition">강사신청 불가</a>
+				</div>
+			</div>
+			<div id="Permission"
+				class="modal modal-edu-general default-popup-PrimaryModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<form id="permission" action="permission" method="post">
+							<input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}" />
+							<div class="modal-body">
+								<i class="educate-icon educate-checked modal-check-pro"></i>
+								<h2>회원의 강사신청을 허가합니다.</h2>
+								<p>축하 쪽지를 발송합니다.</p>
+								<input type='hidden' name='selectedId' th:value="${mdu.id}">
+								<div class="form-group">
+									<input type="hidden" name="sendId" th:value="${adminId}">
+									<label for="exampleFormControlTextarea1">Content</label>
+									<textarea name="messageContent" rows="3">당신은 이제 강사입니다 ~!</textarea>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<a data-dismiss="modal" href="#">Cancel</a>
+								<!-- <a id="permission-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
+								<input type="submit"
+									class="btn btn-custon-rounded-four btn-primary"
+									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									value="Process">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		
+			<div id="Prohibition"
+				class="modal modal-edu-general FullColor-popup-DangerModal fade"
+				role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-close-area modal-close-df">
+							<a class="close" data-dismiss="modal" href="#"><i
+								class="fa fa-close"></i></a>
+						</div>
+						<form id="prohibition" action="prohibition" method="post">
+							<input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}" />
+							<div class="modal-body">
+								<span
+									class="educate-icon educate-danger modal-check-pro information-icon-pro"></span>
+								<h2>회원의 강사신청을 불허합니다</h2>
+								<p style="margin-bottom: 15px">타당한 이유를 쪽지로 보내주세요.</p>
+								<input type='hidden' name='selectedId' th:value="${mdu.id}">
+								<div class="form-group">
+									<input type="hidden" name="sendId" th:value="${adminId}">
+									<label for="exampleFormControlTextarea1">Content</label>
+									<textarea name="messageContent" rows="3">그냥 당신이 강사가 되는게 싫어..</textarea>
+								</div>
+								</div>
+							<div class="modal-footer danger-md">
+								<a data-dismiss="modal" href="#">Cancel</a>
+								<!-- <a id="prohibition-process" data-dismiss="modal" href="#" style="display: inline-block;">Process</a> -->
+								<input type="submit"
+									class="btn btn-custon-rounded-four btn-primary"
+									style="background-color: #006DF0; padding: 10px 20px; margin-left: 20px; height: 40px; margin-bottom: 2px; border-radius: 3px;"
+									value="Process">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+	<h4 layout:fragment="title">강사 신청서</h4>
+	<!-- Static Table Start -->
+	<div layout:fragment="main">
+		<div class="single-pro-review-area mt-t-30 mg-b-15">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="profile-info-inner">
+                            <div class="profile-img">
+                                <img th:src="@{'/member_image/'+${mdu.profileSaveName}}" alt="" />
+                            </div>
+                            <div class="profile-details-hr">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
+                                        <div class="address-hr">
+                                           <p><b>이름</b><br /><th:block th:text="${mdu.name}"></th:block></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
+                                        <div class="address-hr tb-sm-res-d-n dps-tb-ntn">
+                                            <p><b>생년월일</b><br /><th:block th:text="${mdu.birth}"></th:block></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
+                                        <div class="address-hr">
+                                           <p><b>메일</b><br /><th:block th:text="${mdu.email}"></th:block></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
+                                        <div class="address-hr tb-sm-res-d-n dps-tb-ntn">
+                                            <p><b>연락처</b><br /><th:block th:text="${mdu.phonenumber}"></th:block></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="address-hr">
+                                            <p><b>최종학력</b><br /><th:block th:text="${tutorEducationCD}"></th:block></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn">
+                            <ul id="myTabedu1" class="tab-review-design">
+                                <li class="active"><a href="#description">신청서</a></li>
+                                <li><a href="#FILE">첨부파일</a></li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content custom-product-edit st-prf-pro">
+                                <div class="product-tab-list tab-pane fade active in" id="description">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                                        <div class="address-hr biography">
+                                                            <p><b>이름</b><br /><th:block th:text="${mdu.name}"></th:block></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                                        <div class="address-hr biography">
+                                                            <p><b>닉네임</b><br /><th:block th:text="${mdu.nickname}"></th:block></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                                        <div class="address-hr biography">
+                                                            <p><b>생년월일</b><br /><th:block th:text="${mdu.birth}"></th:block></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                                        <div class="address-hr biography">
+                                                            <p><b>연락처</b><br /><th:block th:text="${mdu.phonenumber}"></th:block></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="content-profile">
+                                                            <p th:text="${tutor.introduction}">자기소개</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row mg-b-15">
+                                                    <div class="col-lg-12">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="skill-title">
+                                                                    <h2>경력사항</h2>
+                                                                    <hr />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ex-pro" th:each="selc : ${selectedtutorcareer}">
+                                                            <ul>
+                                                                <li><i class="fa fa-angle-right"></i><th:block th:text="${selc.careerCD.codeValueKorean}"></th:block></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mg-b-15">
+                                                    <div class="col-lg-12">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="skill-title">
+                                                                    <h2>스터디 희망 분야</h2>
+                                                                    <hr />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ex-pro" th:each="seli : ${selectedtutorinterest}">
+                                                            <ul>
+                                                                <li><i class="fa fa-angle-right"></i><th:block th:text="${seli.interest2CD.codeValueKorean}"></th:block></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-tab-list tab-pane fade" id="FILE">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                    <div th:each="tf : ${tutoruploadfile}">
+                                                        <div class="file-upload-inner ts-forms">
+                                                            <div class="input prepend-big-btn">
+                                                                <label class="icon-right" for="prepend-big-btn">
+																		<a th:href="@{'/tutor/file'(tutorFileFullUrl=${tf.tutorFileFullUrl})}"><i class="fa fa-download"></i></a>
+																	</label>
+                                                                <input type="text" id="prepend-big-btn" style="padding-left: 12px" th:value="${tf.tutorfileOriginname}" disabled="disabled">
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	<!-- Static Table End -->
+	
+
+	<script layout:fragment="indexScript"></script>
+	<script layout:fragment="indexScript2"></script>
+</body>
+
+
+
+
+
+</html>

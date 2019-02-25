@@ -25,7 +25,17 @@ public class ReportTypeCD {
 
 	private String reportTypeCode;
 	
-	private String codeValue;	
+	private String codeValue;
+
+	/**
+	 * @param reportTypeCode
+	 * @param codeValue
+	 */
+	public ReportTypeCD(String reportTypeCode) {
+		super();
+		this.reportTypeCode = reportTypeCode;
+	
+	}	
 
 
 

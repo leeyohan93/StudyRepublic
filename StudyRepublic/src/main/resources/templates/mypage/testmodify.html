@@ -5,302 +5,130 @@
 <!-- layout:decorate="~{/layout/mainLayout}" -->
 <head>
 <meta charset="UTF-8">
-<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-<!-- default header name is X-CSRF-TOKEN -->
-<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-<title>회원정보 수정페이지</title>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<style>
-	.btn{
-		background-color: rgb(179,220,248);
-		color: white;
-	}
+<title>마이페이지 테스트</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" th:href="@{/assets/css/main.css}">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
+	type="text/css">
 
-	#form1{
-		width:100%;
-		background-color: #f7f7f7;
-		
-	}
+
+
+<style>
+	
+.contact-form{
+    background: #fff;
+    margin-top: 10%;
+    margin-bottom: 5%;
+    width: 70%;
+}
+.contact-form .form-control{
+    border-radius:1rem;
+}
+.contact-image{
+    text-align: center;
+}
+.contact-image img{
+    border-radius: 6rem;
+    width: 11%;
+  
+   
+}
+.contact-form form{
+    padding: 14%;
+}
+.contact-form form .row{
+    margin-bottom: -7%;
+}
+.contact-form h3{
+    margin-bottom: 8%;
+    margin-top: -10%;
+    text-align: center;
+    color: #0062cc;
+}
+.contact-form .btnContact {
+    width: 50%;
+    border: none;
+    border-radius: 1rem;
+    padding: 1.5%;
+    background: #dc3545;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+.btnContactSubmit
+{
+    width: 50%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    color: #fff;
+    background-color: #0062cc;
+    border: none;
+    cursor: pointer;
+}
 	
 	
-	.form-control{
-		width: 300px;
-	}
 	
 
 </style>
 
-
 </head>
-
 <body>
-<script type="text/javascript">
- var token = $("meta[name='_csrf']").attr("content");
- var header = $("meta[name='_csrf_header']").attr("content");
- $(function() {
-     $(document).ajaxSend(function(e, xhr, options) {
-         xhr.setRequestHeader(header, token);
-     });
- });
-$(document).ready(function(){
-
-	var sel_file;
-	var data = {};
-	var emailcheck =0;
-	var complate = 0;
-	var email = "";
-	var visibilityValue = '0'; //공개 일때 0 비공개는 1 
-	
-	visibilityValue = $('#hidden_visibility').val();
-	
-	if(visibilityValue == '0' || visibilityValue == '1'){
-		$('input:radio[name=visibility]:input[value=' + visibilityValue + ']').attr("checked", true);
-	}
-	
-	//임시로 수정하기 완료버튼 이벤트
-	/* $("#complate").click(function(){
-		if(confirm("수정하시겠습니까?")){
-		}
-		
-		
-		document.form1.submit();
-		
-	});
-	  */
-	//이미지 미리보기
-	$("#sourceFile").on("change",handleImgFileSelect);
-	  
-	  function handleImgFileSelect(e){
-		  var files = e.target.files;
-		  var filesArr = Array.prototype.slice.call(files);
-		  
-		  filesArr.forEach(function(f){
-		  	if(!f.type.match("image.*")){
-		  		alert("확장자는 이미지 확장자만 가능합니다.");
-		  		return;
-		  	}
-		  
-		  	sel_file = f;
-		  	
-		  	var reader = new FileReader();
-		  	reader.onload = function(e){
-		  		$("#img_profile").attr("src",e.target.result);
-		  	}
-		  	reader.readAsDataURL(f);
-		  		
-		  });
-	  }
-	//이미지업로드
-	// form 값 전부 보내기
-	$('#newimg_upload').click(function(){
-	  
-	    var idx = $(this).parent().parent().index();
-	    var frm = document.getElementById('image_Form');
-	    frm.method = 'POST';
-	    frm.enctype = 'multipart/form-data';
-		
-	    var fileFormValue = $('#sourceFile').val();
-	    
-	    var fileData = new FormData(frm);
-	  	
-	    console.log("fileData:" + fileFormValue);
-	    if(fileFormValue != null && fileFormValue != {} && fileFormValue != ''){
-		    // ajax
-		    $.ajax({
-		        url:'/attachments',
-		        type:'POST',
-		        data:fileData,
-		        async:false,
-		        cache:false,
-		        contentType:false,
-		        processData:false
-		    }).done(function(response){
-		        alert("프로필변경이 완료되었습니다.");
-		        location.reload();
-		    });
-	  	}else{
-	  		alert("파일이 첨부되지 않았습니다.");
-	  	}
-	});
-
-	
-	//이메일 중복체크
-	var data ={};
-	
-	$("#emailcheck").click(function(){
-		data.email = $("#email").val();
-		data.url = "./emailAuth";
-		sendServer(data);
-	});
-	function sendServer(data){
-		
-		$.ajax({
-			type:"get",
-			url:data.url,
-			data : data, //{email : $("#email").val()}
-			datatype:"JSON",
-			success:function(success){
-				console.log(success);
-				if(success.emailCount == 0){
-					alert("이메일이 중복되지 않습니다.");
-				}else{
-					alert("이메일이 중복되었습니다.");
-				}
-			},
-			error:function(error){
-				console.log(error);
-			}
-			
-		});
-}
- 	//완료버튼 클릭시 비밀번호입력하기
-	$("#complate").click(function(){
-		console.log("완료버튼클릭");
-		data = {};
-		data.password = $("#passwordcheck").val();
-		data.url = "./passwordAuth";
-		complete(data);
-	});
-	
-	function complete(data){
-		$.ajax({
-			type:"POST",
-			url:data.url,
-			data : data,
-			datatype:"JSON",
-			success:function(eee){
-				console.log(eee);
-			if(confirm("수정하시겠습니까?")){
-					
-					document.form1.submit();
-				} 
-			},
-			error:function(sss){
-				console.log(sss);
-			}
-			
-		});
-	}
-		 
-
-
-});
-	
-</script>
 
 
 <div id="main" layout:fragment="main">
 <div class="inner">
-		
-		<div class="container">
 
-		<div th:each="md : ${mdu}">
-		
-		<div class="row">
- 				<div class="col-sm-4" style="padding-left: 173px">
- 				<form name="image_Form" id="image_Form" action="attachments" method="post">
- 					<img id="img_profile" th:src="@{'/member_image/'+${md.profileSaveName}}" style="width:200px; height:200px"/>   
-					<br>
-					<input name="sourceFile" id="sourceFile" type="file" />
+
+
+    
+<div th:each="md : ${mdu}">
 	
-					<input type="button" class="btn" id="newimg_upload" name="newimg_upload" value="이미지변경"/>
-				</form>
-	
-				<form name="basicimage" action="setdefault_img">
-				<input type="submit" class="btn" value="기본이미지로 변경" />
-				</form>
- 				</div>
-	
-			<div class="col-sm-8">
-				<span sec:authentication="principal.member.nickname"></span>님 회원정보 수정페이지  <br>
-				<span>	<a class="btn" id="modifypwd" th:href="@{passwordmodi}" role="button">비밀번호 변경</a></span>
-			</div>
- 		</div>
 
-<form th:action="@{modimember2}" id="form1" name="form1" method="post">
-			
-
-
-				<div class="form-group row">
-					<label for="id" class="col-sm-2 col-form-label">아이디</label>
-					<div class="col-sm-6" >
-						<input type="text" readonly class="form-control-plaintext" name="id" id="id" th:value="${md.id}">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-2 col-form-label">이름</label>
-					<div class="col-sm-6">
-						<input type="text" readonly class="form-control-plaintext"
-							id="staticEmail" th:value="${md.name}">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="gender" class="col-sm-2 col-form-label">성별</label>
-					<div class="col-sm-6">
-						<input type="text" readonly class="form-control-plaintext"
-							id="gender" th:value="${md.gender}">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="birth" class="col-sm-2 col-form-label">생년월일</label>
-					<div class="col-sm-6">
-						<input type="text" readonly class="form-control-plaintext"
-							id="birth" th:value="${md.birth}">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="nickname" class="col-sm-2 col-form-label">닉네임</label>
-					<div class="col-sm-6">
-						<input type="text" readonly class="form-control-plaintext"
-							id="nickname" th:value="${md.nickname}">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="email" class="col-sm-2 col-form-label">E-mail</label>
-					<div class="col-sm-6">
-						<input type="text"  class="form-control" name="email"
-							id="email" th:value="${md.email}">
-					</div>
-				<button type="button" class="button" id="emailcheck" name="emailcheck" >중복체크</button></br>
-				</div>
-				<div class="form-group row">
-					<label for="phonenumber" class="col-sm-2 col-form-label">휴대전화</label>
-					<div class="col-sm-6">
-						<input type="text"  class="form-control"
-							id="phonenumber" th:value="${md.phonenumber}">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="" class="col-sm-2 col-form-label">공개여부</label>
-					<div class="col-sm-6">
-						<input type="radio" name="visibility" value="0"/>공개&nbsp&nbsp<input type="radio" name="visibility" value="1"/>비공개
-						<input type="hidden" id="hidden_visibility" th:value="${md.visibility}"/>
-					</div>
-				</div>
-			비밀빈호&nbsp&nbsp<span><input type="password" id="passwordcheck" name="passwordcheck"/></span></br>
-				
-				
-
-			<span>	<a class="btn" id="memberexit" th:href="@{memberexit}" role="button">탈퇴하기</a></span>
-					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-			<span>	<a class="btn" id="complate" role="button">완료</a></span>
-				
-</form> 
-		</div>
-		</div>
-
-
-	
+<div class="container contact-form">
+	<form name="image_Form" id="image_Form" action="attachments" method="post">
+            <div class="contact-image">
+                <img id="img_profile" th:src="@{'/member_image/'+${md.profileSaveName}}" style="border-radius:100%; width:200px; height:200px"/>
+            	<br><input name="sourceFile" id="sourceFile" type="file"><br>
+   				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+   				<input type="button"  id="newimg_upload" name="newimg_upload" value="이미지변경"/>
+            </div>
+	</form>
+            
+            
+ </div>             
+            <form method="post">
+		<h3 th:text="${session.nickname}"></h3>님 회원정보입니다.<br>
+               <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" name="txtName" class="form-control" placeholder="Your Name *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="txtEmail" class="form-control" placeholder="Your Email *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="txtPhone" class="form-control" placeholder="Your Phone Number *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="btnSubmit" class="btnContact" value="Send Message" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <textarea name="txtMsg" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
 </div>
 
 </div>
-
-
+<!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
+</div>
+<!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
 
 </body>
 </html>

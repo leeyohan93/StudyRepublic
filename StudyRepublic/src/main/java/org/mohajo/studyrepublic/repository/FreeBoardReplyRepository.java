@@ -22,5 +22,8 @@ public interface FreeBoardReplyRepository extends JpaRepository<FreeBoardReply, 
 
 	@Query(value="select count(f.freeBoardReplyId) from FreeBoardReply f where f.freeBoardId =:fbi")
 	public int replyCount(@Param("fbi")int freeBoardId);
-
+	
+	//댓글 리스트 출력
+	@Query(value="select * from freeboard_reply where freeboard_id =:f1 order by replygroup asc", nativeQuery=true)
+    List<FreeBoardReply> findFreeBoardReply(@Param("f1")int freeBoardId);
 }

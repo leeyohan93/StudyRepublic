@@ -109,7 +109,7 @@ public String memberexit(@ModelAttribute Member member) {
    
    System.out.println(123);
    
-   return "redirect:index";
+   return "redirect:/logout";
 }
 
 /*@RequestMapping("/modimember2")

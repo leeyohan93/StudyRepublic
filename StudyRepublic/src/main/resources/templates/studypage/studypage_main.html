@@ -7,83 +7,375 @@
 <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
 <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>스터디 메인 페이지 입니다.</title>
+<th:block layout:fragment="customCSS">
+	<style>
+	  	#noticeboardBoard{
+	  		border-radius: 10px;
+	  		padding: 1%;
+	  		background-color: #73737333;
+	  		margin-bottom: 1%;
+	  	}
+	  	.contentForm{
+	  		padding-left: 5%;
+	  	}
+	  	.contentDate{
+	  		display: inline-block;
+	  	}
+	  	.contentWriteDate{
+ 	  		
+ 	  		display: inline-block;
+		    width: 100%;
+		    text-align: center;
+		    font-size: 75%;
+	  	}
+	  	.content{
+	  	    width: 95%;
+		    margin-top: 5%;
+		    margin-bottom: 3%;
+	  	}
+	  	.contentReplyForm{
+	  	    width: 95%;
+		    border: gray 1px;
+		    border-style: inset;
+		    border-radius: 10px;
+		    padding : 1%;
+		    padding-left : 2%;
+		    padding-right: 2%;
+			background-color: #73737333;
+	  	}
+	  	#contentReply{
+	  		margin-bottom: 2%;
+	  	}
+	  	.contentReplyWriteForm{
+	  		width:100%;
+	  		display: inline-flex;
+	  	}
+	  	.userProfile{
+	  		width: 8%;
+	  		display: inline-block;
+	  	}
+	  	.contentReplyWriteDiv{
+	  		width: 70%;
+	  		display: inline-block;
+	  		background-color: white;
+	  	}
+	  	.contentReplyWriteInput{
+	  		width: 100%;
+	  		background-color: white;
+	  	}
+	  	.replyButton{
+	  		width: 18%;
+	  		display: inline-block !important;
+	  		margin-left: 4%;
+	  		color: snow !important;
+	  	}
+	  	.contentModifyAndDelete div{
+	  		display: inline-block;
+	  	}
+	  	#writeButtonSpace{
+	  		text-align: right;
+	  	}
+	  	.btn-dark{
+	  	    background-color: dimgrey;
+	  	}
+	  	#writeButton{
+	  		padding-left: 3%;
+    		padding-right: 2%;
+    		color: snow !important;
+	  	}
+	  	.rightTitleLeft{
+			width: 20%;
+	  		text-align: center;
+	  	}
+		.rightTitleMiddle{
+	  		width: 50%;
+	  		text-align: center;
+	  	}
+	  	.rightTitleRight{
+	  		width: 30%;
+	  		text-align: center;
+	  	}
+	  	.rightLeft{
+			width: 20%;
+	  		text-align: center;
+	  	}
+		.rightMiddle{
+	  		width: 50%;
+	  		text-align: center;
+	  	}
+	  	.rightRight{
+	  		width: 30%;
+	  		text-align: center;
+	  	}
+	  	.btn-dark{
+	  		border : 0px;
+	  	}
+		.rightContent{
+		    height: 20%;
+		    width: 100%;
+		    padding-top: 20px;
+		    padding-bottom: 20px;
+		    border: gray 1px;
+		    border-style: inset;
+	 	    border-radius: 10px;
+		    margin-bottom: 1%;
+		    background-color: white;
+	  	}
+	  	.rightTitle{
+	  		display: inline-block;
+	  	}
+		#right{
+	  		heigth: 100%;
+	  	}
+	  	input[type="submit"]:hover,
+	  	input[type="reset"]:hover,
+	  	input[type="button"]:hover,
+	  	button:hover,
+	  	.button:hover{
+	  		color : white !important;
+	  		box-shadow: none;
+	  	}
+	  	.dateFont{
+	  		font-weight: bold;
+	  	}
+	  	.profileBox{
+	  		display: inline-block;
+	  		width: 12%;
+	  	}
+	  	.profileBoxshow{
+	  		padding: 1%;
+	  		font-weight: bolder;
+	  	}
+	  	.profileBoxPhoto{
+	  		text-align: -webkit-center;
+	  	}
+	  	.profileBoxPhotoIamge{
+	  		width : 30px;
+	  		height: 30px;
+	  		border-radius:100%;
+	  	}
+	  	.profileBoxName{
+	  		font-size:small;
+	  		text-align: center;
+	  	}
+	  	#progressPercent{
+	  		padding-bottom: 5%;
+	  	}
+	  	#progressPadding{
+	  		padding-top: 5%;
+    		padding-bottom: 10%;
+	  	}
+	  	.progress{
+	  		height: 35px !important;
+	  		background-color: #dc3545 !important;
+	  	}
+	  	#bar{
+	  		width: 0%;
+	  		aria-valuenow: 25;
+	  		/* width와 aria-valuenow는 동기화 된 상태로 따라 다녀야 한다.  */
+	  		aria-valuemin: 0;
+	  		aria-valuemax: 100;
+	  		background-color: #00ff46d6 !important;
+	  	}
+	  	#progressStudyType{
+	  		padding-top: 5%;
+	  		padding-bottom: 5%;
+	  	}
+  	</style>
+</th:block>
 </head>
 <body>
     <div id="right" layout:fragment="right">
-                <div id="noticeBoard">
-                	<table>
-                		<tr>
-	                		<td>공지사항 페이지 고유번호</td>
-							<td>스터디 ID</td>
-							<td>게시글 번호</td>
-							<td>제목</td>
-							<td>내용</td>
-							<td>작성일</td>
-							<td>작성자</td>
-							<td>진행 날짜</td>
-							<td>위치</td>
-						</tr>
-						<tr th:each="snb : ${studynoticeboard3result}">
-							<td th:text = "${snb.studyNoticeboardId}"></td>
-							<td th:text = "${snb.studyId}"></td>
-							<td th:text = "${snb.number}"></td>
-							<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${snb.title}"></a></td>
-							<td th:text = "${snb.content}"></td>
-							<td th:text = "${snb.date}"></td>
-							<td th:text = "${snb.id}"></td>
-							<td th:text = "${snb.day}"></td>
-							<td th:text = "${snb.location}"></td>
-                		</tr>
-                		<tr th:each="snb : ${study}">
-                			<td th:text = "${snb.studyId}"></td>
-                	</table>
-                </div>
-                <div id="joinMember">
-                	<div>
-                		<div:inline-block th:each="fbsm : ${findbystudymember}">
-                				<span th:each="member : ${fbsm.Member}">
-	                					<tr><th th:text="${member.profileSaveName}"></th></tr>
-	                			</span>
-                		</div:inline-block>
+			<div id="noticeboardBoard">
+			 	<div class="boardName">	
+						>>최근 공지사항
+				</div>
+				<div th:each="fasn : ${studynoticeboard3result}" th:if="${fasn}!=null"><!-- 공지사항 게시판의 내용을 가져오는 부분  -->
+					<div class="rightContent rightAll" >
+						<div><input type="hidden" th:value="${fasn.number}" name="number">
+						</div>
+						<div class="rightLeft rightTitle dateFont" th:text="${#dates.format(fasn.day, 'MM월dd일')}"></div
+						><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasn.number}" data-toggle="collapse" class="boardList"
+								th:text="${fasn.title}" th:id="${fasn.number}"></a></div
+						><div class="rightRight rightTitle" th:text="${fasn.location}"></div>
+						<div class="collapse contentForm" th:id="'write'+${fasn.number}">
+							<input type="hidden" th:id="${fasn.number}">
+							<div class="contentDate" th:text="${#dates.dayOfWeekName(fasn.day)} + ' ' + ${#dates.format(fasn.startTime, 'HH:mm')}+'~'+${#dates.format(fasn.endTime, 'HH:mm')}">
+							</div>
+							<div class="contentWriteDate">
+								<div class="" th:text="${#dates.format(fasn.date, 'yyyy/MM/dd')}"></div>
+								<div class="" th:text="${#dates.format(fasn.date, 'HH:mm:ss')}+' 작성'"></div>
+							</div>
+							<div class="content" th:text="${fasn.content}">
+							</div>
+							<div class="contentReplyForm"
+								><div class="contentReply" th:text="${fasn.studyNoticeboardReply}">
+								
+								</div>
+								<div class="contentReplyWriteForm"
+									><div class="userProfile">프</div
+									><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
+									><button type="button" class="btn btn-dark replyButton">댓글 작성</button
+								></div
+							></div>
+							<div class="contentModifyAndDelete">
+								<div class="contentModify">
+									<button type="button" class="btn btn-dark modifyButton">수정</button>
+								</div>
+								<div class="contentDelete">
+									<button type="button" class="btn btn-dark deleteButton">삭제</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div
+			></div
+			><div id="joinMember"
+				><div class="profileBoxshow"><!-- 참여중인 사람에 대한 정보를 보여주는 공간 -->
+								참여중인 멤버
+				</div>
+				<div><div class="profileBox" th:each="fbsm : ${findbystudymember}" th:if="${fbsm}">
+               				<div th:each="member : ${fbsm.Member}">
+               					<div class="profileBoxPhoto">
+               						<img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${member.profileSaveName}}">
+               					</div>
+               					<div class="profileBoxName" th:text="${member.nickname}"></div>
+                			</div>
+                		</div>
                 	</div>
-                	<div>
-                		<div:inline-block th:each="fbsm : ${findbystudymember}">
-                				<span th:each="member : ${fbsm.Member}">
-	                					<tr><th th:text="${member.nickname}"></th></tr>
-	                			</span>
-                		</div:inline-block>
-                	</div>
-                </div>
-                <div id="double">
-                        <div id="qnaBoard">
-                       		<table>
-		                		<tr>
-			                		<td>QnA 페이지 고유번호</td>
-									<td>스터디 ID</td>
-									<td>게시글 번호</td>
-									<td>제목</td>
-									<td>내용</td>
-									<td>작성일</td>
-									<td>작성자</td>
-								</tr>
-								<tr th:each="sqb : ${studyqnaboard3result}">
-									<td th:text = "${sqb.studyQnaboardId}"></td>
-									<td th:text = "${sqb.studyId}"></td>
-									<td th:text = "${sqb.number}"></td>
-									<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${sqb.title}"></a></td>
-									<td th:text = "${sqb.content}"></td>
-									<td th:text = "${sqb.date}"></td>
-									<td th:text = "${sqb.id}"></td>
-		                		</tr>
-                			</table>
+                </div
+                ><div id="double">
+                    <div id="qnaBoard"><!-- 질문 및 답변 게시판의 내용을 보여주는 공간 -->
+                       	<div class="boardName">	
+							>>질문 및 답변
+						</div>
+						<div th:each="fasq : ${studyqnaboard3result}" th:if="${fasq}">
+							<div class="rightContent rightAll" >
+								<div><input type="hidden" th:value="${fasq.number}" name="number">
+								</div>
+								<div class="rightLeft rightTitle"
+									><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${fasq.studyMember.member.profileSaveName}}"
+									><div class="profileName" th:text = "${fasq.studyMember.member.nickname}"></div
+								></div
+								><div class="rightMiddle rightTitle"><a th:href="'#Qna'+${fasq.number}" data-toggle="collapse" class="boardList"
+										th:text="${fasq.title}" th:id="${fasq.number}"></a
+								></div
+								><div class="rightRight rightTitle contentWriteDate">
+										<div class="" th:text="${#dates.format(fasq.date, 'yyyy/MM/dd')}"></div>
+										<div class="" th:text="${#dates.format(fasq.date, 'HH:mm:ss')}+' 작성'"></div>
+								</div>
+								<div class="collapse contentForm" th:id="'Qna'+${fasq.number}">
+									<input type="hidden" th:id="${fasq.number}">
+									<div class="content" th:text="${fasq.content}">
+									</div>
+									<div class="contentReplyForm"
+										><!-- <div class="contentReply" th:if="${fasq.studyQnaboardReply}!=null"
+											><div th:each="fasqReply :${fasq.studyQnaboardReply}">너 뭐냐?</div
+										></div> -->
+										<div class="contentReplyWriteForm"
+											><div class="userProfile">프</div
+											><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
+											><button type="button" class="btn btn-dark replyButton">댓글 작성</button
+										></div
+									></div>
+									<div class="contentModifyAndDelete">
+										<div class="contentModify">
+											<button type="button" class="btn btn-dark modifyButton">수정</button>
+										</div>
+										<div class="contentDelete">
+											<button type="button" class="btn btn-dark deleteButton">삭제</button>
+										</div>
+									</div>
+								</div>
+							</div>
                         </div>
-                        <div id="ing">
-                        </div>
-                      </div>
-  
- 
+                     </div>
+                     <div id="ing"><!-- 스터디 진행률을 보여주는 바 -->
+                     	<div id="progressPercent"
+                     		><font color="white" id="studyPlayingRate">스터디 진행률</font
+                     	></div
+                     	><div id="progressPadding"
+                     		><div class="progress"
+                     			><div class="progress-bar" id="bar" role="progressbar"
+						 		></div
+							></div
+						></div
+						><div id="progressDateBox"
+							><font color="white"><div th:text = "'시작일 : ' + ${#dates.format(studyMemberInfo.study.startDate, 'yy/MM/dd')}"
+							></div
+							><div th:text = "'종료일 : ' + ${#dates.format(studyMemberInfo.study.endDate, 'yy/MM/dd')}"
+							></div
+	                   	></div>
+                     	<div id="progressStudyType" th:text = "'스터디 유형 : ' +	${studyMemberInfo.study.onoffCode.codeValueKorean}">
+                     	</div
+                     ></font></div>
+			</div>
+			<script type="text/javascript" th:inline="javascript">
+				/*<![CDATA[*/
+				$(document).ready(function(){
+					var rate = calcDate(getPlayingDate(), getTotalDate());
+					$('#studyPlayingRate')[0].textContent = "스터디 진행률 (" + rate + "%)";
+					$('#bar')[0].style.width = Math.floor(rate)+'%';
+				});
+				
+				//만약에 시작일과 종료일이 같을 경우, 0이 나오기 때문에 예외처리함.
+				function calcDate(playingDate, totalDate){
+						if(totalDate==0){
+							return 100;
+						}
+						//진행일-과정일
+						if(playingDate-totalDate>=0){
+							return 100;
+						}else{
+							return ((playingDate/totalDate)*100).toFixed(2);
+						}
+				}
+				
+				//종료일 - 시작일.
+				function getTotalDate(){
+					//var startDateOrigin = /*[[ ${studyMemberInfo.study.startDate} ]]*/;
+					//var endDateOrigin = /*[[ ${studyMemberInfo.study.endDate} ]]*/;
+					
+					/* console.log(startDateOrigin);
+					console.log(endDateOrigin); */
+					
+					var startDate = new Date(/*[[ ${studyMemberInfo.study.startDate} ]]*/);
+					var endDate = new Date(/*[[ ${studyMemberInfo.study.endDate} ]]*/);
+					/*
+					Tue Jan 15 2019 09:00:00 GMT+0900 (한국 표준시)
+					Tue Feb 19 2019 10:10:30 GMT+0900 (한국 표준시)
+					*/
+					console.log(startDate);
+					console.log(endDate);
+					/* console.log('startDate:' + startDate.getTime());
+					console.log('endDate:' + endDate.getTime()); */
+					//Milli Second 개념으로 치완 될 경우 뒷 날짜가 앞 날짜 보다 작다...
+					var totalDateMilliSecond = endDate.getTime()-startDate.getTime();
+					var totalDate = Math.floor(totalDateMilliSecond / (1000 * 60 * 60 * 24));
+					console.log('totalDate : ' + totalDate);
+					return totalDate;
+	            }
+				
+				
+				//오늘 - 시작일, -값에 대한 예외처리는 해놓음.
+				function getPlayingDate(){
+					var startDate = new Date(/*[[ ${studyMemberInfo.study.startDate} ]]*/);
+					var todayDate = new Date();
+					console.log(startDate);
+					console.log(todayDate);
+					
+					var playingDateMilliSecond = todayDate.getTime() - startDate.getTime();
+					var playingDate = Math.floor(playingDateMilliSecond / (1000 * 60 * 60 * 24));
+					
+					//현재 날짜 - 진행 시작일 일때. 현재 날짜가 진행 시작일보다, 전일 경우 -값이 나오는 것을 방지함.
+					if(playingDate<0){
+						playingDate = 0;
+					}
+					console.log('playingDate : ' + playingDate);
+					return playingDate;
+				}
+	            /*]]>*/
+			</script>
 		</div>
-		
-	
 </body>
 </html>

@@ -9,6 +9,7 @@ import org.mohajo.studyrepublic.domain.QInquireBoard;
 import org.mohajo.studyrepublic.domain.QMember;
 import org.mohajo.studyrepublic.domain.QReport;
 import org.mohajo.studyrepublic.domain.QRequestBoard;
+import org.mohajo.studyrepublic.domain.QSendMessage;
 import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.QStudyInterest;
 import org.mohajo.studyrepublic.domain.QStudyLocation;
@@ -52,13 +53,13 @@ public class AdminPredicate {
 		if(!(searchValue.equals(""))) {
 			switch(searchKey) {
 			case "id":
-				builder.and(member.id.eq(searchValue));
+				builder.and(member.id.contains(searchValue));
 				break;
 			case "name":
-				builder.and(member.name.eq(searchValue));
+				builder.and(member.name.contains(searchValue));
 				break;
 			case "nickname":
-				builder.and(member.nickname.eq(searchValue));
+				builder.and(member.nickname.contains(searchValue));
 			}
 		}
 			
@@ -74,13 +75,13 @@ public class AdminPredicate {
 		if(!(searchValue.equals(""))) {
 			switch(searchKey) {
 			case "id":
-				builder.and(member.id.eq(searchValue));
+				builder.and(member.id.contains(searchValue));
 				break;
 			case "name":
-				builder.and(member.name.eq(searchValue));
+				builder.and(member.name.contains(searchValue));
 				break;
 			case "nickname":
-				builder.and(member.nickname.eq(searchValue));
+				builder.and(member.nickname.contains(searchValue));
 			}
 		}
 		builder.and(member.gradeCD.gradeCode.eq("W"));
@@ -114,7 +115,7 @@ public class AdminPredicate {
 				builder.and(study.name.contains(searchValue));
 				break;
 			case "leader":
-				builder.and(study.member.id.eq(searchValue));
+				builder.and(study.member.id.contains(searchValue));
 			}
 		}
 			
@@ -210,6 +211,30 @@ public class AdminPredicate {
 				break;
 			case "memberId":
 				builder.and(report.id.contains(searchValue));
+			}
+		}
+		
+		return builder;
+	}
+	
+public static Predicate searchMessage(String searchKey,String searchValue) {
+		
+		BooleanBuilder builder = new BooleanBuilder();
+		QSendMessage message = QSendMessage.sendMessage;
+		
+		if(!(searchValue.equals(""))) {
+			switch(searchKey) {
+			case "sendId":
+				builder.and(message.sendId.contains(searchValue));
+				break;
+			case "receiveId":
+				builder.and(message.receiveId.contains(searchValue));
+				break;
+			case "content":
+				builder.and(message.messageContent.contains(searchValue));
+				break;
+			case "id":
+				builder.and(message.messageSendId.eq(Integer.parseInt(searchValue)));
 			}
 		}
 		

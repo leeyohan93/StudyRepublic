@@ -64,10 +64,10 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 //	public List<Study> findPrStudyBytypeCode();
 	public List<PopularStudy> findPrStudyBytypeCode();
 	
-	@Query(value="select * from study natural join study_interest where interest_2_code in ('P02','P08') "
+	@Query(value="select * from study natural join study_interest where interest_2_code in (?1) "
 			+ "and STUDY_STATUS_CODE ='O' order by rand() limit 2",nativeQuery=true)
 //	public List<Study> findBsStudyBytypeCode();
-	public List<PopularStudy> findBsStudyBytypeCode();
+	public List<PopularStudy> findBsStudyBytypeCode(String[] popularTag);
 	
 
 // 스터디 뷰 테이블 관계 설정 후 에러. 주석 처리함. BY 이미연
@@ -88,6 +88,12 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 	@Modifying	//https://winmargo.tistory.com/208, https://docs.spring.io/spring-data/jpa/docs/current/reference/html/, 안 써도 되나?
 	@Query(value = "update Study s set s.enrollActual = s.enrollActual + 1 where studyId = ?1")
 	public void plusEnrollActual(String studyId);
+	
+
+	@Query(value = "SELECT MID(post_date,1,7) period, COUNT(*) as count FROM study GROUP BY period order by period desc;",nativeQuery=true)
+	List<Object[]> getStudyCount();
+	@Query(value = "SELECT MID(post_date,1,4) period, COUNT(*) as count FROM study GROUP BY period order by period desc;",nativeQuery=true)
+	List<Object[]> getStudyCountYear();
 	
 
 }

@@ -58,7 +58,6 @@ padding: 2em 1.2em;
     border: 1px solid #444444;
     border-collapse: collapse;
 } 
-
 <style>  
   table {
     width: 100%;
@@ -75,10 +74,8 @@ padding: 2em 1.2em;
  
   }
   
-
   tr:nth-child(2n), td:nth-child(2n) {
     background-color: #eee;
-
   }
   tr:nth-child(2n+1), td:nth-child(2n+1) {
     background-color: #c9c9c9a6;
@@ -88,7 +85,6 @@ padding: 2em 1.2em;
   td:nth-child(2n+1) {
   font-weight:bold
   }
-
 </style>
 
 </head>
@@ -110,7 +106,7 @@ padding: 2em 1.2em;
 								style="margin-top: 50px; margin-bottom: 0; width: 940px; padding: 50px 55px 0px 55px;">
 								<!-- <span class="login100-form-title p-b-43"> 프리미엄등급 신청 내역 </span> -->
 
-								<div class="wrap-input100_label" th:each = "member : ${mdu}" style="width: auto; height: auto; margin-bottom: 120px" >
+								<div class="wrap-input100_label" th:each = "member : ${mdu}"style="width: auto; height: auto; margin-bottom: 120px" >
 									<span class="label-input100_label"  th:text = "${member.name} + '님 신청내역'"style="width: 220px; font-size:25px">
 										</span>
 								</div>
@@ -233,9 +229,7 @@ padding: 2em 1.2em;
 							</div>
 
 							<div class="wrap-input100_ validate-input">
-<!-- 								<div id="interest2cd" name="interest2cd">
-									<div id="int2"><input type="text" id="isel0" name="tutorinterest[0].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel0" onclick="deleteInterest(0)" style="display: none;"><div id="liisel0" class="ysh"><span class="yshspan"> &gt; 네트워크관리</span> <input class="yshbtn" type="button" value="X" id="liidel0" onclick="deleteInterest(0)"></div><input type="text" id="isel1" name="tutorinterest[1].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel1" onclick="deleteInterest(1)" style="display: none;"><div id="liisel1" class="ysh"><span class="yshspan"> &gt; LINUX</span> <input class="yshbtn" type="button" value="X" id="liidel1" onclick="deleteInterest(1)"></div><input type="text" id="isel2" name="tutorinterest[2].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel2" onclick="deleteInterest(2)" style="display: none;"><div id="liisel2" class="ysh"><span class="yshspan"> &gt; 서버관리</span> <input class="yshbtn" type="button" value="X" id="liidel2" onclick="deleteInterest(2)"></div></div>
-								</div> -->
+
 							</div>
 
 						</div>					
@@ -281,7 +275,7 @@ padding: 2em 1.2em;
 						<a th:href = "${tf.tutorfilePartUrl}" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a>
 						<a th:href = "@{'/tutor/file'(tutorFileFullUrl=${tf.tutorFileFullUrl})}" style = "color:blue">다운로드</a> 
 						</div>
-						<!-- <a th:href = "@{'/tutor/file/delete'(tutorFileFullUrl=${tf.tutorFileFullUrl})}">X(삭제)</a>  -->
+	<!-- 					<a th:href = "@{'/tutor/file/delete'(tutorFileFullUrl=${tf.tutorFileFullUrl})}">X(삭제)</a>  -->
 						</div>
 
 						</div>
@@ -320,7 +314,6 @@ padding: 2em 1.2em;
 </div>
 
 
-			</div>
 
 
 
@@ -348,6 +341,7 @@ padding: 2em 1.2em;
 			
 </script>
 
+			</div>
 		</div>
 	</div>
 	

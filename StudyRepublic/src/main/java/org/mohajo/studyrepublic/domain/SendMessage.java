@@ -33,7 +33,13 @@ public class SendMessage extends Message implements Serializable{
 	@Column(name="message_send_id" , nullable=false)
 	private int messageSendId;
 	
-
+	/*	@Column(name="send_nickname", nullable=true)
+	private String send_nickname;
+	
+	@Column(name="receive_nickname", nullable=true)
+	private String receive_nickname;
+	
+	 */
 	
 
 }

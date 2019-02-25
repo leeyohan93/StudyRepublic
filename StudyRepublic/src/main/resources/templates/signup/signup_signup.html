@@ -400,7 +400,7 @@ $(function() {
              document.getElementById("enterId").style.color = "#f30e0e";
           }  
           if ( !(regex_id.test(uid)) && uid !== "" ) {
-             document.getElementById("enterId").innerHTML = "유효하지 않은 형식 입니다.";
+             document.getElementById("enterId").innerHTML = "4~12자리 영어,숫자를 사용하여 아이디를 설정해주세요.";
              document.getElementById("enterId").style.color = "#f30e0e";
           } else if ( regex_id.test(uid) && idCheck == 1 ) {
              document.getElementById("enterId").innerHTML="이미 사용되고 있는 아이디 입니다.";
@@ -421,7 +421,7 @@ $(function() {
     	
     	uid = document.getElementById("id").value;       
         pw = document.getElementById("password").value;
-        regex_pw=/^[a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\-\_\+\=]{10,18}$/
+        regex_pw=/^[a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\-\_\+\=]{4,12}$/
         
           if(pw==="" && uid !== ""){
            // document.getElementById("password").focus();
@@ -430,7 +430,7 @@ $(function() {
          	}
           
           else if ( !(regex_pw.test(pw)) && uid !== "" ) {
-            document.getElementById("enterPw").innerHTML = "유효하지 않은 형식 입니다.";
+            document.getElementById("enterPw").innerHTML = "4~12자리 영어,숫자를 사용하여 비밀번호를 설정 해주세요. ";
             document.getElementById("enterPw").style.color = "#f30e0e";
          	} else if ( regex_pw.test(pw)) {         
        	    document.getElementById("enterPw").innerHTML = "password ok";
@@ -559,7 +559,7 @@ $(function() {
         
        
        function check_Phone(){
-              email = document.getElementById("nickname").value;
+              email = document.getElementById("email").value;
               phoneNumber = document.getElementById("phonenumber").value;
               regex_phone = /^[0-9]{10,11}$/
                 

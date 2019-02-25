@@ -33,15 +33,14 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "study_fileshareboard")
-@PrimaryKeyJoinColumn(name="study_fileshareboard_id")
-public class StudyFileshareboard extends StudyBoard implements Serializable{
+public class StudyFileshareboard /*extends StudyBoard*/ implements Serializable{
 
 	
 	@Id
 	@Column(name = "study_fileshareboard_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyFileshareboardId;
-	/*@Column(name = "study_id")
+	@Column(name = "study_id")
 	private String studyId;
 	@Column
 	private int number;
@@ -63,7 +62,7 @@ public class StudyFileshareboard extends StudyBoard implements Serializable{
 		@JoinColumn(name="study_id", referencedColumnName="studyId", insertable=false, updatable=false),
 		@JoinColumn(name="id", referencedColumnName="id", insertable=false, updatable=false)
 	})
-	private StudyMember studyMember;*/
+	private StudyMember studyMember;
 	
 	@OneToMany
 	@JoinColumn(name="study_fileshareboard_id")

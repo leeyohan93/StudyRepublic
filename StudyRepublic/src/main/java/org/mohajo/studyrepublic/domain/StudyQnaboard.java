@@ -32,7 +32,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "study_qnaboard")
-public class StudyQnaboard extends StudyBoard implements Serializable{
+public class StudyQnaboard /*extends StudyBoard*/ implements Serializable{
 
 	
 	@Id
@@ -40,7 +40,7 @@ public class StudyQnaboard extends StudyBoard implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyQnaboardId;
 	
-	/*@Column(name = "study_id")
+	@Column(name = "study_id")
 	private String studyId;
 	@Column
 	private int number;
@@ -62,7 +62,7 @@ public class StudyQnaboard extends StudyBoard implements Serializable{
 		@JoinColumn(name="study_id", referencedColumnName="studyId", insertable=false, updatable=false),
 		@JoinColumn(name="id", referencedColumnName="id", insertable=false, updatable=false)
 	})
-	private StudyMember studyMember;*/
+	private StudyMember studyMember;
 	
 	@OneToMany
 	@JoinColumn(name="study_qnaboard_id")

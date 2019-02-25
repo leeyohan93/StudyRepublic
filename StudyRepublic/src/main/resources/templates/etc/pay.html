@@ -13,7 +13,7 @@
 <body>
 
 
-<th:block th:if = "${memberpoint}">
+
 <input id = "id" type = "text" th:value = '${memberpoint.member.id}' style = "display:none">
 <input id = "nowpoint" type = "text" th:value = '${memberpoint.point}' style = "display:none">
 충전하실 금액을 입력해주세요. <input type = "number" id = "point"> <input type="button" value="충전" onclick="pay()" />
@@ -24,7 +24,6 @@
 <div th:text = '${memberpoint.point} + 보유포인트'></div>
 </div>
 
-</th:block>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript"
 		src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -44,6 +43,7 @@
 		IMP.init("imp18113186");
 		var data = {};
 		var afterPoint = "";
+		/* var id = "" ;document.getElementById("id").value; */
 
 		function pay() {
 			
@@ -54,7 +54,7 @@
 				merchant_uid : 'merchant_' + new Date().getTime(),
 				name : 'StudyRepublic 포인트 결제',
 				amount : $('#point').val(),
-				id : id,
+				id : $('#id').val(),
 //				buyer_email : '${member.email}',
 //				buyer_name : '${member.id}',
 //				buyer_tel : '',
@@ -65,7 +65,7 @@
 			}, function(rsp) {
 				if (rsp.success) {
 					
-					data.id = $('#id').val();
+					data.id = $('#point').val();
 					data.plusPoint = $('#point').val();
 					
 					$.ajax({

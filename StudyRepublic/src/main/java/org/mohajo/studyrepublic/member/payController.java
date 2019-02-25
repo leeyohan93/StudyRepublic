@@ -6,6 +6,8 @@ package org.mohajo.studyrepublic.member;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberPoint;
 import org.mohajo.studyrepublic.repository.MemberPointRepository;
@@ -20,17 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-
-/**
- * @author 윤성호
- * @since 2019.01.22
- * @version
- * -기능1 추가
- * -기능2 추가
- * -기능3 추가
- */
-
 @Controller
 public class payController {
 
@@ -40,8 +31,8 @@ public class payController {
 	@Autowired
 	MemberPointRepository  memberpointrepository;
 	
-	@RequestMapping("/pay")
-	public String pay(Model model) {
+	@RequestMapping("/member/point/charge")
+	public String chargePoint(Model model, HttpSession session) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -49,15 +40,21 @@ public class payController {
 		MemberPoint memberpoint = memberpointrepository.inqueryPoint(id);
 		model.addAttribute("memberpoint", memberpoint);
 		
-		return "etc/pay";
+    	         
+        session.setAttribute("memberpoint", memberpoint.getPoint());
+        System.out.println("보유포인트갱신: " + memberpoint.getPoint());
+        
+		return "member/pointCharge";
+		
 	}
 	
-	@PostMapping("/kakaopay")
+	@PostMapping("/member/kakaopay")
 	@ResponseBody
-	public Map <Object, Object> pointCharge (@RequestParam int plusPoint, @RequestParam String id, Model model) {
+	public Map <Object, Object> KakaoPay (@RequestParam int plusPoint, @RequestParam String id, Model model) {
 		
 		System.out.println("충전 아이디: " + id);
 		
+		/*int plus_point = Integer.parseInt(plusPoint);*/
 		
 		Map<Object, Object> map = new HashMap <Object, Object> ();
 		

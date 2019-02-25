@@ -22,6 +22,13 @@ public class ReportWhyCD {
 	
 	private String codeValueEnglish;
 	private String codeValueKorean;
+	/**
+	 * @param reportWhyCode
+	 */
+	public ReportWhyCD(int reportWhyCode) {
+		super();
+		this.reportWhyCode = reportWhyCode;
+	}
 
 
 

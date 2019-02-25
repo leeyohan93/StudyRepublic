@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<title>풀캘린더</title>
+<style type="text/css">
+    body {
+        margin :40px 10px;
+        padding : 0;
+        font-family : "Lucida Grande", Helvetica, Arial, Verdana,sans-serif;
+        font-size : 14px;
+    }
+    #calendar {
+        max-width : 900px;
+        margin : 0 auto;
+    }
+</style>
+<link href="./fullcalendar-3.10.0/fullcalendar.css" rel="stylesheet"/>
+<link href="./fullcalendar-3.10.0/fullcalendar.print.css" rel="stylesheet" media="print"/>
+<script type="text/javascript" src="./fullcalendar-3.10.0/lib/moment.min.js"></script>
+<script type="text/javascript" src="./fullcalendar-3.10.0/lib/jquery.min.js"></script>
+<script type="text/javascript" src="./fullcalendar-3.10.0/fullcalendar.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    jQuery(document).ready(function() {
+	
+			  	var biginfo = [];// 컨트롤러에서 가져오는값 담는 그릇 
+				var miniinfo = []; // 가져온값을 api 에 맞게 담는그릇
+    	jQuery("#calendar").fullCalendar({
+    		 $ajax({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,listYear'
+				},
+				/* eventRender: function(event, element, view){
+				    if (event.isRecurrring) {
+				      return (event.ranges.filter(function(range){
+				        return (biginfo[i].study.startDate(event.start).isBefore(range.end) &&
+				        		biginfo[i].study.endDate(event.end).isAfter(range.start));
+				      }).length) > 0;
+				    }
+				  },	 */
+	            	
+		displayEventTime: false, // don't show the time column in list view
+	            		
+		eventClick: function(event,view, jsEvent) {
+		// opens events in a popup window
+		//window.open('http://naver.com', 'gcalevent', 'width=700,height=600');
+		return false;
+		}
+	    ,defaultDate : new Date() //오늘날짜 
+        , editable : true
+        , eventLimit : true
+        , events: miniinfo
+        
+       
+        
+    
+   
+				
+			        
+			         ,type:"GET"
+			         ,url:"./schedulerApi"
+			         ,data : {} //컨트롤러에 넘겨줄값
+			         ,datatype:"JSON"
+			         ,success:function(success){
+			            console.log(success);
+			            biginfo = success.biginfo;
+			            for(var i=0; i < biginfo.length; i++){
+			            	miniinfo.push({});
+			            	
+			            	//miniinfo[i].allDay = false;
+			            	miniinfo[i].id = biginfo[i].study.studyId;
+			            	miniinfo[i].title = biginfo[i].study.name;
+ 			            	miniinfo[i].start = biginfo[i].study.startDate;
+			            	miniinfo[i].end = biginfo[i].study.endDate;
+	/* 		            	miniinfo[i].startTime = biginfo[i].study.startTime;
+			             	miniinfo[i].endTime = biginfo[i].study.endTime; */
+			             	
+			           /*   	miniinfo[i].ranges.push({}); */
+ 			             /* 	miniinfo[i].ranges=[{
+ 			             		
+							isRecurring : event.isRecurring,
+			             	start : biginfo[i].study.startDate(from),
+			             	end : biginfo[i].study.endDate(to);
+ 			             	}];
+			             	 */
+			             	console.log(biginfo[i].study.startDate);
+			             	//ranges: [{ //repeating events are only displayed if they are within one of the following ranges.
+							//        start: moment().startOf('week'), //next two weeks
+							//        end: moment().endOf('week').add(7,'d'),
+							//    }
+			            	//miniinfo[i].rendering = 'background';
+			            	
+			             	miniinfo[i].dow = []; 
+			            	
+			            	miniinfo[i].dow.push(Number(biginfo[i].study.dayCode.dayCode));
+			            	console.log(miniinfo[i].dow);
+			            	
+			            			            	 
+			            	
+			            	if(biginfo[i].study.typeCode.typeCode == 'B'){
+			            		miniinfo[i].color = "black";
+			            		miniinfo[i].textColor ="white";
+			            	
+			            	}else{
+			            
+		            		miniinfo[i].color = "pink";
+		            		miniinfo[i].textColor ="skyblue";
+			            	}
+			            }
+			            		
+		   
+		        
+
+		        //$('#calendar').fullCalendar('renderEvent', miniinfo, true); 
+	         },
+	         error:function(error){
+	            console.log(error);
+	         }
+	         
+			         });
+	         
+	      });	
+	
+	
+	
+	
+	
+	
+});
+</script>
+<body>
+<div id="calendar"></div>
+</body>
+</html>
+
+
+

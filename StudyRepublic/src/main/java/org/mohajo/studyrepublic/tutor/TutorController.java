@@ -10,10 +10,14 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -24,10 +28,15 @@ import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberRoles;
+import org.mohajo.studyrepublic.domain.PageDTO;
+import org.mohajo.studyrepublic.domain.PageMaker;
+import org.mohajo.studyrepublic.domain.StudyMember;
+import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TutorCareer;
 import org.mohajo.studyrepublic.domain.TutorInterest;
 import org.mohajo.studyrepublic.domain.TutorUploadFile;
+import org.mohajo.studyrepublic.domain.TypeCD;
 import org.mohajo.studyrepublic.fileupload.MyUploadForm;
 import org.mohajo.studyrepublic.repository.CareerCDRepository;
 import org.mohajo.studyrepublic.repository.EducationCDRepository;
@@ -35,6 +44,8 @@ import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.MemberRolesRepository;
+import org.mohajo.studyrepublic.repository.StudyMemberRepository;
+import org.mohajo.studyrepublic.repository.StudyViewRepository;
 import org.mohajo.studyrepublic.repository.TutorCareerRepository;
 import org.mohajo.studyrepublic.repository.TutorInterestRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
@@ -42,13 +53,20 @@ import org.mohajo.studyrepublic.repository.TutorUploadFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,7 +99,17 @@ public class TutorController implements Serializable {
 	TutorCareerRepository tutorcareerrepository;
 	@Autowired
 	TutorInterestRepository tutorinterestrepository;
+	
+	@Autowired
+	TypeCD typeCd;
+	
+	@Autowired
+	StudyViewRepository svr;
+	
+	@Autowired
+	StudyMemberRepository smr;
 
+	private static final String ROLE_PREFIX = "ROLE_";
 
 	@RequestMapping("/tutor")
 	public String tutorInfo(Model model) {
@@ -135,7 +163,7 @@ public class TutorController implements Serializable {
 
 	@RequestMapping("/tutor/insert")
 	public String insertTutor(Model model, @ModelAttribute Tutor tutor, MultipartHttpServletRequest request,
-			@RequestParam MultipartFile file) throws Exception {
+		@RequestParam MultipartFile file, HttpSession session) throws Exception {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -149,17 +177,25 @@ public class TutorController implements Serializable {
 		member.setRoles(roles);
 		
 		
+		Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>(); 
 		
 		
-
-
-/*		List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities()); 
-		updatedAuthorities.add(new SimpleGrantedAuthority("W")); //add your role here [e.g., new SimpleGrantedAuthority("ROLE_NEW_ROLE")] 
-*/
+			authoritySet.add(new SimpleGrantedAuthority(ROLE_PREFIX + "W"));
+		
+		
+		Authentication newAuth = new UsernamePasswordAuthenticationToken(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), "", authoritySet);
 	
+		System.out.println("roles" + roles);
+//		auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("권한체크: " + newAuth.getAuthorities());
+		SecurityContext securityContext = SecurityContextHolder.getContext(); 
+		securityContext.setAuthentication(newAuth);
+/*		auth.setAuthenticated(true);*/
+		session = request.getSession(); 
+		session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 		
 		
-		
+		memberrolesrepository.deleteNormal(id);
 
 		memberrepository.save(member);
 //		memberrolesrepository.save(memberroles);
@@ -187,7 +223,7 @@ public class TutorController implements Serializable {
 		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		
 		Resource resource = defaultresourceloader
-				.getResource("file:src\\main\\resources\\static\\tutorFileUpload");
+				.getResource("file:src\\main\\resources\\static\\tutorFileUpload\\" + member.getId());
 		
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
 		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
@@ -222,9 +258,11 @@ public class TutorController implements Serializable {
 			fileOriginName = name;
 			// Client File Name
 			String sourceFileNameExtension = FilenameUtils.getExtension(fileOriginName).toLowerCase();
+				
 			String fileSaveName = RandomStringUtils.randomAlphanumeric(32) + "." + sourceFileNameExtension;
 
 			System.out.println("Client File Name = " + name);
+			System.out.println("fileSaveName: " + fileSaveName );
 
 			if (fileSaveName != null && fileSaveName.length() > 0) {
 				try {
@@ -239,7 +277,7 @@ public class TutorController implements Serializable {
 					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 					stream.write(fileData.getBytes());
 					stream.close();
-					
+					//
 					uploadedFiles.add(serverFile);
 					System.out.println("Write file: " + serverFile);
 
@@ -252,7 +290,7 @@ public class TutorController implements Serializable {
 					tutoruploadfile.setTutorfileSavename(fileSaveName);
 					String fullUrl = uploadRootPath + "\\" + fileSaveName;
 					tutoruploadfile.setTutorFileFullUrl(fullUrl);
-					String partUrl = "\\tutorFileUpload\\" + fileSaveName;
+					String partUrl = "\\tutorFileUpload\\" + member.getId() + "\\" + fileSaveName;
 
 					tutoruploadfile.setTutorfilePartUrl(partUrl);
 					tutoruploadfile.setMember(member);
@@ -323,9 +361,12 @@ public class TutorController implements Serializable {
 
 		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		
-		Resource resource = defaultresourceloader
-				.getResource("file:src\\main\\resources\\static" + tutoruploadfile.getTutorfilePartUrl());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
 		
+		Resource resource = defaultresourceloader
+				.getResource("file:src\\main\\resources\\static" +tutoruploadfile.getTutorfilePartUrl());
+				
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
 		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
 
@@ -398,18 +439,55 @@ public class TutorController implements Serializable {
 	@PostMapping("/tutor/delete/inquery")
 	public String deleteTutor(@ModelAttribute Tutor tutor) throws IOException {
 		
-	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	String id = auth.getName();	
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();	
 		
-	memberrolesrepository.deleteTutorWait(id);	
-	tutorrepository.deleteById(tutor.getTutorNumber());
+		memberrolesrepository.deleteTutorWait(id);	
+		tutorrepository.deleteById(tutor.getTutorNumber());
+		
+		MemberRoles memberroles = new MemberRoles();
+		memberroles.setRoleName("N");				
+		Member member = memberrepository.findById(id).get();
+		List<MemberRoles> roles = memberrolesrepository.findByRole(id);	
+		roles.add(memberroles);								
+		member.setRoles(roles);
+		member.setGradeCD(new GradeCD("N"));
+		
+		memberrolesrepository.deleteTutorWait(id);
+		
+		memberrepository.save(member);
 	
-	
-	
-
 		System.out.println("강사신청삭제완료!");
 		return "redirect:/index";
 	}
+	
+	@GetMapping("/tutor/profile/{typeCode}")
+	public String goTutorProfile(@RequestParam String id, @PathVariable("typeCode") String typeCode, PageDTO pageDto, Model model) {
+	/*	 */
+		/*typeCode = "p";*/
+		
+		Tutor tutor = tutorrepository.findByTutor(id);
+			
+		model.addAttribute("tutor", tutor);
+
+		List<StudyMember> studyActivity = smr.findTutorActivityById(id);
+		model.addAttribute("studyActivity", studyActivity);
+		
+		Member modifyuser = memberrepository.findById(id).get();
+		model.addAttribute("mdu",modifyuser);
+		
+		int tutor_number = tutor.getTutorNumber();
+		System.out.println(tutor_number);
+		
+		List<TutorCareer> selectedtutorcareer = tutorcareerrepository.selectedtutorcareer(tutor_number);
+		model.addAttribute("selectedtutorcareer", selectedtutorcareer);
+		
+		
+		return "tutor/tutor_profile";
+		
+	}
+	
+
 	
 	
 	   @RequestMapping(value = "/uploadOneFile", method = RequestMethod.GET)

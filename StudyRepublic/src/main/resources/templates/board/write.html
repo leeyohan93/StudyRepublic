@@ -6,20 +6,35 @@
  -->
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{/layout/mainLayout}"
->
+	layout:decorate="~{/layout/mainLayout}">
 <head>
 
 <title></title>
-<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html" ; charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
-
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js"
+	charset="utf-8"></script>
+<!-- modals CSS
+		============================================ -->
+<link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
 <style>
+.writeTop {
+	margin-top: 20px !important;
+	margin-bottom: 20px !important;
+	padding-bottom: 10px !important;
+	border-bottom: 1px solid #ccc;
+}
+
+h3 {
+	letter-spacing: 0;
+}
+
 .boardSelect {
-	margin-top: 50px;
+	margin-top: 20px;
 }
 
 #boardType {
@@ -52,85 +67,159 @@
 }
 
 #smarteditor {
-	width: 95%;
-	height: 100%
+	width: 98%;
+	
 }
 
-/* .cancelBtn{ */
-/*     position:relative; */
-/*     top: -22px; */
-/*     left: -543px; */
-/* } */
-/* .previewBtn{ */
+.writeForm {
+	border: 1px solid #ccc;
+}
 
-/*    position:relative; */
-/*     top: -55px; */
-/*     left: 772px; */
-/* } */
+.boardBtnForm {
+	padding: 0px !important
+}
 
-/* .registerBtn{ */
-/*     position:relative; */
-/*     top: -55px; */
-/*     left: 774px; */
-/* } */
+#previewRgisterForm {
+	float: right;
+}
+
+
+#cancelBtn, #previewBtn, #registerBtn {
+	background-color: white;
+	color: rgb(66, 161, 226) !important;
+	text-align: center;
+	display: inline-block;
+	margin: 0px;
+	cursor: pointer;
+	padding: 7px 2px 2px 2px;
+	width: 75px;
+	height: 42px;
+	border: 1px solid;
+}
+#registerBtn {
+		padding-top: 4px;
+}
+
+#previewBtn {
+	width: 100px;
+}
+ 
+#fileAddBtn{
+margin-bottom: 10px;
+}
+
+#fileAddBtn button{
+     font-size: 15px;
+     background: white;
+     border: 1px solid #ccc;
+     height: 40px;
+    padding: 0px 20px;
+    border-radius: 4px;
+}
+.yshbtn{
+background: white;
+     border: 1px solid #ccc !important;
+     height: 40px;
+    border-radius: 4px;
+}
+#file_route {
+ display: inline-block;
+}
+
+.file_input{
+ padding: 10px;
+}
+#liidel0{
+      height: 46px;
+      background: white;
+    color: black;
+    border:1px solid #ccc;
+    border-radius: 4px;
+}  
+.se2_inputarea{
+ height: 1000px !important;
+}     
 </style>
 
 </head>
 
-<body>	
+<body>
 
 
-<div id = "main" layout:fragment = "main">
-<div class="inner">
+	<div id="main" layout:fragment="main">
+		<div class="inner writeTop">
+			<h3>글쓰기</h3>
+		</div>
+		<div class="inner writeForm">
 
 
-<form id="boardWriteForm" th:action="@{registerBoard}" method="post">
-	 
-	 <div class="boardSelect">
-	 <select id ="boardType" name = "boardType">
-	 <option>게시판 선택 </option>
-     <option value ='freeBoard'>자유게시판</option>
-	 <option value ='requestBoard'>스터디 요청게시판</option>
-	 <option value ='inquireBoard'>문의게시판</option>
-	</select> 
-	</div>
-	
-<!-- 제목, 공지옵션, 비공개옵션, -->
-  <span>
-	<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
-	<input id ="boardWriter" name ='id' type='hidden' th:value="${memberId}">
-	</span>
-    <input id ="boardNotice" name ="notice" type="checkbox" value="0">
-    <span class ="boardTitleOpt">공지</span> 
+			<form id="boardWriteForm" th:action="@{registerBoard}" method="post" enctype="multipart/form-data" >
 
-  
-  <!--제목, 공지옵션, 비공개옵션 끝 -->
-  
-  <!-- 스마트 에디터 적용 글내용 -->
-  <div id = "editor">
-    <div>  
-       <textarea name="content" id="smarteditor" rows="10" cols="100"></textarea>
-	</div>
-  </div>
+				<!-- 게시판 선택 -->
+				<div class="boardSelect">
+					<select id="boardType" name="boardType">
+						<option value="">게시판 선택</option>
+						<option value='freeBoard' th:selected="${boardType} =='freeBoard'">자유게시판</option>
+						<option value='requestBoard' th:selected="${boardType} =='requestBoard'">스터디 요청게시판</option>
+						<option value='inquireBoard' th:selected="${boardType} =='inquireBoard'">문의게시판</option>
+					</select>
+				</div>
+				<!-- 게시판 선택 끝-->
 
-	<!--스마트 에디터 적용 글내용 끝  -->
-  
-  <span class="cancelBtn">
-    <a class ="btn btn-default" th:href="@{listFreeBoard}" role="button" id="cancel">취소</a> 
-  </span>
-  
-  <span class="previewBtn">
-    <button class="btn btn-default" name="writePreview" id="writePreview" type="button">미리보기</button> 
-   
-  </span>
-  <span class="registerBtn">
-	 <button class="btn btn-default" name="boardRegister" id="boardRegister"  type="submit">확인</button>
-  </span>
-	 </form>
-  </div>
- 
- 
+				<!-- 제목, 공지옵션, 비공개옵션, -->
+				<span> <input id="boardTitle" name="title" type="text"
+					maxlength="26" placeholder="제목을 입력해주세요." value=""> 
+					<input id="boardWriter" name='id' type='hidden' th:value="${member.id}">
+					<input id="boardNickname" name='nickname' type='hidden' th:value="${member.nickname}">
+				</span> 
+				<span id = "logout" sec:authorize="hasRole('A')">	
+				<input id="boardNotice" name="notice" type="checkbox" value="0">
+				<span class="boardTitleOpt">공지</span>
+				</span>
 
+
+				<!--제목, 공지옵션, 비공개옵션 끝 -->
+				
+				
+				<span th:unless="${boardType eq 'inquireBoard'}">
+				<!--파일업로드  -->
+				<div id="fileAddBtn">
+				
+				 <button type="button">파일첨부</button>
+				</div>
+				<div class="validate-input" id="fileAdd">
+				
+				</div>
+				</span>
+				<!--파일업로드  끝-->
+
+				<!-- 스마트 에디터 적용 글내용 -->
+				<div id="editor">
+					<div>
+						<textarea name="content" id="smarteditor" rows="10" cols="100" ></textarea>
+					</div>
+				</div>
+
+				<!--스마트 에디터 적용 글내용 끝  -->
+		</div>
+
+		<!-- 취소 미리보기 확인 버튼 -->
+		<div class="inner boardBtnForm">
+
+			<span class=""> <a class="btn" id="cancelBtn"
+				th:href="@{listFreeBoard}" role="button" >취소</a>
+			</span>
+			<div id="previewRgisterForm">
+				<span class=""> <a class="btn" id="previewBtn" name="writePreview" >미리보기</a>
+
+				</span> <span class="">
+					<button class="btn" id= "registerBtn" name="boardRegister"
+						 type="submit">확인</button>
+				</span>
+			</div>
+			</form>
+
+			<!-- 취소 미리보기 확인 버튼 -->
 
 
 <script th:inline="javascript">
@@ -139,56 +228,98 @@
 //스마트에디터 여기부터
 $(document).ready(function(){
 
-	//전역변수선언
-    var editor_object = [];
 
 
-    
+	  
+	
+ 	var editor_object = [];
      
-    nhn.husky.EZCreator.createInIFrame({
-        oAppRef: editor_object,
-        elPlaceHolder: "smarteditor",
-        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
-        htParams : {
-            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-            bUseToolbar : true,            
-            // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-            bUseVerticalResizer : true,    
-            // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-            bUseModeChanger : true,
-            // 기본 글꼴 설정
-            SE2M_FontName: {
-    			htMainFont: {'id': '굴림','name': '굴림','size': '14','url': '','cssUrl': ''} 
-    		}
-        }
-    
+	    nhn.husky.EZCreator.createInIFrame({
+	        oAppRef: editor_object,
+	        elPlaceHolder: "smarteditor",
+	        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+	        htParams : {
+	            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseToolbar : true,            
+	            // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseVerticalResizer : true,    
+	            // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseModeChanger : true,
+	            // 기본 글꼴 설정
+	            SE2M_FontName: {
+	    			htMainFont: {'id': '굴림','name': '굴림','size': '14','url': '','cssUrl': ''} 
+	    		}
+	        }
+	    
 
-    });
+	    });
+	     
+	    //전송버튼 클릭이벤트
+	    $("#registerBtn").click(function(){
+	        //id가 smarteditor인 textarea에 에디터에서 대입
+	        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+	        
+	        
+	        var boardTitle = $('#boardTitle').val();
+	        var smarteditor = $("#smarteditor").val();
+	        var boardType = $('#boardType').val();
 
-     
-    //전송버튼 클릭이벤트
-    $("#boardRegister").click(function(){
-        //id가 smarteditor인 textarea에 에디터에서 대입
-        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
-              
-        $("#boardWriteForm").submit();
-            
-    });
+	       if (boardType == ''){
+	    	   Swal.fire("게시판을 선택해주세요!","");
+	    	   
+	    	   return false;
+	       }
+	       else if (boardTitle == ''){
+	    	   Swal.fire("제목을 입력해주세요 !","");
+	    	   
+	    	   return false;
+	       }
+	       
+
+	       else if ( smarteditor == ""  || smarteditor == null || smarteditor == '&nbsp;' || smarteditor == '<p>&nbsp;</p>')  {
+	    	   Swal.fire("내용을 입력해주세요 !","");
+	        	editor_object.getById["smarteditor"].exec("FOCUS"); //포커싱
+	             return false;
+	        }
+	     
+	       
+	       else{
+	    	
+	        $("#boardWriteForm").submit();
+	       }
+	    
+	    }); 
 
     
     
     //미리보기
-    $('#writePreview').click(function(){
+    $('#previewBtn').click(function(){
 
     	editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+    	  
+        var boardTitle = $('#boardTitle').val();
+        var smarteditor = $("#smarteditor").val();
     	
-    	 var popOption = "width=750px, height=750px, top=50px, left=600px;"
-        window.open("preview","previewPage",popOption);
+    		if (boardTitle == ''){
+    			Swal.fire("제목을 입력해주세요 !","");
+ 	    	   
+ 	    	   return false;
+ 	       	}
+ 	       
+
+ 	       	else if ( smarteditor == ""  || smarteditor == null || smarteditor == '&nbsp;' || smarteditor == '<p>&nbsp;</p>')  {
+ 	       	Swal.fire("내용을 입력해주세요 !","");
+ 	        	editor_object.getById["smarteditor"].exec("FOCUS"); //포커싱
+ 	             return false;
+ 	        }
+ 	       	else{
+ 	    	   
+    	    var popOption = "width=600px, height=700px, top=100px, left=650px;"
+       		 window.open("preview","자식창", popOption);
+ 	       	}
 
 
     });
-    
-
 });
     
     //공지사항
@@ -207,10 +338,37 @@ $(document).ready(function(){
     	}  
     	
     })
+    
+    
+    //파일업로드 
+    var fileCount = 0;
+    $("#fileAddBtn").click( function(){
+    	var uploadFile = "<div class = 'file_input' id = 'lifile" + fileCount + "'>"
+		+ "<input type = 'file' name = 'file' multiple onchange = \"javascript:document.getElementById('file_route"
+		+ fileCount + "').value = this.value.substring(12)\">"
+		+ "<input class = 'yshbtn' type = 'button' value = 'X' id = 'liidel"
+		+ fileCount
+		+ "' onclick = 'deleteFile("
+		+ fileCount + ")'>"
+      	+ "</div>"
+		
+		$('#fileAdd').append(uploadFile);
+
+		fileCount++;
+
+    });
+    
+    
+    	//파일업로드 제거
+    	function deleteFile(num) {
+
+					$('#lifile' + num).remove();
+
+				}
+
   
-
-
-    </script>
-   </div>
-    </body>
+		</script>
+	</div>
+	</div>
+</body>
 </html>

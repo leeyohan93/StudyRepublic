@@ -6,11 +6,9 @@ import java.util.List;
 
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberRoles;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Data;
 
@@ -38,7 +36,7 @@ public class MemberSecurity extends User {
 		this.member = member;
 	}
 	
-	//"{noop}" 
+
 	
 	private static List<GrantedAuthority> makeGrantedAuthority(List<MemberRoles> roles) {
 		List <GrantedAuthority> list = new ArrayList<>();	
@@ -46,6 +44,8 @@ public class MemberSecurity extends User {
 		return list;
 		
 	}
+	
+	
 
 
 

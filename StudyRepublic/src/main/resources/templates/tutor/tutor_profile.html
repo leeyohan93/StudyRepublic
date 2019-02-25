@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
+<head>
+
+
+
+
+<title>강사신청내역</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+
+<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
+
+<link rel="icon" type="image/png"
+	href="/Login_v18/images/icons/favicon.ico" />
+
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/bootstrap/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/animate/animate.css">
+
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/css-hamburgers/hamburgers.min.css">
+
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/animsition/css/animsition.min.css">
+
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/select2/select2.min.css">
+
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/daterangepicker/daterangepicker.css">
+
+<link rel="stylesheet" type="text/css" href="/Login_v18/css/util.css">
+<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+
+
+<style>
+	
+	.studyDetail {
+		/* box-shadow: X오프셋 Y오프셋 블러반경 퍼짐반경 색상; */
+/* 		box-shadow: 0.3em 0.3em 10px 3px silver; */
+		box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important;
+		border:	0.5px solid rgba(0,0,0,0.12);
+		width: 100%;
+		margin: 1em auto;
+		padding: 2em 2em;
+		position:relative;
+		min-width: inherit;
+	}
+	.basic-info {
+		position: relative;
+
+	}
+	.column-name {
+		font: 1.1em bolder !important;
+	}
+	.essential-info-1 {
+		margin: 2em 2em;
+	}
+	.essential-info-2 {
+		margin: 1em 2.5em;
+	}
+	.box-info {
+		display: inline-block;
+		top: 8px;
+		right: 16px;
+		float: right;
+		width: 100px;
+		background-color: lightgray;
+		font: bold 20px;
+		vertical-align: 50%;
+		position: absolute;
+		text-align: center;
+		padding: 0 0;
+		
+	}
+	.enroll-count {
+		font: bold x-large;
+		padding: 0.5em 0;
+	}
+	.level {
+		background-color: silver;
+		font: white;
+		padding: 0.3em 0;
+	}
+	.row {
+		margin: 0.5em 1em;
+	}
+	.tag {
+		border-radius: 1em;
+		background-color: lightblue;
+		font: white bold;
+		width: translateX(120%);
+		padding: 0 0.8em;
+		margin: 0.2em;
+	}
+	.intro {
+		width: calc(100%-100px);
+		margin: 1.5em 3em 2em;
+		
+	}
+	.intro-content {
+		width: calc(100%-100px);
+		border: solid 1px #ddd;
+		padding: 1em;
+/* 		margin: 0 3em 2em; */
+		display: block;
+	}
+	.additional-info {
+		width: calc(100%-100px);
+/* 		display: block; */
+/* 		padding: 1em; */
+		margin: 0 3em 2em;
+	}
+	/* .tab-head:after{content:"";display:table;clear:both;*zoom:1} */
+	/* .tab-head .tab-item:disabled{cursor:default;color:#888} */
+	/* .tab-head.one-tab .tab-item{width:100%;margin:0 -1px} */
+	/* .tab-content{display:none;padding-top:30px} */
+	/* .tab-content.on{display:block} */
+	
+	.tab-head0 {
+ 		margin: 0.2em 0 0;
+/* 		display: block; */
+		display: inline-flex;
+		width: 100%;
+		position: relative;
+/* 		top: 0.5px; */
+	}
+	/* .tab-head .tab-item{} */
+	.tab-title {
+		box-sizing:border-box;
+		background-color:#fafafa;
+		border:1px solid #ddd;
+		float:left;
+		margin-left:-1px;
+		margin-bottom:-1px;
+		text-align:center;
+		padding: 0.3em 0;
+		
+ 		display: inline-block;
+		height: auto;
+		width: 20%;
+		cursor: pointer;
+	}
+	/* .tab-head .tab-item:after{content:"";display:table;clear:both;*zoom:1} */
+	/* .tab-head .tab-item.tab-active{background-color:#fff;border-bottom:1px solid #fff;opacity:1} */
+	.tab-title.tab-active {
+		background-color: white;
+		border-bottom:1px solid #fff;
+		opacity:1;
+	}
+	.tab-content {
+		display: block;
+		border: solid 1px #ddd;
+		width: 100%;
+		padding: 1em;
+	}
+	.sticky {
+		position: -webkit-sticky;
+		position: sticky;
+		bottom: 10%;
+		padding: 5px;
+		font: 0.9em white;
+		text-align: center;
+		margin: 0 auto 2em;
+		left: 50%;
+ 		transform: translateX(-50%);
+		
+	}
+	.invisible {
+		display: none;
+	}
+	.disable {
+		color: silver;
+		cursor: not-allowed;
+	}
+	
+	/**
+	*	Star Ratings With JavaScript & Font Awesome, BY Traversy Media (https://www.youtube.com/watch?v=u3rylF3y3og)
+	*/
+	.stars-outer {
+	  position: relative;
+	  display: inline-block;
+	}
+	
+	.stars-inner {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  width: 0;
+	}
+	
+	.stars-outer::before {
+	  content: "\f005 \f005 \f005 \f005 \f005";
+	  font-family: "Font Awesome 5 Free";
+	  font-weight: 900;
+	  color: #ccc;
+	}
+	
+	.stars-inner::before {
+	  content: "\f005 \f005 \f005 \f005 \f005";
+	  font-family: "Font Awesome 5 Free";
+	  font-weight: 900;
+	  color: #f8ce0b;
+	}
+</style>
+
+</head>
+<body>
+
+
+
+
+
+
+
+	<div id="studyList" layout:fragment="main">
+		<div class="inner">
+			<div class="heading">
+									
+									
+			<h3 style = "margin: 50px 50px">리더소개</h3>
+
+	
+			
+			</div>
+			<div class="body">
+			
+				
+			
+				<div class="wrap-input100_ validate-input" style = "display:inline-block; margin:50px 50px; width: 200px;">
+								<img id="img_profile"
+									th:src="@{'/member_image/'+${mdu.profileSaveName}}"
+									style="width: 200px; height: 240px; border-radius:100%;"  />
+									</div>
+									
+				
+				
+				
+
+						
+						<div class="join-input100" th:each = "tutor : ${tutor}"
+							style="width: auto; height:auto; align-items: baseline; float:right">
+							<div class="input100" name="introduction"  th:text = "${tutor.introduction}"
+								style="padding: 20px; width: 570px; height: 400px"></div>
+						</div>
+						
+						
+						
+						
+							<div class="wrap-input100 validate-input"
+							style="width: auto; margin: 0; border: none; margin: auto;">
+							<div class="wrap-input100_label"
+								style="width: 100%; display: block; margin-bottom: 20px">
+								<span class="label-input100_label" style="width: auto; top:-50px; margin: 30px 0 0 115px;" th:text="${tutor.member.nickname}"></span>
+							</div>
+						</div>	
+						
+						
+												<div class="wrap-input100_label"
+							style="width: auto; height: auto; margin-bottom: 70px; ">
+							<span class="label-input100_label" style="width: 80px; ">
+								경력사항</span>
+						</div>
+						
+						
+						
+							<div class="wrap-input100 validate-input" style="padding: 20px; margin: auto; margin-bottom: 40px; height:auto">
+
+							<div class="wrap-input100_ validate-input_">
+								<div th:each="selc : ${selectedtutorcareer}">
+								<div id="career" name="career">
+									<div class="ysh" id="sedu" style="margin-bottom: 20px; padding: 0"><span class="yshspan">⊙</span></div>
+									<div class="ysh" id="sedu" style="margin-bottom: 20px;"><span class="yshspan" th:text = "${selc.careerCD.codeValueKorean}">&gt;</span></div>
+								</div>
+								
+							</div>
+							</div>
+							</div>
+				</div>
+				
+				
+					<div class="wrap-input100_ validate-input" style = "margin-bottom:30px">
+									<h3 style = "width:100%">개설스터디내역</h3><br>
+									</div>
+									<table>
+								<tr>
+									<th>No.</th>
+									<th>스터디명</th>
+									<th>기간</th>
+									<th>평점</th>
+								</tr>
+								<tr th:each="tempStudyActivity : ${studyActivity}">
+									<th:block th:with="tempStudy = ${tempStudyActivity.study}">
+										<td>no.</td>
+										<td><a th:href="@{'/study/detail/' + ${tempStudy.studyId}}" th:text="${tempStudy.name}">studyName</a>&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorean}">status</i></td>
+										<td th:text="|${tempStudy.startDate}~${tempStudy.endDate}|">period</td>
+										<td th:if="${tempStudy.averageScore}==-1">-</td>
+										<td th:unless="${tempStudy.averageScore}==-1" class="score-container">
+											<div class="stars-outer"><div class="stars-inner">별</div></div>
+											<span class="stars-score" th:text="${tempStudy.averageScore}!=-1? ${tempStudy.averageScore} : '-'">avgScore</span>
+										</td>
+									</th:block>
+								</tr>
+							</table>
+						
+				
+				  </div>
+</div>	
+
+	
+
+
+
+
+		
+			<script src="/Login_v18/vendor/jquery/jquery-3.2.1.min.js"></script>
+	
+			<script src="/Login_v18/vendor/animsition/js/animsition.min.js"></script>
+		
+			<script src="/Login_v18/vendor/bootstrap/js/popper.js"></script>
+			<script src="/Login_v18/vendor/bootstrap/js/bootstrap.min.js"></script>
+			
+			<script src="/Login_v18/vendor/select2/select2.min.js"></script>
+		
+			<script src="/Login_v18/vendor/daterangepicker/moment.min.js"></script>
+			
+			<script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
+
+			<script src="/Login_v18/js/main.js"></script>
+
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			
+			
+	<script layout:fragment="customScript">
+		
+		<!-- Spring Security ~ Ajax 관련 추가 코드 BY 성호님 -->
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$(function() {
+			$(document).ajaxSend(function(e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+		});
+		
+		$(document).ready(function() {
+			
+			makeTabWorks();
+			activateReviewTab();
+			prejoinCheck();
+			getRatingStars();
+			
+		});
+
+		//	1. 탭 메뉴 구현
+		function makeTabWorks() {
+
+			// 아래는 왜 한 번만 실행되지?
+			/* $('.tab-title:not(.tab-active)').on('click', function() {
+				$('.tab-active').removeClass("tab-active");
+				$(this).addClass("tab-active");
+			}); */
+			$('.tab-title').on('click', function() {
+				if (!$(this).hasClass("tab-active")
+						&& !$(this).hasClass("disable")) {
+
+					//tab-title
+					$('.tab-active').removeClass("tab-active");
+					$(this).addClass("tab-active");
+
+					//tab-content
+					$('.tab-content').addClass("invisible");
+					var targetTabContent = $('#tab-content-'
+							+ $(this)[0].id.split("-")[2])[0];
+					targetTabContent.classList.remove("invisible");
+				}
+			});
+		}
+
+		//	2. 리뷰 탭 활성화: 완료 스터디 대상
+		function activateReviewTab() {
+			// 완료된 스터디이면, 리뷰 탭의 disable 클래스를 제거한다.
+			if ($('#study-status').attr('value') == "C") {
+				$('#tab-title-review').removeClass('disable');
+			}
+		}
+
+		//	3. 스터디 가입 제한
+		function prejoinCheck() {
+			$('.btn-join-study').on('click', function(e) {
+				// 모집 마감된 스터디는 버튼을 비활성화 한다.
+				if ($('.btn-join-study').hasClass('disable')) {
+					e.preventDefault();
+					return;
+				}
+
+				// 1) 비로그인 유저의 경우 --> 로그인 페이지
+				// *** 로그인 여부 판별하는 방법 확인하기
+				var joinBtn = $('.btn-join-study')[0];
+				
+				var pathName = window.location.pathname;
+				var studyId = pathName.replace('/study/detail/', '');
+				var originUrl = window.location.origin;
+				var location = "";
+				var userId = document.getElementById('loggedInUserId').value;
+
+				if (joinBtn.dataset.userType == "anonymous") {
+					alert("로그인 후 신청할 수 있어요!");
+					location = "/login";
+					window.location.replace = originUrl + location;
+					return;
+					// 로그인 후 스터디 가입 페이지 또는 상세 페이지로 이동하도록 처리할 것! ********
+
+				} else if (joinBtn.dataset.userType == "authenticated") {
+					// 3) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우 --> 메시지	==> 예기치 못한 Ajax...
+					$.ajax({
+						type : "GET",
+						contentType : "application/json",
+						url : "/study/prejoin",
+						data : {
+							"studyId" : studyId,
+							"userId" : userId
+						},
+						/* dataType : 'json', */
+						cache : false,
+						timeout : 600000,
+						success : function(data) {
+							console.log("Success: " + data);
+							
+							if (!data) {
+								location = "/study/join/" + studyId;
+								window.location.href = originUrl + location;
+							}
+							/* var jsonData = JSON.parse(data);
+							var studyMemberStatusCode = jsonData.studyMemberStatusCode.studyMemberStatusCode; */
+							var studyMemberStatusCode = data.studyMemberStatusCode.studyMemberStatusCode;
+							console.log("studyMemberStatusCode = " + studyMemberStatusCode);
+
+							switch (studyMemberStatusCode) {
+								case "WA":
+									alert("승인 대기중인 스터디입니다.");
+									return;
+								case "ME":
+								case "LE":
+									alert("이미 가입된 스터디입니다.");
+									return;
+								case "EX":
+								case "DE":
+									alert("가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.");
+									return;
+							}
+						},
+						error : function(e) {
+							console.log("Error: " + e);
+							return false;
+						}
+					});
+				}
+			});
+		}
+		
+		function getRatingStars() {
+			var s = $(".stars-score");
+			var score;
+			var scoreTotal = 5;
+			var width;
+			
+			for(let i=0; i < s.length; i++) {
+				score = s[i].textContent;
+				
+				if(score != "-") {
+					width = Math.round( (score/scoreTotal * 100) /10 ) * 10 + "%";
+					console.log(width);
+					s[i].previousElementSibling.children[0].style.width = width;
+				}			
+			}
+		}
+		
+	</script>
+
+		
+
+	
+
+
+
+</body>
+</html>

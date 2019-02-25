@@ -8,11 +8,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberPoint;
+import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.security.MemberSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,11 +24,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 @Controller
 
@@ -37,6 +44,10 @@ public class MemberController {
 	
 	@Autowired
 	private MemberPointRepository memberpointrepository;
+		
+	@Autowired
+	StudyMemberRepository studymemberrepository;
+	
 		
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
@@ -163,12 +174,7 @@ public class MemberController {
 	public String login(HttpServletRequest request) {
 		return "member/login";
 	}
-	
-	@RequestMapping("/login2")
-	public String login2() {
-		return "member/login2";
-	}
-	
+		
 	@RequestMapping ("/logout")
 	public void logout() {
 	}
@@ -195,7 +201,119 @@ public class MemberController {
 		return "sign_up";
 	}
 	
+/*	public Member member (String id) {
+		
+		Member member = memberrepository.findById(id).get();
+		System.out.println("멤버레퍼짓토리" + memberrepository);
+		
+		return member;
+	}
+	*/
+	
+	@PostMapping("/member/findPassword")
+	@ResponseBody
+	public Map <Object, Object> findPassword(@RequestParam String messageNumber, @RequestParam String phonenumber, Model model) {		
+		
+		int randomKey = (int)((Math.random()*900000))+100000;	// 6자리 난수 생성
+		messageNumber = Integer.toString(randomKey);
+		
+	    String api_key = "NCSYDZXO7QQ6LVKH";
+	    String api_secret = "FPBMC3GJHNDBUTOXR27TA9A4PR1CJH3D";
+	    
+	    Message coolsms = new Message(api_key, api_secret);
+	    
+	    System.out.println("PhoneNumber: " + phonenumber);
 
+	    HashMap<String, String> params = new HashMap<String, String>();
+	    params.put("to", phonenumber);
+	    params.put("from", "01025791441");
+	    params.put("type", "SMS");
+	    params.put("text", randomKey + " 를 입력해주세요.");
+	    params.put("text", "Study Republic 본인인증: 인증란에 인증번호 [" + randomKey + "] 를 입력해주세요.");
+	    params.put("app_version", "JAVA SDK v1.2"); // application name and version
+	    
+
+	    try {
+	        JSONObject obj = (JSONObject) coolsms.send(params);
+	        System.out.println(obj.toString());
+	      } catch (CoolsmsException e) {
+	        System.out.println(e.getMessage());
+	        System.out.println(e.getCode());
+	      }
+
+		model.addAttribute("messageNumber", messageNumber);
+		System.out.println("messageNumber: " + messageNumber);
+		
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+
+		map.put("messageNumber", messageNumber);
+
+		return map;	
+	}
+	
+	@RequestMapping(value="/member/successAuth")
+	public String moveModifyPassword(@RequestParam String id ,Model model) {
+		
+		model.addAttribute("id", id);
+		
+		return "member/member_modifypassword";
+	}
+	
+	@PostMapping(value = "/member/modifyPassword")
+	public String afterAuth_ModifyPassword(@RequestParam String id,@RequestParam String password) {
+		
+		
+		Member member = memberrepository.findById(id).get();
+		member.setPassword(bcryptpasswordencoder.encode(password));	
+		memberrepository.save(member);
+		
+		return "redirect:/index";
+	}
+	
+	@RequestMapping(value = "/socialLogin")
+	String socialLogin() {
+		return "sign_up";
+	}
+	
+	
+	   public void createSession(HttpSession session, Member member) {	
+		         
+		   		 session.setAttribute("nickname", member.getNickname());
+		         session.setAttribute("memberimg", member.getProfileSaveName());
+		         
+		         MemberPoint memberpoint = memberpointrepository.inqueryPoint(member.getId());		         
+		         session.setAttribute("memberpoint", memberpoint.getPoint());
+		         System.out.println("보유포인트: " + memberpoint.getPoint());
+		         
+		         
+		         	System.out.println("멤버 객체 ID 조회 : " + member.getId());
+					List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(member.getId());		
+					System.out.println("멤버테스트: " + member);
+					System.out.println("조이닝스터디테스트 : " + joiningStudy);
+					HashMap <String, String> studyNameAndStudyIdMap = new HashMap<>();
+					HashMap <String, String> studyIdAndStatusKoreanMap = new HashMap<>();
+					
+					
+					for(StudyMember studyMember : joiningStudy) {
+				         Study studyDomain = studyMember.getStudy();
+				         studyNameAndStudyIdMap.put(studyDomain.getName(), studyDomain.getStudyId());
+				         studyIdAndStatusKoreanMap.put(studyDomain.getStudyId(), studyMember.getStudyMemberStatusCode().getCodeValueKorean());
+						
+					}
+					
+					System.out.println("스터디 Map: "  + studyNameAndStudyIdMap/*joiningStudy*/.toString());
+				    System.out.println("스터디별 권한: " + studyIdAndStatusKoreanMap.toString());
+					
+					System.out.println("session아 제대로 찍히니? : " + session);
+					System.out.println("TEST1111111111111111111111111");
+							
+					session.setAttribute("studyNameAndStudyIdMap", studyNameAndStudyIdMap);
+					session.setAttribute("studyIdAndStatusKoreanMap", studyIdAndStatusKoreanMap);
+		         
+		   }
+	
 	
 
 	   
@@ -235,10 +353,7 @@ public class MemberController {
 				
 				for(int i = 1; i < listSize + 1; i++) {
 					studyNameList.add(i, studymember.get(i-1).getStudy().getName());
-				}
-				
-				
-				
+				}		
 				
 				List <String> studyIdList = new ArrayList<>(); 
 				
@@ -250,11 +365,16 @@ public class MemberController {
 		    	  
 		         session.setAttribute("studyNameList", studyNameList);
 		         session.setAttribute("studyIdList",studyIdList);
-		         
-		         
 		      
 		      }
 		   }
+	   
+	   public void memberp() {
+		   System.out.println("되라 - " + memberrepository);
+	   }
+	   
+	   
+
 	
 	
 }
