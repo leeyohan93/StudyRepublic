@@ -1,37 +1,36 @@
 package org.mohajo.studyrepublic.mypage;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mohajo.studyrepublic.domain.Board;
-import org.mohajo.studyrepublic.domain.FreeBoard;
-import org.mohajo.studyrepublic.domain.InquireBoard;
+import javax.servlet.http.HttpServletRequest;
+
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.InterestLocation;
 import org.mohajo.studyrepublic.domain.Member;
-import org.mohajo.studyrepublic.domain.RequestBoard;
-import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
-import org.mohajo.studyrepublic.repository.FreeBoardRepository;
-import org.mohajo.studyrepublic.repository.InquireBoardRepository;
 import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.InterestLocationRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
-import org.mohajo.studyrepublic.repository.RequestBoardRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
-import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * @author 김준석
@@ -56,6 +55,7 @@ public class MypageController {
 	private Interest1CDRepository i1cdr;
 	@Autowired
 	private Interest2CDRepository i2cdr;
+	private Member member;
 	
 	/*@RequestMapping("/mypage")
 	public String userinfo(Model model) {
@@ -149,7 +149,7 @@ public class MypageController {
 		
 	}
 	
-	@RequestMapping("/testmy")
+/*	@RequestMapping("/testmy")
 	public String testmy(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -169,12 +169,12 @@ public class MypageController {
 		model.addAttribute("iir",interestlocation);
 		
 		
-		System.out.println(user); /*유저정보 데이터*/
+		System.out.println(user); 유저정보 데이터
 		
 	
-		/*회원 스터디정보 가져오기*/
+		회원 스터디정보 가져오기
 		return"mypage/testmypage";
-	}
+	}*/
 	
 	@RequestMapping(value="/scheduler")
 	public String scheduler(Model model) {
@@ -190,18 +190,111 @@ public class MypageController {
 	public Map <Object, Object> myscheduler(Model model) {      
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		List biginfo;
+		List<StudyMember> biginfo;
 		Map<Object, Object> map = new HashMap<Object, Object>();
 	   
-		biginfo = smr.findActivityById(id);
+		biginfo = smr.findSchedulerById(id);
 	   
 	   map.put("biginfo", biginfo);
 	   
 	   return map;   
 	}
+	
+	/* 관심지역 ajax 수정하기 */
+	@RequestMapping(value="/deleteLocation",method=RequestMethod.GET)
+	@ResponseBody
+	public  Map<Object, Object>  deleteLocation(){
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		String result="false";
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		int deleteCnt = iir.deleteLocationById(id);
+		
+		
+		if(deleteCnt > 0) {
+			result = "true";
+		}
+		
+		
+		map.put("result", result);
+		   System.out.println(result);
+		return map;
+	} 
+		
 
+	/* 관심지역 하던중 
+	@RequestMapping(value="/insertLocation",method=RequestMethod.POST)
+	@ResponseBody
+	public void insertLocation(@RequestParam(value="insertList[i].toString()",required=false)Member interestLocation) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		 
+		
+		String result="false";
+		
+		System.out.println("인서트");
+		 List <InterestLocation> interestlocation;
+		
+		Member memberlocation = new Member();
+		memberlocation.setInterestlocation(interestLocation);
+		
+		iir.save(interestLocation, id);
+		
+		
 	
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		//if(insertCnt > 0) {
+		//  result = "true";
+		//}
+		//map.put("result", insertCnt);
+		return 	iir.save(interestLocation,id);
+	}
+		
+			
+		*/
+		
+			
+			
+		   
+			
+				
 	
+	@RequestMapping("/modalmember")
+	@ResponseBody
+	public Map<String, Object> modalmeber(Model model, @RequestParam String id){
+		List<Member> member = mbr.findMemberbyId(id);
+		
+		System.out.println(member.get(0));
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("memberInfo", member);
+		
+		return map;
+	}
+	
+	/*관심분야 인설트 하던중 */
+	/*@RequestMapping("/insertmemberInterest")
+	public String insertMemberInterest(Model model,@RequestParam String memberInterest) {
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		Member memberinterest = new Member();
+		memberinterest.setMemberInterest(memberInterest);
+		
+		
+		
+		
+		return "";
+		
+	}
+*/
+	
+		
+		
 	
 }	 
 

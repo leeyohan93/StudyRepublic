@@ -86,6 +86,10 @@ public interface MemberRepository extends JpaRepository<Member, String>, Queryds
 	List<Object[]> getMemberCountYear();
 	@Query(value = "SELECT MID(registration_date,1,4) period, COUNT(*) as count FROM member where grade_code='T' GROUP BY period order by period desc;",nativeQuery=true)
 	List<Object[]> getTutorCountYear();
+	
+	/*모달 유저정보 가져오기*/
+	@Query (value = "SELECT * FROM member where id = :id", nativeQuery = true)
+	List<Member> findMemberbyId(String id);
 
 }
 

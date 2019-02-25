@@ -216,7 +216,7 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.9.4</version>
 		</dependency>
-		
+		 
 		<!-- Java Mail API -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
