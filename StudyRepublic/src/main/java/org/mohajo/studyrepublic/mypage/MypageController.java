@@ -177,29 +177,29 @@ public class MypageController {
 		return"mypage/testmypage";
 	}*/
 	
-	@RequestMapping(value="/scheduler")
-	public String scheduler(Model model) {
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
-		
-		
-		return "mypage/myscheduler";
-	}
-	
-	@RequestMapping("/schedulerApi")
-	@ResponseBody 
-	public Map <Object, Object> myscheduler(Model model) {      
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
-		List<StudyMember> biginfo;
-		Map<Object, Object> map = new HashMap<Object, Object>();
+	  @RequestMapping(value="/scheduler")
+	   public String scheduler(Model model) {
+	      Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+	      String id = auth.getName();
+	      
+	      
+	      return "mypage/myscheduler";
+	   }
 	   
-		biginfo = smr.findSchedulerById(id);
-	   
-	   map.put("biginfo", biginfo);
-	   
-	   return map;   
-	}
+	   @RequestMapping("/schedulerApi")
+	   @ResponseBody 
+	   public Map <Object, Object> myscheduler(Model model) {      
+	      Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+	      String id = auth.getName();
+	      List biginfo;
+	      Map<Object, Object> map = new HashMap<Object, Object>();
+	      
+	      biginfo = smr.findActivityById(id);
+	      
+	      map.put("biginfo", biginfo);
+	      
+	      return map;   
+	   }
 	
 	/* 관심지역 ajax 수정하기 */
 	@RequestMapping(value="/deleteLocation",method=RequestMethod.GET)
