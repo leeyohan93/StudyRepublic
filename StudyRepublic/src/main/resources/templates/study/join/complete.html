@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}"><head>
+<meta charset="UTF-8">
+<title>레벨테스트</title>
+</head>
+
+<th:block layout:fragment="customCss">
+	<style>
+
+		/* 출처:	https://tiblog.tistory.com/42 */
+		.sns-go {text-align:center; padding: 20px 0;}
+		.sns-go li {display:inline-block; margin: 0 5px; }
+		.sns-go li img {border-radius:50%;}	
+		
+	</style>
+</th:block>
+
+<body>
+
+	<div layout:fragment="main">
+		<div class="inner">
+		
+			<div class="page-header">
+				<div class="page-title">
+					<h3>스터디 가입 신청이 완료되었습니다.</h3>
+					<h4>리더가 승인하면 가입이 확정됩니다.</h4>
+					<hr>
+				</div>
+				<div class="page-description">
+					<pre>
+					-	신청 상태는 마이페이지에서 확인하실 수 있습니다.  
+					</pre>
+				</div>
+			</div>
+			
+			<div class="page-footer">
+				
+				<div class="page-go">
+					<a>신청 상태 확인하기</a>
+					<a>스터디 상세 페이지로 이동</a>
+				</div>
+				
+				<!-- 출처:	https://tiblog.tistory.com/42 -->
+				<!-- 창 크기를 조정할 것 -->
+				<!-- 연결되는 링크를 /study/detail/studyId 로 변경할 것 -->
+				<div class="sns-go">
+				  <ul>
+				    <li>
+				      <a href="#" onclick="javascript:window.open('http://share.naver.com/web/shareView.nhn?url=' +encodeURIComponent(document.URL)+'&title='+encodeURIComponent(document.title), 'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Naver" ><img src="/images/sns/sns_naver.png" width="40" alt="네이버 블러그 공유하기"></a>
+				    </li>
+				    <li>
+				    	<!-- 페이스북은 오류 발생. 다음 링크를 참고하여 변경할 것 -->
+				    	<!-- https://developers.facebook.com/docs/sharing/web -->
+				      <a href="#" onclick="javascript:window.open('https://www.facebook.com/sharer/sharer.php?u=' +encodeURIComponent(document.URL)+'&t='+encodeURIComponent(document.title), 'facebooksharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Facebook" ><img src="/images/sns/sns_face.png" width="40" alt="페이스북 공유하기"></a>
+				    </li>
+				    <li>
+				      <a href="#" onclick="javascript:window.open('https://twitter.com/intent/tweet?text=[%EA%B3%B5%EC%9C%A0]%20' +encodeURIComponent(document.URL)+'%20-%20'+encodeURIComponent(document.title), 'twittersharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Twitter" ><img src="/images/sns/sns_tw.png" width="40" alt="트위터 공유하기"></a>
+				    </li>
+				    <li>
+				      <a href="#" onclick="javascript:window.open('https://plus.google.com/share?url=' +encodeURIComponent(document.URL), 'googleplussharedialog','menubar=no,toolbar=no,resizable=yes, scrollbars=yes,height=350,width=600');return false;" target="_blank" alt="Share on Google+"><img src="/images/sns/sns_google.png" width="40" alt="구글 플러스 공유하기"></a>
+				    </li>
+				    <li>
+				      <a href="#" onclick="javascript:window.open('https://story.kakao.com/s/share?url=' +encodeURIComponent(document.URL), 'kakaostorysharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes, height=400,width=600');return false;" target="_blank" alt="Share on kakaostory"><img src="/images/sns/sns_kakao.png" width="40" alt="카카오스토리 공유하기"></a>
+				    </li>
+				  </ul>
+				</div>
+				
+			</div>			
+
+		
+		</div>
+	</div>
+
+	<th:block layout:fragment="customScript">
+		<script type="text/javascript">
+		
+		
+		</script>
+	</th:block>
+</body>
+</html>

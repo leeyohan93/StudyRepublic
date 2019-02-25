@@ -12,13 +12,17 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.DayCD;
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
+import org.mohajo.studyrepublic.domain.Leveltest;
 import org.mohajo.studyrepublic.domain.LeveltestList;
+import org.mohajo.studyrepublic.domain.LeveltestResponse;
+import org.mohajo.studyrepublic.domain.LeveltestResponseList;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
@@ -30,6 +34,8 @@ import org.mohajo.studyrepublic.domain.StudyInterest;
 import org.mohajo.studyrepublic.domain.StudyLocation;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberId;
+import org.mohajo.studyrepublic.domain.StudyMemberStatusCD;
+import org.mohajo.studyrepublic.domain.StudyPrice;
 import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
 import org.mohajo.studyrepublic.domain.TypeCD;
@@ -47,6 +53,7 @@ import org.mohajo.studyrepublic.repository.StudyFileRepository;
 import org.mohajo.studyrepublic.repository.StudyInterestRepository;
 import org.mohajo.studyrepublic.repository.StudyLocationRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
+import org.mohajo.studyrepublic.repository.StudyMemberStatusCDRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.mohajo.studyrepublic.repository.StudyViewRepository;
@@ -140,6 +147,9 @@ public class StudyController {
 	StudyLocationRepository slr;
 	
 	@Autowired
+	StudyMemberStatusCDRepository smscr;
+	
+	@Autowired
 	TypeCD typeCd;
 	
 	
@@ -152,6 +162,7 @@ public class StudyController {
 	 */
 	@RequestMapping("/list/{typeCode}")
 	public String list(@PathVariable("typeCode") String typeCode, PageDTO pageDto, Model model) {
+		
 		// P/B --> p, b 로 변함. 왜지.
 
 		// 날짜 동적 쿼리 쓸 때 참고:
@@ -167,7 +178,7 @@ public class StudyController {
 		// Pageable paging = pageDto.makePageable(0, "postDate");	//(ERROR) java.sql.SQLSyntaxErrorException: Unknown column 'sv.postDate' in 'order clause'
 		// pageDto.setSize(2);	//변화 없음
 		
-		Pageable page = pageDto.makePageable(0, "post_date");
+		Pageable page = pageDto.studyMakePageable(0, 2, "post_date");
 		log.info(page.toString());
 //		Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "post_date");
 		// Page<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
@@ -262,55 +273,6 @@ public class StudyController {
 	
 	/**
 	 * @author	이미연
-	 * @return	ajax 응답
-	 * - 로그인 유저의 아이디와 스터디 아이디로 StudyMember 테이블에서 결과를 조회한다.
-	 * - 스터디 가입 여부 등을 판별하여 신청을 제한 하기 위함.
-	 */
-// (1)	JSON 으로 AJAX 응답 전송
-/*	@RequestMapping("/prejoin")
-	public void prejoin( @RequestParam("studyId") String studyId,  @RequestParam("userId") String userId, HttpServletResponse response) {
-
-		log.info("prejoin() called...");
-
-		log.info("studyId = " + studyId);
-		log.info("userId = " + userId);
-		
-		StudyMemberId smi = new StudyMemberId();
-		smi.setId(userId);
-		smi.setStudyId(studyId);
-		log.info("smi test = " + smi.getId());
-		StudyMember history = smr.findByStudyIdAndId(studyId, userId);
-//		StudyMember history = smr.findById(smi).get();
-		log.info("find test = " + history);
-		ObjectMapper objMapper = new ObjectMapper();
-		
-		try {
-			response.getWriter().print(objMapper.writeValueAsString(history));
-			
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
-// (2)	객체로 AJAX 응답 전송
-	@RequestMapping("/prejoin")
-	@ResponseBody
-	public StudyMember prejoin( @RequestParam("studyId") String studyId,  @RequestParam("userId") String userId) {
-
-		log.info("prejoin() called...");
-
-		StudyMemberId smi = new StudyMemberId();
-		smi.setId(userId);
-		smi.setStudyId(studyId);
-		StudyMember history = smr.findByStudyIdAndId(studyId, userId);
-		
-		return history;
-	}
-	
-	/**
-	 * @author	이미연
 	 * @return	스터디 개설 (/study/open.html)
 	 */
 	@RequestMapping("/open")
@@ -359,77 +321,67 @@ public class StudyController {
 	
 	/**
 	 * @author	이미연
-	 * @return	스터디 가입 페이지 (미결사항: join 페이지는 테스트용)
+	 * @return	ajax 응답
+	 * - 로그인 유저의 아이디와 스터디 아이디로 StudyMember 테이블에서 결과를 조회한다.
+	 * - 스터디 가입 여부 등을 판별하여 신청을 제한 하기 위함.
 	 */
-	@RequestMapping("/join/{studyId}")
-	public String join(@PathVariable("studyId") String studyId, HttpServletRequest request) {
-		
-		log.info("join() called...");
+// (1)	JSON 으로 AJAX 응답 전송
+/*	@RequestMapping("/prejoin")
+	public void prejoin( @RequestParam("studyId") String studyId,  @RequestParam("userId") String userId, HttpServletResponse response) {
 
-		//hasLeveltest == 1 && referer != ...leveltest
-			//return "레벨테스트 페이지";
-		//else if, typeCd == "P"
-			//return "결제 페이지";
+		log.info("prejoin() called...");
+
+		log.info("studyId = " + studyId);
+		log.info("userId = " + userId);
 		
-		Study study = sr.findById(studyId).get();
-		String referer = request.getHeader("referer");
-		log.info(referer);
+		StudyMemberId smi = new StudyMemberId();
+		smi.setId(userId);
+		smi.setStudyId(studyId);
+		log.info("smi test = " + smi.getId());
+		StudyMember history = smr.findByStudyIdAndId(studyId, userId);
+//		StudyMember history = smr.findById(smi).get();
+		log.info("find test = " + history);
+		ObjectMapper objMapper = new ObjectMapper();
 		
-		if(study.getHasLeveltest() == 1) {
-			return "/study/takeLeveltest";
+		try {
+			response.getWriter().print(objMapper.writeValueAsString(history));
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	}*/
+// (2)	객체로 AJAX 응답 전송
+	@RequestMapping("/prejoin")
+	@ResponseBody
+	public StudyMember prejoin( @RequestParam("studyId") String studyId,  @RequestParam("userId") String userId) {
+
+		log.info("prejoin() called...");
+
+		StudyMemberId smi = new StudyMemberId();
+		smi.setId(userId);
+		smi.setStudyId(studyId);
+		StudyMember history = smr.findByStudyIdAndId(studyId, userId);
 		
-		if(study.getTypeCode().getTypeCode() == "P") {
-			return "/study/pay";
-		}
-		
-		return "/study/join";
+		return history;
 	}
-	
-
-	@RequestMapping("/review")
-	public String review() {
-
-		log.info("review() called...");
-
-		return "/study/review";
-	}
-	
-	// 테스트 시작.
-	@RequestMapping("/test")
-	public String test(Model model) {
-		
-		log.info("test() called...");
-
-/*
-//		List<LeveltestResponse> leveltestResponse = lrr.selectByStudyId("BF00003");
-		
-		List<Study> study = sr.findAll();
-		
-		model.addAttribute("test", study);
-		*/
-		
-		List<StudyMember> studyMember = smr.selectByStudyId("BF00002");
-		model.addAttribute("studyMember", studyMember);
-		
-//		List<Leveltest> leveltest = lr.findAll();
-//		List<LeveltestResponse> leveltestResponse = lrr.findAll();
-//		model.addAttribute("leveltest", leveltest);
-//		model.addAttribute("leveltestResponse", leveltestResponse);
-	
-		return "/study/test";
-		
-//		return "/study/paperBootTest";
-		
-	}
-	// 테스트 끝.
-	
 	
 	@RequestMapping("/register")
-	public String leveltestSubmitTest(@ModelAttribute Study study, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
+	public String register(@ModelAttribute Study study, @ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
+//	public String register(@ModelAttribute StudyView study, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 		
 		log.info("register() called...");
-		log.info(study.toString());
+		log.info("원본 = " + study.toString());
+		
+		if(!study.getMember().getGradeCD().getGradeCode().equals("T") && study.getTypeCode().getTypeCode().equals("P")) {
+			log.info("Invalid member tried to open premium study");
+			// 작성중인 내용 세션에 저장하도록 추가할 것
+			model.addAttribute("errorMsg", "Your grade is not 'tutor'");
+			return "/study/error";
+		}
+		
 		
 		// 참고:  https://stackoverflow.com/a/2009224
 		// 설명:   "unparseable date" exception can here only be thrown by SimpleDateFormat#parse()
@@ -461,32 +413,91 @@ public class StudyController {
 			study.setStartTime(startTime);
 			study.setEndTime(endTime);
 		}
+		log.info("----------------[ date & time processed ]----------------");
+		
+		List<StudyLocation> studyLocations = study.getStudyLocation();
+		List<StudyInterest> studyInterests = study.getStudyInterest();
+		
+		if(studyLocations != null) {
+			for(int i=studyLocations.size()-1; i>=0; i--) {
+				StudyLocation studyLocation = studyLocations.get(i);
+				if(studyLocation.getInterestLocation() == null) {
+					studyLocations.remove(i);
+				}
+			}
+		}
+
+		if(studyInterests != null) {
+			for(int i=studyInterests.size()-1; i>=0; i--) {
+				StudyInterest studyInterest = studyInterests.get(i);
+				if(studyInterest.getInterest2code() == null) {
+					studyInterests.remove(i);
+				}
+			}
+		}
+		log.info("----------------[ location & interest processed ]----------------");
 
 		String studyId = sr.getNewStudyId(study.getTypeCode().getTypeCode(), study.getOnoffCode().getOnoffCode());
 		
-
+		if(studyId == null) {
+			log.info("studyId is null");
+			// 작성중인 내용 세션에 저장하도록 추가할 것
+			model.addAttribute("errorMsg", "Could not generate study_id");
+			return "/study/error";
+		}
+		log.info("new studyId = " + studyId);
 		study.setStudyId(studyId);
-		
-//		List<StudyInterest> studyInterests = study.getStudyInterest();
-//		
-//		for(StudyInterest studyInterest : studyInterests) {
-//			sir.save(studyInterest);
-//		}
-//		
-//		List<StudyLocation> studyLoccations = study.getStudyLocation();
-//		
-//		for(StudyLocation studyLocation : studyLoccations) {
-//			slr.save(studyLocation);
-//		}
-		
-		log.info(study.toString());
-		sr.save(study);
+		log.info("----------------[ studyId generated ]----------------");
 
-		log.info("file = " + file.toString());
-		List<MultipartFile> files = mhsRequest.getFiles("file");
-		doUpload(mhsRequest, model, files, studyId);
-				
-		model.addAttribute("study", study);
+		log.info(studyPrice.toString());	
+		studyPrice.setStudyId(studyId);
+		study.setPrice(studyPrice);
+		log.info(studyPrice.toString());
+		log.info("----------------[ price processed ]----------------");
+
+		log.info("수정 = " + study.toString());
+		try {
+			sr.save(study);
+	//		svr.save(study);	//java.sql.SQLException: The target table study_view of the INSERT is not insertable-into
+			log.info("----------------[ study save completed ]----------------");
+			
+			StudyMember studyMember = new StudyMember();
+			studyMember.setStudy(study);
+			studyMember.setId(study.getMember().getId());
+			StudyMemberStatusCD studyMemberStatusCode = new StudyMemberStatusCD();
+			studyMemberStatusCode.setStudyMemberStatusCode("LE");
+			studyMember.setStudyMemberStatusCode(studyMemberStatusCode);
+			
+			smr.save(studyMember);
+			log.info("----------------[ studyMember save completed ]----------------");
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMsg", "Could not save study");
+			return "/study/error";
+		}
+
+		List<Leveltest> leveltestList = leveltests.getLeveltests();
+
+		if(leveltestList != null) {
+			log.info(leveltestList.toString());
+	
+			for(int i=0; i<leveltestList.size(); i++) {
+				leveltestList.get(i).setStudyId(studyId);
+			}
+			log.info(leveltestList.toString());
+			lr.saveAll(leveltestList);
+			log.info("----------------[ leveltest save completed ]----------------");
+		}
+
+		if(file != null) {
+			log.info("file = " + file.toString());
+			List<MultipartFile> files = mhsRequest.getFiles("file");
+			doUpload(mhsRequest, model, files, studyId);
+			log.info("----------------[ file save completed ]----------------");
+		}
+
+		model.addAttribute("test", study);
 		
 		
 		return "/study/test";
@@ -554,6 +565,254 @@ public class StudyController {
 		log.info(failedFiles.toString());
 	}
 	
+
+	/**
+	 * @author	이미연
+	 * @return	스터디 가입 페이지 (미결사항: join 페이지는 테스트용)
+	 */
+	@RequestMapping("/join/{studyId}")
+	public String join(@PathVariable("studyId") String studyId, /*@ModelAttribute StudyMember studyMember, */@ModelAttribute LeveltestResponseList leveltestResponseList, HttpSession session, HttpServletRequest request, Model model) {
+		
+		log.info("join() called...");
+
+		// index 거치지 않고도 id 를 세션에 저장할 수 있다면, 세션에서 값을 읽어오도록 변경할 것.
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		log.info("id = " + id);
+
+		// StudyMember 로 사용자 재검증할 것!
+		
+		
+		/* 유입 경로 확인 */
+		String referer = request.getHeader("referer");
+		log.info("referer = " + referer);
+		
+		String str = "/study";
+		String refererAfter = referer.substring(referer.indexOf(str) + str.length());
+		log.info("refererAfter = " + refererAfter);
+		
+		
+		/* 사용자, 스터디 식별을 위해 model 에 추가 */
+		model.addAttribute("id", id);
+		model.addAttribute("studyId", studyId);
+		
+		
+		Study study = sr.findById(studyId).get();
+		
+		
+		/* 1. 결제 후 매핑되는 경우 */
+		if(refererAfter.indexOf("/pay") != -1) {
+			
+			log.info("-------------------- case 1 --------------------");
+			saveStudyMember(id, studyId);
+			//save payment
+			
+			if(study.getHasLeveltest() == 1) {
+				List<LeveltestResponse> leveltestResponses = (List<LeveltestResponse>) session.getAttribute("leveltestResponses");
+				
+				if(leveltestResponses.get(0).getStudyId().equals(studyId)) {
+					lrr.saveAll(leveltestResponses);
+					session.removeAttribute("leveltestResponses");
+				}
+			}
+			
+			return "/study/join/complete";
+			
+		}
+		/* 2. 레벨테스트 응시 후 매핑되는 경우 */
+		else if(refererAfter.indexOf("/leveltest") != -1) {
+
+			List<LeveltestResponse> leveltestResponses = leveltestResponseList.getLeveltesResponses();
+
+			
+			/* 2-1. 프리미엄 스터디 --> 결제 페이지 */
+			if(study.getTypeCode().getTypeCode() == "P") {
+				
+				log.info("-------------------- case 2-1 --------------------");
+				
+				session.setAttribute("leveltestResponses", leveltestResponses);
+				// session.timeout 확인 --> 문제 발생 시 스크립트단에서 처리할 것
+				// html 에 새로 입력 버튼 추가
+				
+				// memberpointrepository 에서 사용자의 포인트 정보 조회 --> model 에 add
+				model.addAttribute("study", study);	//출력을 위해 추가
+				
+				return "/study/join/pay";
+				
+			} 
+			/* 2-2. 일반 스터디 --> 가입 완료 */
+			else {
+				
+				log.info("-------------------- case 2-2 --------------------");
+
+				saveStudyMember(id, studyId);
+				lrr.saveAll(leveltestResponses);
+				session.removeAttribute("leveltestResponses");
+				
+				return "/study/join/complete";
+				
+			}
+			
+		}
+		/* 3. 최초 매핑되는 경우 */
+		// 이 경우가 많다면, 최상위로 위치를 이동해야 한다.
+		else {
+			
+			
+			/* 3-1. 레벨테스트 보유 --> 레벨테스트 페이지 */
+			if(study.getHasLeveltest() == 1) {
+				
+				log.info("-------------------- case 3-1 --------------------");
+
+				List<Leveltest> leveltestList = lr.findByStudyId(studyId);
+				model.addAttribute("leveltestList", leveltestList);
+				
+				return "/study/join/leveltest";
+				
+			} 
+			/* 3-2. 프리미엄 스터디 --> 결제 페이지 */
+			else if(study.getTypeCode().getTypeCode() == "P") {
+
+				log.info("-------------------- case 3-2 --------------------");
+
+				// memberpointrepository 에서 사용자의 포인트 정보 조회 --> model 에 add
+				model.addAttribute("study", study);
+				
+				return "/study/join/pay";
+				
+			} 
+			/* 레벨테스트가 미등록된 일반 스터디 */
+			else {
+				
+				log.info("-------------------- case 3-3 --------------------");
+				
+				saveStudyMember(id, studyId);
+				
+				return "/study/join/complete";
+				
+			}
+		}
+	}
 	
+	private void saveStudyMember(String id, String studyId) {
+//	private void saveStudyMember(StudyMember studyMember, String studyId) {
+
+		StudyMember studyMember = new StudyMember();
+		
+		//org.springframework.orm.jpa.JpaSystemException: Could not set field value [aaa123] value by reflection : [class org.mohajo.studyrepublic.domain.StudyMemberId.id] setter of org.mohajo.studyrepublic.domain.StudyMemberId.id; nested exception is org.hibernate.PropertyAccessException: Could not set field value [aaa123] value by reflection : [class org.mohajo.studyrepublic.domain.StudyMemberId.id] setter of org.mohajo.studyrepublic.domain.StudyMemberId.id] with root cause
+//		Member member = new Member();
+//		member.setId(id);
+//		studyMember.setMember(member);
+		
+		//org.springframework.orm.jpa.JpaSystemException: attempted to assign id from null one-to-one property [org.mohajo.studyrepublic.domain.StudyMember.member]; nested exception is org.hibernate.id.IdentifierGenerationException: attempted to assign id from null one-to-one property [org.mohajo.studyrepublic.domain.StudyMember.member]
+//		StudyMemberId studyMemberId = new StudyMemberId();
+//		studyMemberId.setId(id);
+//		studyMemberId.setStudyId(studyId);
+//		studyMember.setStudyMemberId(studyMemberId);
+		
+		Member member = mr.findById(id).get();
+		Study study = sr.findById(studyId).get();
+		// 참고:  https://stackoverflow.com/a/27467933/11111203
+		// 답변자님 절 받으세요
+		// @EmbeddedId ContractServiceLocationPK id = new ContractServiceLocationPK(); 와 같은 식으로 도메인에서 복합키를 초기화하라는 답변. --> save 시 직접 지정하는 것으로 변경
+		StudyMemberStatusCD studyMemberStatusCode = smscr.findById("WA").get();
+		
+		studyMember.setMember(member);
+		studyMember.setStudy(study);
+		studyMember.setStudyMemberStatusCode(studyMemberStatusCode);
+		
+		smr.save(studyMember);
+		// studyMemberStatusCD 확인하기
+		log.info("-------------------- studyMember saved --------------------");
+
+		sr.plusEnrollActual(studyId);
+		log.info("-------------------- study enrollActual updated --------------------");
+	}
+	
+	
+	@RequestMapping("/pleaseLogin")
+	public String pleaseLogin(@RequestParam String pathName) {
+		
+		// 참고:  https://best421.tistory.com/53
+		// 오류:  org.thymeleaf.exceptions.TemplateInputException: Error resolving template [/study/detail/BO00002], template might not exist or might not be accessible by any of the configured Template Resolvers
+		// 원본:  return pathName;
+		return "redirect:" + pathName;
+	}
+
+	@RequestMapping("/review")
+	public String review() {
+
+		log.info("review() called...");
+
+		return "/study/review";
+	}
+	
+	// 테스트 시작.
+	@RequestMapping("/test")
+	public String test(Model model) {
+		
+		log.info("test() called...");
+
+/*
+//		List<LeveltestResponse> leveltestResponse = lrr.selectByStudyId("BF00003");
+		
+		List<Study> study = sr.findAll();
+		
+		model.addAttribute("test", study);
+		*/
+		
+		List<StudyMember> studyMember = smr.selectByStudyId("BF00002");
+		model.addAttribute("studyMember", studyMember);
+		
+//		List<Leveltest> leveltest = lr.findAll();
+//		List<LeveltestResponse> leveltestResponse = lrr.findAll();
+//		model.addAttribute("leveltest", leveltest);
+//		model.addAttribute("leveltestResponse", leveltestResponse);
+	
+		return "/study/test";
+		
+//		return "/study/paperBootTest";
+		
+	}
+	// 테스트 끝.
+	
+	
+	@RequestMapping("/insertTest")
+	public String insertTest(Model model) {
+		
+		Study study = new Study();
+		String studyId = "ST00001";
+		study.setStudyId(studyId);
+		study.setName("테스트");
+		
+		Member member = new Member();
+		member.setId("bbb123");
+		study.setMember(member);
+		
+//		List<StudyInterest> studyInterestList = new ArrayList<StudyInterest>();
+//		StudyInterest studyInterest = new StudyInterest();
+//		Interest2CD interest2code = new Interest2CD();
+//		interest2code.setInterest2Code("P02");
+//		studyInterest.setInterest2code(interest2code);
+//		studyInterestList.add(studyInterest);
+//		study.setStudyInterest(studyInterestList);
+
+//		List<StudyLocation> studyLocationList = new ArrayList<StudyLocation>();
+//		StudyLocation studyLocation = new StudyLocation();
+//		studyLocation.setInterestLocation("태양계 지구");
+//		studyLocationList.add(studyLocation);
+//		study.setStudyLocation(studyLocationList);
+		
+		StudyPrice studyPrice = new StudyPrice();
+		studyPrice.setPrice(30000);
+		studyPrice.setStudyId(studyId);
+		study.setPrice(studyPrice);
+		
+		log.info(study.toString());
+		sr.save(study);
+		model.addAttribute("test", study);
+		
+		return "/study/test";
+	}
 }
 	

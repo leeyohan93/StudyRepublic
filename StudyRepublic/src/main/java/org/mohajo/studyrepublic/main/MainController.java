@@ -87,7 +87,8 @@ public class MainController {
 //	public String search(Study studyInfo,String searchDate,String[] location, String[] interest, Model model){
 	public String search(Study studyInfo, String searchDate,String[] location, String[] interest, PageDTO pageDTO, Model model){
 		
-		Pageable page = pageDTO.makePageable(0, "postDate");
+//		Pageable page = pageDTO.makePageable(0, "postDate");
+		Pageable page = pageDTO.studyMakePageable(0, 2, "postDate");
 				
 		Page<Study> searchList = mainService.search(studyInfo, searchDate, location, interest, page);
 		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());

@@ -71,10 +71,13 @@
 				</nav>
 				
 				<!-- 페이지 번호를 통해 이동 1 -->
-<!-- 				<form id="pageForm" th:action="@{'/study/list/' + ${typeCode}}" method="get"> -->
-<!-- 					<input type="hidden" name="page" th:value="${pagedList.currentPageNum}"> -->
-<!-- 					<input type="hidden" name="size" th:value="${pagedList.currentPage.pageSize}"> -->
-<!-- 				</form> -->
+				<form id="pageForm" th:action="@{'/study/list/' + ${typeCode}}" method="get">
+<!-- 				<form id="pageForm" action="/search" method="get"> -->
+					<input type="hidden" name="page" th:value="${pagedList.currentPageNum}">
+					<input type="hidden" name="size" th:value="${pagedList.currentPage.pageSize}">
+					<input type="hidden" name="searchDate" th:value="${pagedList}">
+<!-- 					<input type="text" th:text="${pageDTO}"> -->
+				</form>
 
 			</div>
 			

@@ -24,8 +24,11 @@ import lombok.Data;
 public class StudyInterest implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int StudyInterestId;
+	
+//	private String studyId;
 	
 	@ManyToOne
 	@JoinColumn(name = "INTEREST_2_CODE")

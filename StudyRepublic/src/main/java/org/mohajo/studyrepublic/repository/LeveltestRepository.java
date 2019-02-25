@@ -1,5 +1,7 @@
 package org.mohajo.studyrepublic.repository;
 
+import java.util.List;
+
 import org.mohajo.studyrepublic.domain.Leveltest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,6 +13,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 //public interface LeveltestRepository extends JpaRepository<Leveltest, LeveltestId>{
 public interface LeveltestRepository extends JpaRepository<Leveltest, String>{
+
+	List<Leveltest> findByStudyId(String studyId);
 
 
 }

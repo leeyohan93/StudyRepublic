@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}"><head>
+<meta charset="UTF-8">
+<title>레벨테스트</title>
+</head>
+
+<th:block layout:fragment="customCss">
+	<style>
+	
+	.leveltest-container {
+		padding: 0.3rem;
+		background-color: silver;	
+	}
+	
+	.leveltest {
+		opacity: 0.4 !important;
+		border-radius: 22.37%;
+	}
+		
+	</style>
+</th:block>
+
+<body>
+
+
+	<div layout:fragment="main">
+		<div class="inner">
+		
+			<div class="page-header">
+				<div class="page-title">
+					<h4>레벨테스트</h4>
+					<hr>
+				</div>
+				<div class="page-description">
+					<pre>
+					-	신청하신 스터디에는 레벨테스트가 등록되어 있습니다.
+					-	레벨테스트 응시는 선택사항입니다.
+					-	응시 결과는 리더가 가입 승인을 검토할 때 참고 자료로 사용됩니다.
+					</pre>			
+				</div>
+			</div>
+			
+			<div class="page-content">
+				
+				<form id="leveltest-submit-form">
+	        		<input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' />
+				
+		            <div class="leveltest-container" th:each="leveltest : ${leveltestList}">
+		            
+		            	<input type="hidden" name="studyId" th:text="${studyId}">
+		            	<input type="hidden" name="id" th:text="${id}">
+	       		        <input type="hidden" name="leveltestId" th:text="${leveltest.leveltestId}">
+		            
+		            	<th:block th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'MC'">
+				            <div class="leveltest">
+				                <div class="question">
+				                    <span class="numbering question-numbering" th:text="${leveltest.questionNumber}">number</span>
+				                    <span class="question-content" th:text="${leveltest.content}">content</span>
+				                    <span class='icon icon-plus leveltest-toggle'></span>
+				                </div>
+				                
+				                <!-- 참고:  https://bestcure.tistory.com/entry/thymeleaf-each-%EB%AC%B8-%EC%95%88%EC%97%90%EC%84%9C-split%EC%9C%BC%EB%A1%9C-%ED%95%9C%EB%B2%88%EB%8D%94-each-%EC%98%88%EC%A0%9C -->
+				                <div class="question-choice" style="display: none" th:each="choice : ${#strings.arraySplit(leveltest.choice, ';')}">
+				                
+				                    <div class="question-choice-group">
+				                        <span class="numbering choice-numbering" th:text="${choiceStat.index} + 1">0</span>
+				                        <span class="question-choice-option" th:text="${choice}">choice</span>
+				                    </div>
+				                    
+				                </div>
+				                
+				                <div class="question-answer" style="display: none">
+				                    	정답: <select name="submitAnswer" th:each="choice : ${#strings.arraySplit(leveltest.choice, ';')}">
+				                        <option th:value="${choiceStat.index} + 1">0</option>
+				                    </select>
+				                </div>
+				            </div>
+						</th:block>
+						
+		           		<th:block th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'SA'">
+	                        <div class="leveltest">
+	                            <div class="question">
+	                                <span class="numbering question-numbering" th:text="${leveltest.questionNumber}">0</span>
+	                                <span class="question-content" th:text="${leveltest.content}">content</span>
+	                                <span class="icon icon-plus leveltest-toggle"></span>
+	                            </div>
+	                            <div class="question-answer" style="display: none">
+									정답: <input name="submitAnswer" class="question-answer-input" type="text">
+	                            </div>
+	
+	                        </div>
+						
+						</th:block>
+						
+					</div>
+					
+					<input class="input-btn" type="reset" value="다시 작성하기">
+					<input class="input-btn" type="submit" value="제출하기">
+					<input class="input-btn" type="submit" value="건너뛰기">
+					
+				</form>
+					
+			</div>
+			
+		</div>
+	</div>
+
+	<th:block layout:fragment="customScript">
+		<script type="text/javascript">
+		
+			$(document).ready(function() {
+				
+				$('.input-btn').on('click', "[type='submit']", function(e) {
+					
+					e.preventDefault();
+					
+					if($(this).val() == "건너뛰기") {
+						
+						$('.leveltest-container').remove();						
+					}
+					
+	                $("form").attr("action", "/study/join/" + $("input[name='studyId']").val());
+	                $("form").attr("method", "post");
+	                $("form").submit();
+					
+				});
+				
+	            $(".leveltest-container").on("click", ".leveltest-toggle", function () {
+	
+	                    var icon = $(this);
+	
+	                    icon.toggleClass("icon-plus icon-minus");
+	                    icon.closest(".leveltest").find(".question-choice, .question-answer").toggle();
+	
+                });
+				
+			});
+		
+		</script>
+	</th:block>
+</body>
+</html>

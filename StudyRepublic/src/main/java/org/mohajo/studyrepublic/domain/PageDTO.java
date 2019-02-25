@@ -29,8 +29,9 @@ public class PageDTO {
 	public static final int DEFAULT_MAX_SIZE = 50;
 
 	private int page;
-	private int DEFAULT_SIZE = 15;
-	private int size = DEFAULT_SIZE;
+//	private int DEFAULT_SIZE = 15;
+//	private int size = DEFAULT_SIZE;
+	private int size = 15;
 	private String keyword;
 	private String searchType;
 	private String searchPeriod;
@@ -47,12 +48,20 @@ public class PageDTO {
 
 		return PageRequest.of(this.page - 1, this.size, dir, props);
 	}
+
 	public Pageable noticeMakePageable(String notice, String freeBoardId) {
 
 
 		return PageRequest.of(this.page - 1, this.size, Sort.by(
 				Sort.Order.desc(notice),
 				Sort.Order.desc(freeBoardId)));
+	}
+	
+	public Pageable studyMakePageable(int direction, int size, String... props) {
+
+		Sort.Direction dir = direction == 0 ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+		return PageRequest.of(this.page - 1, size, dir, props);
 	}
 
 
@@ -69,7 +78,8 @@ public class PageDTO {
 	}
 
 	public void setSize(int size) {
-		this.size = (size < DEFAULT_SIZE || size > DEFAULT_MAX_SIZE) ? DEFAULT_SIZE :size;
+//		this.size = (size < DEFAULT_SIZE || size > DEFAULT_MAX_SIZE) ? DEFAULT_SIZE :size;
+		this.size = (size > DEFAULT_MAX_SIZE) ? DEFAULT_MAX_SIZE :size;
 	}
 
 

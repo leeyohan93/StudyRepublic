@@ -1,7 +1,7 @@
 package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -28,7 +27,7 @@ import lombok.Data;
 public class StudyMember implements Serializable {
 
 		@EmbeddedId
-		private StudyMemberId studyMemberId;
+		private StudyMemberId studyMemberId = new StudyMemberId();
 		
 		@Column(insertable=false, updatable=false)
 		private String id;
@@ -37,15 +36,22 @@ public class StudyMember implements Serializable {
 		private String studyId;
 		
 		@ManyToOne(cascade=CascadeType.ALL) 
-		@JoinColumn(name = "study_member_status_code")
+		@JoinColumn(name = "study_member_status_code", nullable=false)
 		private StudyMemberStatusCD studyMemberStatusCode;
 		
-		private Date enrollDate;
+		@Column(nullable=false)
+		private Date enrollDate = new Date();
+		
 		private Date exitDate;
 		
+//		@MapsId("id")
+//		// org.hibernate.id.IdentifierGenerationException: attempted to assign id from null one-to-one property [org.mohajo.studyrepublic.domain.StudyMember.member]
+//		// @ManyToOne
+//		@ManyToOne(fetch=FetchType.LAZY)
+//		@JoinColumn(name = "id", updatable=false, insertable=false)
 		@MapsId("id")
-		@ManyToOne 
-		@JoinColumn(name = "id")
+		@ManyToOne
+		@JoinColumn(name="id", updatable=false, insertable=false)
 		private Member member;
 		
 //		@MapsId("studyId")
@@ -54,8 +60,8 @@ public class StudyMember implements Serializable {
 //		private StudyView studyView;
 		
 		@MapsId("studyId")
-		@ManyToOne 	
-		@JoinColumn(name="studyId")
+		@ManyToOne
+		@JoinColumn(name="studyId", updatable=false, insertable=false)
 		private Study study;  
 		
 		/*@OneToMany(mappedBy="studyMember")

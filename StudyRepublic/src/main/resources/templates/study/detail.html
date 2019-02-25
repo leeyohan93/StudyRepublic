@@ -238,7 +238,7 @@ layout:decorate="~{/layout/mainLayout}">
 				<section class="intro">
 					<h5>소개</h5>
 					<div class="intro-content">
-						<p th:text="${study.introduction}"></p>
+						<p th:utext="${study.introduction}"></p>
 					</div>
 				</section>
 				
@@ -297,7 +297,8 @@ layout:decorate="~{/layout/mainLayout}">
 					<div class="tab-content review invisible" id="tab-content-review">
 						<p th:text="${#lists.isEmpty(study.review)}? '작성 된 후기가 없습니다.' ">후기 리스트</p>
 						<th:block th:if="${not #lists.isEmpty(study.review)}">
-							<span class="review-counter" ></span>
+							총 <span class="review-counter" ></span>건
+							<hr/>
 							
 							<div class="review-unit" th:each="review : ${study.review}" th:with="reviewer = ${review.studyMember.member}">
 								<span class="review-index" th:classappend="${reviewStat.index}" th:text="${reviewStat.index}+1"></span>
@@ -308,6 +309,7 @@ layout:decorate="~{/layout/mainLayout}">
 									<span class="stars-score" th:text="${review.score}">score</span>
 								</div>
 								<p th:text="${review.content}"></p>
+								<hr/>
 							</div>
 							
 						</th:block>
@@ -376,6 +378,9 @@ layout:decorate="~{/layout/mainLayout}">
 			// 완료된 스터디이면, 리뷰 탭의 disable 클래스를 제거한다.
 			if ($('#study-status').attr('value') == "C") {
 				$('#tab-title-review').removeClass('disable');
+				$('#tab-title-review').trigger('click');
+				var reviewCount = $('.review-unit').length;
+				$('.review-counter').text(reviewCount);
 			}
 		}
 
@@ -400,6 +405,8 @@ layout:decorate="~{/layout/mainLayout}">
 
 				if (joinBtn.dataset.userType == "anonymous") {
 					alert("로그인 후 신청할 수 있어요!");
+					location = "/study/pleaseLogin/?pathName=" + pathName;
+					window.location.href = originUrl + location;
 // 					location = "/login";
 // 					window.location.replace = originUrl + location;					
 					// 로그인 후 스터디 가입 페이지로 이동하도록 처리할 것! ******** --> SecurityConfig.java 에서 처리 완료
@@ -422,8 +429,13 @@ layout:decorate="~{/layout/mainLayout}">
 							console.log("Success: " + data);
 							
 							if (!data) {
-								location = "/study/join/" + studyId;
-								window.location.href = originUrl + location;
+								var answer = confirm("이 스터디에 가입하시겠어요?");
+								if(answer) {
+									location = "/study/join/" + studyId + "?id=" + userId;
+									window.location.href = originUrl + location;
+								} else {
+									return;
+								}
 							}
 							/* var jsonData = JSON.parse(data);
 							var studyMemberStatusCode = jsonData.studyMemberStatusCode.studyMemberStatusCode; */

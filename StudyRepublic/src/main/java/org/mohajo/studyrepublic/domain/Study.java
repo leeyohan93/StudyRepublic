@@ -78,7 +78,7 @@ public class Study implements Serializable {
 	private Date startDate;			//시작일
 	
 	@Temporal(TemporalType.DATE)					// 년, 월, 일 형식으로 출력하겠다. DATE를 TIMESTAMP로 바꾸면 시, 분, 초 까지 출력.
-	@Column
+	@Column(nullable = false)
 	private Date endDate;							//종료일
 	
 	@ManyToOne
@@ -105,7 +105,7 @@ public class Study implements Serializable {
 	@Column(nullable = false)
 	private String introduction;						//소개
 	
-	@Column
+	@Column(nullable = false)
 	private int hasLeveltest = 0;						//레벨테스트 유무 (0/1)
 	
 	@Column
@@ -115,7 +115,10 @@ public class Study implements Serializable {
 	private Timestamp postDate = new java.sql.Timestamp(new Date().getTime());	//게시일
 	
 	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name = "study_id", nullable = false)
+//	@JoinColumn(name = "study_id", nullable = false)	//StudyInterest 클래스에 studyId 추가 후 에러 발생 - Caused by: org.hibernate.DuplicateMappingException: Table [study_interest] contains physical column name [study_id] referred to by multiple physical column names: [study_id], [studyId]
+//	@JoinColumn(name = "studyId", nullable = false)		//Caused by: org.hibernate.MappingException: Repeated column in mapping for entity: org.mohajo.studyrepublic.domain.StudyInterest column: study_id (should be mapped with insert="false" update="false")
+//	@JoinColumn(name = "studyId", nullable = false, insertable = false, updatable = false)	//아마도 여기로 추정 - java.sql.SQLIntegrityConstraintViolationException: Column 'study_id' cannot be null
+	@JoinColumn(name = "studyId", nullable = false)
 	private List<StudyInterest> studyInterest;			//분야
 	
 	@OneToMany(cascade=CascadeType.ALL)
@@ -125,11 +128,12 @@ public class Study implements Serializable {
 	///////////	아래는 Study 클래스를 상속하여 분리시킬 수도 있음 //////////////////////
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "study_id")
+	@JoinColumn(name = "studyId", nullable = false)
 	private StudyPrice price;							//가격
 	
 	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name = "study_id")
+//	@JoinColumn(name = "studyId")						//java.sql.SQLException: Field 'study_id' doesn't have a default value
+	@JoinColumn(name = "studyId", nullable = false)
 	private List<StudyLocation> studyLocation;			//지역
 	
 	/**
@@ -141,6 +145,8 @@ public class Study implements Serializable {
 	 */
 	/*@OneToMany(mappedBy="study")
 	private List<StudyMember> studyMember;*/
+	
+//	Leveltest 추가할 수도 있음
 	
 
 }
