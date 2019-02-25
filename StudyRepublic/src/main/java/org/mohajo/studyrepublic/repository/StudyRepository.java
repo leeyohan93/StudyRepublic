@@ -85,7 +85,7 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 	@Query(value = "select if(number<100000, concat(prefix, lpad(number, 5, 0)), null) as new_study_id from (select substring(study_id, 1, 2) as prefix, substring(study_id, 3)+1 as number from study where type_code = :typeCode and onoff_code = :onoffCode order by study_id desc limit 1) sample", nativeQuery=true)
 	public String getNewStudyId(String typeCode, String onoffCode);
 
-	@Modifying	//https://winmargo.tistory.com/208, https://docs.spring.io/spring-data/jpa/docs/current/reference/html/, 안 써도 되나?
+	@Modifying	//https://winmargo.tistory.com/208, https://docs.spring.io/spring-data/jpa/docs/current/reference/html/, 안 써도 되나? --> Modifying Annotation을 추가하지 않는 경우 Not supported for DML operations 에러가 발생한다고 함. (https://www.slipp.net/questions/95)
 	@Query(value = "update Study s set s.enrollActual = s.enrollActual + 1 where studyId = ?1")
 	public void plusEnrollActual(String studyId);
 	

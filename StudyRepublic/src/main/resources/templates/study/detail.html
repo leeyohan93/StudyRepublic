@@ -319,6 +319,7 @@ layout:decorate="~{/layout/mainLayout}">
 				<!-- 스터디 가입 신청 버튼 -->
 				<th:block th:with="studyStatusCode = ${study.studyStatusCode.studyStatusCode}">
 					<th:block th:unless="${studyStatusCode.equals('C')} OR ${studyStatusCode.equals('D')}">
+						<input type="hidden" class="studyId-container" th:value="${study.studyId}">
 						<button sec:authorize="isAnonymous()" class="sticky btn-join-study" data-user-type="anonymous" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
 						<button sec:authorize="isAuthenticated()" class="sticky btn-join-study" data-user-type="authenticated" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
 					</th:block>
@@ -397,15 +398,16 @@ layout:decorate="~{/layout/mainLayout}">
 				// *** 로그인 여부 판별하는 방법 확인하기
 				var joinBtn = $('.btn-join-study')[0];
 				
-				var pathName = window.location.pathname;
-				var studyId = pathName.replace('/study/detail/', '');
+				var pathname = window.location.pathname;
+// 				var studyId = pathname.replace('/study/detail/', '');
+				var studyId = $(this).prev('.studyId-container').val();
 				var originUrl = window.location.origin;
 				var location = "";
 				var userId = document.getElementById('loggedInUserId').value;
 
 				if (joinBtn.dataset.userType == "anonymous") {
 					alert("로그인 후 신청할 수 있어요!");
-					location = "/study/pleaseLogin/?pathName=" + pathName;
+					location = "/study/pleaseLogin/?pathname=" + pathname;
 					window.location.href = originUrl + location;
 // 					location = "/login";
 // 					window.location.replace = originUrl + location;					
@@ -431,7 +433,7 @@ layout:decorate="~{/layout/mainLayout}">
 							if (!data) {
 								var answer = confirm("이 스터디에 가입하시겠어요?");
 								if(answer) {
-									location = "/study/join/" + studyId + "?id=" + userId;
+									location = "/study/join/" + studyId/*  + "?id=" + userId */;
 									window.location.href = originUrl + location;
 								} else {
 									return;

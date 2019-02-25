@@ -184,6 +184,7 @@
 											</div>
 											<div class="footer">
 												<div class="social-links text-center">
+													<input type="hidden" class="studyId-container" th:value="${study.studyId}">
 													<a class="btn-join-study" th:href="@{'/study/join/' + ${study.studyId}}">신청</a> <a
 														th:href="@{'/study/detail/' + ${study.studyId}}">상세</a>
 												</div>
@@ -358,6 +359,7 @@
 											</div>
 											<div class="footer">
 												<div class="social-links text-center">
+													<input type="hidden" class="studyId-container" th:value="${study.studyId}">
 													<a class="btn-join-study" th:href="@{'/study/join/' + ${study.studyId}}">신청</a> <a
 														th:href="@{'/study/detail/' + ${study.studyId}}">상세</a>
 												</div>

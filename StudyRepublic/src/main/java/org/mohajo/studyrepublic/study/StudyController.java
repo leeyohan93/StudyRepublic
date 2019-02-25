@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,9 +22,9 @@ import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Leveltest;
 import org.mohajo.studyrepublic.domain.LeveltestList;
-import org.mohajo.studyrepublic.domain.LeveltestResponse;
 import org.mohajo.studyrepublic.domain.LeveltestResponseList;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberPoint;
 import org.mohajo.studyrepublic.domain.OnoffCD;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
@@ -45,6 +46,7 @@ import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.LevelCDRepository;
 import org.mohajo.studyrepublic.repository.LeveltestRepository;
 import org.mohajo.studyrepublic.repository.LeveltestResponseRepository;
+import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.OnoffCDRepository;
 import org.mohajo.studyrepublic.repository.PaymentRepository;
@@ -67,6 +69,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,6 +79,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.java.Log;
 
@@ -150,7 +155,13 @@ public class StudyController {
 	StudyMemberStatusCDRepository smscr;
 	
 	@Autowired
+	MemberPointRepository mpr;
+	
+	@Autowired
 	TypeCD typeCd;
+	
+	String origin = "http://localhost:8080";
+	String pathname = "";
 	
 	
 	/**
@@ -276,14 +287,27 @@ public class StudyController {
 	 * @return	스터디 개설 (/study/open.html)
 	 */
 	@RequestMapping("/open")
-	public String open(Model model) {
+	public String open(HttpServletRequest request, Model model) {
 
 		log.info("open() called...");
 
+		String referer = request.getHeader("referer");
+		log.info("referer = " + referer);
+		
+		if(referer == null) {
+			pathname = "/index";
+			
+		} else {
+			pathname = referer.substring(referer.indexOf(origin) + origin.length());
+			
+		}
+		log.info("pathname = " + pathname);
+		
+		
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 
 		if(auth.getName() == "anonymousUser") {
-			return "/member/login";
+			return "redirect:/study/pleaseLogin/?pathname=" + pathname;
 		}
 		
 		String id = auth.getName();
@@ -569,131 +593,352 @@ public class StudyController {
 	/**
 	 * @author	이미연
 	 * @return	스터디 가입 페이지 (미결사항: join 페이지는 테스트용)
+	 * @throws IOException 
 	 */
 	@RequestMapping("/join/{studyId}")
-	public String join(@PathVariable("studyId") String studyId, /*@ModelAttribute StudyMember studyMember, */@ModelAttribute LeveltestResponseList leveltestResponseList, HttpSession session, HttpServletRequest request, Model model) {
+	public String join(@PathVariable("studyId") String studyId, HttpServletResponse response, RedirectAttributes redirectAttr, Model model) throws IOException {
+		
 		
 		log.info("join() called...");
 
-		// index 거치지 않고도 id 를 세션에 저장할 수 있다면, 세션에서 값을 읽어오도록 변경할 것.
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		log.info("id = " + id);
+		log.info("Logged in user = " + id);
 
-		// StudyMember 로 사용자 재검증할 것!
+		
+		/************************* StudyMember 로 사용자 재검증 ******************************/
+
+		// 참고:	https://epthffh.tistory.com/entry/JAVA단에서-alert창-띄우기, https://nahosung.tistory.com/74
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
 		
 		
-		/* 유입 경로 확인 */
-		String referer = request.getHeader("referer");
-		log.info("referer = " + referer);
-		
-		String str = "/study";
-		String refererAfter = referer.substring(referer.indexOf(str) + str.length());
-		log.info("refererAfter = " + refererAfter);
-		
-		
-		/* 사용자, 스터디 식별을 위해 model 에 추가 */
-		model.addAttribute("id", id);
-		model.addAttribute("studyId", studyId);
-		
-		
-		Study study = sr.findById(studyId).get();
-		
-		
-		/* 1. 결제 후 매핑되는 경우 */
-		if(refererAfter.indexOf("/pay") != -1) {
+		// 1) 비로그인 유저의 경우 --> 로그인 페이지
+		if (id.equals("anonymousUser")) {
 			
-			log.info("-------------------- case 1 --------------------");
-			saveStudyMember(id, studyId);
-			//save payment
+			log.info("----------------[ Anonymous user ]----------------");
 			
-			if(study.getHasLeveltest() == 1) {
-				List<LeveltestResponse> leveltestResponses = (List<LeveltestResponse>) session.getAttribute("leveltestResponses");
+			out.println("<script>alert('로그인 후 신청할 수 있어요!'); window.location.href='/study/pleaseLogin/?pathname='/study/join" + studyId + "';</script>");
+			out.flush();
+			
+			return null;
+			
+			
+		} else {
+			
+			StudyMember history = prejoin(studyId, id);
+			
+			if(history != null) {
+				// 2) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우
 				
-				if(leveltestResponses.get(0).getStudyId().equals(studyId)) {
-					lrr.saveAll(leveltestResponses);
-					session.removeAttribute("leveltestResponses");
+				String studyMemberStatusCode = history.getStudyMemberStatusCode().getStudyMemberStatusCode();
+				String alert = "";
+				
+				switch (studyMemberStatusCode) {
+				case "WA":
+					alert = "승인 대기중인 스터디입니다.";
+					break;
+				case "ME":
+				case "LE":
+					alert = "이미 가입된 스터디입니다.";
+					break;
+				case "EX":
+				case "DE":
+					alert = "가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.";
+					break;
 				}
-			}
+				log.info("----------------[ User is rejected ]----------------");
+				
+				out.println("<script>alert('" + alert + "'); window.location.href='/index'</script>");
+				out.flush();
+				
+				return "redirect:" + pathname;
+				
+			}		
+		}
+		
+		log.info("----------------[ User is valid ]----------------");
+
+		/************************* study 가입 절차 확인 ******************************/
+
+		Study study;
+		
+		try {
+			study = sr.findById(studyId).get();
+		
+		} catch(Exception e) {
+			e.printStackTrace();
 			
-			return "/study/join/complete";
+			return "/study/404";
 			
 		}
-		/* 2. 레벨테스트 응시 후 매핑되는 경우 */
-		else if(refererAfter.indexOf("/leveltest") != -1) {
-
-			List<LeveltestResponse> leveltestResponses = leveltestResponseList.getLeveltesResponses();
-
-			
-			/* 2-1. 프리미엄 스터디 --> 결제 페이지 */
-			if(study.getTypeCode().getTypeCode() == "P") {
-				
-				log.info("-------------------- case 2-1 --------------------");
-				
-				session.setAttribute("leveltestResponses", leveltestResponses);
-				// session.timeout 확인 --> 문제 발생 시 스크립트단에서 처리할 것
-				// html 에 새로 입력 버튼 추가
-				
-				// memberpointrepository 에서 사용자의 포인트 정보 조회 --> model 에 add
-				model.addAttribute("study", study);	//출력을 위해 추가
-				
-				return "/study/join/pay";
-				
-			} 
-			/* 2-2. 일반 스터디 --> 가입 완료 */
-			else {
-				
-				log.info("-------------------- case 2-2 --------------------");
-
-				saveStudyMember(id, studyId);
-				lrr.saveAll(leveltestResponses);
-				session.removeAttribute("leveltestResponses");
-				
-				return "/study/join/complete";
-				
-			}
+		
+		int checkStudy = 0;
+		
+		if(study.getHasLeveltest() == 1) {
+			List<Leveltest> leveltestList = lr.findByStudyId(studyId);
+			model.addAttribute("leveltestList", leveltestList);
+			checkStudy += 1;
+			log.info("----------------[ Has leveltest ]----------------");
 			
 		}
-		/* 3. 최초 매핑되는 경우 */
-		// 이 경우가 많다면, 최상위로 위치를 이동해야 한다.
-		else {
+		
+		if(study.getTypeCode().getTypeCode() == "P") {
+			// memberpointrepository 에서 사용자의 포인트 정보 조회 --> model 에 add
+			MemberPoint memberPoint = mpr.findById(id).get();
 			
+			model.addAttribute("study", study);
+			model.addAttribute("memberPoint", memberPoint);
 			
-			/* 3-1. 레벨테스트 보유 --> 레벨테스트 페이지 */
-			if(study.getHasLeveltest() == 1) {
-				
-				log.info("-------------------- case 3-1 --------------------");
+			checkStudy += 1;
+			log.info("----------------[ Is premium ]----------------");
 
-				List<Leveltest> leveltestList = lr.findByStudyId(studyId);
-				model.addAttribute("leveltestList", leveltestList);
-				
-				return "/study/join/leveltest";
-				
-			} 
-			/* 3-2. 프리미엄 스터디 --> 결제 페이지 */
-			else if(study.getTypeCode().getTypeCode() == "P") {
-
-				log.info("-------------------- case 3-2 --------------------");
-
-				// memberpointrepository 에서 사용자의 포인트 정보 조회 --> model 에 add
-				model.addAttribute("study", study);
-				
-				return "/study/join/pay";
-				
-			} 
-			/* 레벨테스트가 미등록된 일반 스터디 */
-			else {
-				
-				log.info("-------------------- case 3-3 --------------------");
-				
-				saveStudyMember(id, studyId);
-				
-				return "/study/join/complete";
-				
-			}
 		}
+		
+		if(checkStudy == 0) {
+			
+			// 참고:	https://sendthesignal.tistory.com/
+			redirectAttr.addAttribute("id", id);
+			redirectAttr.addAttribute("studyId", studyId);
+			log.info("----------------[ Fast-forward join ]----------------");
+
+			return "redirect:/study/join/confirm";
+		}
+			
+		return "/study/join/process";
+		
 	}
 	
+	@RequestMapping("/join/confirm")
+	public String joinConfirm(@RequestParam("id") String id, @RequestParam("studyId") String studyId, @ModelAttribute LeveltestResponseList leveltestResponseList, Model model) {
+		
+		if(id == null || studyId == null) {
+			model.addAttribute("errorMsg", "스터디 가입 실패! 예기치 못한 문제가 발생하였습니다. 다시 시도해주세요.");
+			
+			return "/study/error";
+			
+		}
+		
+		try {
+			saveStudyMember(id, studyId);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMsg", "가입 신청 처리중 문제가 발생했습니다. 다시 시도해주세요.");
+			
+			return "/study/error";
+		}
+		
+		model.addAttribute("studyId", studyId);
+		
+		return "/study/join/confirm";
+		
+	}
+	
+//	@RequestMapping("/join/{studyId}")
+//	public String join(@PathVariable("studyId") String studyId, /*@ModelAttribute StudyMember studyMember, */@ModelAttribute LeveltestResponseList leveltestResponseList, HttpSession session, HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
+//		
+//		log.info("join() called...");
+//
+//		// index 거치지 않고도 id 를 세션에 저장할 수 있다면, 세션에서 값을 읽어오도록 변경할 것.
+//		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+//		String id = auth.getName();
+//		log.info("id = " + id);
+//		
+//		
+//		/* 유입 경로 확인 */
+//		String referer = request.getHeader("referer");
+//		log.info("referer = " + referer);
+//		
+//		if(referer == null) {
+//			pathname = "/index";
+//			
+//		} else {
+//			pathname = referer.substring(referer.indexOf(origin) + origin.length());
+//			
+//		}
+//		log.info("pathname = " + pathname);
+//		
+//		
+//		/* 사용자, 스터디 식별을 위해 model 에 추가 */
+//		model.addAttribute("id", id);
+//		model.addAttribute("studyId", studyId);
+//		
+//		Study study;
+//		
+//		try {
+//			study = sr.findById(studyId).get();
+//		
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			return "/study/404";
+//			
+//		}
+//		
+//		// 참고:	https://epthffh.tistory.com/entry/JAVA단에서-alert창-띄우기, https://nahosung.tistory.com/74
+//		response.setContentType("text/html; charset=UTF-8");
+//		PrintWriter out = response.getWriter();
+//		
+//		
+//		/************************* StudyMember 로 사용자 재검증 ******************************/
+//
+//		// 1) 비로그인 유저의 경우 --> 로그인 페이지
+//		if (id.equals("anonymousUser")) {
+//			
+//			log.info("----------------[ Anonymous user ]----------------");
+//			
+//			out.println("<script>alert('로그인 후 신청할 수 있어요!'); window.location.href='/study/pleaseLogin/?pathname=" + pathname + "';</script>");
+////			out.println("<script>alert('로그인 후 신청할 수 있어요!');</script>");
+//			out.flush();
+//			
+////			 return "redirect:/study/pleaseLogin/?pathname=" + pathname;
+//			return "redirect:" + pathname;
+//			
+//		} else {
+//			
+//			StudyMember history = prejoin(studyId, id);
+//			
+//			if(history != null) {
+//				// 2) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우
+//				
+//				String studyMemberStatusCode = history.getStudyMemberStatusCode().getStudyMemberStatusCode();
+//				String alert = "";
+//				
+//				switch (studyMemberStatusCode) {
+//				case "WA":
+//					alert = "승인 대기중인 스터디입니다.";
+//					break;
+//				case "ME":
+//				case "LE":
+//					alert = "이미 가입된 스터디입니다.";
+//					break;
+//				case "EX":
+//				case "DE":
+//					alert = "가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.";
+//					break;
+//				}
+//				log.info("----------------[ User is rejected ]----------------");
+//				
+//				out.println("<script>alert('" + alert + "'); window.location.href='/index'</script>");
+//				out.flush();
+//				
+////				 return "redirect:/index";	//java.lang.IllegalStateException: Cannot call sendRedirect() after the response has been committed
+//				return "redirect:" + pathname;
+//				
+////			} else {
+////				// 3) 가입 이력이 없는 경우 --> 가입 페이지
+////
+////				log.info("----------------[ User is a new studyMember ]----------------");
+////				
+////				out.println("<script>var answer = confirm('이 스터디에 가입하시겠어요?'); "
+////						+ "if(answer) { window.location.href = " + str + "/study/join/" + studyId + "?id=" + id + "; "
+////						+ "} else { return; }</script>");
+////				out.flush();
+//////				return new ModelAndView("redirect:/helpInfo/update");
+//				
+//			}		
+//		}
+//		
+//		log.info("화ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ인");
+//		
+//		/*************************  *************************/
+//		
+//		/* 1. 결제 후 매핑되는 경우 */
+//		if(pathname.indexOf("/pay") != -1) {
+//			
+//			log.info("-------------------- case 1 --------------------");
+//			saveStudyMember(id, studyId);
+//			//save payment
+//			
+//			if(study.getHasLeveltest() == 1) {
+//				List<LeveltestResponse> leveltestResponses = (List<LeveltestResponse>) session.getAttribute("leveltestResponses");
+//				
+//				if(leveltestResponses.get(0).getStudyId().equals(studyId)) {
+//					lrr.saveAll(leveltestResponses);
+//					session.removeAttribute("leveltestResponses");
+//				}
+//			}
+//			
+//			return "/study/join/confirm";
+//			
+//		}
+//		/* 2. 레벨테스트 응시 후 매핑되는 경우 */
+//		else if(pathname.indexOf("/leveltest") != -1) {
+//
+//			List<LeveltestResponse> leveltestResponses = leveltestResponseList.getLeveltesResponses();
+//
+//			
+//			/* 2-1. 프리미엄 스터디 --> 결제 페이지 */
+//			if(study.getTypeCode().getTypeCode() == "P") {
+//				
+//				log.info("-------------------- case 2-1 --------------------");
+//				
+//				session.setAttribute("leveltestResponses", leveltestResponses);
+//				// session.timeout 확인 --> 문제 발생 시 스크립트단에서 처리할 것
+//				// html 에 새로 입력 버튼 추가
+//				
+//				// memberpointrepository 에서 사용자의 포인트 정보 조회 --> model 에 add
+//				model.addAttribute("study", study);	//출력을 위해 추가
+//				
+//				return "/study/join/pay";
+//				
+//			} 
+//			/* 2-2. 일반 스터디 --> 가입 완료 */
+//			else {
+//				
+//				log.info("-------------------- case 2-2 --------------------");
+//
+//				saveStudyMember(id, studyId);
+//				lrr.saveAll(leveltestResponses);
+//				session.removeAttribute("leveltestResponses");
+//				
+//				return "/study/join/confirm";
+//				
+//			}
+//			
+//		}
+//		/* 3. 최초 매핑되는 경우 */
+//		// 이 경우가 많다면, 최상위로 위치를 이동해야 한다.
+//		else {
+//			
+//			
+//			/* 3-1. 레벨테스트 보유 --> 레벨테스트 페이지 */
+//			if(study.getHasLeveltest() == 1) {
+//				
+//				log.info("-------------------- case 3-1 --------------------");
+//
+//				List<Leveltest> leveltestList = lr.findByStudyId(studyId);
+//				model.addAttribute("leveltestList", leveltestList);
+//				
+//				return "/study/join/leveltest";
+//				
+//			} 
+//			/* 3-2. 프리미엄 스터디 --> 결제 페이지 */
+//			else if(study.getTypeCode().getTypeCode() == "P") {
+//
+//				log.info("-------------------- case 3-2 --------------------");
+//
+//				// memberpointrepository 에서 사용자의 포인트 정보 조회 --> model 에 add
+//				model.addAttribute("study", study);
+//				
+//				return "/study/join/pay";
+//				
+//			} 
+//			/* 레벨테스트가 미등록된 일반 스터디 */
+//			else {
+//				
+//				log.info("-------------------- case 3-3 --------------------");
+//				
+//				saveStudyMember(id, studyId);
+//				
+//				return "/study/join/confirm";
+//				
+//			}
+//		}
+//	}
+	
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	private void saveStudyMember(String id, String studyId) {
 //	private void saveStudyMember(StudyMember studyMember, String studyId) {
 
@@ -725,18 +970,21 @@ public class StudyController {
 		// studyMemberStatusCD 확인하기
 		log.info("-------------------- studyMember saved --------------------");
 
+		// [Request processing failed; nested exception is org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query] with root cause
 		sr.plusEnrollActual(studyId);
 		log.info("-------------------- study enrollActual updated --------------------");
 	}
 	
 	
 	@RequestMapping("/pleaseLogin")
-	public String pleaseLogin(@RequestParam String pathName) {
+	public String pleaseLogin(@RequestParam String pathname) {
+		
+		log.info("pathname = " + pathname);
 		
 		// 참고:  https://best421.tistory.com/53
 		// 오류:  org.thymeleaf.exceptions.TemplateInputException: Error resolving template [/study/detail/BO00002], template might not exist or might not be accessible by any of the configured Template Resolvers
-		// 원본:  return pathName;
-		return "redirect:" + pathName;
+		// 원본:  return pathname;
+		return "redirect:" + pathname;
 	}
 
 	@RequestMapping("/review")
