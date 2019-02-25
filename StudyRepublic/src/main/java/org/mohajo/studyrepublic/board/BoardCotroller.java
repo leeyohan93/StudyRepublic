@@ -958,29 +958,17 @@ public class BoardCotroller {
 	@ResponseBody
 	public int boardReport(Model model, String id,String target,String reportTypeCD,int reportWhyCD,String content) {
    
-     log.info(id);
-     log.info(target);
-     log.info(reportTypeCD);
-     log.info(reportWhyCD+"");
-     log.info(content);
-//     ReportTypeCD reportType = new ReportTypeCD();
-//     reportType.setReportTypeCode(reportTypeCD);
-//     log.info(reportType.toString());
-//     ReportWhyCD reprotWhy = new ReportWhyCD();
-//     reprotWhy.setReportWhyCode(reportWhyCD);
-//     log.info(reprotWhy.toString());
-     log.info("=============================================");
+  
+     
      
      Report report = new Report();
      report.setId(id);
      report.setTarget(target);
-//     report.setReportTypeCD(reportType);
-//     report.setReportWhyCD(reprotWhy);
+
      report.setReportTypeCD(new ReportTypeCD(reportTypeCD));
      report.setReportWhyCD(new ReportWhyCD(reportWhyCD));
      report.setContent(content);
      log.info(report.toString());
-     log.info("=============================================");
      ReportRepository.save(report);
      
 	      

@@ -35,11 +35,11 @@ public class Report {
 	private int reportId;
 	private String id;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="REPORT_WHY_CODE")
 	private ReportWhyCD reportWhyCD;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="REPORT_TYPE_CODE")
 	private ReportTypeCD reportTypeCD;
 	
