@@ -38,8 +38,9 @@ public class ChatController {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		Member member = memberRepository.findById(id).get();
+		
 		model.addAttribute("id", id);
+		Member member = memberRepository.findById(id).get();
 		model.addAttribute("member", member);
 
 

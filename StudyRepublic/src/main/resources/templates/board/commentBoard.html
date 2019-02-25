@@ -276,19 +276,19 @@ $(document).ready(function(){
 	        var boardType = $('#boardType').val();
 
 	       if (boardType == ''){
- 				swal("게시판을 선택해주세요!","");
+	    	   Swal.fire("게시판을 선택해주세요!","");
 	    	   
 	    	   return false;
 	       }
 	       else if (boardTitle == ''){
-	    	   swal("제목을 입력해주세요 !","");
+	    	   Swal.fire("제목을 입력해주세요 !","");
 	    	   
 	    	   return false;
 	       }
 	       
 
 	       else if ( smarteditor == ""  || smarteditor == null || smarteditor == '&nbsp;' || smarteditor == '<p>&nbsp;</p>')  {
-	        	swal("내용을 입력해주세요 !","");
+	    	   Swal.fire("내용을 입력해주세요 !","");
 	        	editor_object.getById["smarteditor"].exec("FOCUS"); //포커싱
 	             return false;
 	        }

@@ -3,7 +3,6 @@
  */
 package org.mohajo.studyrepublic.domain;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -19,8 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,13 +36,14 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "requestboard")
-public class RequestBoard{
+public class RequestBoard extends Board{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "requestboard_id")
 	private int requestBoardId;
 
+	@Column(insertable=false, updatable=false)
 	protected String id;
 	protected String title;
 	protected String content;
@@ -60,14 +58,18 @@ public class RequestBoard{
 	@Column(name = "replycount")
 	protected int replyCount;
 
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="requestboard_id")
-	private List<RequestBoardReply> requestBoardReply;
 
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="requestboard_id")
-	private List<RequestBoardFile> requestBoardFile;
+	private List<RequestBoardReply> requestBoardReply;
 	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="requestboard_id")
+	private List<RequestBoardFile> requestBoardFile;
+
+	
+	
+
 	@ManyToOne
     @JoinColumn(name="id",insertable=false, updatable=false)
 	protected Member member;

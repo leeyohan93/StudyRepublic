@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.CreationTimestamp;
+
 
 import lombok.Data;
 import lombok.Getter;
@@ -49,7 +49,6 @@ public class FreeBoard extends Board{
 
 	@Column(insertable=false, updatable=false)
 	protected String id;
-
 	protected String title;
 	protected String content;
 
@@ -75,6 +74,7 @@ public class FreeBoard extends Board{
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="freeboard_id")
 	private List<FreeBoardFile> freeBoardFile;
+	
 	
 
 	@ManyToOne

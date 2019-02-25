@@ -20,10 +20,9 @@
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	
 <style>
 #beforeAfter {
 	padding: 0px !important;
@@ -173,25 +172,89 @@ resize: none;
   text-align: right;
   margin-top: 10px;
 }
+
+/* 신고모달 css */
+.reportOption{
+ text-align: center;
+ width: 40%;
+ float: left;
+ font-weight: bold;
+}
+#reportBody{
+ border: 1px solid #ccc;
+ padding: 5px;
+}
+.reportContent{
+text-align: center;
+ width: 59.5%;
+ float: right;
+}
+#reportClose{
+    padding: 9px;
+    height: 40px;
+    margin: 0px;
+        width: 36px;
+}
+#reprotContentOption{
+    height: 93px;
+}
+#reportHeader{
+padding: 1.5rem 40px 1rem;
+font-weight: bold;
+}
+#reportForm{
+margin: 0px;
+}
+#reportForm input{
+ border: 0.5px solid;
+ border-radius: 3px;
+ margin: 0.6px;
+}
+#reportForm select{
+    border: 1px solid;
+    border-radius: 3px;
+    height: 50px;
+        padding-left: 40px;
+}
+#reportForm textarea{
+height: 90px !important;
+    border: 1px solid;
+    padding: 10px;
+    margin-top: 2px;
+    border-radius: 3px;
+    text-align: left;
+}
+#reportCancel,#reportRegister{
+ background-color: white;
+	color: rgb(66, 161, 226) !important;
+	text-align: center;
+	display: inline-block;
+	margin: 0px;
+	cursor: pointer;
+	padding: 9px 2px 2px 2px;
+	width: 100px;
+	height: 50px;
+	border: 1px solid ;
+	border-radius: 3px;
+	margin: 5px;
+	font-size: 19px;
+
+}
+.commentModifyBtn{
+    height: 62px;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+}
+#reportRegister{
+
+}
 </style>
 <body>
 
 	<div id="main" layout:fragment="main">
      
 
-			<!-- 이전글 다음글 -->
-		<div class="inner" id="beforeAfter">
-
-			<a class="btn" role="button" id="goBeforeInquirePage"
-				name="goBeforeInquirePage"
-				th:href="@{'goBeforeInquirePage'(inquireBoardId=${inquireBoard.inquireBoardId})}">이전글
-				▼</a> <a class="btn" role="button" id="goAfterInquirePage"
-				name="goAfterInquirePage"
-				th:href="@{'goAfterInquirePage'(inquireBoardId=${inquireBoard.inquireBoardId})}">다음글
-				▲</a>
-		</div>
-
-		<!-- 이전글 다음글 끝-->
+		
 
 		<div class="inner" id="viewForm">
 			<!-- 게시글내용 시작 -->
@@ -204,7 +267,7 @@ resize: none;
 			<!--게시판명 끝  -->
 
 
-			<!--아이디 조회수 추천 날짜 파일업로드 -->
+			<!--아이디 조회수  날짜  -->
 			<div id="viewRow2">
 			   <img id="chatImgProfile" th:src="@{'/member_image/'+${inquireBoard.member.profileSaveName}}" />
 			   <span id = "viewRow22"> 
@@ -213,23 +276,23 @@ resize: none;
 				<span name="date" id="viewBoardDate">[[${#dates.format(inquireBoard.date,
 				'yyyy-MM-dd HH:mm')}]]</span>
 				</span>
-             
+				
+				 
           
-			<!--아이디 조호수 추천 날짜 파일업로드 끝  -->
+			<!--아이디 조회수 날짜  끝  -->
 
 
-			<!--글내용 신고 추천 -->
+			<!--글내용 신고  -->
 			<div class="contentArea">
 
 				<div name="content" id="content" th:utext="${inquireBoard.content}"
 					readonly></div>
 				<div id="likeReportForm">
-					<a class="btn" role="button" id="likeCountBtn" name="likeCountBtn">추천&nbsp&nbsp<span
-						id="likeCount" name="likeCount"></span></a> <a class="btn"
+					 <a class="btn"
 						role="button" id="viewRepotBtn" data-toggle="modal"
 						data-target="#reportModal">신고</a>
 				</div>
-				<!--글내용 신고 추천 끝  -->
+				<!--글내용 신고 끝  -->
 				<!--  댓글  -->
                 
 				
@@ -283,25 +346,40 @@ resize: none;
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h3>신고하기</h3>
-							<br>
-							<p>신고사유 선택 후 상세한 신고 내용을 함꼐 작성해 주시면 확인에 큰 도움이 됩니다.</p>
-							<button class="close" data-dismiss="modal">&times;</button>
+						  <div>
+							<h3 id= "reportHeader">신고하기</h3>
+							</div>
+							
+							<button class="close" id="reportClose" data-dismiss="modal">&times;</button>
 						</div>
-						<div class="modal-body" style="text-align: center;">
-							<form>
-								<input class="reportContent" type="text" value="신고자" readonly>
-								<input class="reportContent" name="id" type="text"
-									th:value="${inquireBoard.Id}" readonly> <br> <input
-									class="reportContent" type="text" value="신고일" readonly>
-								<input class="reportContent" name="date" type="text"
+						<div class="modal-body" id="reportBody" style="text-align: center;">
+							<form id="reportForm">
+							  <input type="hidden" name = "reportTypeCD" value="inquire">
+						
+							   <input type="hidden" name = "id" th:value="${memberId}">
+							    <input type="hidden" name ="target" id="reportTarget" th:value="${inquireBoard.member.id}">
+							<div>
+								<input class="reportOption" type="text" value="신고자" readonly>
+								<input class="reportContent" name="idNickname" type="text"
+									th:value="${session.nickname}" readonly>
+									</div>
+									<div>
+									 <input
+									class="reportOption" type="text" value="신고일" readonly>
+						<input class="reportContent" name="date" type="text"
 									th:value="${#dates.format(inquireBoard.date,'yyyy-MM-dd HH:mm')}"
-									readonly> <br> <input class="reportContent"
+									readonly> 
+									</div>
+									<div>
+									<input class="reportOption"
 									type="text" value="신고대상자" readonly> <input
-									class="reportContent" name="target" type="text"
-									th:value="${inquireBoard.Id}" readonly> <br> <input
-									class="reportContent" type="text" value="신고유형" readonly>
-								<select id="reportWhyCD" name="reportWhyCD">
+									class="reportContent" name="targetNickname" type="text"
+									th:value="${inquireBoard.member.nickname}" readonly> 
+									</div>
+									<div>
+									 <input
+									class="reportOption" type="text" value="신고유형" readonly>
+								<select class="reportContent" id="reportWhyCD" name="reportWhyCD">
 									<option value="1">영리목적 및 홍보성</option>
 									<option value="2">불법정보</option>
 									<option value="3">음란성 및 선정성</option>
@@ -309,14 +387,16 @@ resize: none;
 									<option value="5">개인정보노출</option>
 									<option value="6">반복게시 및 도배</option>
 									<option value="7">기타</option>
-								</select> <br> <input class="reportContent" type="text" value="신고내용"
-									readonly> <input class="reportContent" name="content"
-									type="text">
+								</select> 
+                                 </div>
+                                 <div>
+ 									<input class="reportOption" type="text" value="신고내용" id="reprotContentOption" readonly> <textarea class="reportContent" id="reportContent" name="content" placeholder="신고내용을 작성해주세요."
+									></textarea>
+									</div>
 						</div>
-						<div class="modal-footer">
-							<button class="btn btn-default" data-dismiss="modal" type=button>취소</button>
-							<input class="btn btn-default" type="submit" value="신고하기"
-								data-toggle="model" data-target="#reportConfirm">
+						<div class="modal-footer" id="reportFooter">
+							<a class="btn" id="reportCancel" data-dismiss="modal">취소</a>
+							<a class="btn" id="reportRegister" data-toggle="model" data-target="#reportConfirm">신고하기</a>
 							</form>
 						</div>
 
@@ -325,22 +405,7 @@ resize: none;
 
 			</div>
 
-			<!--신고 modal 끝  -->
-
-			<!--                 신고 modal확인창  -->
-			<!--                 <div class="modal fade" id="reportConfirm"> -->
-			<!--                 <div class="modal-dialog"> -->
-			<!--                 <div class="content"> -->
-			<!--                 <div class="modal-body"> -->
-			<!--                 <p>신고처리 가되었습니다.</p> -->
-			<!--                 </div> -->
-
-			<!--                 </div> -->
-			<!--                 </div> -->
-
-			<!--                 </div> -->
-
-			<!--신고 modal확인창 끝  -->
+			<!-- 신고 모달 끝 -->
 
 			
 
@@ -474,8 +539,8 @@ resize: none;
             	
             	 console.log([[${memberId}]]);
                  a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                 a += '<div class="commentInfo'+value.inquireBoardReplyId+'"><img class="commentProfile" src="/member_image/'+value.member.profileSaveName+'" > '+value.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleTimeString(); 
-                 a += '<a onclick="commentSecond('+value.inquireBoardReplyId+');"> 답글 </a>';
+                 a += '<div class="commentInfo'+value.inquireBoardReplyId+'"><img class="commentProfile" src="/member_image/'+value.member.profileSaveName+'" > '+value.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
+          				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3"); 
                  if(value.member.id == [[${memberId}]])
                  {
                  a += '<a onclick="commentUpdate('+value.inquireBoardReplyId+',\''+value.content+'\');"> 수정 </a>';
@@ -551,23 +616,48 @@ resize: none;
      });
  }
  
- //답글 등록
- function commentSecond(inquireBoardReplyId){
-     
-	 var a ='';
-     
-     a += '<div class="input-group">';
-     a += '<input type="text" class="form-control" name="content_'+inquireBoardReplyId+'" value="'+content+'"/>';
-     a += '<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="commentUpdateProc('+inquireBoardReplyId+');">등록</button> </span>';
-     a += '</div>';
-     
-     $('.commentSecondList').html(a);
-	 
- }
+
  //첨부파일 토글
   $(".fileAccordion").click(function(){
     $(".fileForm").toggle();
   });
+ 
+
+  //신고하기
+   $('#reportRegister').click(function(){
+   var reportData = $("#reportForm").serialize(); 
+ 	  console.log("reportData:" + reportData);
+ 	  
+ 	  if($('#reportTarget').val()==[[${memberId}]]){
+ 		 Swal.fire("내가 작성한 글입니다.","");
+ 	  }else if($('#reportWhyCD').val()== ""){
+ 		 Swal.fire("신고유형을 선택해주세요.","");
+ 	  }else if($('#reportContent').val()== "" || $('#reportContent').val() == null || $('#reportContent').val() == '&nbsp;'){
+ 		 Swal.fire("신고내용을 입력해주세요.","");
+ 	  }
+ 	  else {
+ 		  reportInsert(reportData);
+ 	  }
+  }); 
+
+   function reportInsert(reportData){
+ 	  console.log(reportData);
+ 	  
+ 	  $.ajax({
+ 			url : '/board/report',
+ 			type :'post',
+ 			data : reportData,
+ 			success : function(){
+ 				console.log("성공");
+ 				Swal.fire("신고 처리 되었습니다.","");
+ 				$("#reportModal .close").click()
+ 			},
+ 				
+ 			error :function(){
+ 				console.log("실패");
+ 			}
+ 		});
+   };
      </script>
      </div>
     

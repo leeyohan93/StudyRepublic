@@ -21,18 +21,26 @@ import org.apache.catalina.startup.ClassLoaderFactory.Repository;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.validator.internal.IgnoreForbiddenApisErrors;
+import org.mohajo.studyrepublic.domain.BoardLike;
 import org.mohajo.studyrepublic.domain.FreeBoard;
 import org.mohajo.studyrepublic.domain.FreeBoardFile;
 import org.mohajo.studyrepublic.domain.InquireBoard;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
+import org.mohajo.studyrepublic.domain.Report;
+import org.mohajo.studyrepublic.domain.ReportTypeCD;
+import org.mohajo.studyrepublic.domain.ReportWhyCD;
 import org.mohajo.studyrepublic.domain.RequestBoard;
+import org.mohajo.studyrepublic.domain.RequestBoardFile;
 import org.mohajo.studyrepublic.domain.Tutor;
+import org.mohajo.studyrepublic.repository.BoardLikeRepository;
 import org.mohajo.studyrepublic.repository.FreeBoardFileRepository;
 import org.mohajo.studyrepublic.repository.FreeBoardRepository;
 import org.mohajo.studyrepublic.repository.InquireBoardRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.ReportRepository;
+import org.mohajo.studyrepublic.repository.RequestBoardFileRepository;
 import org.mohajo.studyrepublic.repository.RequestBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -50,6 +58,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,15 +92,26 @@ public class BoardCotroller {
 	
 	@Autowired
 	FreeBoardFileRepository freeBoardFileRepository;
+	
+	@Autowired
+	RequestBoardFileRepository requestBoardFileRepository;
+	
+	@Autowired
+	ReportRepository ReportRepository;
+	
+	@Autowired
+	BoardLikeRepository boardLikeRepository;
 
 
 	//자유게시판 글목록 페이징
 	@GetMapping("/listFreeBoard")
 	public void listFreeBoard(@ModelAttribute("pageDTO") PageDTO pageDTO, Model model) {
        	       
+		
 		log.info(pageDTO.toString());
 		Pageable page = pageDTO.makePageable(0, "freeBoardId");
 		Pageable noticePage = pageDTO.noticeMakePageable("notice", "freeBoardId");
+		
 		
 		Page<FreeBoard> list = freeBoardRepository.findAll(freeBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),noticePage); 
 		model.addAttribute("list", new PageMaker<>(list));
@@ -105,7 +125,7 @@ public class BoardCotroller {
 
 		Pageable page = pageDTO.makePageable(0, "requestBoardId");
 		Pageable noticePage = pageDTO.noticeMakePageable("notice", "requestBoardId");
-		Page<RequestBoard> list = requestBoardRepository.findAll(requestBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword()),noticePage);
+		Page<RequestBoard> list = requestBoardRepository.findAll(requestBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),noticePage);
 
 		model.addAttribute("list", new PageMaker<>(list));
 		model.addAttribute("boardName", "스터디 요청게시판");
@@ -117,7 +137,7 @@ public class BoardCotroller {
 	public void listInquireBoard(@ModelAttribute("pageDTO") PageDTO pageDTO, Model model) {
 
 		Pageable page = pageDTO.makePageable(0, "commentGroup");
-		Page<InquireBoard> list = inquireBoardRepository.findAll(inquireBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword()),page);
+		Page<InquireBoard> list = inquireBoardRepository.findAll(inquireBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),page);
 
 		model.addAttribute("list", new PageMaker<>(list));
 		model.addAttribute("boardName", "문의게시판");
@@ -126,51 +146,19 @@ public class BoardCotroller {
 
 	//글쓰기 폼으로 이동
 	@GetMapping("/writeBoard")
-	public String writeBoard(Model model) {
+	public String writeBoard(Model model, String boardType) {
         
+		log.info(boardType);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		Member member = memberRepository.findById(id).get();
 	    model.addAttribute("member",member);
+	    model.addAttribute("boardType",boardType);
 	      
 		return "board/write";
 
 	}
 
-
-	//게시판 글등록
-/*	@PostMapping("/registerBoard")
-	public String registerFreeBoard(FreeBoard freeBoard,RequestBoard requestBoard,InquireBoard inquireBoard,String boardType) {
-		 
-
-	      
-		log.info(boardType);
-		
-		switch(boardType) {		
-		
-		case "freeBoard":
-		    
-			freeBoardRepository.save(freeBoard);	
-		
-	
-			return "redirect:/board/listFreeBoard";
-		
-		case "requestBoard":
-			requestBoardRepository.save(requestBoard);
-			return "redirect:/board/listRequestBoard";
-			
-		case "inquireBoard":
-			inquireBoardRepository.save(inquireBoard);
-			InquireBoard inquireBoardGroup= inquireBoardRepository.findById(inquireBoard.getInquireBoardId()).get();
-			inquireBoardGroup.setCommentGroup(inquireBoardGroup.getInquireBoardId());
-			inquireBoardRepository.save(inquireBoardGroup);
-			
-			return "redirect:/board/listInquireBoard";
-		}
-			
-		return "redirect:/board/listFreeBoard";
-		
-	}*/
 	
 	//게시판 글등록 파일업로드
 	@PostMapping("/registerBoard")
@@ -245,6 +233,7 @@ public class BoardCotroller {
 		List<File> uploadedFiles = new ArrayList<File>();
 		List<String> failedFiles = new ArrayList<String>();
 		
+		
 		for (MultipartFile fileData : uploadFileList) {
 			
 			//원래 파일 이름
@@ -265,6 +254,10 @@ public class BoardCotroller {
 					
 					uploadedFiles.add(serverFile);
 					log.info("serverFile :" + serverFile);
+					log.info("boardType:"+boardType);
+					switch(boardType) {
+					
+					case "freeBoard":
 					
 					FreeBoardFile freeBoardFile = new FreeBoardFile();
 					freeBoardFile.setFreeBoardId(freeBoard.getFreeBoardId());
@@ -281,7 +274,27 @@ public class BoardCotroller {
 					freeBoardFile.setPartUrl(partUrl);
 					log.info("partUrl : " + partUrl);
 					freeBoardFileRepository.save(freeBoardFile);
+					break;
 					
+					case "requestBoard":
+					RequestBoardFile requestBoardFile = new RequestBoardFile();
+					requestBoardFile.setRequestBoardId(requestBoard.getRequestBoardId());
+					requestBoardFile.setOriginName(fileOriginName);
+					requestBoardFile.setUploadPath(uploadRootPath);
+					requestBoardFile.setSaveName(fileSaveName);
+						
+					String fullUrl2 = uploadRootPath + "\\" + fileSaveName;
+					log.info("fullUrl2 : " + fullUrl2);
+					requestBoardFile.setFullUrl(fullUrl2);
+						
+					String partUrl2 = "\\boardFileUpload\\" + fileSaveName;
+						
+					requestBoardFile.setPartUrl(partUrl2);
+					log.info("partUrl2 : " + partUrl2);
+					log.info(requestBoardFile.toString());
+					requestBoardFileRepository.save(requestBoardFile);	
+					break;
+				    }
 					
 				}catch (Exception e) {
 					log.info("Error file :" + name );
@@ -293,9 +306,9 @@ public class BoardCotroller {
 	}
 	
 	
-	//파일다운로드
-	@GetMapping("/boardFile")
-	public String boardFile(HttpServletRequest request,String fullUrl, HttpServletResponse response) throws Exception {
+	//자유게시판 파일다운로드
+	@GetMapping("/freeBoardFile")
+	public String freeBoardFile(HttpServletRequest request,String fullUrl, HttpServletResponse response) throws Exception {
 		
 		log.info("freeBoardId : " + fullUrl);
 		FreeBoardFile freeBoardFile = freeBoardFileRepository.findByfullUrl(fullUrl);
@@ -321,6 +334,46 @@ public class BoardCotroller {
 			fileName = URLEncoder.encode(freeBoardFile.getOriginName(), "UTF-8");
 		}else {
 			fileName = new String(freeBoardFile.getOriginName().getBytes("UTF-8"),"iso-8859-1" );
+		}
+		
+		response.setContentType("applicaiton/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+		OutputStream outputStream = response.getOutputStream();
+		FileCopyUtils.copy(in, outputStream);
+		in.close();
+		outputStream.flush();
+		outputStream.close();
+		return "board/viewBoard";
+	}
+	
+	//스터디요청게시판 파일다운로드
+	@GetMapping("/requestBoardFile")
+	public String requestBoardFile(HttpServletRequest request,String fullUrl, HttpServletResponse response) throws Exception {
+		
+		log.info("requestBoardId : " + fullUrl);
+		RequestBoardFile reqeustBoardFile = requestBoardFileRepository.findByfullUrl(fullUrl);
+		log.info( "boardFileFullUrl :" + reqeustBoardFile);
+		String uploadRootPath = request.getServletContext().getRealPath("/");
+		log.info("uploadRootPath :" + uploadRootPath);
+		
+		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
+		
+		Resource resource = defaultresourceloader.getResource("file:src\\main\\resources\\static" + reqeustBoardFile.getPartUrl());
+		
+		log.info("resource :" + resource);
+		log.info("resource path :" + resource.getFile().getAbsolutePath());
+		
+		File file = new File(resource.getFile().getAbsolutePath());
+		log.info("file :" + file);
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+		
+		String header =  request.getHeader("User-Agent");
+		String fileName;
+		
+		if((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
+			fileName = URLEncoder.encode(reqeustBoardFile.getOriginName(), "UTF-8");
+		}else {
+			fileName = new String(reqeustBoardFile.getOriginName().getBytes("UTF-8"),"iso-8859-1" );
 		}
 		
 		response.setContentType("applicaiton/octet-stream");
@@ -381,57 +434,119 @@ public class BoardCotroller {
 		return freeBoardFileInfo;
 
 	}
-
-	//글확인 및 조회수
-	@GetMapping("/viewBoard")
-    public String viewFreeBoard(String boardType,FreeBoard freeBoard,RequestBoard requestBoard,InquireBoard inquireBoard, Model model) {
-		 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    String id = auth.getName();
-		    
-	    model.addAttribute("memberId",id);
-	    
-
-		switch(boardType) {
-		case "freeBoard" : 
-		
-			FreeBoard freeBoardHit = freeBoardRepository.findById(freeBoard.getFreeBoardId()).get();
-			freeBoardHit.setHit(freeBoardHit.getHit() + 1);
-			freeBoardRepository.save(freeBoardHit);
-			freeBoardRepository.findById(freeBoard.getFreeBoardId()).ifPresent(board-> model.addAttribute("freeBoard", board));
-			int fileCount = freeBoardRepository.fileCount(freeBoard.getFreeBoardId());
-			model.addAttribute("fileExist", fileCount);
+	
+	//요청게시판 파일업로드 삭제
+		@GetMapping("/requestBoardFileDelete")
+		@ResponseBody
+		public List<RequestBoardFile> requestBoardFileDelete(int requestBoardFileId,int requestBoardId) throws Exception {
 			
-			return "board/viewFreeBoard";
-		
-		case "requestBoard":
-			RequestBoard requestBoardHit = requestBoardRepository.findById(requestBoard.getRequestBoardId()).get();
-			requestBoardHit.setHit(requestBoardHit.getHit() + 1);
-			requestBoardRepository.save(requestBoardHit);
-			requestBoardRepository.findById(requestBoard.getRequestBoardId()).ifPresent(board-> model.addAttribute("requestBoard", board));
-			int fileCount2 = requestBoardRepository.fileCount(requestBoard.getRequestBoardId());
-			model.addAttribute("fileExist", fileCount2);
-			return "board/viewRequestBoard";
+			log.info("requestBoardFileId:" +requestBoardFileId);
+			log.info("requestBoardId:" +requestBoardId);
+			log.info("파일삭제 시작");
+			RequestBoardFile requestBoardFile = requestBoardFileRepository.findById(requestBoardFileId).get();
+			requestBoardFileRepository.deleteById(requestBoardFileId);
+			final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 			
-		case "inquireBoard":
-			InquireBoard inquireBoardHit = inquireBoardRepository.findById(inquireBoard.getInquireBoardId()).get();
-			inquireBoardHit.setHit(inquireBoardHit.getHit() + 1);
-			inquireBoardRepository.save(inquireBoardHit);
-			inquireBoardRepository.findById(inquireBoard.getInquireBoardId()).ifPresent(board-> model.addAttribute("inquireBoard", board));
-//			int fileCount3 = inquireBoardRepository.fileCount(inquireBoard.getInquireBoardId());
-//			model.addAttribute("fileExist", fileCount3);
-			return "board/viewInquireBoard";
+			Resource resource = defaultresourceloader.getResource("file:src\\main\\resources\\static" + requestBoardFile.getPartUrl());
+			
+			//파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
+			log.info("resource :" + resource); 
+			
+			log.info("resource 경로 :" + resource.getFile().getAbsolutePath());
+			
+			File file = new File(resource.getFile().getAbsolutePath());
+			
+			log.info("file :" + file);
+			
+			if(file.exists()) {
+				if(file.isDirectory()) {
+					File[] files = file.listFiles();
+					for (int i=0; i<file.length(); i++) {
+						if(files[i].delete()) {
+							log.info(files[i].getName() + "삭제성공");
+						}else {
+							log.info(files[i].getName() + "삭제실패");
+						}
+					}
+				}
+				if(file.delete()) {
+					log.info("파일삭제 성공");
+				}else {
+					log.info("파일삭제 실패");
+				}
+			}else {
+				log.info("파일이 존재하지 않습니다");
+			}
+			
+			RequestBoard requestBoard = requestBoardRepository.findById(requestBoardId).get();
+			List<RequestBoardFile> requestBoardFileInfo = requestBoard.getRequestBoardFile();
+			return requestBoardFileInfo;
+
 		}
+
+		//글확인 및 조회수
+		@GetMapping("/viewBoard")
+	    public String viewFreeBoard(String boardType,FreeBoard freeBoard,RequestBoard requestBoard,InquireBoard inquireBoard, Model model) {
+			 
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    String id = auth.getName();
+		    
+			    
+		    model.addAttribute("memberId",id);
+		    
+		   try {
 			
-		return "board/viewFreeBoard";
-	}
+		
+			switch(boardType) {
+			case "freeBoard" : 
+			
+				FreeBoard freeBoardHit = freeBoardRepository.findById(freeBoard.getFreeBoardId()).get();
+				freeBoardHit.setHit(freeBoardHit.getHit() + 1);
+				freeBoardRepository.save(freeBoardHit);
+				freeBoardRepository.findById(freeBoard.getFreeBoardId()).ifPresent(board-> model.addAttribute("freeBoard", board));
+				int fileCount = freeBoardRepository.fileCount(freeBoard.getFreeBoardId());
+				model.addAttribute("fileExist", fileCount);
+				
+				return "board/viewFreeBoard";
+			
+			case "requestBoard":
+				RequestBoard requestBoardHit = requestBoardRepository.findById(requestBoard.getRequestBoardId()).get();
+				requestBoardHit.setHit(requestBoardHit.getHit() + 1);
+				requestBoardRepository.save(requestBoardHit);
+				requestBoardRepository.findById(requestBoard.getRequestBoardId()).ifPresent(board-> model.addAttribute("requestBoard", board));
+				int fileCount2 = requestBoardRepository.fileCount(requestBoard.getRequestBoardId());
+				model.addAttribute("fileExist", fileCount2);
+				return "board/viewRequestBoard";
+				
+			case "inquireBoard":
+				InquireBoard inquireBoardHit = inquireBoardRepository.findById(inquireBoard.getInquireBoardId()).get();
+				inquireBoardHit.setHit(inquireBoardHit.getHit() + 1);
+				inquireBoardRepository.save(inquireBoardHit);
+				inquireBoardRepository.findById(inquireBoard.getInquireBoardId()).ifPresent(board-> model.addAttribute("inquireBoard", board));
+				return "board/viewInquireBoard";
+			}
+				
+		   } catch (Exception e) {
+			   FreeBoard freeBoardHit = freeBoardRepository.findById(freeBoard.getFreeBoardId()).get();
+				freeBoardHit.setHit(freeBoardHit.getHit() + 1);
+				freeBoardRepository.save(freeBoardHit);
+				freeBoardRepository.findById(freeBoard.getFreeBoardId()).ifPresent(board-> model.addAttribute("freeBoard", board));
+				int fileCount = freeBoardRepository.fileCount(freeBoard.getFreeBoardId());
+				model.addAttribute("fileExist", fileCount);
+				
+				return "board/viewFreeBoard";
+			}  
+		      
+			return "board/viewFreeBoard";
+		}
 	
 	
 	//수정폼
 	@GetMapping("/modifyBoard")
     public String modifyBoard(String boardType,FreeBoard freeBoard,RequestBoard requestBoard,InquireBoard inquireBoard,Model model) {
     	
-
+       
+		
         switch(boardType) {
         case "freeBoard":
         	freeBoardRepository.findById(freeBoard.getFreeBoardId()).ifPresent(board-> model.addAttribute("board", board)); 
@@ -453,6 +568,8 @@ public class BoardCotroller {
 	@PostMapping("/modifyRegister")
 	public String modifyRegister(String boardType,RequestBoard requestBoard,InquireBoard inquireBoard,FreeBoard freeBoard, Model model,MultipartHttpServletRequest request,MultipartFile file) throws Exception {
 		
+		
+		log.info(inquireBoard.toString());
 		switch(boardType) {
 		
 		case "freeBoard":
@@ -467,18 +584,31 @@ public class BoardCotroller {
 			RequestBoard requestBoardModify = requestBoardRepository.findById(requestBoard.getRequestBoardId()).get();
 			requestBoardModify.setTitle(requestBoard.getTitle());
 			requestBoardModify.setContent(requestBoard.getContent());
-			requestBoardRepository.save(requestBoardModify);		
+			requestBoardRepository.save(requestBoardModify);
+			List<MultipartFile> uploadFileList2 = request.getFiles("file");
+			doUpload(request,uploadFileList2,freeBoard,requestBoard, inquireBoard,boardType);
 			return "redirect:/board/listRequestBoard";
-		case "inquireBoard":
-			InquireBoard inquireBoardModify = inquireBoardRepository.findById(inquireBoard.getInquireBoardId()).get();
-			inquireBoardModify.setTitle(inquireBoard.getTitle());
-			inquireBoardModify.setContent(inquireBoard.getContent());
-			inquireBoardRepository.save(inquireBoardModify);		
-			return "redirect:/board/listInquireBoard";
+
 		}
 		
 		return "redirect:/board/listFreeBoard";
 	}
+	
+	
+	//문의게시판 수정
+	@PostMapping("/modifyInquireRegister")
+	public String modifyInquireRegister(InquireBoard inquireBoard) {
+		
+		InquireBoard inquireBoardModify = inquireBoardRepository.findById(inquireBoard.getInquireBoardId()).get();
+		inquireBoardModify.setTitle(inquireBoard.getTitle());
+		inquireBoardModify.setContent(inquireBoard.getContent());
+		log.info(inquireBoardModify.toString());
+		inquireBoardRepository.save(inquireBoardModify);	
+		
+		return "redirect:/board/listInquireBoard";
+		
+	}
+	
     //삭제
 	@GetMapping("/deleteBoard")
 	public String deleteFreeBoard(String boardType,FreeBoard freeBoard,RequestBoard requestBoard,InquireBoard inquireBoard) {
@@ -506,29 +636,125 @@ public class BoardCotroller {
 		return "redirect:/board/listFreeBoard";
 	}
 	
-	//이전글로 이동
+	//자유게시판 이전글로 이동
 	@GetMapping("/goBeforeFreePage")
-	public String goBeforeFreePage(String boardType, int freeBoardId, Model model) {
+	public String goBeforeFreePage(int freeBoardId, Model model) {
 		
-		log.info(freeBoardId+"");
-		FreeBoard beforeBoard = freeBoardRepository.beForeBoard(freeBoardId);
-		log.info(beforeBoard.toString());
-        model.addAttribute("freeBoard",beforeBoard);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String id = auth.getName();
+	    model.addAttribute("memberId",id);
+	    
+		try {
+			log.info(freeBoardId+"");
+			FreeBoard beforeBoard = freeBoardRepository.beForeBoard(freeBoardId);
+			log.info(beforeBoard.toString());
+			model.addAttribute("freeBoard",beforeBoard);
+			
+			int fileCount = freeBoardRepository.fileCount(beforeBoard.getFreeBoardId());
+			model.addAttribute("fileExist", fileCount);
+			
+		} catch (Exception e) {
+			FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId).get();
+			model.addAttribute("freeBoard",freeBoard);
+			
+			int fileCount = freeBoardRepository.fileCount(freeBoard.getFreeBoardId());
+			model.addAttribute("fileExist", fileCount);
+			return "board/viewFreeBoard";
+		}
+		
 		
 		return "board/viewFreeBoard";
 		
 	}
 	
-	//다음글로 이동
-		@GetMapping("/goAfterFreePage")
-		public String goAfterFreePage(String boardType, int freeBoardId, Model model) {
+	//요청게시판 이전글로 이동
+		@GetMapping("/goBeforeRequestPage")
+		public String goBeforeRequestPage(int requestBoardId, Model model) {
 			
-			log.info(freeBoardId+"");
-			FreeBoard beforeBoard = freeBoardRepository.beAfterBoard(freeBoardId);
-			log.info(beforeBoard.toString());
-	        model.addAttribute("freeBoard",beforeBoard);
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    String id = auth.getName();
+		    model.addAttribute("memberId",id);
+		    
+			try {
+				log.info(requestBoardId+"");
+				RequestBoard beforeBoard = requestBoardRepository.beForeBoard(requestBoardId);
+				log.info(beforeBoard.toString());
+				model.addAttribute("requestBoard",beforeBoard);
+				
+				int fileCount = requestBoardRepository.fileCount(beforeBoard.getRequestBoardId());
+				model.addAttribute("fileExist", fileCount);
+				
+			} catch (Exception e) {
+				RequestBoard requestBoard = requestBoardRepository.findById(requestBoardId).get();
+				model.addAttribute("requestBoard",requestBoard);
+				
+				int fileCount = requestBoardRepository.fileCount(requestBoard.getRequestBoardId());
+				model.addAttribute("fileExist", fileCount);
+				return "board/viewRequestBoard";
+			}
+			
+			
+			return "board/viewRequestBoard";
+			
+		}
+	
+	//자유게시판 다음글로 이동
+		@GetMapping("/goAfterFreePage")
+		public String goAfterFreePage(int freeBoardId, Model model) {
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    String id = auth.getName();
+		    model.addAttribute("memberId",id);
+		    
+			try {
+				log.info(freeBoardId+"");
+				FreeBoard beAfterBoard = freeBoardRepository.beAfterBoard(freeBoardId);
+				log.info(beAfterBoard.toString());
+				model.addAttribute("freeBoard",beAfterBoard);
+				
+				int fileCount = freeBoardRepository.fileCount(beAfterBoard.getFreeBoardId());
+				model.addAttribute("fileExist", fileCount);
+				
+			} catch (Exception e) {
+				FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId).get();
+				model.addAttribute("freeBoard",freeBoard);
+				
+				int fileCount = freeBoardRepository.fileCount(freeBoard.getFreeBoardId());
+				model.addAttribute("fileExist", fileCount);
+				return "board/viewFreeBoard";
+			}
 			
 			return "board/viewFreeBoard";
+			
+		}
+		
+		//요청게시판 다음글로 이동
+		@GetMapping("/goAfterRequestePage")
+		public String goAfterRequestePage(int requestBoardId, Model model) {
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    String id = auth.getName();
+		    model.addAttribute("memberId",id);
+		    
+			try {
+				log.info(requestBoardId+"requestBoardId");
+				RequestBoard beAfterBoard = requestBoardRepository.beAfterBoard(requestBoardId);
+				log.info(beAfterBoard.toString());
+				model.addAttribute("requestBoard",beAfterBoard);
+				
+				int fileCount = requestBoardRepository.fileCount(beAfterBoard.getRequestBoardId());
+				model.addAttribute("fileExist", fileCount);
+				
+			} catch (Exception e) {
+				RequestBoard requestBoard = requestBoardRepository.findById(requestBoardId).get();
+				model.addAttribute("requestBoard",requestBoard);
+				
+				int fileCount = requestBoardRepository.fileCount(requestBoard.getRequestBoardId());
+				model.addAttribute("fileExist", fileCount);
+				return "board/viewRequestBoard";
+			}
+			
+			return "board/viewRequestBoard";
 			
 		}
 	
@@ -555,14 +781,14 @@ public class BoardCotroller {
 		case "requestBoard":			
 			Pageable page1 = pageDTO.makePageable(0, "requestBoardId");
 			Pageable noticePage2 = pageDTO.noticeMakePageable("notice", "requestBoardId");
-			Page<RequestBoard> list1 = requestBoardRepository.findAll(requestBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword()),noticePage2);
+			Page<RequestBoard> list1 = requestBoardRepository.findAll(requestBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),noticePage2);
 
 			model.addAttribute("list", new PageMaker<>(list1));
 			model.addAttribute("boardName", "스터디 요청게시판");
 			return "board/listRequestBoard";
 		case "inquireBoard":
 			Pageable page2 = pageDTO.makePageable(0, "commentGroup");
-			Page<InquireBoard> list2 = inquireBoardRepository.findAll(inquireBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword()),page2);
+			Page<InquireBoard> list2 = inquireBoardRepository.findAll(inquireBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),page2);
 
 			model.addAttribute("list", new PageMaker<>(list2));
 			model.addAttribute("boardName", "문의게시판");
@@ -580,19 +806,119 @@ public class BoardCotroller {
 		
 	}
 	
-	//추천수
+	//자유게시판 추천수
 	@PostMapping("/likeCountFreeBoard")
 	@ResponseBody
-	public int likeCountFreeBoard(int freeBoardId) {
-		
-		log.info(freeBoardId+"");
+	public int likeCountFreeBoard(int freeBoardId, 	String memberId) {
 		
 		FreeBoard freeBoardLikeCount = freeBoardRepository.findById(freeBoardId).get();
-		freeBoardLikeCount.setLikeCount(freeBoardLikeCount.getLikeCount()+1);
-		freeBoardRepository.save(freeBoardLikeCount);	
-		log.info(freeBoardLikeCount.getLikeCount()+"");
-		return freeBoardLikeCount.getLikeCount();
+		
+		//먼저 게시판에 추천여부 확인 처음이면 객체생성
+		try {
+			log.info(freeBoardId+"");
+			log.info(memberId);
+			BoardLike boardlikeList = boardLikeRepository.findBoardLike(freeBoardId, memberId);
+	       
+			log.info(boardlikeList.getLikeCount()+"");
+			//추천여부확인
+			if(boardlikeList.getLikeCount()==1) {
+			
+			
+			freeBoardLikeCount.setLikeCount(freeBoardLikeCount.getLikeCount()-1);
+			freeBoardRepository.save(freeBoardLikeCount);	
+			
+			boardlikeList.setLikeCount(0);
+			boardLikeRepository.save(boardlikeList);
+			
+			log.info(freeBoardLikeCount.getLikeCount()+"");
+			return freeBoardLikeCount.getLikeCount();
+			}
+			else {
+				
+			freeBoardLikeCount.setLikeCount(freeBoardLikeCount.getLikeCount()+1);
+			freeBoardRepository.save(freeBoardLikeCount);
+			
+			boardlikeList.setLikeCount(1);
+			boardLikeRepository.save(boardlikeList);
+			log.info(freeBoardLikeCount.getLikeCount()+"");
+			return freeBoardLikeCount.getLikeCount();
+				
+			}
+
+		//처음이면 추천객체 생성
+		} catch (Exception e) {
+			
+			BoardLike boardLike = new BoardLike();
+			boardLike.setBoardId(freeBoardId);
+			boardLike.setBoardWriter(memberId);
+			boardLike.setLikeCount(1);
+			boardLikeRepository.save(boardLike);
+			
+		
+			freeBoardLikeCount.setLikeCount(freeBoardLikeCount.getLikeCount()+1);
+			freeBoardRepository.save(freeBoardLikeCount);	
+			log.info(freeBoardLikeCount.getLikeCount()+"");
+			return freeBoardLikeCount.getLikeCount();
+		}
+
 	}
+	
+	//요청게시판 추천수
+		@PostMapping("/likeCountRequestBoard")
+		@ResponseBody
+		public int likeCountRequestBoard(int requestBoardId, String memberId) {
+			
+			RequestBoard requestBoardLikeCount = requestBoardRepository.findById(requestBoardId).get();
+			
+			//먼저 게시판에 추천여부 확인 처음이면 객체생성
+			try {
+				log.info(requestBoardId+"requestBoardId");
+				log.info("memberId :"+ memberId);
+				BoardLike boardlikeList = boardLikeRepository.findBoardLike(requestBoardId, memberId);
+		       
+				log.info(boardlikeList.getLikeCount()+"");
+				//추천여부확인
+				if(boardlikeList.getLikeCount()==1) {
+				
+				
+				requestBoardLikeCount.setLikeCount(requestBoardLikeCount.getLikeCount()-1);
+				requestBoardRepository.save(requestBoardLikeCount);	
+				
+				boardlikeList.setLikeCount(0);
+				boardLikeRepository.save(boardlikeList);
+				
+				log.info(requestBoardLikeCount.getLikeCount()+"");
+				return requestBoardLikeCount.getLikeCount();
+				}
+				else {
+					
+				requestBoardLikeCount.setLikeCount(requestBoardLikeCount.getLikeCount()+1);
+				requestBoardRepository.save(requestBoardLikeCount);
+				
+				boardlikeList.setLikeCount(1);
+				boardLikeRepository.save(boardlikeList);
+				log.info(requestBoardLikeCount.getLikeCount()+"");
+				return requestBoardLikeCount.getLikeCount();
+					
+				}
+
+			//처음이면 추천객체 생성
+			} catch (Exception e) {
+				
+				BoardLike boardLike = new BoardLike();
+				boardLike.setBoardId(requestBoardId);
+				boardLike.setBoardWriter(memberId);
+				boardLike.setLikeCount(1);
+				boardLikeRepository.save(boardLike);
+				
+			
+				requestBoardLikeCount.setLikeCount(requestBoardLikeCount.getLikeCount()+1);
+				requestBoardRepository.save(requestBoardLikeCount);	
+				log.info(requestBoardLikeCount.getLikeCount()+"");
+				return requestBoardLikeCount.getLikeCount();
+			}
+
+		}
 	
 	//문의게시판 답글폼
 	@GetMapping("/commentBoard")
@@ -624,6 +950,30 @@ public class BoardCotroller {
 		log.info(inquireBoardComment.toString());
 		
 		return "redirect:/board/listInquireBoard";
+	}
+	
+	
+	//신고하기
+	@PostMapping("/report")
+	@ResponseBody
+	public int boardReport(Model model, String id,String target,String reportTypeCD,int reportWhyCD,String content) {
+   
+  
+     
+     
+     Report report = new Report();
+     report.setId(id);
+     report.setTarget(target);
+
+     report.setReportTypeCD(new ReportTypeCD(reportTypeCD));
+     report.setReportWhyCD(new ReportWhyCD(reportWhyCD));
+     report.setContent(content);
+     log.info(report.toString());
+     ReportRepository.save(report);
+     
+	      
+		return 1;
+      
 	}
 	
 	//공지숨기기
