@@ -21,6 +21,9 @@
 <script type="text/javascript" src="./fullcalendar-3.10.0/lib/jquery.min.js"></script>
 <script type="text/javascript" src="./fullcalendar-3.10.0/fullcalendar.js"></script>
 <script type="text/javascript" src="./moment.js"></script>
+
+</head>
+<body>
 <script type="text/javascript" th:inline="javascript">
 			  	var biginfo = [];// 컨트롤러에서 가져오는값 담는 그릇 
 				var miniinfo = []; // 가져온값을 api 에 맞게 담는그릇
@@ -141,8 +144,11 @@
 	
 });
 </script>
-<body>
-<div id="calendar"></div>
+
+<div id="calendar">
+
+
+</div>
 </body>
 </html>
 

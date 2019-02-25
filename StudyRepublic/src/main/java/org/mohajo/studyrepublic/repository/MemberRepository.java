@@ -92,6 +92,10 @@ public interface MemberRepository extends JpaRepository<Member, String>, Queryds
 
     Boolean existsByEmail(String email);
 
+	/*모달 유저정보 가져오기*/
+	@Query (value = "SELECT * FROM member where id = :id", nativeQuery = true)
+	List<Member> findMemberbyId(String id);
+
 }
 
 	
