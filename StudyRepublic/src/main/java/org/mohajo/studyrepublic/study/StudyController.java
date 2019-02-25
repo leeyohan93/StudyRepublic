@@ -392,14 +392,18 @@ public class StudyController {
 		return history;
 	}
 	
+	@Transactional
 	@RequestMapping("/register")
-	public String register(@ModelAttribute Study study, @ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
+	public String register(@ModelAttribute Study study, @RequestParam String id, @ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 //	public String register(@ModelAttribute StudyView study, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 		
 		log.info("register() called...");
 		log.info("원본 = " + study.toString());
 		
-		if(!study.getMember().getGradeCD().getGradeCode().equals("T") && study.getTypeCode().getTypeCode().equals("P")) {
+		Member leader = mr.findById(id).get();
+		
+//		if(!study.getMember().getGradeCD().getGradeCode().equals("T") && study.getTypeCode().getTypeCode().equals("P")) {
+		if((!leader.getGradeCD().getGradeCode().equals("T")) && study.getTypeCode().getTypeCode().equals("P")) {
 			log.info("Invalid member tried to open premium study");
 			// 작성중인 내용 세션에 저장하도록 추가할 것
 			model.addAttribute("errorMsg", "Your grade is not 'tutor'");
@@ -485,14 +489,26 @@ public class StudyController {
 	//		svr.save(study);	//java.sql.SQLException: The target table study_view of the INSERT is not insertable-into
 			log.info("----------------[ study save completed ]----------------");
 			
-			StudyMember studyMember = new StudyMember();
-			studyMember.setStudy(study);
-			studyMember.setId(study.getMember().getId());
+
+			/*StudyMember studyMember = new StudyMember();
+			
+			StudyMemberId studyMemberId = new StudyMemberId();
+			
+//			studyMember.setStudy(study);
+//			studyMember.setId(study.getMember().getId());
+			studyMemberId.setId(id);
+			studyMemberId.setStudyId(studyId);
+//			studyMember.setStudyMemberId(studyMemberId);
+//			studyMember.setMember(leader);
+			
 			StudyMemberStatusCD studyMemberStatusCode = new StudyMemberStatusCD();
 			studyMemberStatusCode.setStudyMemberStatusCode("LE");
 			studyMember.setStudyMemberStatusCode(studyMemberStatusCode);
 			
-			smr.save(studyMember);
+			smr.save(studyMember);*/
+			
+			saveStudyMember(id, studyId, "LE");
+			
 			log.info("----------------[ studyMember save completed ]----------------");
 			
 		} catch(Exception e) {
@@ -621,7 +637,7 @@ public class StudyController {
 			out.println("<script>alert('로그인 후 신청할 수 있어요!'); window.location.href='/study/pleaseLogin/?pathname='/study/join" + studyId + "';</script>");
 			out.flush();
 			
-			return null;
+			return "redirect:/study/pleaseLogin/?pathname='/study/join/'" + studyId;
 			
 			
 		} else {
@@ -720,7 +736,7 @@ public class StudyController {
 		}
 		
 		try {
-			saveStudyMember(id, studyId);
+			saveStudyMember(id, studyId, "WA");
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -939,7 +955,7 @@ public class StudyController {
 	
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	private void saveStudyMember(String id, String studyId) {
+	private void saveStudyMember(String id, String studyId, String studyMemberStatus) {
 //	private void saveStudyMember(StudyMember studyMember, String studyId) {
 
 		StudyMember studyMember = new StudyMember();
@@ -960,7 +976,7 @@ public class StudyController {
 		// 참고:  https://stackoverflow.com/a/27467933/11111203
 		// 답변자님 절 받으세요
 		// @EmbeddedId ContractServiceLocationPK id = new ContractServiceLocationPK(); 와 같은 식으로 도메인에서 복합키를 초기화하라는 답변. --> save 시 직접 지정하는 것으로 변경
-		StudyMemberStatusCD studyMemberStatusCode = smscr.findById("WA").get();
+		StudyMemberStatusCD studyMemberStatusCode = smscr.findById(studyMemberStatus).get();
 		
 		studyMember.setMember(member);
 		studyMember.setStudy(study);
@@ -969,10 +985,12 @@ public class StudyController {
 		smr.save(studyMember);
 		// studyMemberStatusCD 확인하기
 		log.info("-------------------- studyMember saved --------------------");
-
-		// [Request processing failed; nested exception is org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query] with root cause
-		sr.plusEnrollActual(studyId);
-		log.info("-------------------- study enrollActual updated --------------------");
+		
+		if(!studyMemberStatus.equals("LE")) {
+			// [Request processing failed; nested exception is org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query] with root cause
+			sr.plusEnrollActual(studyId);
+			log.info("-------------------- study enrollActual updated --------------------");
+		}
 	}
 	
 	

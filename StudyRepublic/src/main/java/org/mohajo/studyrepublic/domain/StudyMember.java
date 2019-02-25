@@ -37,7 +37,7 @@ public class StudyMember implements Serializable {
 		
 		@ManyToOne(cascade=CascadeType.ALL) 
 		@JoinColumn(name = "study_member_status_code", nullable=false)
-		private StudyMemberStatusCD studyMemberStatusCode;
+		private StudyMemberStatusCD studyMemberStatusCode/* = new StudyMemberStatusCD("WA", "")*/;
 		
 		@Column(nullable=false)
 		private Date enrollDate = new Date();
@@ -49,6 +49,7 @@ public class StudyMember implements Serializable {
 //		// @ManyToOne
 //		@ManyToOne(fetch=FetchType.LAZY)
 //		@JoinColumn(name = "id", updatable=false, insertable=false)
+		
 		@MapsId("id")
 		@ManyToOne
 		@JoinColumn(name="id", updatable=false, insertable=false)
@@ -62,7 +63,7 @@ public class StudyMember implements Serializable {
 		@MapsId("studyId")
 		@ManyToOne
 		@JoinColumn(name="studyId", updatable=false, insertable=false)
-		private Study study;  
+		private Study study;
 		
 		/*@OneToMany(mappedBy="studyMember")
 		private List<StudyNoticeboard> studyNoticeboard;

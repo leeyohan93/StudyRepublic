@@ -382,7 +382,9 @@ a {
 	<script th:src="@{/searchInterest.js}"></script>
 	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 	<script th:src="@{/map.js}"></script>
-	<script th:src="@{/assets/js/jquery.min.js}"></script>
+	<th:block layout:fragment="jquery">
+		<script th:src="@{/assets/js/jquery.min.js}"></script>
+	</th:block>
 	<script th:src="@{/assets/js/browser.min.js}"></script>
 	<script th:src="@{/assets/js/breakpoints.min.js}"></script>
 	<script th:src="@{/assets/js/util.js}"></script>
