@@ -63,8 +63,7 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 //	public List<Study> findPrStudyBytypeCode();
 	public List<PopularStudy> findPrStudyBytypeCode();
 	
-	@Query(value="select * from study natural join study_interest where interest_2_code in (?1) "
-			+ "and STUDY_STATUS_CODE ='O' order by rand() limit 2",nativeQuery=true)
+	@Query(value="select * from study where study_id in (select distinct study_id from study natural join study_interest where interest_2_code in (?1) and TYPE_CODE = 'B' and STUDY_STATUS_CODE ='O') order by rand() limit 2;",nativeQuery=true)
 //	public List<Study> findBsStudyBytypeCode();
 	public List<PopularStudy> findBsStudyBytypeCode(String[] popularTag);
 	

@@ -3562,15 +3562,25 @@ input::-moz-focus-inner {
 		}
 		
 		/* entire container, keeps perspective */
+
 .card-container {
 	  -webkit-perspective: 500px;
    -moz-perspective: 500px;
      -o-perspective: 500px;
         perspective: 500px;
         display:inline-block;
-		margin: 30px;
+		margin: 30px;    box-shadow: 0 17px 30px 0 rgba(0, 0, 0, 0.20);
 		box-shadow: 0 17px 30px 0 rgba(0, 0, 0, 0.20);
 }
+.card-container-nonehover{
+		display:block;
+		margin: 30px;
+		box-shadow: 0 17px 30px 0 rgba(0, 0, 0, 0.20);
+		width: 270px;
+		height: 320px;
+		border-radius: 4px;
+}
+
 /* flip the pane when hovered */
 .card-container:not(.manual-flip):hover .card,
 .card-container.hover.manual-flip .card{
@@ -3757,7 +3767,7 @@ input::-moz-focus-inner {
 .card .profession{
     color: #000000;
     text-align: center;
-    font-size:10px;
+    font-size:13px;
     margin-bottom: 15px;
 }
 .card .text-center{
