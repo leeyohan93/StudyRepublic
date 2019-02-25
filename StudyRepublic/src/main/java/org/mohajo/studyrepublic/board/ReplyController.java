@@ -65,8 +65,8 @@ public class ReplyController {
 	@ResponseBody
 	public List<FreeBoardReply> listFreeReply(Model model, int freeBoardId){
 	
-	    FreeBoard freeBoard = freeBoardRepository.findById(freeBoardId).get();
-		return freeBoard.getFreeBoardReply(); 
+		
+		return freeBoardReplyRepository.findFreeBoardReply(freeBoardId);
 	}
 	
 	//스터디 요청게시판 댓글 리스트 출력
@@ -74,8 +74,8 @@ public class ReplyController {
 	@ResponseBody
 	public List<RequestBoardReply> listRequestReply(Model model, int requestBoardId){
 	
-	    RequestBoard requestBoard = requestBoardRepository.findById(requestBoardId).get();
-		return requestBoard.getRequestBoardReply(); 
+	    
+		return requestBoardReplyRepository.findRequestBoardReply(requestBoardId); 
 	}
 	
 	//문의게시판 댓글 리스트 출력
@@ -91,25 +91,30 @@ public class ReplyController {
 	//자유게시판 댓글 등록
 	@PostMapping("/registerFreeReply")
 	@ResponseBody
-	public FreeBoardReply registerFreeReply(int freeBoardId, String content, String id) {
+	public FreeBoardReply registerFreeReply(FreeBoardReply freeBoardReply) {
 		
-		FreeBoardReply freeBoardReply = new FreeBoardReply();
-		freeBoardReply.setFreeBoardId(freeBoardId);
-		freeBoardReply.setContent(content);
-		freeBoardReply.setId(id);	   
-		return freeBoardReplyRepository.save(freeBoardReply);
+//		FreeBoardReply freeBoardReply = new FreeBoardReply();
+//		freeBoardReply.setFreeBoardId(freeBoardId);
+//		freeBoardReply.setContent(content);
+//		freeBoardReply.setId(id);	   
+		freeBoardReplyRepository.save(freeBoardReply);
+		FreeBoardReply freeBoardReplyGroup= freeBoardReplyRepository.findById(freeBoardReply.getFreeBoardReplyId()).get();
+		freeBoardReplyGroup.setReplyGroup(freeBoardReplyGroup.getFreeBoardReplyId());
+		
+		return freeBoardReplyRepository.save(freeBoardReplyGroup);
 	}
 	
 	//스터디 요청게시판 댓글 등록
 	@PostMapping("/registerRequestReply")
 	@ResponseBody
-	public RequestBoardReply registerRequestReply(int requestBoardId, String content, String id) {
+	public RequestBoardReply registerRequestReply(RequestBoardReply requestBoardReply) {
 		
-		RequestBoardReply requestBoardReply = new RequestBoardReply();
-		requestBoardReply.setRequestBoardId(requestBoardId);
-		requestBoardReply.setContent(content);
-		requestBoardReply.setId(id);	   
-		return requestBoardReplyRepository.save(requestBoardReply);
+	
+		
+		requestBoardReplyRepository.save(requestBoardReply);
+		RequestBoardReply requestBoardReplyGroup= requestBoardReplyRepository.findById(requestBoardReply.getRequestBoardReplyId()).get();
+		requestBoardReplyGroup.setReplyGroup(requestBoardReplyGroup.getRequestBoardReplyId());
+		return requestBoardReplyRepository.save(requestBoardReplyGroup);
 	}
 	
 	//문의게시판 댓글 등록
@@ -209,6 +214,48 @@ public class ReplyController {
 		
 		int inquireCount =inquireBoardReplyRepository.replyCount(inquireBoardId);
 		return inquireCount;
+	}
+	
+	//자유게시판 대댓글
+	@PostMapping("/secondFreeReply")
+	@ResponseBody
+	public FreeBoardReply secondFreeReply(String content,String memberId, int freeBoardId, int freeBoardReplyId) {
+		
+		log.info("content :" + content);
+		log.info("memberId :" + memberId);
+		log.info("freeBoardId :" + freeBoardId);
+		log.info("freeBoardReplyId :" + freeBoardReplyId);
+		
+		FreeBoardReply freeBoardReply = new FreeBoardReply();
+		freeBoardReply.setContent(content);
+		freeBoardReply.setFreeBoardId(freeBoardId);
+		freeBoardReply.setId(memberId);
+		freeBoardReply.setReplyGroup(freeBoardReplyId);
+		freeBoardReply.setReplyStep(1);
+		
+		
+		return freeBoardReplyRepository.save(freeBoardReply);
+	}
+	
+	//요청게시판 대댓글
+	@PostMapping("/secondRequestReply")
+	@ResponseBody
+	public RequestBoardReply secondRequestReply(String content,String memberId, int requestBoardId, int requestBoardReplyId) {
+		
+		log.info("content :" + content);
+		log.info("memberId :" + memberId);
+		log.info("freeBoardId :" + requestBoardId);
+		log.info("freeBoardReplyId :" + requestBoardReplyId);
+		
+		RequestBoardReply requestBoardReply = new RequestBoardReply();
+		requestBoardReply.setContent(content);
+		requestBoardReply.setRequestBoardId(requestBoardId);
+		requestBoardReply.setId(memberId);
+		requestBoardReply.setReplyGroup(requestBoardReplyId);
+		requestBoardReply.setReplyStep(1);
+		
+		
+		return requestBoardReplyRepository.save(requestBoardReply);
 	}
 
 }

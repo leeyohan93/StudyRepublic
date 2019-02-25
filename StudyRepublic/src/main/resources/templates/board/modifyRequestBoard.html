@@ -17,14 +17,11 @@
 <meta id="_csrf_header" name="_csrf_header"
 	th:content="${_csrf.headerName}" />
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
 <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js"
 	charset="utf-8"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<!-- modals CSS
-		============================================ -->
-<link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
+
 <style>
 .writeTop {
 	margin-top: 20px !important;
@@ -193,7 +190,21 @@ background: white;
 				
 				
 				<!--파일업로드  -->
-
+                  
+                 <div id="fileAddBtn">
+				
+				 <button type="button">파일첨부</button>
+				</div>
+				<div class="validate-input" id="fileAdd">
+				
+				</div>
+				<div class= "fileForm" th:each = "frf : ${board.requestBoardFile}" >
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input type="hidden" name ="boardFileUrl" th:value="${frf.fullUrl}" />
+		    <a class="fileOriginName" th:name =|${frf.requestBoardFileId}| th:href = "@{'/board/requestBoardFile'(fullUrl=${frf.fullUrl})}">[[${frf.originName}]]</a>
+		     <a class="fileDelete" th:name =|${frf.requestBoardFileId}| >X(삭제)</a> 
+		    </div> 
+                  
 			
 				<!--파일업로드  끝-->
 
@@ -225,36 +236,6 @@ background: white;
 
 			<!-- 취소 미리보기 확인 버튼 -->
 
-			<!-- 모달 -->
-<!-- 			<a class="Primary mg-b-10" href="#" data-toggle="modal" -->
-<!-- 				data-target="#PrimaryModalalert">Primary</a> -->
-<!-- 			<div id="PrimaryModalalert"
-				class="modal modal-edu-general default-popup-PrimaryModal fade"
-				role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-close-area modal-close-df">
-							<a class="close" data-dismiss="modal" href="#"><i
-								class="fa fa-close"></i></a>
-						</div>
-						<div class="modal-body">
-							<i class="educate-icon educate-checked modal-check-pro"></i>
-							<h2>Awesome!</h2>
-							<p>The Modal plugin is a dialog box/popup window that is
-								displayed on top of the current page</p>
-						</div>
-						<div class="modal-footer">
-							<a data-dismiss="modal" href="#">Cancel</a> <a href="#">Process</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			모달 끝
-		</div>
-		 -->
-
-
-
 
 <script th:inline="javascript">
 
@@ -263,18 +244,7 @@ var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 //스마트에디터 여기부터
 $(document).ready(function(){
-	var sz = $('.fileDelete').length;
-	var ss = $('.fileDelete')
-	console.log(sz);
-//    var fileOriginName = $(".fileOriginName");
-// 	var fileOriginName2 = $(".fileOriginName").length;
-// 	for(var i =0; i<fileOriginName2;i++){
-// 		console.log(fileOriginName.eq(i).attr("name"));
-// 		console.log(fileOriginName.eq(i).innerText);
-// 	}
-// 	console.log(fileOriginName);
-//        var fileDeleteLength =$('.fileOriginName').length;
-//     		console.log(fileDeleteLength);
+
 	
 	 //ajax사용
 	 $(document).ajaxSend(function(e, xhr, options) {
@@ -313,19 +283,19 @@ $(document).ready(function(){
 	        var boardType = $('#boardType').val();
 
 	       if (boardType == ''){
- 				swal("게시판을 선택해주세요!","");
+	    	   Swal.fire("게시판을 선택해주세요!","");
 	    	   
 	    	   return false;
 	       }
 	       else if (boardTitle == ''){
-	    	   swal("제목을 입력해주세요 !","");
+	    	   Swal.fire("제목을 입력해주세요 !","");
 	    	   
 	    	   return false;
 	       }
 	       
 
 	       else if ( smarteditor == ""  || smarteditor == null || smarteditor == '&nbsp;' || smarteditor == '<p>&nbsp;</p>')  {
-	        	swal("내용을 입력해주세요 !","");
+	    	   Swal.fire("내용을 입력해주세요 !","");
 	        	editor_object.getById["smarteditor"].exec("FOCUS"); //포커싱
 	             return false;
 	        }
@@ -349,14 +319,14 @@ $(document).ready(function(){
          var smarteditor = $("#smarteditor").val();
      	
      		if (boardTitle == ''){
-  	    	   swal("제목을 입력해주세요 !","");
+     			Swal.fire("제목을 입력해주세요 !","");
   	    	   
   	    	   return false;
   	       	}
   	       
 
   	       	else if ( smarteditor == ""  || smarteditor == null || smarteditor == '&nbsp;' || smarteditor == '<p>&nbsp;</p>')  {
-  	        	swal("내용을 입력해주세요 !","");
+  	       	Swal.fire("내용을 입력해주세요 !","");
   	        	editor_object.getById["smarteditor"].exec("FOCUS"); //포커싱
   	             return false;
   	        }
@@ -393,8 +363,7 @@ $(document).ready(function(){
     $("#fileAddBtn").click( function(){
     	var uploadFile = "<div class = 'file_input' id = 'lifile" + fileCount + "'>"
 		+ "<input type = 'file' name = 'file' multiple onchange = \"javascript:document.getElementById('file_route"
-		+ fileCount
-		+ "').value = this.value.substring(12)\">"
+		+ fileCount + "').value = this.value.substring(12)\">"
 		+ "<input class = 'yshbtn' type = 'button' value = 'X' id = 'liidel"
 		+ fileCount
 		+ "' onclick = 'deleteFile("
@@ -408,7 +377,7 @@ $(document).ready(function(){
     });
     
     
-    	//파일업로드 제거
+    	//파일업로드창 제거
     	function deleteFile(num) {
 
 					$('#lifile' + num).remove();
@@ -430,7 +399,7 @@ $(document).ready(function(){
     		var requestBoardId = [[${board.requestBoardId}]];
     		console.log(requestBoardId);
     		$.ajax({
-    			url:'/board/boardFileDelete',
+    			url:'/board/requestBoardFileDelete',
     			type: 'get',
     			data:{'requestBoardFileId':requestBoardFileId, 'requestBoardId':requestBoardId},
     		   success : function(data){

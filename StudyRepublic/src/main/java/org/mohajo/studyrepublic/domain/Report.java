@@ -2,6 +2,7 @@ package org.mohajo.studyrepublic.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -34,11 +35,11 @@ public class Report {
 	private int reportId;
 	private String id;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="REPORT_WHY_CODE")
 	private ReportWhyCD reportWhyCD;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="REPORT_TYPE_CODE")
 	private ReportTypeCD reportTypeCD;
 	

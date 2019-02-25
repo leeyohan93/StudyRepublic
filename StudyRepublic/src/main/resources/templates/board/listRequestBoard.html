@@ -18,10 +18,6 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
-<!-- modals CSS
-		============================================ -->
-<link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
-
 <style>
 .boardName {
 	margin: 20px !important;
@@ -206,7 +202,7 @@ span.listReplyCount {
 	<div class="wrapper">
 		<div id="main" layout:fragment="main">
 			<div class="inner">
-
+  
 				<!--게시판 타이틀  -->
 				<div class="boardName">
 					<h3>
@@ -250,7 +246,8 @@ span.listReplyCount {
 									<td id="listBoardNotice">[[${board.notice}]]</td>
 									<td class="" id="listBoardId">[[${board.requestBoardId}]]</td>
 									
-
+                                  
+                                  <td class="listBoardFileExist" th:name=|${board.requestBoardFile}|>[[${board.requestBoardFile}]]</td>
 									<td class="text-left boardTtile"><a
 										th:href='${board.requestBoardId}' class="boardLink">[[${board.title}]]</a>
 										<a th:href='${board.requestBoardId}' class="boardLink"> <span
@@ -273,7 +270,7 @@ span.listReplyCount {
 
 					<!--글쓰기 버튼  -->
 					<div class="boardWriteBtn">
-						<a class="btn" id="writeBtn" th:href="@{writeBoard}"
+						<a class="btn" id="writeBtn" th:href="@{'writeBoard'(boardType=requestBoard)}"
 							role="button"><img id= "boardWriteImage"src="/board/img/outline_create_black_18dp.png">글쓰기</a>
 					</div>
 
@@ -310,8 +307,8 @@ span.listReplyCount {
 						<select id="boardSearchPeriod">
 							<option value="allDay"
 								th:selected="${pageDTO.searchPeriod} =='allDay'">전체기간</option>
-							<option value="weak"
-								th:selected="${pageDTO.searchPeriod} =='weak'">1주</option>
+							<option value="week"
+								th:selected="${pageDTO.searchPeriod} =='week'">1주</option>
 							<option value="month"
 								th:selected="${pageDTO.searchPeriod} =='month'">1개월</option>
 							<option value="sMonth"
@@ -368,10 +365,10 @@ span.listReplyCount {
 
     	 //댓글 존재할때만 리스트에 출력
     	 replyListOutput();
-    	//파일업로드한 게시글은 리스트에 아이콘추가
-//     	 listFileExist();
     	//오늘게시글 new표시 
     	todayWrite();
+    	//파일업로드한 게시글은 리스트에 아이콘추가
+   	 listFileExist();
     	
     	//공지 띄우기
     	 $('.boardTableBody tr').each(function() {
@@ -386,27 +383,20 @@ span.listReplyCount {
     		 }
     		     		    
     		});
-    	 
+    	
     	 //파일업로드한 게시글은 리스트에 아이콘추가
-/*     	 $('.boardTableBody tr').each(function(){
-    		 var fileExist = $(this).find("td:nth-child(3)").text();
- 			var fileExistLength = fileExist.length; 
-    		 if(fileExistLength > 2){
-    			 $(this).find("td:nth-child(3)").append('<img id="fileImage" src="/board/img/fileImage.png">');
-    			}
-    	 }); */
-    	 
-    	 //파일업로드한 게시글은 리스트에 아이콘추가
-    /* 	 function listFileExist(){
+    	 function listFileExist(){
     	 var listBoardFileExistLength = $('.listBoardFileExist').length;
     	 for(var i =0;i<listBoardFileExistLength;i++){
     		 var fileExist = $('.listBoardFileExist').eq(i).attr("name")
     		 if(fileExist.length > 2){
-    			 console.log(fileExist);
+    			 console.log("fileExist :" + fileExist);
     			 $('.listReplyCount').eq(i).append('<img id="fileImage" src="/board/img/fileImage.png">');
     		 }
     	 }
-    	 }; */
+    	 };
+    	 
+
     	 
     	
     	 

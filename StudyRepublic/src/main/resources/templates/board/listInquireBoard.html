@@ -18,9 +18,6 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
-<!-- modals CSS
-		============================================ -->
-<link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
 
 <style>
 .boardName {
@@ -274,7 +271,7 @@ span.listReplyCount {
 
 					<!--글쓰기 버튼  -->
 					<div class="boardWriteBtn">
-						<a class="btn" id="writeBtn" th:href="@{writeBoard}"
+						<a class="btn" id="writeBtn" th:href="@{'writeBoard'(boardType=inquireBoard)}"
 							role="button"><img id= "boardWriteImage"src="/board/img/outline_create_black_18dp.png">글쓰기</a>
 					</div>
 
@@ -311,8 +308,8 @@ span.listReplyCount {
 						<select id="boardSearchPeriod">
 							<option value="allDay"
 								th:selected="${pageDTO.searchPeriod} =='allDay'">전체기간</option>
-							<option value="weak"
-								th:selected="${pageDTO.searchPeriod} =='weak'">1주</option>
+							<option value="week"
+								th:selected="${pageDTO.searchPeriod} =='week'">1주</option>
 							<option value="month"
 								th:selected="${pageDTO.searchPeriod} =='month'">1개월</option>
 							<option value="sMonth"
