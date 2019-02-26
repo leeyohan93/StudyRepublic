@@ -280,6 +280,7 @@ public class MemberController {
 	
 	   public void createSession(HttpSession session, Member member) {	
 		         
+		   		 session.setAttribute("id", member.getId());
 		   		 session.setAttribute("nickname", member.getNickname());
 		         session.setAttribute("memberimg", member.getProfileSaveName());
 		         

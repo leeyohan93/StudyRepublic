@@ -44,6 +44,9 @@ public interface MemberRepository extends JpaRepository<Member, String>, Queryds
 	@Query(value = "select * from recommend_tutor_member",nativeQuery=true)
 	List<Member> getRecommendTutorMember();
 	
+	@Query(value = "select * from member where MEMBER_STATUS_CODE='N' and GRADE_CODE='N' order by rand() limit 3 ",nativeQuery=true)
+	List<Member> getRecommendNomalMember();
+	
 	/*@Query(value = "select m.id, f.title,f.date,f.likecount, f.hit from (select * from member where id=:id)m, freeboard f where m.id=f.id", nativeQuery=true)
 	List<FreeBoard> findAllBoardById(String id);*/
 	

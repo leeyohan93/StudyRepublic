@@ -43,6 +43,7 @@ public class MainController {
 	@Autowired
 	StudyMemberRepository studymemberrepository;
 	
+	
 	@RequestMapping("/index")
 	public void index(Model model, Member member, Authentication authentication, HttpSession hs) {
 		List<Interest2CD> basicPopularTagList = mainService.getBasicPopularTag();
@@ -67,6 +68,7 @@ public class MainController {
 		model.addAttribute("popularPremiumStudy", mainService.getPopularPremiumStudy());
 		model.addAttribute("popularBasicStudy", mainService.getPopularBasicStudy(basicPopularTag));
 		
+		model.addAttribute("recommendNomalMember", mainService.getRecommendNomalMember());
 		model.addAttribute("recommendTutorMember", mainService.getRecommendTutorMember());
 		model.addAttribute("premiumPopularTag", mainService.getPremiumPopularTag());
 		model.addAttribute("basicPopularTag", basicPopularTagList);
@@ -78,11 +80,13 @@ public class MainController {
 //		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
 //		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
 		
+		
 		membercontroller.getSession(authentication,hs,member);
+		
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		
+
 		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);
 		HashMap <String, String> studyNameAndStudyId = new HashMap<>();
 		

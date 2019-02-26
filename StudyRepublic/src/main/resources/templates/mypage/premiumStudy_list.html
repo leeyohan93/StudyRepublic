@@ -1,60 +1,167 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{/layout/mainLayout}">
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8">
 <title>프리미엄스터디 활동내역</title>
 <meta name="viewport"
-	content="width=device-width, initial-scale=1, user-scalable=no" />
+   content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
-	type="text/css">
+   type="text/css">
+<!-- modals CSS============================================ -->
+<link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
 
 </head>
 <body>
 
 <div id="main" layout:fragment="main">
 <div class="inner">
+         <div class="heading" style="margin-top: 5px; margin-bottom: 30px;">
+               <h3 style="display: inline;">프리미엄 스터디 활동 내역</h3><a href="/activityinfo" class="button primary" style="float: right;'">뒤로가기</a><br>
+         </div>
 
-		
-	<table class="table">
-		
-			<tr>
-				<th scope="cols">스터디명</th>
-				<th scope="cols"></th>
-				<th scope="cols">진행상태</th>
-				<th scope="cols">기간</th>
-				<th scope="cols">탈퇴</th>
-				<!-- <th scope="cols">평점</th> -->
-			</tr>
-		
-	 
-			<tr th:each="premium : ${myp}">
-				<td><a th:href="@{'/study/detail/'+${premium.study.studyId}}" th:text= "${premium.study.name}"></a></td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'WA'}">신청중</td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'LE'}">리더</td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'ME'}">승인</td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'DE'}">거절</td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'EX'}">탈퇴</td>
-				
-				<td th:text="${premium.study.studyStatusCode.codeValueKorean}"/>
-				<td th:text="|${premium.study.startDate}~${premium.study.endDate}|"/>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'ME'}" ><a href="" >탈퇴</a></td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'LE' }" ><a href="" >해체</a></td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'WA' }" >-</td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'DE' }" >-</td>
-				<td th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'EX' }" >-</td>
-				
-				
-			</tr>
-	</table>
-				
-				
+
+         <table class="table">
+            <tr>
+               <th scope="cols">스터디명</th>
+               <th scope="cols">기간</th>
+               <th scope="cols">멤버상태</th>
+               <th scope="cols">진행상태</th>
+               <th scope="cols">리뷰</th>
+               <!-- <th scope="cols">평점</th> -->
+            </tr>
+
+
+            <tr th:each="premium : ${myp}">
+               <td><a th:href="@{'/study/detail/'+${premium.study.studyId}}"
+                  th:text="${premium.study.name}"></a></td>
+               <td th:text="|${premium.study.startDate}~${premium.study.endDate}|" />
+               <td
+                  th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'WA'}">신청중</td>
+               <td
+                  th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'LE'}">리더</td>
+               <td
+                  th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'ME'}">승인</td>
+               <td
+                  th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'DE'}">거절</td>
+               <td
+                  th:if="${premium.studyMemberStatusCode.studyMemberStatusCode == 'EX'}">탈퇴</td>
+
+               <td th:text="${premium.study.studyStatusCode.codeValueKorean}" />
+               <td th:if="${premium.study.studyStatusCode.codeValueKorean == '완료'}">
+               <th:block th:if="${#strings.contains(isReview,premium.study.studyId)}==false">
+                  <div class="modal-area-button" style="margin-top: 0;">
+                     <a class="Primary mg-b-10" href="#" data-toggle="modal"
+                        th:data-target="'#Review'+${premiumStat.index}"
+                        style="color: white; margin-top: 0; padding: 3px 15px;">리뷰남기기</a>
+                  </div>
+                  <div th:id="|Review${premiumStat.index}|" class="modal modal-edu-general default-popup-PrimaryModal fade"
+                     role="dialog">
+                     <div class="modal-dialog" style="max-width: 720px; max-height: 720px;">
+                        <div class="modal-content">
+                           <div class="modal-close-area modal-close-df">
+                              <a class="close" data-dismiss="modal" href="#"><i
+                                 class="fa fa-close"></i></a>
+                           </div>
+                           <form id="review" action="review" method="post">
+                              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                              <input type="hidden" name="memberId" th:value="${session.id}">
+                              <input type="hidden" name="studyId" th:value="${premium.study.studyId}">
+                              <div class="modal-body">
+                              <h4 th:text="${premium.study.name}" style="font-weight: 700px;"></h4>
+                                 <p>참가하신 스터디는 어떠셨나요?<br>별점과 후기를 남겨주세요!</p>
+                                 
+                                 <div class="form-group" style="margin-top: 15px">
+                                 <div id="star-rating-container">
+                                       <!-- Star Rating BY James Barnett (https://codepen.io/jamesbarnett/pen/vlpkh) -->
+                                       <fieldset class="rating">
+                                           <input type="radio" id="star5" name="score" value="5" /><label class = "full" for="star5" title="최고예요! - 5점"></label>
+                                           <input type="radio" id="star4half" name="score" value="4.5" /><label class="half" for="star4half" title="아주 좋아요! - 4.5점"></label>
+                                           <input type="radio" id="star4" name="score" value="4" /><label class = "full" for="star4" title="좋아요! - 4점"></label>
+                                           <input type="radio" id="star3half" name="score" value="3.5" /><label class="half" for="star3half" title="괜찮아요 - 3.5점"></label>
+                                           <input type="radio" id="star3" name="score" value="3" checked /><label class = "full" for="star3" title="보통이에요 - 3점"></label>
+                                           <input type="radio" id="star2half" name="score" value="2.5" /><label class="half" for="star2half" title="그냥 그래요 - 2.5점"></label>
+                                           <input type="radio" id="star2" name="score" value="2" /><label class = "full" for="star2" title="아쉬워요 - 2점"></label>
+                                           <input type="radio" id="star1half" name="score" value="1.5" /><label class="half" for="star1half" title="별로예요 - 1.5점"></label>
+                                           <input type="radio" id="star1" name="score" value="1" /><label class = "full" for="star1" title="아주 별로예요 - 1 star"></label>
+                                           <input type="radio" id="starhalf" name="score" value="0.5" /><label class="half" for="starhalf" title="최악이에요 - 0.5점"></label>
+                                       <p class="star-score">3점</p>
+                                       </fieldset>
+                                    </div>
+                                    <label for="exampleFormControlTextarea1">Content</label>
+                                    <textarea name="reviewContent" rows="10" style="min-height: 13.75em; min-width: 35em;border-style: outset;"
+                                    placeholder="당신의 소중한 리뷰를 남겨주세요."></textarea>
+                                 </div>
+                              </div>
+                              <div class="modal-footer">
+                                 <a class="writeReview-process" href="javascript:void(0);" th:onclick="'writeReview('+${premiumStat.index}+')'" style="display: inline-block;color:white;" data-dismiss="modal">리뷰작성</a>
+                              </div>
+                              <script>
+                              var token = $("meta[name='_csrf']").attr("content");
+                              var header = $("meta[name='_csrf_header']").attr("content");
+                              var event;
+                              $(function() {
+                                  $(document).ajaxSend(function(e, xhr, options) {
+                                      xhr.setRequestHeader(header, token);
+                                  });
+                                  $('.rating > input').on('click', function(e) {
+                                      e.target.parentElement.children[20].innerText = e.target.value+'점';
+                                   });
+
+                              });
+                              
+          
+          function writeReview(number) {
+               formData = "";
+               var memberId= $("#Review"+number+" input[name='memberId']").val();
+               var studyId= $("#Review"+number+" input[name='studyId']").val();
+               var reviewContent= $("#Review"+number+" textarea[name='reviewContent']").val();
+               var score =  $("#Review"+number+" input[name='score']:checked").val();
+               formData = {"memberId":memberId,"studyId":studyId,"reviewContent":reviewContent,"score":score}
+               console.log(formData);
+
+                $.ajax({
+                       type: 'post',
+                       url: '/writeReview',
+                       traditional: true,
+                       data: formData,
+
+                       success: function () {
+                    	   location.reload();
+                       },
+                       error :function(){
+                           alert("error");
+                       }
+                   });
+          }
+            </script>
+                           </form>
+                        </div>
+                     </div>
+                  </div>
+                  </th:block>
+                  <th:block th:unless="${#strings.contains(isReview,premium.study.studyId)}==false">
+				리뷰완료
+				</th:block>
+               </td>
+               <td th:unless="${premium.study.studyStatusCode.codeValueKorean == '완료'}">-</td>
+            </tr>
+
+
+
+
+         </table>
+
+
+         </div>
 </div>
-</div>	
-	
+   
 
 </body>
 </html>
