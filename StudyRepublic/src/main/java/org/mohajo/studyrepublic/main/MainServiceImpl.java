@@ -52,6 +52,7 @@ public class MainServiceImpl implements MainService{
 	@Override
 //	public List<Study> getPopularBasicStudy() {
 	public List<PopularStudy> getPopularBasicStudy(String[] popularTag) {
+		
 		return studyRepository.findBsStudyBytypeCode(popularTag);
 		
 	}

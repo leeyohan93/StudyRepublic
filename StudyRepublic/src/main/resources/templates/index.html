@@ -5,6 +5,11 @@
 <head>
 <title>Main Page</title>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<style>
+.dropdown-toggle::after {
+	border: none !important;
+}
+</style>
 </head>
 <body>
 	<div id="main" layout:fragment="main">
@@ -48,7 +53,10 @@
 				<div class="tiles">
 					<div class="row">
 						<div class="col-sm-3">
-							<h5>popular<br>Tags</h5><br>
+							<h5>
+								popular<br>Tags
+							</h5>
+							<br>
 							<div th:with="popularTag = ${premiumPopularTag}">
 								<a th:text="${popularTag[0].codeValueEnglish}"
 									th:href="'search?name=&typeCode.typeCode=B&onoffCode.onoffCode=All&searchDate=&levelCode.levelCode=All&interest='+${popularTag[0].interest2Code}"
@@ -106,35 +114,30 @@
 						</div> -->
 						<div th:each="study : ${popularPremiumStudy}" class="col-sm-3">
 							<article class="style1" style="margin: 0 10em 0 0;">
-								<div class="card-container" style="zoom:0.8;"> 
+								<div class="card-container" style="zoom: 0.8;">
 									<div class="card">
 										<div class="front">
 											<div class="cover">
 												<img
 													th:src="'/images/'+${study.studyInterest[0].interest2code.interest2Code}+'.jpg'">
 												<div class="studyType"
-													th:text="${typeCode} eq 'p'?${study.typeCode.codeValueKorean}:${study.typeCode.codeValueKorean}"></div>
+													th:text="${study.typeCode.codeValueKorean}"></div>
 												<div class="studyOnoff"
 													th:text="${study.onoffCode.codeValueKorean}"></div>
 											</div>
 											<div class="profile_box">
 												<div class="user">
-													<img class="img-circle" src="/images/pic02.jpg" />
+													<img class="img-circle" th:src="@{'/member_image/'+${study.member.profileSaveName}}" />
 												</div>
-												<th:block th:if="${typeCode} eq 'p'">
 													<p class="profession" th:text="${study.member.name}"
 														style="margin-bottom: 2px; font-weight: bold;">CEO</p>
 													<p class="profession" th:text="${study.member.nickname}">CEO</p>
-												</th:block>
-												<th:block th:unless="${typeCode} eq 'p'">
-													<p class="profession" th:text="${study.member.nickname}">CEO</p>
-												</th:block>
 											</div>
 											<h6 class="name" th:text="${study.name}">John Marvel</h6>
 											<div class="content">
 												<div class="main">
 													<p class="text-center"
-														th:text="${typeCode} eq 'p'?|￦${study.price.price}"
+														th:text="|￦${study.price.price}"
 														style="color: #ff005a; font-weight: bold;"></p>
 													<br>
 													<p class="text-center"
@@ -142,8 +145,8 @@
 													<p class="text-center"
 														th:text="'관심분야 : '+${study.studyInterest[0].interest2code.codeValueKorean}+' / 레벨 : '+${study.levelCode.codeValueKorean}"></p>
 													<i class="tag btn-primary"
-														th:text="${study.studyStatusCode.codeValueKorean}"
-														style="color: blue; float: right;"></i>
+														th:text="|${study.studyStatusCode.codeValueKorean}&nbsp|"
+														style="color:white;background: #ff7600; float: right;"></i>
 												</div>
 											</div>
 										</div>
@@ -190,58 +193,49 @@
 											</div>
 										</div>
 										<!-- end back panel -->
-										
-										
+
+
 									</div>
 									<!-- end card -->
 								</div>
 								<!-- end card-container -->
 							</article>
 						</div>
-						
-						
-						<th:block th:if="${popularPremiumStudy.size()==0}">
-							<div class="col-sm-3">
-								<article class="style1" style="margin: 2em 10em 0 0;">
-									<span class="image">
-									<img src="images/pic01.jpg">
-									</span>
-									<a>
-									<h6>아직 인증된 강의가 존재하지 않습니다</h6>
-									<div class="content">
-										<p>리뷰 4.5이상의 강의 경력을 가진 인증된 강사의 강의를 기대해주세요.</p>
-									</div>
-									</a>
-								</article>
-							</div>
-							<div class="col-sm-3">
-								<article class="style2" style="margin: 2em 10em 0 0;">
-									<span class="image">
-									<img src="images/pic01.jpg">
-									</span>
-									<a>
-									<h6>아직 인증된 강의가 존재하지 않습니다</h6>
-									<div class="content">
-										<p>리뷰 4.5이상의 강의 경력을 가진 인증된 강사의 강의를 기대해주세요.</p>
-									</div>
-									</a>
-								</article>
-							</div>
-						</th:block>
-						<th:block th:if="${popularPremiumStudy.size()==1}">
-						<div class="col-sm-3">
-								<article class="style1" style="margin: 2em 10em 0 0;">
-									<span class="image">
-									<img src="images/pic01.jpg">
-									</span>
-									<a>
-									<h6>아직 인증된 강의가 존재하지 않습니다</h6>
-									<div class="content">
-										<p>리뷰 4.5이상의 강의 경력을 가진 인증된 강사의 강의를 기대해주세요.</p>
-									</div>
-									</a>
-								</article>
-							</div>
+
+
+						<th:block th:if="${popularPremiumStudy.size()<2}" th:each="num:${#numbers.sequence(popularPremiumStudy.size(),1)}">
+							<div  class="col-sm-3">
+							<article class="style1" style="margin: 0 10em 0 0;">
+								<div class="card-container-nonehover" style="zoom: 0.8;">
+									<div class="card">
+										<div class="front">
+											<div class="cover">
+												<img src="images/pic01.jpg">
+												<div class="studyType">프리미엄</div>
+												<div class="studyOnoff">온오프라인</div>
+											</div>
+											<div class="profile_box">
+												<div class="user">
+													<img class="img-circle" src="images/pic01.jpg" />
+												</div>
+													<p class="profession">인증강사</p>
+											</div>
+											<h6 class="name">아직 인증된 강의가 존재하지 않습니다</h6>
+											<div class="content">
+												<div class="main">
+													<p class="text-center" style="color: #ff005a; font-weight: bold;">리뷰 4.5이상의 강의 경력을 가진 인증된 강사의 강의를 기대해주세요.</p>
+													<br>
+													<p class="text-center"></p>
+													<p class="text-center"></p>
+													<i class="tag btn-primary" style="color: blue; float: right;"></i>
+												</div>
+											</div>
+										</div>
+										</div>
+										</div>
+										</article>
+										</div>
+										<!-- end front panel -->
 						</th:block>
 
 						<div class="col-sm-3">
@@ -250,7 +244,9 @@
 								<br>
 								<div th:each="member : ${recommendTutorMember}"
 									class="list-group">
-									<a th:text="${member.nickname}" th:href="@{'/tutor/profile/p'(id=${member.id})}" class="list-group-item">aaa123</a>
+									<a th:text="${member.nickname}"
+										th:href="@{'/tutor/profile/p'(id=${member.id})}"
+										class="list-group-item">aaa123</a>
 								</div>
 							</article>
 						</div>
@@ -265,7 +261,10 @@
 				<div class="tiles">
 					<div class="row">
 						<div class="col-sm-3">
-							<h5>popular<br>Tags</h5><br>
+							<h5>
+								popular<br>Tags
+							</h5>
+							<br>
 							<div th:with="popularTag = ${basicPopularTag}">
 								<a th:text="${popularTag[0].codeValueEnglish}"
 									th:href="'search?name=&typeCode.typeCode=P&onoffCode.onoffCode=All&searchDate=&levelCode.levelCode=All&interest='+${popularTag[0].interest2Code}"
@@ -280,35 +279,27 @@
 						</div>
 						<div th:each="study : ${popularBasicStudy}" class="col-sm-3">
 							<article class="style1" style="margin: 0 10em 0 0;">
-								<div class="card-container" style="zoom:0.8;"> 
+								<div class="card-container" style="zoom: 0.8;">
 									<div class="card">
 										<div class="front">
 											<div class="cover">
 												<img
 													th:src="'/images/'+${study.studyInterest[0].interest2code.interest2Code}+'.jpg'">
 												<div class="studyType"
-													th:text="${typeCode} eq 'p'?${study.typeCode.codeValueKorean}:${study.typeCode.codeValueKorean}"></div>
+													th:text="${study.typeCode.codeValueKorean}"></div>
 												<div class="studyOnoff"
 													th:text="${study.onoffCode.codeValueKorean}"></div>
 											</div>
 											<div class="profile_box">
 												<div class="user">
-													<img class="img-circle" src="/images/pic02.jpg" />
+													<img class="img-circle" th:src="@{'/member_image/'+${study.member.profileSaveName}}" />
 												</div>
-												<th:block th:if="${typeCode} eq 'p'">
-													<p class="profession" th:text="${study.member.name}"
-														style="margin-bottom: 2px; font-weight: bold;">CEO</p>
 													<p class="profession" th:text="${study.member.nickname}">CEO</p>
-												</th:block>
-												<th:block th:unless="${typeCode} eq 'p'">
-													<p class="profession" th:text="${study.member.nickname}">CEO</p>
-												</th:block>
 											</div>
 											<h6 class="name" th:text="${study.name}">John Marvel</h6>
 											<div class="content">
 												<div class="main">
 													<p class="text-center"
-														th:text="${typeCode} eq 'p'?|￦${study.price.price}"
 														style="color: #ff005a; font-weight: bold;"></p>
 													<br>
 													<p class="text-center"
@@ -316,8 +307,8 @@
 													<p class="text-center"
 														th:text="'관심분야 : '+${study.studyInterest[0].interest2code.codeValueKorean}+' / 레벨 : '+${study.levelCode.codeValueKorean}"></p>
 													<i class="tag btn-primary"
-														th:text="${study.studyStatusCode.codeValueKorean}"
-														style="color: blue; float: right;"></i>
+														th:text="|${study.studyStatusCode.codeValueKorean}&nbsp|"
+														style="color:white;background: #ff7600; float: right;"></i>
 												</div>
 											</div>
 										</div>
@@ -364,57 +355,48 @@
 											</div>
 										</div>
 										<!-- end back panel -->
-										
-										
+
+
 									</div>
 									<!-- end card -->
 								</div>
 								<!-- end card-container -->
 							</article>
 						</div>
-						
-						<th:block th:if="${popularBasicStudy.size()==0}">
-							<div class="col-sm-3">
-								<article class="style1" style="margin: 2em 10em 0 0;">
-									<span class="image">
-									<img src="images/pic01.jpg">
-									</span>
-									<a>
-									<h6>아직 인증된 강의가 존재하지 않습니다</h6>
-									<div class="content">
-										<p>리뷰 4.5이상의 강의 경력을 가진 인증된 강사의 강의를 기대해주세요.</p>
-									</div>
-									</a>
-								</article>
-							</div>
-							<div class="col-sm-3">
-								<article class="style2" style="margin: 2em 10em 0 0;">
-									<span class="image">
-									<img src="images/pic01.jpg">
-									</span>
-									<a>
-									<h6>아직 인증된 강의가 존재하지 않습니다</h6>
-									<div class="content">
-										<p>리뷰 4.5이상의 강의 경력을 가진 인증된 강사의 강의를 기대해주세요.</p>
-									</div>
-									</a>
-								</article>
-							</div>
-						</th:block>
-						<th:block th:if="${popularBasicStudy.size()==1}">
-						<div class="col-sm-3">
-								<article class="style1" style="margin: 2em 10em 0 0;">
-									<span class="image">
-									<img src="images/pic01.jpg">
-									</span>
-									<a>
-									<h6>아직 인증된 강의가 존재하지 않습니다</h6>
-									<div class="content">
-										<p>리뷰 4.5이상의 강의 경력을 가진 인증된 강사의 강의를 기대해주세요.</p>
-									</div>
-									</a>
-								</article>
-							</div>
+
+						<th:block th:if="${popularBasicStudy.size()<2}" th:each="num:${#numbers.sequence(popularBasicStudy.size(),1)}">
+							<div  class="col-sm-3">
+							<article class="style1" style="margin: 0 10em 0 0;">
+								<div class="card-container-nonehover" style="zoom: 0.8;">
+									<div class="card">
+										<div class="front">
+											<div class="cover">
+												<img src="images/pic01.jpg">
+												<div class="studyType">프리미엄</div>
+												<div class="studyOnoff">온오프라인</div>
+											</div>
+											<div class="profile_box">
+												<div class="user">
+													<img class="img-circle" src="images/pic01.jpg" />
+												</div>
+													<p class="profession">인증강사</p>
+											</div>
+											<h6 class="name">아직 인증된 강의가 존재하지 않습니다</h6>
+											<div class="content">
+												<div class="main">
+													<p class="text-center" style="color: #ff005a; font-weight: bold;">리뷰 4.5이상의 강의 경력을 가진 인증된 강사의 강의를 기대해주세요.</p>
+													<br>
+													<p class="text-center"></p>
+													<p class="text-center"></p>
+													<i class="tag btn-primary" style="color: blue; float: right;"></i>
+												</div>
+											</div>
+										</div>
+										</div>
+										</div>
+										</article>
+										</div>
+										<!-- end front panel -->
 						</th:block>
 
 						<!-- <div th:with="study=${popularBasicStudy1}" class="col-sm-3">
@@ -442,14 +424,183 @@
 							<article>
 								<h5>추천 멤버</h5>
 								<br>
-								<div th:each="member : ${recommendTutorMember}"
-									class="list-group">
+								<!-- <div th:each="member : ${recommendTutorMember}" class="list-group">
 									<a th:text="${member.nickname}" href="#"
 										class="list-group-item">aaa123</a>
+								</div> -->
+								<div class="list-group"
+									th:each="member : ${recommendTutorMember}">
+									<div class="dropdown">
+										<a class="list-group-item" data-toggle="dropdown"
+											th:text="${member.nickname}"></a>
+
+										<div class="dropdown-menu">
+											<a class="dropdown-item" data-toggle="modal"
+												data-target="#messagewrite"
+												th:data-receive-id="${member.id}">쪽지쓰기</a> <a
+												class="dropdown-item" data-toggle="modal"
+												data-target="#memberinfo" th:data-member-info="${member.id}">유저정보</a>
+										</div>
+									</div>
 								</div>
+								<!-- 모달창 쪽지쓰기창 시작 -->
+								<div class="modal" id="messagewrite">
+									<div class="modal-dialog">
+										<div class="modal-content">
+
+											<div class="modal-header">
+												<h4 class="modal-title">쪽지쓰기</h4>
+												<button type="button" class="close" data-dismiss="modal">&times;</button>
+											</div>
+
+
+											<div class="modal-body">
+												<form method="POST" action="/modalmessageWriteResult"
+													name="modalmessage">
+													<div class="card border-primary rounded-0">
+														<div class="card-header p-0">
+															<div class="bg-info text-white text-center py-2">
+																<h3>
+																	<i class="fa fa-envelope"></i>
+																</h3>
+																<p class="m-0">쪽지쓰기</p>
+															</div>
+														</div>
+														<div class="card-body p-3">
+
+
+															<div class="form-group">
+																<div class="input-group mb-2">
+																	<div class="input-group-prepend">
+																		<div class="input-group-text">
+																			<i class="fa fa-user text-info"></i>
+																		</div>
+																	</div>
+																	<input type="text" class="form-control" id="receiveId"
+																		name="receiveId" placeholder="받는사람을 입력해주세요." value=""
+																		required />
+																</div>
+															</div>
+
+															<div class="form-group">
+																<div class="input-group mb-2">
+																	<div class="input-group-prepend">
+																		<div class="input-group-text">
+																			<i class="fa fa-comment text-info"></i>
+																		</div>
+																	</div>
+																	<textarea class="form-control" name="messageContent"
+																		id="messageContent" placeholder="내용을 입력해주세요." required></textarea>
+																</div>
+															</div>
+
+															<div class="text-center">
+																<input type="hidden" th:name="${_csrf.parameterName}"
+																	th:value="${_csrf.token}" /> <input type="button"
+																	value="전송하기" data-toggle="modal"
+																	data-target="#completemessage"
+																	class="btn btn-info btn-block rounded-0 py-2"
+																	onclick="gomessage()">
+															</div>
+															<span><a
+																class="btn btn-info btn-block rounded-0 py-2"
+																id="modimember" th:href="@{receiveMessage}"
+																role="button">취소</a></span>
+
+
+														</div>
+
+													</div>
+												</form>
+											</div>
+
+
+											<div class="modal-footer">
+												<button type="button" class="btn btn-danger"
+													data-dismiss="modal">Close</button>
+											</div>
+
+
+										</div>
+									</div>
+								</div>
+
+								<!-- 모달창 쪽지쓰기창 끝 -->
+								<!-- 모달창 완료 메세지 -->
+								<div class="modal" id="completemessage">
+
+									<div class="modal-dialog modal-sm">
+										<div class="modal-content">
+
+											<!-- Modal body -->
+											<div class="modal-body">쪽지가 전송되었습니다.</div>
+											<!-- Modal footer -->
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-dismiss="modal">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- 모달창 유저정보 시작 -->
+								<div class="modal" id="memberinfo">
+									<div class="modal-dialog">
+										<div class="modal-content" style="background-color: white;">
+
+											<!-- Modal Header -->
+											<div class="modal-header">
+												<h4 class="modal-title">Modal Heading</h4>
+												<button type="button" class="close" data-dismiss="modal">&times;</button>
+											</div>
+
+											<!-- Modal body -->
+											<div class="modal-body">
+												<input type="text" id="memberInfo" name="memberInfo" value= />
+
+											</div>
+
+											<!-- Modal footer -->
+											<div class="modal-footer">
+												<button type="button" class="btn btn-danger"
+													data-dismiss="modal">Close</button>
+											</div>
+
+										</div>
+									</div>
+								</div>
+								<!-- 모달창 유저정보 끝 -->
+								<script>
+									$('#messagewrite')
+											.on(
+													'show.bs.modal',
+													function(e) {
+														var receiveId = $(
+																e.relatedTarget)
+																.data(
+																		'receive-id');
+														$(e.currentTarget)
+																.find(
+																		'input[name="receiveId"]')
+																.val(receiveId);
+													});
+
+									$('#memberinfo')
+											.on(
+													'show.bs.modal',
+													function(e) {
+														var memberInfo = $(
+																e.relatedTarget)
+																.data(
+																		'member-info');
+														$(e.currentTarget)
+																.find(
+																		'input[name="memberInfo"]')
+																.val(memberInfo);
+													});
+								</script>
 							</article>
 						</div>
-
 					</div>
 				</div>
 			</div>
@@ -460,9 +611,6 @@
 
 	</div>
 </body>
-
-
-
 
 
 </html>

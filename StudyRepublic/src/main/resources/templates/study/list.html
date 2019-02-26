@@ -34,7 +34,7 @@ h2 {
 				<h3 th:if="${typeCode} eq 'b'">일반 스터디</h3>
 				<h3 th:if="${typeCode} eq 'All'">전체 스터디</h3>
 				<th:block th:if="${search}!=null">
-				<p th:text="|검색조건  - 스터디명 : , 스터디타입 : ${typeCode} , 온오프 : ${onoffCode} , 레밸 : ${levelCode}|" style="font-weight: bold;font-style: italic;"></p>
+				<p th:text="|검색조건  - 스터디명 : , 스터디타입 : ${typeCode} , 온오프 : ${onoffCode} , 레벨 : ${levelCode}|" style="font-weight: bold;font-style: italic;"></p>
 				</th:block>
 				<hr>
 			</div>
@@ -65,7 +65,7 @@ h2 {
 									<p class="text-center" th:text="${typeCode} eq 'p'?|￦${study.price.price}" style="color: #ff005a; font-weight: bold;"></p><br>
 									<p class="text-center" th:text="|${study.startDate}~${study.endDate}|+' '+${study.dayCode.codeValueKorean}"></p>
 									<p class="text-center" th:text="'관심분야 : '+${study.studyInterest[0].interest2code.codeValueKorean}+' / 레벨 : '+${study.levelCode.codeValueKorean}"></p>
-									<i class="tag btn-primary" th:text="${study.studyStatusCode.codeValueKorean}" style="color: blue; float: right;"></i>									
+									<i class="tag btn-primary" th:text="|${study.studyStatusCode.codeValueKorean}&nbsp|" style="color: white; float: right; background: #ff7600;"></i>									
 								</div>
 							</div>
 						</div>

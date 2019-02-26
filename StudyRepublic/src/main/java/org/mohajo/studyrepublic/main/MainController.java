@@ -43,7 +43,6 @@ public class MainController {
 	@Autowired
 	StudyMemberRepository studymemberrepository;
 	
-	
 	@RequestMapping("/index")
 	public void index(Model model, Member member, Authentication authentication, HttpSession hs) {
 		List<Interest2CD> basicPopularTagList = mainService.getBasicPopularTag();
@@ -110,7 +109,7 @@ public class MainController {
 //	public String search(Study studyInfo,String searchDate,String[] location, String[] interest, Model model){
 	public String search(Study studyInfo, String searchDate,String[] location, String[] interest, PageDTO pageDto, Model model){
 		
-		Pageable page = pageDto.studyMakePageable(0, 2, "postDate");
+		Pageable page = pageDto.studyMakePageable(0, 12, "postDate");
 		Page<Study> searchList = mainService.search(studyInfo, searchDate, location, interest, page);
 //		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());
 //		model.addAttribute("list", searchList);
