@@ -115,24 +115,57 @@
 					dataType : "json",
 					success : function(data) {
 						console.log("실행됨");
-						d = data;
-						$("#leftDown").append("<button class='check' value='" + data[0] + "'>" + data[1] + "</button></br>");
+						if(data[1]=="탈퇴"){
+							$("#leftDown").append("<button class='check' data-toggle='modal' data-target='#exitModal' value='" + data[0] + "'>" + data[1] + "</button></br>"
+									+"<div class='modal fade' id='exitModal' role='dialog'>"
+									+"<div class='modal-dialog'>"
+									+"<div class='modal-content'>"
+									+"<div class='modal-header'>"
+									+"<h4 class='modal-title' id='warnning'>경고</h4>"						    
+						     		+"<button type='button' class='close' data-dismiss='modal'>×</button>"
+						     		+"</div>"
+						     		+"<div class='modal-body'>"
+						        	+"<p id='reallyClose'>정말로 스터디를 탈퇴하시겠습니까?</p>"
+						          	+"<p id='doNotResolve'>탈퇴한 스터디는 재가입 할 수 없습니다.</p>"
+						        	+"</div>"
+						        	+"<div class='modal-footer' id='modal-footerId'>"
+						        	+"<button type='button' class='btn btn-default' id='OKBye2' data-dismiss='modal'>예</button>"
+						        	+"<button type='button' class='btn btn-default' id='NOIdidnt' data-dismiss='modal'>아니오</button>"
+						        	+"</div></div></div></div>"
+						        	+"<script>$('#OKBye2').on('click', function(){"
+						        	+"console.log('실행됨?');"
+						        	+"var studyId = window.name; console.log('확인합니다'+studyId); alert('???');"
+						        	+"$.ajax({"
+						        		+"type : 'POST',"
+						        		+"type : 'POST',"
+						        		+"contentType : 'application/json; charset=UTF-8',"
+						        	    +"url : '/StudyPage/Exit',"
+						        	    +"data : studyId," 
+										+"dataType : 'text',"
+										+"success : function(data) { console.log('성공함'); self.close()"
+										+"},error : function(data) {"
+										+"console.log('실패함');}"
+										+"});});"							        
+						      );
+						}else if(data[1]=="관리"){
+							$("#leftDown").append("<button class='check' value='" + data[0] + "'>" + data[1] + "</button></br>");
+						}
 						$('.check').on('click', function(e){
-			        		
-			        		form = $('#formAction')[0];
-			        		form.method = "POST";
-			        		form.action = this.value;
-			        		form[0].name = "studyId";
-			        		form[0].value = window.name;
-			        		console.log(form.action + '/' + form[0].name + '/' + form[0].value);
-			        		form.submit();
+			        		if(this.textContent!="탈퇴"){
+			        			form = $('#formAction')[0];
+				        		form.method = "POST";
+				        		form.action = this.value;
+				        		form[0].name = "studyId";
+				        		form[0].value = window.name;
+				        		console.log(form.action + '/' + form[0].name + '/' + form[0].value);
+				        		form.submit();
+			        		}
 			        	});
 					},error : function(data) {
 						console.log(data);
 					}
 				});
-	        	
-	        	
+		       
 	        });
       
     var popOpen;

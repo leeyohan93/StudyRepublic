@@ -36,8 +36,9 @@ public class StudyQnaboardReply /*extends StudyBoardReply*/{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyQnaboardReplyId;
 	
-	@Column(name = "study_qnaboard_id")
-	private StudyQnaboard studyqnaboardId;
+	@Column(name = "study_qnaboard_id", insertable=false, updatable=false)
+	private int studyqnaboardId;
+//	private StudyQnaboard studyqnaboardId;
 	
 	@Column(name = "study_id", insertable=false, updatable=false)
 	private String studyId;

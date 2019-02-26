@@ -125,7 +125,7 @@ public class StudyPageController {
 			sendString[0] = "/StudyPage/Management";
 			sendString[1] = "관리";
 		}else if(findStudyMemberLEMEbyStudyIdAndId.getStudyMemberStatusCode().getStudyMemberStatusCode().equals("ME")) {
-			sendString[0] = "#";
+			sendString[0] = "#personalExit";
 			sendString[1] = "탈퇴";
 		}
 		log.info(sendString[0], sendString[1]);
@@ -158,7 +158,13 @@ public class StudyPageController {
 		//session으로 연결할 경우 해당 페이지마다 식별이 어려울 것이기 때문에, model을 통한 값 전달 및 링크 전송을 통한 값 전달을 실행함.
 		//session으로 하는 방법도 있지만, 그렇게 할 경우 여러페이지의 페이지를 띄우더라도 결국은 session에 남은 하나의 페이지만 관리 될 수 있음.
 		log.info("스터디 이름" + studyId + "/" + "유저 이름" + userId);
-		
+		try {
+			StudyMember studymember = smr.findStudyMemberLEMEbyStudyIdAndId(studyId, userId, "LE", "ME");
+		}catch(Exception e){
+			log.info("걸렸는데 error가 리턴이 안됨...");
+			return "studypage/error";
+		}
+		log.info("여기로 왜 오냐????");
 
 		try {
 			log.info("findbystudymember");
@@ -344,6 +350,35 @@ public class StudyPageController {
 		return "studypage/studypage_preview";
 	}
 	
+	@RequestMapping(value="/Exit")
+	@ResponseBody
+	public boolean exitUser(@RequestBody String studyId) {
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		log.info(studyId + "/" + id);
+	
+		StudyMember studyMember = smr.findStudyMemberLEMEbyStudyIdAndId(studyId, id, "ME", "ME");
+		
+		if(studyMember != null) {
+			log.info("조회에 성공함");
+			log.info("아이디 : " + studyMember.getId()
+					+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
+			try {
+				log.info("try 진입");
+				studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD("EX"));
+				smr.save(studyMember);
+				log.info("update까지 성공함.");
+				return true;
+			}catch(Exception e) {
+				log.info("실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+				e.printStackTrace();
+				return false;
+			}
+		}else {
+			log.info("조회에 실패함");
+			return false;
+		}
+	}
+	
 	@RequestMapping(value="/GetoutUser")
 	@ResponseBody
 	public boolean getoutUser(@RequestBody HashMap getoutUserInfo) {
@@ -460,21 +495,29 @@ public class StudyPageController {
 		String nickName = (String)getoutUserInfo.get("nickName");
 		log.info(studyId + "/" + nickName);
 		StudyMember studyMember = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "WA");
+		int capacity = studyMember.getStudy().getEnrollCapacity();
+		int actual = studyMember.getStudy().getEnrollActual();
 		if(studyMember != null) {
 			log.info("조회에 성공함");
 			log.info("닉네임 : " + studyMember.getMember().getNickname()
 					+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
 			String id = studyMember.getId();
 			log.info("아이디 : " + id);
-			try {
-				log.info("try 진입");
-				studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD("ME"));
-				smr.save(studyMember);
-				log.info("update까지 성공함.");
-				return true;
-			}catch(Exception e) {
-				log.info("실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
-				e.printStackTrace();
+			if(capacity > actual) {
+				try {
+					log.info("try 진입");
+					studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD("ME"));
+					studyMember.getStudy().setEnrollActual(actual+1);
+					log.info("스터디원 추가가 완료 됨");
+					smr.save(studyMember);
+					log.info("update까지 성공함.");
+					return true;
+				}catch(Exception e) {
+					log.info("실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+					e.printStackTrace();
+					return false;
+				}
+			}else {
 				return false;
 			}
 		}else {
@@ -508,22 +551,32 @@ public class StudyPageController {
 			try {
 				log.info("첫번째 try 진입");
 				StudyMember studyMember = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "WA");
+				int capacity = studyMember.getStudy().getEnrollCapacity();
+				int actual = studyMember.getStudy().getEnrollActual();
 				if(studyMember != null) {
 					log.info("조회에 성공함");
 					log.info("닉네임 : " + studyMember.getMember().getNickname()
 							+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
 					String id = studyMember.getId();
 					log.info("아이디 : " + id);
-					try {
-						log.info("두번째 try 진입");
-						studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD(userStatus));
-						smr.save(studyMember);
-						log.info("update까지 성공함.");
-						sqlResultList.add(true);
-					}catch(Exception e) {
-						log.info("두번째 try 실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
-						e.printStackTrace();
-						sqlResultList.add(false);
+					if(userStatus=="ME"&& capacity > actual) {
+						try {
+							log.info("두번째 try 진입");
+							studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD(userStatus));
+							//원래라면 이하 같은 과정에는 Transaction을 적용해줘야 하지만, 현재는 시간의 여유가 없으므로 그냥 넘어간다...
+							if(userStatus=="ME") {
+								studyMember.getStudy().setEnrollActual(actual+1);
+								log.info("스터디원 추가가 완료 됨");
+							}
+							smr.save(studyMember);
+							log.info("update까지 성공함.");
+							sqlResultList.add(true);
+						}catch(Exception e) {
+							log.info("두번째 try 실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+							e.printStackTrace();
+							sqlResultList.add(false);
+						}
+						
 					}
 				}else {
 					sqlResultList.add(false);
