@@ -1,6 +1,8 @@
 package org.mohajo.studyrepublic.domain;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -36,17 +40,32 @@ public class StudyQnaboardReply /*extends StudyBoardReply*/{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyQnaboardReplyId;
 	
-	@Column(name = "study_qnaboard_id")
+/*    @Column(name = "study_qnaboard_id")
 	private StudyQnaboard studyqnaboardId;
 	
 	@Column(name = "study_id", insertable=false, updatable=false)
 	private String studyId;
+	
 	@Column(name = "id", insertable=false, updatable=false)
+	private String id;*/
+	
+	@Column(name = "study_qnaboard_id")
+	private int studyqnaboardId;
+	
+	@Column(name = "study_id")
+	private String studyId;
+	
+	@Column(name = "id")
 	private String id;
+
+	
 	@Column
 	private String content;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column
-	private Date date;
+	private Date date= new Date();
+	
 	@Column(name = "replygroup")
 	private int replyGroup;
 	@Column(name = "replystep")

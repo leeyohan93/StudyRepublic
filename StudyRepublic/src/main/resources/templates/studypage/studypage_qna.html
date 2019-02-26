@@ -125,10 +125,13 @@
 	  	.dateFont{
 	  		font-weight: bold;
 	  	}
-	  	.profileBoxPhotoIamge{
+	  	.profileBoxPhotoIamge,.commentProfile{
 	  		border-radius: 100%;
 		    width: 20%;
 		    display: inline-block;
+	  	}
+	  	.commentProfile{
+	  	    width: 30px;
 	  	}
 	  	.profileName{
 	  		display: inline-block;
@@ -144,17 +147,21 @@
 			<div id="boardName">
 				>>질문 및 답변
 			</div>
-			<div th:each="fasq : ${findQnaboardInfoByStudyId}">
+			<div th:with="result=${findQnaboardInfoByStudyId.list}">
+			<div th:each="fasq : ${result.content}">
 				<div class="rightContent rightAll" >
+			        
+			        <input id="studyQnaboardId" type="hidden" th:value="${fasq.studyQnaboardId}"/>
+			        
 					<div><input type="hidden" th:value="${fasq.number}" name="number">
 					</div>
 					<div class="rightLeft rightTitle"
 						><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${fasq.studyMember.member.profileSaveName}}"
 						><div class="profileName" th:text = "${fasq.studyMember.member.nickname}"></div
 					></div
-					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasq.number}" data-toggle="collapse" class="boardList"
-							th:text="${fasq.title}" th:id="${fasq.number}"></a
-					></div
+					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasq.number}"  th:name=|${fasq.studyQnaboardId}| data-toggle="collapse" class="boardList"
+							th:text="${fasq.title}" th:id="${fasq.number}"></a>
+					</div
 					><div class="rightRight rightTitle contentWriteDate">
 							<div class="" th:text="${#dates.format(fasq.date, 'yyyy/MM/dd')}"></div>
 							<div class="" th:text="${#dates.format(fasq.date, 'HH:mm:ss')}+' 작성'"></div>
@@ -163,16 +170,20 @@
 						<input type="hidden" th:id="${fasq.number}">
 						<div class="content" th:text="${fasq.content}">
 						</div>
+						<!--댓글  -->
 						<div class="contentReplyForm"
-							><div class="contentReply" th:text="${fasq.studyQnaboardReply}">
-							
+							>
+<!-- 							<div class="contentReply" th:text="${fasq.studyQnaboardReply}"> -->
+							<div class="contentReply">
+							  <div class="commentList"></div>
 							</div>
 							<div class="contentReplyWriteForm"
 								><div class="userProfile">프</div
-								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
-								><button type="button" class="btn btn-dark replyButton">댓글 작성</button
+								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" th:name=|content${fasq.studyQnaboardId}| cols="30" rows="3" maxlength="255"></textarea></div
+								><button type="button" class="btn btn-dark replyButton" th:value="${fasq.studyQnaboardId}">댓글 작성</button
 							></div
 						></div>
+						<!--댓글 끝  -->
 						<div class="contentModifyAndDelete">
 							<div class="contentModify">
 								<button type="button" class="btn btn-dark modifyButton">수정</button>
@@ -184,6 +195,38 @@
 					</div>
 				</div>
 			</div>
+			</div>
+			
+			<!-- 페이징   -->
+
+
+			 		<nav>
+						<div class="pageForm">
+							<ul class="pagination">
+								<li class="page-item" th:if="${findQnaboardInfoByStudyId.prevPage}"><a
+									class="page-link" th:href="${findQnaboardInfoByStudyId.prevPage.pageNumber}+ 1">
+										〈&nbsp&nbsp이전 </a></li>
+								<li class="page-item" th:each="p:${findQnaboardInfoByStudyId.pageList}"
+									th:classappend="${p.pageNumber == findQnaboardInfoByStudyId.currentPageNum -1}?active: '' "><a
+									class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
+										+ 1]]</a></li>
+
+								<li class="page-item" th:if="${findQnaboardInfoByStudyId.nextPage}"><a
+									class="page-link" th:href="${findQnaboardInfoByStudyId.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
+								</li>
+							</ul>
+						</div>
+					</nav> 
+					
+					
+					<form id="f1" th:action="@{Qnaboard}" method="get">
+						<input type="hidden" name="page" th:value=${findQnaboardInfoByStudyId.currentPageNum}>
+						<input type="hidden" name="size"
+							th:value=${findQnaboardInfoByStudyId.currentPage.pageSize}>
+					</form>
+
+					<!--페이징 끝  -->
+					
 		</div>
 		<div id="writeButtonSpace">
 			<button type="button" class="btn btn-dark" id="writeButton">글쓰기</button>
@@ -192,6 +235,7 @@
 			<span></span> <span></span> <span></span> <span></span>
 		</div>
 		<script>
+			var contentCheck;
 			$(document).ready(function() {
 								var token = $("meta[name='_csrf']").attr("content");
 								var header = $("meta[name='_csrf_header']").attr("content");
@@ -202,7 +246,7 @@
 											});
 								});
 
-								$(".boardList").on("click", function() {
+								/* $(".boardList").on("click", function() {
 													var StudyNoticeboard = {
 														studyId : "BB00001",
 														id : "aaa123",
@@ -223,7 +267,7 @@
 																	 *설명 : 덧글만 따로 뽑아내기 위한 Ajax
 																	 *주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
 																	 */
-																	$.ajax({
+																	/*$.ajax({
 																				type : "POST",
 																				contentType : "application/json; charset=UTF-8",
 																				url : "/StudyPage/Noticeboard/replyshow",
@@ -243,12 +287,143 @@
 																	alert("error");
 																}
 															});
-												});
+												}); */
 								$("#writeButton").on("click", function(){
 									//tip! : 버튼에 href 링크 넣기
 									$(location).attr('href',  '/StudyPage/Write?board=Noticeboard');
 								});
 							});	//readyEnd
+							
+							//페이징
+							
+							var formObj = $("#f1");
+							$(".pagination a").click(function(e) {
+
+								e.preventDefault();
+					      
+								formObj.find('[name="page"]').val($(this).attr('href'));
+
+								formObj.submit();
+
+							});
+							
+							//댓글 등록 버튼 클릭
+							var replyGroup = 0;
+							var replystep =0;
+							 $(".replyButton").click(function(){  
+								 
+							var studyId = window.name
+							var studyQnaBoardId = this.value;
+							var content = $('[name=content'+studyQnaBoardId+']').val();
+							
+								 console.log("히힛!");
+								 console.log(studyQnaBoardId);
+								 console.log(studyId);
+								 console.log(content);
+								 
+							 	 $.ajax({
+							         url : '/StudyPage/qnaBoardReplyRegister',
+							         type : 'post',
+							         data : {'studyQnaBoardId' : studyQnaBoardId, 'studyId' : studyId , 'content' : content,  'replyGroup' : replyGroup,  'replystep' : replystep},
+							         success : function(data){
+							        	 console.log("성공");
+						                 $(".contentReplyWriteInput").val('');
+							        	 commentList(studyQnaBoardId); 
+							             },
+							         
+							         error :function(){
+											console.log("실패");
+										}
+							         
+							     });  
+							     
+							 });
+							 
+							 //댓글 목록 
+							  $(".boardList").on("click", function(){
+								 
+								 var studyQnaBoardId = this.name;
+								 console.log(studyQnaBoardId);
+							      $.ajax({
+							         url : '/StudyPage/qnaBoardReplyList',
+							         type : 'get',
+							         data : {'studyQnaBoardId':studyQnaBoardId},
+							         success : function(data){
+							        	 console.log("성공");
+							             var a =''; 
+							             console.log(data);
+							              $.each(data, function(key, value){ 
+							            	
+							                 a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+							                 a += '<div class="commentInfo'+value.studyQnaboardReplyId+'"><img class="commentProfile" src="/member_image/'+value.studyReplyMember.member.profileSaveName+'" > '+value.studyReplyMember.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
+							          				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3"); 
+							                 a += '<a onclick="commentUpdate('+value.studyQnaboardReplyId+',\''+value.content+'\');"> 수정 </a>';
+							                 a += '<a onclick="commentDelete('+value.studyQnaboardReplyId+');"> 삭제 </a> </div>';
+							                 a += '<div class="commentContent'+value.studyQnaboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
+							                 a += '</div></div>';
+ 							             $(".commentList").html(a);
+							             }); 
+							           
+							         },
+							         error : function(data){
+							        	 console.log("에러");
+							         }
+							     }); 
+							 }); 
+							 
+							 //댓글 목록
+							 function commentList(studyQnaBoardId){
+								 $.ajax({
+							         url : '/StudyPage/qnaBoardReplyList',
+							         type : 'get',
+							         data : {'studyQnaBoardId':studyQnaBoardId},
+							         success : function(data){
+							        	 console.log("성공");
+							             var a =''; 
+							             console.log(data);
+							              $.each(data, function(key, value){ 
+                                              console.log("value.studyQnaboardId:"+value.studyqnaboardId);							            	
+							                 a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+							                 a += '<div class="commentInfo'+value.studyQnaboardReplyId+'"><img class="commentProfile" src="/member_image/'+value.studyReplyMember.member.profileSaveName+'" > '+value.studyReplyMember.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
+							          				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3"); 
+							                
+							                 a += '<a onclick="commentDelete('+value.studyQnaboardReplyId+',\''+value.studyqnaboardId+'\');"> 삭제 </a> </div>';
+							                 a += '<div class="commentContent'+value.studyQnaboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
+							                 a += '</div></div>';
+ 							             $(".commentList").html(a);
+							             }); 
+							           
+							         },
+							         error : function(data){
+							        	 console.log("에러");
+							         }
+							     });
+								 
+							 };
+							 
+							 //댓글 삭제 
+							 function commentDelete(studyQnaboardReplyId,studyQnaboardId){ 
+								 console.log("studyQnaboardId:"+studyQnaboardId);
+							     $.ajax({
+							         url : '/StudyPage/qnaBoardReplyDelete/'+studyQnaboardReplyId,
+							         type : 'post',
+							         success : function(data){ 
+							        	 console.log(data);
+							        	 console.log("studyQnaboardId:"+studyQnaboardId);
+							        	 console.log("=============");
+							        	 console.log("성공");
+							             commentList(studyQnaboardId); 
+							         },
+							         error : function(data){
+							        	 console.log(data);
+							        	 console.log("에러");
+							         }
+							     });
+							 }
+						
+							
+							 
+							 
 							
 		</script>
 	</div>
