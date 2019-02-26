@@ -145,8 +145,8 @@
 													<p class="text-center"
 														th:text="'관심분야 : '+${study.studyInterest[0].interest2code.codeValueKorean}+' / 레벨 : '+${study.levelCode.codeValueKorean}"></p>
 													<i class="tag btn-primary"
-														th:text="${study.studyStatusCode.codeValueKorean}"
-														style="color: blue; float: right;"></i>
+														th:text="|${study.studyStatusCode.codeValueKorean}&nbsp|"
+														style="color:white;background: #ff7600; float: right;"></i>
 												</div>
 											</div>
 										</div>
@@ -307,8 +307,8 @@
 													<p class="text-center"
 														th:text="'관심분야 : '+${study.studyInterest[0].interest2code.codeValueKorean}+' / 레벨 : '+${study.levelCode.codeValueKorean}"></p>
 													<i class="tag btn-primary"
-														th:text="${study.studyStatusCode.codeValueKorean}"
-														style="color: blue; float: right;"></i>
+														th:text="|${study.studyStatusCode.codeValueKorean}&nbsp|"
+														style="color:white;background: #ff7600; float: right;"></i>
 												</div>
 											</div>
 										</div>
