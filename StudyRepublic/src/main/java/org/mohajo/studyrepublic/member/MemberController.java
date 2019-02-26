@@ -280,8 +280,13 @@ public class MemberController {
 	
 	   public void createSession(HttpSession session, Member member) {	
 		         
+		   		member = memberrepository.findById(member.getId()).get();
+		   
 		   		 session.setAttribute("nickname", member.getNickname());
 		         session.setAttribute("memberimg", member.getProfileSaveName());
+		         
+		         System.out.println("전 이미지: " + member.getProfileSaveName());
+		       
 		         
 		         MemberPoint memberpoint = memberpointrepository.inqueryPoint(member.getId());		         
 		         session.setAttribute("memberpoint", memberpoint.getPoint());
@@ -290,7 +295,7 @@ public class MemberController {
 		         
 		         	System.out.println("멤버 객체 ID 조회 : " + member.getId());
 					List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(member.getId());		
-					System.out.println("멤버테스트: " + member);
+/*					System.out.println("멤버테스트: " + member);*/
 					System.out.println("조이닝스터디테스트 : " + joiningStudy);
 					HashMap <String, String> studyNameAndStudyIdMap = new HashMap<>();
 					HashMap <String, String> studyIdAndStatusKoreanMap = new HashMap<>();

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.member.MemberController;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,9 @@ public class ModifyMemberController {
    
    @Autowired
    private MemberRepository mbr;
+   
+   @Autowired
+   private MemberController membercontroller;
    
    BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 
@@ -199,6 +203,11 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
    Authentication auth =SecurityContextHolder.getContext().getAuthentication();
    String id = auth.getName();
    
+   Member member = mbr.findById(id).get();
+
+   
+   
+   
    String sourceFileName = sourceFile.getOriginalFilename();
    String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
    
@@ -228,8 +237,13 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
    response.setFileContentType(sourceFile.getContentType());
    response.setAttachmentUrl("http://localhost:8080/member_image/" + saveFileName);
    
+   member.setProfileSaveName(saveFileName);
+   mbr.save(member);
+   
    int uploadResult = mbr.changeProfile(sourceFileName+sourceFileNameExtension, saveFileName, id);
    
+   membercontroller.createSession(session, member);
+   System.out.println("발동중??");
    
    return new ResponseEntity<>(response,HttpStatus.OK);
 }

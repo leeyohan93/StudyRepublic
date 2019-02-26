@@ -1,36 +1,36 @@
 package org.mohajo.studyrepublic.mypage;
 
-import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.InterestLocation;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberInterest;
+import org.mohajo.studyrepublic.domain.MemberPoint;
+import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.InterestLocationRepository;
+import org.mohajo.studyrepublic.repository.MemberInterestRepository;
+import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * @author 김준석
@@ -48,6 +48,8 @@ public class MypageController {
 	@Autowired
 	private MemberRepository mbr;
 	@Autowired
+	private MemberInterestRepository mir;
+	@Autowired
 	private StudyMemberRepository smr;
 	@Autowired
 	private InterestLocationRepository iir;
@@ -55,6 +57,9 @@ public class MypageController {
 	private Interest1CDRepository i1cdr;
 	@Autowired
 	private Interest2CDRepository i2cdr;
+	@Autowired
+	MemberPointRepository  memberpointrepository;
+	
 	private Member member;
 	
 	/*@RequestMapping("/mypage")
@@ -70,7 +75,7 @@ public class MypageController {
 
 
 	@RequestMapping("/mypage")
-	public String userinfo(Model model ) {
+	public String userinfo(Model model, HttpSession session ) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		
@@ -87,8 +92,7 @@ public class MypageController {
 		model.addAttribute("smr2",studymemberpremium);
 		model.addAttribute("smr3",studymemberCount);
 		
-		List<InterestLocation> interestlocation = iir.findInterestById(id) ; 
-		
+		List<InterestLocation> interestlocation = iir.findInterestById(id) ; 	
 		model.addAttribute("iir",interestlocation);
 		
 	      List<Interest1CD> interest1cd = i1cdr.findAll();
@@ -97,6 +101,10 @@ public class MypageController {
 	      List<Interest2CD> Dinterest2cd = i2cdr.Dinterest2List();
 	      List<Interest2CD> Winterest2cd = i2cdr.Winterest2List();
 	      List<Interest2CD> Ninterest2cd = i2cdr.Ninterest2List();
+	      List<MemberInterest> mymemberinterest = mir.findMemberInterest(id);
+	      
+	      System.out.println("나의 관심분야: " + mymemberinterest);
+	      
 
 	      model.addAttribute("interest1cd", interest1cd);
 	      model.addAttribute("interest2cd", interest2cd);
@@ -104,9 +112,21 @@ public class MypageController {
 	      model.addAttribute("dinterest2cd", Dinterest2cd);
 	      model.addAttribute("winterest2cd", Winterest2cd);
 	      model.addAttribute("ninterest2cd", Ninterest2cd);
+	      model.addAttribute("mymemberinterest", mymemberinterest);
 		
 		
 		System.out.println(studymemberpremium); /*유저정보 데이터*/
+		
+		
+		
+		
+		MemberPoint memberpoint = memberpointrepository.inqueryPoint(id);
+		model.addAttribute("memberpoint", memberpoint);
+		model.addAttribute("memberpoint_point", memberpoint.getPoint());
+		
+    	         
+        session.setAttribute("memberpoint", memberpoint.getPoint());
+        System.out.println("보유포인트갱신: " + memberpoint.getPoint());
 		
 		return "mypage/mypage_main";
 		/*회원 스터디정보 가져오기*/
@@ -201,69 +221,7 @@ public class MypageController {
 	      return map;   
 	   }
 	
-	/* 관심지역 ajax 수정하기 */
-	@RequestMapping(value="/deleteLocation",method=RequestMethod.GET)
-	@ResponseBody
-	public  Map<Object, Object>  deleteLocation(){
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
 		
-		String result="false";
-		
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		
-		int deleteCnt = iir.deleteLocationById(id);
-		
-		
-		if(deleteCnt > 0) {
-			result = "true";
-		}
-		
-		
-		map.put("result", result);
-		   System.out.println(result);
-		return map;
-	} 
-		
-
-	/* 관심지역 하던중 
-	@RequestMapping(value="/insertLocation",method=RequestMethod.POST)
-	@ResponseBody
-	public void insertLocation(@RequestParam(value="insertList[i].toString()",required=false)Member interestLocation) {
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
-		 
-		
-		String result="false";
-		
-		System.out.println("인서트");
-		 List <InterestLocation> interestlocation;
-		
-		Member memberlocation = new Member();
-		memberlocation.setInterestlocation(interestLocation);
-		
-		iir.save(interestLocation, id);
-		
-		
-	
-		
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		//if(insertCnt > 0) {
-		//  result = "true";
-		//}
-		//map.put("result", insertCnt);
-		return 	iir.save(interestLocation,id);
-	}
-		
-			
-		*/
-		
-			
-			
-		   
-			
-				
-	
 	@RequestMapping("/modalmember")
 	@ResponseBody
 	public Map<String, Object> modalmeber(Model model, @RequestParam String id){
@@ -276,23 +234,70 @@ public class MypageController {
 		
 		return map;
 	}
+
 	
-	/*관심분야 인설트 하던중 */
-	/*@RequestMapping("/insertmemberInterest")
-	public String insertMemberInterest(Model model,@RequestParam String memberInterest) {
+		
+	@RequestMapping("/member/modify/interest") 
+	public String modifyInterest(Model model, @RequestParam String[] minterest) {
+		
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		
-		Member memberinterest = new Member();
-		memberinterest.setMemberInterest(memberInterest);
+		System.out.println("-----관심분야시작------");
+		System.out.println("관심분야 갯수: " + minterest.length);
+		
+		mir.deleteInterest(id);
+			
+//		List<MemberInterest> memberInterestList = new ArrayList<>();
 		
 		
+		for (int i = 0; i < minterest.length; i++) {
+		System.out.println("interest" + i + " : " + minterest[i]);
+		Interest2CD minterest2cd = i2cdr.findById(minterest[i]).get();
+		MemberInterest mmemberinterest = new MemberInterest();
+		mmemberinterest.setId(id);
+		mmemberinterest.setInterest2cd(minterest2cd);
+		mir.save(mmemberinterest);
+				
+		
+/*		memberInterestList.add(mmemberinterest);
+		System.out.println("멤버 인터레스트 사이즈: " + memberInterestList.size());
+		System.out.println("멤버 인터레스트 리스트 " + i + " : " +  memberInterestList.get(i));*/
+		}
 		
 		
-		return "";
+/*		member.setMemberInterest(memberInterestList);
+		mbr.save(member);*/
+		
+		return "redirect:/mypage";
 		
 	}
-*/
+	
+	
+	@RequestMapping("/member/modify/location") 
+	public String modifyLocation(Model model, @RequestParam String[] mlocation) {
+		
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		Member member = mbr.findById(id).get();
+		System.out.println("-----관심지역시작------");
+		System.out.println("관심지역 갯수: " + mlocation.length);
+		
+		iir.deleteLocation(id);
+		
+		for (int i = 0; i < mlocation.length; i++) {
+		System.out.println("interest" + i + " : " + mlocation[i]);
+		
+		InterestLocation interestlocation = new InterestLocation();
+		interestlocation.setMember(member);
+		interestlocation.setInterestLocation(mlocation[i]);
+		iir.save(interestlocation);
+
+		}
+		
+		return "redirect:/mypage";
+	}
+
 	
 		
 		

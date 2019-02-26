@@ -25,18 +25,23 @@ public interface InterestLocationRepository extends JpaRepository<InterestLocati
 	@Query(value ="select * from interest_location where id = :id",nativeQuery=true)
 	List<InterestLocation> findInterestById(String id) ; 
 	
-	@Transactional
+/*	@Transactional
 	@Modifying
 	@Query(value = "delete from interest_location where id = :id", nativeQuery=true)
 	int deleteLocationById(String id);
 
-	/**
+	*//**
 	 * @param memberlocation
 	 * @param id
 	 * @return
-	 */
+	 *//*
 	@Query(value ="Insert into interest_location values(:interestLocation, :id)",nativeQuery=true)
-	List<InterestLocation> save(String interestLocation, String id);
+	List<InterestLocation> save(String interestLocation, String id);*/
+	
+	@Modifying
+	@Transactional
+	@Query(value = "delete from interest_location where id = :id", nativeQuery = true)
+	void deleteLocation(String id);
 
 	/**
 	 * @param interestLocation

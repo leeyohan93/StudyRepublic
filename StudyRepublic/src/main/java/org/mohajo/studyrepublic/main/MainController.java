@@ -79,7 +79,7 @@ public class MainController {
 //		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
 //		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
 		
-		membercontroller.getSession(authentication,hs,member);
+/*		membercontroller.getSession(authentication,hs,member);*/
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
