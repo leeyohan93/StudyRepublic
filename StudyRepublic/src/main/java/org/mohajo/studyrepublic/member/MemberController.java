@@ -280,8 +280,11 @@ public class MemberController {
 	
 	   public void createSession(HttpSession session, Member member) {	
 		         
+
 		   		member = memberrepository.findById(member.getId()).get();
 		   
+		   	     session.setAttribute("userid", member.getId());
+
 		   		 session.setAttribute("nickname", member.getNickname());
 		         session.setAttribute("memberimg", member.getProfileSaveName());
 		         

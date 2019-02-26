@@ -43,6 +43,7 @@ public class MainController {
 	@Autowired
 	StudyMemberRepository studymemberrepository;
 	
+
 	@RequestMapping("/index")
 	public void index(Model model, Member member, Authentication authentication, HttpSession hs) {
 		List<Interest2CD> basicPopularTagList = mainService.getBasicPopularTag();
@@ -50,6 +51,8 @@ public class MainController {
 		for(int i=0; i<basicPopularTagList.size(); i++) {
 			basicPopularTag[i]=basicPopularTagList.get(i).getInterest2Code();
 		}
+		
+		
 		
 //		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
 //		List<PopularStudy> premiumStudy = mainService.getPopularPremiumStudy();
@@ -82,6 +85,8 @@ public class MainController {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
+		
+		
 		
 		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);
 		HashMap <String, String> studyNameAndStudyId = new HashMap<>();
