@@ -18,7 +18,6 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js"
 	charset="utf-8"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- modals CSS
 		============================================ -->
 <link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
@@ -160,9 +159,9 @@ background: white;
 				<div class="boardSelect">
 					<select id="boardType" name="boardType">
 						<option value="">게시판 선택</option>
-						<option value='freeBoard'>자유게시판</option>
-						<option value='requestBoard'>스터디 요청게시판</option>
-						<option value='inquireBoard'>문의게시판</option>
+						<option value='freeBoard' th:selected="${boardType} =='freeBoard'">자유게시판</option>
+						<option value='requestBoard' th:selected="${boardType} =='requestBoard'">스터디 요청게시판</option>
+						<option value='inquireBoard' th:selected="${boardType} =='inquireBoard'">문의게시판</option>
 					</select>
 				</div>
 				<!-- 게시판 선택 끝-->
@@ -182,7 +181,7 @@ background: white;
 				<!--제목, 공지옵션, 비공개옵션 끝 -->
 				
 				
-				
+				<span th:unless="${boardType eq 'inquireBoard'}">
 				<!--파일업로드  -->
 				<div id="fileAddBtn">
 				
@@ -191,6 +190,7 @@ background: white;
 				<div class="validate-input" id="fileAdd">
 				
 				</div>
+				</span>
 				<!--파일업로드  끝-->
 
 				<!-- 스마트 에디터 적용 글내용 -->
@@ -220,36 +220,6 @@ background: white;
 			</form>
 
 			<!-- 취소 미리보기 확인 버튼 -->
-
-			<!-- 모달 -->
-<!-- 			<a class="Primary mg-b-10" href="#" data-toggle="modal" -->
-<!-- 				data-target="#PrimaryModalalert">Primary</a> -->
-<!-- 			<div id="PrimaryModalalert"
-				class="modal modal-edu-general default-popup-PrimaryModal fade"
-				role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-close-area modal-close-df">
-							<a class="close" data-dismiss="modal" href="#"><i
-								class="fa fa-close"></i></a>
-						</div>
-						<div class="modal-body">
-							<i class="educate-icon educate-checked modal-check-pro"></i>
-							<h2>Awesome!</h2>
-							<p>The Modal plugin is a dialog box/popup window that is
-								displayed on top of the current page</p>
-						</div>
-						<div class="modal-footer">
-							<a data-dismiss="modal" href="#">Cancel</a> <a href="#">Process</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			모달 끝
-		</div>
-		 -->
-
-
 
 
 <script th:inline="javascript">
@@ -295,19 +265,19 @@ $(document).ready(function(){
 	        var boardType = $('#boardType').val();
 
 	       if (boardType == ''){
- 				swal("게시판을 선택해주세요!","");
+	    	   Swal.fire("게시판을 선택해주세요!","");
 	    	   
 	    	   return false;
 	       }
 	       else if (boardTitle == ''){
-	    	   swal("제목을 입력해주세요 !","");
+	    	   Swal.fire("제목을 입력해주세요 !","");
 	    	   
 	    	   return false;
 	       }
 	       
 
 	       else if ( smarteditor == ""  || smarteditor == null || smarteditor == '&nbsp;' || smarteditor == '<p>&nbsp;</p>')  {
-	        	swal("내용을 입력해주세요 !","");
+	    	   Swal.fire("내용을 입력해주세요 !","");
 	        	editor_object.getById["smarteditor"].exec("FOCUS"); //포커싱
 	             return false;
 	        }
@@ -331,14 +301,14 @@ $(document).ready(function(){
         var smarteditor = $("#smarteditor").val();
     	
     		if (boardTitle == ''){
- 	    	   swal("제목을 입력해주세요 !","");
+    			Swal.fire("제목을 입력해주세요 !","");
  	    	   
  	    	   return false;
  	       	}
  	       
 
  	       	else if ( smarteditor == ""  || smarteditor == null || smarteditor == '&nbsp;' || smarteditor == '<p>&nbsp;</p>')  {
- 	        	swal("내용을 입력해주세요 !","");
+ 	       	Swal.fire("내용을 입력해주세요 !","");
  	        	editor_object.getById["smarteditor"].exec("FOCUS"); //포커싱
  	             return false;
  	        }
@@ -375,8 +345,7 @@ $(document).ready(function(){
     $("#fileAddBtn").click( function(){
     	var uploadFile = "<div class = 'file_input' id = 'lifile" + fileCount + "'>"
 		+ "<input type = 'file' name = 'file' multiple onchange = \"javascript:document.getElementById('file_route"
-		+ fileCount
-		+ "').value = this.value.substring(12)\">"
+		+ fileCount + "').value = this.value.substring(12)\">"
 		+ "<input class = 'yshbtn' type = 'button' value = 'X' id = 'liidel"
 		+ fileCount
 		+ "' onclick = 'deleteFile("

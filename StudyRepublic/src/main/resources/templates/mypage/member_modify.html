@@ -48,7 +48,7 @@
  <form th:action="@{modimember2}" name="form1" method="post">
 
     ID&nbsp&nbsp<span th:text="${md.id}"></span></br>
-    비밀빈호&nbsp&nbsp<span><input type="password" id="passwordcheck" name="passwordcheck"/></span></br>
+    <!-- 비밀빈호&nbsp&nbsp<span><input type="password" id="passwordcheck" name="passwordcheck"/></span></br> -->
     이름&nbsp&nbsp<span th:text="${md.name}"></span></br>
     성별&nbsp&nbsp<span th:text="${md.gender}"></span></br>
     생년월일&nbsp&nbsp<span th:text="${md.birth}"></span></br>
@@ -57,9 +57,9 @@
    <button type="button" class="button" id="emailcheck" name="emailcheck" >중복체크</button></br>
    <div id="checkmsg"></div>
    휴대폰번호&nbsp&nbsp<span><input type="text" name="phonenumber" th:value="${md.phonenumber}"/></span>
-   <button type="button" class="button" onclick="check()">인증번호</button></br>
-   인증번호&nbsp&nbsp&nbsp<span><input type="text" name="phonenumber2"/></span>
-   <button type="button" class="button" onclick="check()">완료</button></br>
+   <!-- <button type="button" class="button" onclick="check()">인증번호</button></br> -->
+  <!--  인증번호&nbsp&nbsp&nbsp<span><input type="text" name="phonenumber2"/></span>
+   <button type="button" class="button" onclick="check()">완료</button></br> -->
    공개여부&nbsp&nbsp&nbsp<span><input type="radio" name="visibility" value="0"/>공개&nbsp&nbsp<input type="radio" name="visibility" value="1"/>비공개</span>
    <input type="hidden" id="hidden_visibility" th:value="${md.visibility}"/>
 </div>
@@ -155,7 +155,8 @@ $(document).ready(function(){
               processData:false
           }).done(function(response){
               alert("프로필변경이 완료되었습니다.");
-        /*       location.reload(); */
+       
+               location.reload();
           });
         }else{
            alert("파일이 첨부되지 않았습니다.");
@@ -171,32 +172,38 @@ $(document).ready(function(){
       data.url = "./emailAuth";
       sendServer(data);
    });
+   
    function sendServer(data){
       
-      $.ajax({
-         type:"POST",
-         url:data.url,
-         data : data, //{email : $("#email").val()}
-         datatype:"JSON",
-         success:function(success){
-            console.log(success);
-            if(success.emailCount == 0){
-               alert("사용가능한 이메일입니다.");
-            }else{
-               alert("이미사용중인 이메일입니다.");
-            }
-         },
-         error:function(error){
-            console.log(error);
-         }
-         
-      });
-}
+	      $.ajax({
+	         type:"POST",
+	         url:data.url,
+	         data : data, //{email : $("#email").val()}
+	         datatype:"JSON",
+	         success:function(success){
+	            console.log(success);
+	            if(success.emailCount == 0){
+	               alert("사용가능한 이메일입니다.");
+	            }else{
+	               alert("이미사용중인 이메일입니다.");
+	            }
+	         },
+	         error:function(error){
+	            console.log(error);
+	         }
+	         
+	      });
+	};
+	
+	$("#memberexit").click(function(){
+		confirm("정말 탈퇴하시겠습니까?");
+	});
+   
     //완료버튼 클릭시 비밀번호입력하기
    $("#complate").click(function(){
       data = {};
-      data.password = $("#passwordcheck").val();
-      data.url = "./passwordAuth";
+ /*      data.password = $("#passwordcheck").val();
+      data.url = "./passwordAuth"; */
       complete(data);
    });
    

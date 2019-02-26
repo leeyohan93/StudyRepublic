@@ -3,18 +3,15 @@
  */
 package org.mohajo.studyrepublic.main;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
 
+import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
-import org.mohajo.studyrepublic.domain.PopularStudy;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.member.MemberController;
@@ -46,25 +43,36 @@ public class MainController {
 	@Autowired
 	StudyMemberRepository studymemberrepository;
 	
-	
+
 	@RequestMapping("/index")
 	public void index(Model model, Member member, Authentication authentication, HttpSession hs) {
+		List<Interest2CD> basicPopularTagList = mainService.getBasicPopularTag();
+		String[] basicPopularTag = new String[basicPopularTagList.size()];
+		for(int i=0; i<basicPopularTagList.size(); i++) {
+			basicPopularTag[i]=basicPopularTagList.get(i).getInterest2Code();
+		}
+		
+		
+		
 //		List<Study> premiumStudy = mainService.getPopularPremiumStudy();
-		List<PopularStudy> premiumStudy = mainService.getPopularPremiumStudy();
+//		List<PopularStudy> premiumStudy = mainService.getPopularPremiumStudy();
 //		List<Study> basicStudy = mainService.getPopularBasicStudy();
-		List<PopularStudy> basicStudy = mainService.getPopularBasicStudy();
-		
-		for(int i=0; i<premiumStudy.size(); i++) {
-			model.addAttribute("popularPremiumStudy"+i,premiumStudy.get(i));
-		}
-		
-		for(int i=0; i<basicStudy.size(); i++) {
-			model.addAttribute("popularBasicStudy"+i,basicStudy.get(i));
-		}
+//		List<PopularStudy> basicStudy = mainService.getPopularBasicStudy(basicPopularTag);
+//		
+//		for(int i=0; i<premiumStudy.size(); i++) {
+//			model.addAttribute("popularPremiumStudy"+i,premiumStudy.get(i));
+//			System.out.println(premiumStudy.get(i).toString());
+//		}
+//		
+//		for(int i=0; i<basicStudy.size(); i++) {
+//			model.addAttribute("popularBasicStudy"+i,basicStudy.get(i));
+//		}
+		model.addAttribute("popularPremiumStudy", mainService.getPopularPremiumStudy());
+		model.addAttribute("popularBasicStudy", mainService.getPopularBasicStudy(basicPopularTag));
 		
 		model.addAttribute("recommendTutorMember", mainService.getRecommendTutorMember());
 		model.addAttribute("premiumPopularTag", mainService.getPremiumPopularTag());
-		model.addAttribute("basicPopularTag", mainService.getBasicPopularTag());
+		model.addAttribute("basicPopularTag", basicPopularTagList);
 		
 //		model.addAttribute("interest1cd", mainService.getInterest1Code());
 //		model.addAttribute("interest2cd", mainService.getInterest2Code());
@@ -73,50 +81,56 @@ public class MainController {
 //		model.addAttribute("winterest2cd", mainService.getWInterest2Code());
 //		model.addAttribute("ninterest2cd", mainService.getNInterest2Code());
 		
-		membercontroller.getSession(authentication,hs,member);
+/*		membercontroller.getSession(authentication,hs,member);*/
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		
-		List <StudyMember> studyMemberList = studymemberrepository.joinedstudymember(id);
-		HashMap <String, String> studyNameAndStudyIdMap = new HashMap<>();
-		HashMap <String, String> studyIdAndStatusKoreanMap = new HashMap<>();
 		
-		for(StudyMember studyMember : studyMemberList) {
-			Study studyDomain = studyMember.getStudy();
-			studyNameAndStudyIdMap.put(studyDomain.getName(), studyDomain.getStudyId());
-			studyIdAndStatusKoreanMap.put(studyDomain.getStudyId(), studyMember.getStudyMemberStatusCode().getCodeValueKorean());
+		
+		List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(id);
+		HashMap <String, String> studyNameAndStudyId = new HashMap<>();
+		
+		for(StudyMember joiningStudyObject : joiningStudy) {
+			Study extraValue = joiningStudyObject.getStudy();
+			studyNameAndStudyId.put(extraValue.getName(), extraValue.getStudyId());
 		}
-		
-		System.out.println(studyIdAndStatusKoreanMap.get("BB00001"));
 		
 		//아래부분 사용하지 않는 걸로 사료되어 주석 처리함. 2019.02.20 - sangyong.shin
 		//model.addAttribute("joiningStudy", studyNameAndStudyIdjoiningStudy);
-		System.out.println("스터디 Map: "  + studyNameAndStudyIdMap/*joiningStudy*/.toString());
-		System.out.println("스터디별 권한: " + studyIdAndStatusKoreanMap.toString());
+		System.out.println("조이닝스터디: "  + studyNameAndStudyId/*joiningStudy*/.toString());
 		
 		//membercontroller.getSession_Study(auth, hs, joiningStudy);
-		for( String s : studyNameAndStudyIdMap.keySet()) {
+		for( String s : studyNameAndStudyId.keySet()) {
 			System.out.println(s);
 		}
+
 		if(auth!=null) {
-			 hs.setAttribute("studyNameAndStudyIdMap", studyNameAndStudyIdMap);
-			 hs.setAttribute("studyIdAndStatusKoreanMap", studyIdAndStatusKoreanMap);
+			 hs.setAttribute("studyNameAndStudyId", studyNameAndStudyId);
 		}
 	}
 	
 	@RequestMapping("/search")
 //	public String search(Study studyInfo,String searchDate,String[] location, String[] interest, Model model){
-	public String search(Study studyInfo, String searchDate,String[] location, String[] interest, PageDTO pageDTO, Model model){
+	public String search(Study studyInfo, String searchDate,String[] location, String[] interest, PageDTO pageDto, Model model){
 		
-		Pageable page = pageDTO.makePageable(0, "postDate");
-				
+		Pageable page = pageDto.studyMakePageable(0, 12, "postDate");
 		Page<Study> searchList = mainService.search(studyInfo, searchDate, location, interest, page);
 //		System.out.println("typecode는 "+studyInfo.getTypeCode().getTypeCode());
 //		model.addAttribute("list", searchList);
-		model.addAttribute("pagedList", new PageMaker(searchList));
+		model.addAttribute("pagedList", new PageMaker<>(searchList));
 		model.addAttribute("typeCode", studyInfo.getTypeCode().getTypeCode());
-
+		
+		model.addAttribute("search", 1);
+		model.addAttribute("name", studyInfo.getName());
+		model.addAttribute("onoffCode",studyInfo.getOnoffCode().getOnoffCode());
+		model.addAttribute("searchDate",searchDate);
+		model.addAttribute("levelCode",studyInfo.getLevelCode().getLevelCode());
+		if(location!=null)
+			model.addAttribute("location", location);
+		if(interest!=null)
+			model.addAttribute("interest", interest);
+		
 		return "study/list";
 	}
 	

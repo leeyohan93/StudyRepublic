@@ -23,6 +23,11 @@ import lombok.Data;
 @Component
 public class TypeCD implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Column(name = "type_code")
 	private String typeCode;

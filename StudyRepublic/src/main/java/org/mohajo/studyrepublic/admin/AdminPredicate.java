@@ -143,6 +143,7 @@ public class AdminPredicate {
 				builder.and(freeBoard.freeBoardId.eq(Integer.parseInt(searchValue)));
 			}
 		}
+
 		return builder;
 	}
 	

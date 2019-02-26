@@ -44,6 +44,8 @@ public class MemberSecurity extends User {
 		return list;
 		
 	}
+	
+	
 
 
 

@@ -15,12 +15,19 @@
 	type="text/css">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" layout:fragment="bootCss">
 
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <div layout:fragment="customCss"></div>
 <div layout:fragment="bootJs">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 </div>
+<!--소켓  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
+<!--sweetalert2  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
 
 <style>
 #pinterest2cd {
@@ -39,6 +46,14 @@
 	display: none
 }
 
+a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+
+
  	select option:hover,
     select option:focus,
     select option:active {
@@ -52,6 +67,8 @@
         background-color: #d6d6d6 !important; /* for IE */
         color: #000000 !important;
     }
+    
+ 
 
 </style>
 
@@ -63,7 +80,7 @@
 	<div id="wrapper">
 
 		<!-- Header -->
-
+         <div id="socketAlert" class="alert alert-primary" role="alert" style="display:none;"></div>
 		<header id="header" layout:fragment="header">
 			<div class="inner">
 
@@ -72,36 +89,38 @@
 
 
 				<div id = "logout" sec:authorize="hasAnyRole('N','W','T')">
+							
+				
 											
 						<div class = "info" style = "display: inline-block; width:auto;height:50px;float:right;">
 					
-						<div id = "displaying" style = "visibility:hidden; float:right;">
-						<ul > <!--  -->
-						<li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li>
-						<li id = "loginli"><a th:href="@{/mypage}">마이페이지</a></li>				
-						</ul>
-						</div>
-						
+					
 						<div style = "margin-bottom : 10px; float:right">
-						<ul >			
-						<li id = "loginli" th:text = "${session.nickname}+' 왔냐?'"></li>
+						<ul>			
+						<li id = "loginli" th:text = "${session.nickname}+'님'"></li>
 						<li id = "loginimg"><img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%; margin-bottom:5px; float:right;"></li>
-
-
+						</ul>
+						
+					
+						<ul id = "displaying" style= "float:right; margin-top: 10px;">
+						<li id = "loginli" class = "drop"><a th:href="@{/mypage}">마이페이지</a></li>	<br>	
+						<li id = "loginli" class = "drop"><a th:text = "'보유포인트: ' + ${session.memberpoint}" href = "/member/point/charge"></a></li>	<br>
+						<li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li>		
+						                     
+            
+						</ul>
+					
+						
+						</div>
+									
 						</div>
 						
-
 						
-
-						
-						</div>
-						
-						
-							<div>
+							<div id = "ss">
 						<ul>
 						<!-- 스터디를 선택할 수 있는 실질적인 목록을 구현한 부분으로 보인다. session에서 studyName값을 받아와서 출력하고, List에서 해당되는 내용을 선택할(변화를 감지할) 경우 joinStudy(this)를 실행 한다.-->
 						<li style = "top:14px; text-overflow: ellipsis;">
-							<select name = "joinStudy" id = "joinStudy" style ="border:solid 1px #b6babd; width:110px;height:auto; padding: 0 0 0 5px; background-position: calc(98%) center;" >
+							<select name = "joinStudy" id = "joinStudy" style ="border:solid 1px #b6babd; width:110px;height:34px; padding: 0 0 0 5px; background-position: calc(98%) center;" >
 								<!-- <option th:each = "joinSt : ${session.studyNameList}"th:value="${joinSt}" th:text="${joinSt}"></option> -->
 								<option value="참여중인 스터디">참여중인 스터디</option>
 								<!-- 세션 체크 후 값이 없을 경우 500 에러가 뜨는 것을 방지함. 대신에 세션값은 없음..index에서만 생성되기 때문에. shin-sangyong  -->
@@ -111,7 +130,20 @@
 							</select>
 						</li>
 						</ul>
+						
+						<ul style = "width:100%">
+						<li style = "top:14px; text-overflow: ellipsis; ">
+						<button style = "border: solid 1px #b6babd; background: transparent;" onclick = "location.href='/study/open'">스터디개설</button>
+						</li>
+						</ul>
 						</div>
+						
+					
+						
+						
+				
+
+				
 						
 						<!-- 세션에서 studyId 및 studyName의 List를 받아온다. studyId > joiningStudyId / studyName > joiningStudyName -->
 						<!-- 수정 사유 : 개발자 도구에서 studyId에 대한 정보 조회가 가능하기 때문에  -->
@@ -171,10 +203,9 @@
 
 
 				<a href="/index" class="logo"> <span class="symbol"><img
-						th:src="@{/images/logo.svg}" alt="" /></span><span>Study Republic</span>
+						th:src="@{/images/logo.jpg}" alt="" /></span><span>Study Republic</span>
 				</a>
 
-			
 				<!-- Nav -->
 				<nav layout:fragment="header-nav">
 					<ul>
@@ -304,7 +335,7 @@
 			</form>
 		</nav>
 		<!-- Search End -->
-		<hr>
+		<hr style="border-top: solid #21252930; margin-bottom: 0;border-top-width: 1px;">
 		<!-- Main -->
 		<div id="main" layout:fragment="main">
 			<div class="inner"></div>
@@ -351,6 +382,9 @@
 
 
 	</div>
+	
+
+	
 
 	<!-- Scripts -->
 	<script th:src="@{/searchInterest.js}"></script>
@@ -440,25 +474,68 @@
 		
 	} */
 	
+
+	//웹소켓 설정
+	var socket = null;
 	$(document).ready(function(){
+		connectWS();
 		
+
 	});
 	
-	$(function(){
-		$('.info').mouseenter(function(){
-			document.getElementById('displaying').style.visibility = 'visible';
-			document.getElementById('displaying').style.float = 'right';
-		});
-		
-		$('.info').mouseleave(function(){
-			document.getElementById('displaying').style.visibility = 'hidden';
-		});
-		
-		
-	});
+	function connectWS() {
+	    console.log("소켓연결")
+	   var ws = new SockJS("/StudyEcho"); 
+	    socket = ws;
+	    
+	    ws.onopen = function () {
+	        console.log('소켓연결 open');
+	    };
+
+	    ws.onmessage = function (event) {
+	    	
+	        console.log("ReceiveMessage:", event.data+'\n');
+	        var $socketAlert = $('#socketAlert');
+	        $socketAlert.html(event.data);
+	        $socketAlert.css('display', 'block');
+	        
+	        setTimeout( function() {
+	        	$socketAlert.css('display', 'none');
+	        }, 10000);
+	        
+	        const Toast = Swal.mixin({
+				  toast: true,
+				  position: 'top-end',
+				  showConfirmButton: false,
+				  timer: 10000
+				});
+
+				Toast.fire({
+				  type: 'info',
+				  title: event.data
+				})
+	        
+	        
+	    };
+
+	    ws.onclose = function (event) { 
+	        console.log('소켓닫음');
+	        
+	    };
+	    ws.onerror = function (err) { console.log('Error:', err); };
+	}
 	
+	
+
+
+
 	
 	</script>
+	
+	
+
+	
+	
 
 </body>
 </html>

@@ -65,28 +65,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		log.info("security config");
 
+
 		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
 		http
 				.authorizeRequests()
 				.antMatchers("/login", "/member/signup", "/member/insert", "/member/checkid", "/member/checknick", "/member/findPassword", "/member/successAuth", "/member/modifyPassword", "/tutor/profile").anonymous()
-				.antMatchers("/kakaopay", "/", "/signup", "/StudyPage/**", "/index", "/member/**","/tutorFileUpload/**").permitAll()
-				.antMatchers("/tutor/signup", "/tutor/insert", "/pay", "/board/**", "/tutor/inquery", "/tutor/file/**", "/tutor/delete/**", "/chat/studyChat", "/member/point/charge").hasAnyRole("N", "W", "T", "A")
+				.antMatchers("/kakaopay", "/", "/signup", "/StudyPage/**", "/index", "/member/**","/tutorFileUpload/**","/board/**").permitAll()
+				.antMatchers("/tutor/signup", "/tutor/insert", "/pay", "/board/**", "/tutor/inquery", "/tutor/file/**", "/tutor/delete/**", "/chat/studyChat", "/member/point/charge","/member/modify/**").hasAnyRole("N", "W", "T", "A")
 				.antMatchers("/tutor").hasAnyRole("T", "A")
 				.antMatchers("/admin/**", "/adminPage/**").hasRole("A");
 
-		http.formLogin().loginPage("/login").successHandler(new LoginSuccessHandler())
+		http.formLogin()
+		.loginPage("/login")
+		.successHandler(new LoginSuccessHandler())
+		.failureHandler(new CustomAuthenticationFailureHandler())
+		.defaultSuccessUrl("/index");
 
-				.failureHandler(new CustomAuthenticationFailureHandler()).defaultSuccessUrl("/index");
+		http
+		.exceptionHandling()
+		.accessDeniedPage("/accessDenied");
 
-		http.exceptionHandling().accessDeniedPage("/accessDenied");
-
-		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+		http.logout()
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				/* .invalidateHttpSession(true) */
-				.logoutSuccessUrl("/index").deleteCookies("JSESSIONID", "remember-me").invalidateHttpSession(true);
+				.logoutSuccessUrl("/index").deleteCookies("JSESSIONID", "remember-me")
+				.invalidateHttpSession(true);
 
-		http.rememberMe().key("member").rememberMeParameter("remember-me").userDetailsService(memberservice)
-				.tokenRepository(persistentTokenRepository()).tokenValiditySeconds(60 * 60 * 24);
+		http.
+		rememberMe()
+		.key("member")
+		.rememberMeParameter("remember-me")
+		.userDetailsService(memberservice)
+				.tokenRepository(persistentTokenRepository())
+				.tokenValiditySeconds(60 * 60 * 24);
 
 		// 스마트에디터 관련 설정
 		http.headers().frameOptions().sameOrigin();
@@ -127,28 +139,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 
-
 	@Bean
 	public CustomAuthenticationFailureHandler failurehandler() {
 		CustomAuthenticationFailureHandler customLoginFailure = new CustomAuthenticationFailureHandler();
 		return customLoginFailure;
 	}
 
-	
-	@Bean
-	@ConfigurationProperties("facebook.client")
-	AuthorizationCodeResourceDetails facebook()
-	{
-		return new AuthorizationCodeResourceDetails();
-	}
 
-	@Bean
-	@ConfigurationProperties("facebook.resource")
-	ResourceServerProperties facebookResource()
-	{
-		return new ResourceServerProperties();
-	}
-	
 	
 
 

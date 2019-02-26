@@ -14,9 +14,9 @@ import org.springframework.web.socket.config.annotation.*;
 //websocket, stomp관련 설정 ,서버 소켓 토픽 prefix,클라이언트 소켓 이름
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class ChatWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-	//handshake와 통신을 담당할 endpoint를 지정, 클라이언트에서 서버로 접근할 andpoint를 지정한다.
+	//handshake와 통신을 담당할 endpoint를 지정, 클라이언트에서 서버로 접근할 endpoint를 지정한다.
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
        //서버연결 여러가지 endpoint사용가능

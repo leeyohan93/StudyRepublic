@@ -244,7 +244,7 @@
 
 
 						<div class="wrap-input100 validate-input"
-							style="height: 100%; padding: 20px; margin: auto; margin-bottom: 40px;">
+							style="height: 100%; padding: 20px; margin: auto;">
 
 							<div class="wrap-input100_ validate-input_">
 								<div id="education" name="education">
@@ -271,6 +271,12 @@
 							</div>
 
 						</div>
+						
+			   <div class="wrap-input100 validate-input" style = "border:none; margin:0">
+               <span class="login100-form-title-error p-b-43" id = "duplicationmsg">
+                  		
+               </span>
+</div>
 
 
 						<div class="wrap-input100 validate-input"
@@ -318,6 +324,7 @@
 							style="margin: 15px 0px 0px 50px; width: 70px; height: 43px;">
 							<button type="button">파일추가</button>
 						</div>
+
 
 
 
@@ -394,7 +401,7 @@
 					target.innerHTML = "<input type = 'text' id = 'edu' name  = 'educationCD' ></input><span class = 'yshspan'>"
 							+ "> " + educationListText + "</span>";
 					document.getElementById('edu').value = educationListValue;
-
+					
 				}
 
 				var careerNum = 0;
@@ -409,7 +416,7 @@
 
 					if (~selectedCareer
 							.indexOf(obj.options[obj.selectedIndex].text)) {
-						alert("이미 선택한 직종입니다.");
+						document.getElementById("duplicationmsg").innerText = "이미 선택한 직종 입니다.";
 					} else {
 						careerList.push(obj.options[obj.selectedIndex].text);
 						selectedCareer += careerList[careerList.length - 1];
@@ -429,14 +436,16 @@
 								+ "' onclick = 'deleteCareer("
 								+ careerNum + ")'></div>";
 						$('#scar').append(addCareerListText);
-
+							
+						document.getElementById("duplicationmsg").innerText = "";
+						
 						careerInput = document.getElementById('csel'
 								+ careerNum);
 						careerInput.style.display = 'none';
 						careerDelete = document.getElementById('cdel'
 								+ careerNum);
 						careerDelete.style.display = 'none';
-
+						
 						careerNum++;
 					}
 
@@ -473,7 +482,7 @@
 
 					if (~sselectedinterest2
 							.indexOf(obj.options[obj.selectedIndex].text)) {
-						alert("이미 선택한 분야입니다.");
+						document.getElementById("duplicationmsg").innerText = "이미 선택한 분야 입니다.";
 					} else {
 						iinterest2List
 								.push(obj.options[obj.selectedIndex].text);
@@ -481,7 +490,7 @@
 
 						aaddinterestListValue = "<input type = 'text' id = 'isel" + count +  "' name = 'tutorinterest[" + count + "].interest2CD'></input> <input type = 'button' value = '삭제' id = 'idel"
 								+ count
-								+ "' onclick = 'deleteInterest("
+								+ "' onclick = 'deleteInterest2("
 								+ count + ")'>";
 						$('#int2').append(aaddinterestListValue);
 
@@ -493,10 +502,12 @@
 								+ iinterest2List[iinterest2List.length - 1]
 								+ "</span> <input class = 'yshbtn' type = 'button' value = 'X' id = 'liidel"
 								+ count
-								+ "' onclick = 'deleteInterest("
+								+ "' onclick = 'deleteInterest2("
 								+ count + ")'></div>";
 						$('#int2').append(aaddInterest2List);
 
+						document.getElementById("duplicationmsg").innerText = "";	
+						
 						interestInput = document.getElementById('isel' + count);
 						interestInput.style.display = 'none';
 						interestDelete = document
@@ -508,7 +519,7 @@
 
 				}
 
-				function deleteInterest(num) {
+				function deleteInterest2(num) {
 					sselectedinterest2 = sselectedinterest2.replace(
 							iinterest2List[num], "") // 중복금지차원
 					$('#isel' + num).remove();
@@ -536,7 +547,7 @@
 								
 									var uploadFile = "<div class = 'file_input' id = 'lifile" + fileCount + "' style = 'margin: 0 60px 0 20px;'>"
 											+ "<input type = 'text' readonly = 'readonly' id = 'file_route" + fileCount + "'>"
-											+ "<label style = 'margin:10px'> 파일선택 <input type = 'file' name = 'file' multiple onchange = \"javascript:document.getElementById('file_route"
+											+ "<label style = 'margin:10px'> 파일선택 <input type = 'file' id = 'fnum" + fileCount+ "' name = 'file' multiple onchange = \"javascript:document.getElementById('file_route"
 											+ fileCount
 											+ "').value = this.value.substring(12)\"></label>"
 											+ "<input class = 'yshbtn' type = 'button' value = 'X' id = 'liidel"

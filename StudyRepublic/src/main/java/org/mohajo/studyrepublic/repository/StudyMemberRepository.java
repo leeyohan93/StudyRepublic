@@ -27,11 +27,13 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 //	List<StudyMember> findTutorActivityByStudyMemberId(StudyMemberId studyMemberId);
 
 
-	
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기 */
 	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where s1.study_status_code='O'",nativeQuery=true)
 	List<StudyMember> findActivityById(String id);
 	
+	@Query(value="select * from study_member a1, study_view s1 where a1.study_id = s1.study_id and a1.id=:id",nativeQuery=true)
+	List<StudyMember> findSchedulerById(String id);
+	//
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기(카운터방식으로) */
 	@Query(value="select count(*) from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where  type_code='B' and s1.study_status_code='G'",nativeQuery=true)
 	int studycount(String id); 
