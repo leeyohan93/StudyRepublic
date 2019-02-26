@@ -1073,6 +1073,24 @@ public class StudyController {
 		return "/study/review";
 	}
 	
+	@RequestMapping("/memberPointInquiry")
+	@ResponseBody
+	public MemberPoint memberPointInquiry() {
+		
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		MemberPoint memberpoint = mpr.inqueryPoint(id);
+		
+		log.info(memberpoint.toString());
+		
+		return memberpoint;
+		
+	}
+
+	
+	
+	
 	// 테스트 시작.
 	@RequestMapping("/test")
 	public String test(Model model) {

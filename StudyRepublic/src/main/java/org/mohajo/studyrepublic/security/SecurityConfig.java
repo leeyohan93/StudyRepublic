@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/login", "/member/signup", "/member/insert", "/member/checkid", "/member/checknick", "/member/findPassword", "/member/successAuth", "/member/modifyPassword", "/tutor/profile").anonymous()
 				.antMatchers("/kakaopay", "/", "/signup", "/StudyPage/**", "/index", "/member/**","/tutorFileUpload/**","/board/**").permitAll()
-				.antMatchers("/tutor/signup", "/tutor/insert", "/pay", "/board/**", "/tutor/inquery", "/tutor/file/**", "/tutor/delete/**", "/chat/studyChat", "/member/point/charge", "/study/pleaseLogin/**").hasAnyRole("N", "W", "T", "A")
+				.antMatchers("/tutor/signup", "/tutor/insert", "/pay", "/board/**", "/tutor/inquery", "/tutor/file/**", "/tutor/delete/**", "/chat/studyChat", "/member/point/charge", "/study/pleaseLogin/**", "study/joinConfirm/**").hasAnyRole("N", "W", "T", "A")
 				.antMatchers("/tutor").hasAnyRole("T", "A")
 				.antMatchers("/admin/**", "/adminPage/**").hasRole("A");
 
