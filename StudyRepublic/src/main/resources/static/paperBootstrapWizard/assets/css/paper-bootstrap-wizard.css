@@ -1081,6 +1081,14 @@ input[type="button"]:focus {
 /*    height: 70px; */
 /*    top: -32px; */
 }
+.wizard-card .nav-pills li.show:not(.active) .icon-circle {
+   border-color: rgb(35,154,235);
+   background-color: rgb(35,154,235);
+/*    width: 70px; */
+/*    height: 70px; */
+/*    top: -32px; */
+}
+
 
 .wizard-card .nav-pills li.show .icon-circle:after {
    font-family: "Font Awesome 5 Free";
@@ -1092,9 +1100,9 @@ input[type="button"]:focus {
    position: absolute;
 }
 
-.wizard-card .nav-pills li:nth-of-type(1).show .icon-circle:after {
-   content: "\f303";
-}
+/* .wizard-card .nav-pills li:nth-of-type(1).show .icon-circle:after { */
+/*    content: "\f303"; */
+/* } */
 
 .tooltip {
   font-size: 14px;

@@ -23,6 +23,7 @@ layout:decorate="~{/layout/mainLayout}">
 /* 		box-shadow: 0.3em 0.3em 10px 3px silver; */
 		box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important;
 		border:	0.5px solid rgba(0,0,0,0.12);
+		background-color: white;
 		width: 100%;
 		margin: 1em auto;
 		padding: 2em 2em;
@@ -223,7 +224,7 @@ layout:decorate="~{/layout/mainLayout}">
 						<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
 						<th:block th:if="${study.price}">
 							<div class="col-md-2 column-name">가격</div>
-							<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">studyPrice</th:block></div>
+							<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">price</th:block></div>
 						</th:block>
 					</div>
 					<div class="box-info">
@@ -256,7 +257,8 @@ layout:decorate="~{/layout/mainLayout}">
 					</div>
 					
 					<!-- 1) 리더 정보 -->
-					<div class="tab-content leader-info" id="tab-content-leaderInfo" th:if="${tutorInfo}" th:with="leaderInfo = ${tutorInfo.member}">
+<!-- 					<div class="tab-content leader-info" id="tab-content-leaderInfo" th:if="${tutorInfo}" th:with="leaderInfo = ${tutorInfo.member}" th:classappend="${tutorInfo}? tutor-grade-leader"> -->
+					<div class="tab-content leader-info" id="tab-content-leaderInfo" th:with="leaderInfo = ${tutorInfo}? ${tutorInfo.member} : ${leaderInfo}">
 						<div class="profile-container">
 							<div class="profile-image-container">
 								<img th:alt="|${leaderInfo.nickname}님의 프로필 사진|" th:src="${leaderInfo.profileSaveName}? @{'/static/images/' + ${leaderInfo.id} + '/' + ${leaderInfo.profileSaveName}} : @{/static/images/defaultProfile.jpg}">

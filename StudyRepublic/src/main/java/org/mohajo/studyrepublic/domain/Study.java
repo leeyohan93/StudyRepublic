@@ -128,7 +128,8 @@ public class Study implements Serializable {
 	///////////	아래는 Study 클래스를 상속하여 분리시킬 수도 있음 //////////////////////
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "studyId", nullable = false)
+	@JoinColumn(name = "studyId"/*, nullable = false*/)
+//	private StudyPrice price;							//가격
 	private StudyPrice price;							//가격
 	
 	@OneToMany(cascade=CascadeType.ALL)

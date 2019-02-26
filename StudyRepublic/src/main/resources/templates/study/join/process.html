@@ -3,6 +3,11 @@
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorate="~{/layout/mainLayout}"><head>
 <meta charset="UTF-8">
+
+<!-- Spring Security ~ Ajax 관련 추가 코드 BY 성호님 -->
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
+
 <title>스터디 가입</title>
 </head>
 
@@ -19,6 +24,9 @@ layout:decorate="~{/layout/mainLayout}"><head>
 /* 		border-radius: 22.37%; */
 /* 	} */
 	
+		#main {
+		    background: white !important;
+		}
 	
         /********************************** leveltest - CSS 시작 **********************************/
         #leveltestArea .leveltest-container {
@@ -39,14 +47,19 @@ layout:decorate="~{/layout/mainLayout}"><head>
             border: solid 1px silver;
             padding: 0.1em;
             min-height: 400px;
+            background-image: url("/images/background/background-img-cosmo.jpg");
+            background-size: cover;
+   			background-position-y: -230px;
         }
 
         #leveltestArea .leveltest {
             margin: 0 0 0.5em 0;
             padding: 0.3em;
             border: 1px solid #c5c5c5;
-            border-radius: 3px;
+           	border-radius: 11.5px;
             background-color: white;
+            padding: unset !important;
+            opacity: 0.86;
         }
 
         #leveltestArea .leveltest-placeholder {
@@ -60,7 +73,7 @@ layout:decorate="~{/layout/mainLayout}"><head>
             background-color: transparent;
             border: dotted 1px;
             display: inline-block;
-            height: 1.8em;
+            height: auto;
         }
 
         #leveltestArea input.question-content {
@@ -136,12 +149,18 @@ layout:decorate="~{/layout/mainLayout}"><head>
         }
 
         #leveltestArea .icon-plus::before {
-            content: "\f067";
-            font-family: "Font Awesome 5 Free";
-            font-weight: 600;
-            color: black;
+/*             content: "\f067"; */
+/*             font-family: "Font Awesome 5 Free"; */
+/*             font-weight: 600; */
+/*             color: black; */
             width: 100%;
             padding: 0.2em 0.3em;
+            
+			color: #0082ff;
+			content: "+";
+			font-size: 2rem !important;
+			font-weight: lighter !important;
+						
         }
 
         #leveltestArea .question-choice {
@@ -194,7 +213,7 @@ layout:decorate="~{/layout/mainLayout}"><head>
         }
 
         #leveltestArea .question-choice~.question-answer {
-            margin-left: 70%;
+            margin-left: 85%;
         }
 
         #leveltestArea input.question-answer-input {
@@ -213,6 +232,60 @@ layout:decorate="~{/layout/mainLayout}"><head>
 
         /********************************** leveltest - CSS 끝 **********************************/
         
+        .point-form {
+            background-color: #f7f7f7;
+   			padding: 50px;
+   			margin-top: 20px;
+   			margin-bottom: 20px;
+        }
+        
+        .label-checkbox100 {
+        	font-size: 18px !important;
+       	    font-weight: 900 !important;
+       	    cursor: default !important;
+       	    display: inline-block !important;
+       	    position: absolute !important;
+        }
+        
+        .label-checkbox100::before {
+         	content: '\f0c8' !important; 
+             font-family: "Font Awesome 5 Free" !important; 
+             border: none !important; 
+             color: #999999 !important; 
+             background: none !important; 
+             background-color: none !important; 
+             font-size: 0.3rem !important; 
+        }
+	
+		.point-amount {
+			display: inline-block;
+		    margin-left: 90%;
+		    text-align: right;
+		    width: 5rem;
+		}
+		
+		.join-form-btn {
+		    display: inline-block !important;
+		    width: auto !important;
+		    height: auto !important;
+		    margin: auto !important;
+		}
+		
+		input[id='leveltest-rewrite-btn'] {
+			border: none !important;
+			font-size: 12px !important;
+		}
+		
+		.disabled {
+			background-color: #ccc !important;
+			color: silver !important;
+		}
+		
+		.disabled #point-pay-btn:hover {
+			color: silver !important; 
+			box-shadow: none !important;
+			cursor: default !important;
+		}
 	
 	</style>
 	
@@ -222,6 +295,9 @@ layout:decorate="~{/layout/mainLayout}"><head>
 	<!-- Sortable (for leveltest) -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<!-- 성호님 소스 -->	
+	<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
 	
 </th:block>
 
@@ -231,167 +307,318 @@ layout:decorate="~{/layout/mainLayout}"><head>
 	<div layout:fragment="main">
 		<div class="inner">
 		
-			<div class="page-header">
-				<div class="page-title">
-					<h4>레벨테스트</h4>
-					<hr>
-				</div>
-				<div class="page-description">
-					<pre>
-					-	신청하신 스터디에는 레벨테스트가 등록되어 있습니다.
-					-	레벨테스트 응시는 선택사항입니다.
-					-	응시 결과는 리더가 가입 승인을 검토할 때 참고 자료로 사용됩니다.
-					</pre>			
-				</div>
-			</div>
-			
-			<div class="page-content" id="leveltestArea">
+			<form id="join-form">
+					            
+            	<!-- 값이 공통으로 들어가는지 확인할 것 -->
+            	<input type="hidden" name="studyId" th:value="${studyId}">
+            	<input type="hidden" name="id" th:value="${id}">
+            	
+				<section class="leveltest-section" th:if="${leveltestList}">
 				
-				<form id="leveltest-submit-form">
-	        		<input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' />
-				
-		            <div class="leveltest-container">
-		            
-		            	<!-- 값이 공통으로 들어가는지 확인할 것 -->
-		            	<input type="hidden" name="studyId" th:value="${studyId}">
-		            	<input type="hidden" name="id" th:value="${id}">
-		            
-			            <th:block th:each="leveltest : ${leveltestList}">	
-			       		        <input type="hidden" name="leveltestId" th:value="${leveltest.leveltestId}">
-			            
-			            
-<!-- 			            	<th:block th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'MC'"> -->
-					            <div class="leveltest" th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'MC'">
-					                <div class="question">
-					                    <span class="numbering question-numbering" th:text="${leveltest.questionNumber}">number</span>
-					                    <span class="question-content" th:text="${leveltest.content}">content</span>
-					                    <span class='icon icon-plus leveltest-toggle'></span>
-					                </div>
-					                
-					                <!-- 참고:  https://bestcure.tistory.com/entry/thymeleaf-each-%EB%AC%B8-%EC%95%88%EC%97%90%EC%84%9C-split%EC%9C%BC%EB%A1%9C-%ED%95%9C%EB%B2%88%EB%8D%94-each-%EC%98%88%EC%A0%9C -->
-					                <div class="question-choice" style="display: none" th:each="choice : ${#strings.arraySplit(leveltest.choice, ';')}">
-					                
-					                    <div class="question-choice-group">
-					                        <span class="numbering choice-numbering" th:text="${choiceStat.index} + 1">0</span>
-					                        <span class="question-choice-option" th:text="${choice}">choice</span>
-					                    </div>
-					                    
-					                </div>
-					                
-					                <div class="question-answer" style="display: none">
-					                    	정답: <select name="submitAnswer">
-					                        <option th:each="choice : ${#strings.arraySplit(leveltest.choice, ';')}" th:value="${choiceStat.index} + 1" th:text="${choiceStat.index} + 1">0</option>
-					                    </select>
-					                </div>
-					            </div>
-<!-- 							</th:block> -->
-							
-<!-- 			           		<th:block th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'SA'"> -->
-		                        <div class="leveltest" th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'SA'">
-		                            <div class="question">
-		                                <span class="numbering question-numbering" th:text="${leveltest.questionNumber}">0</span>
-		                                <span class="question-content" th:text="${leveltest.content}">content</span>
-		                                <span class="icon icon-plus leveltest-toggle"></span>
-		                            </div>
-		                            <div class="question-answer" style="display: none">
-										정답: <input name="submitAnswer" class="question-answer-input" type="text">
-		                            </div>
-		
-		                        </div>
-							
-<!-- 							</th:block> -->
+					<div class="page-header">
+						<div class="page-title">
+							<h4>레벨테스트</h4>
+							<hr>
+						</div>
+						<div class="page-description">
+							<p>
+							-	신청하신 스터디에는 레벨테스트가 등록되어 있습니다.<br/>
+							-	레벨테스트 응시는 선택사항입니다.<br/>
+							-	응시 결과는 리더가 가입 승인을 검토할 때 참고 자료로 사용됩니다.<br/>
+							-	주의! 제출하기 버튼을 클릭하면 빈 답안이 제출되어 오답 처리 됩니다.
+							</p>			
+						</div>
+					</div>
+					
+					<div class="page-content" id="leveltestArea">
 						
-						</th:block>
+			        		<input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' />
+						
+				            <div class="leveltest-container">
+		
+				            
+					            <th:block th:each="leveltest : ${leveltestList}">	
+					            
+					            
+		<!-- 			            	<th:block th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'MC'"> -->
+							            <div class="leveltest" th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'MC'">
+						       		        <input type="hidden" name="leveltestId" th:value="${leveltest.leveltestId}">
+							                <div class="question">
+							                    <span class="numbering question-numbering" th:text="${leveltest.questionNumber}">number</span>
+							                    <span class="question-content" th:text="${leveltest.content}">content</span>
+							                    <span class='icon icon-plus leveltest-toggle'></span>
+							                </div>
+							                
+							                <!-- 참고:  https://bestcure.tistory.com/entry/thymeleaf-each-%EB%AC%B8-%EC%95%88%EC%97%90%EC%84%9C-split%EC%9C%BC%EB%A1%9C-%ED%95%9C%EB%B2%88%EB%8D%94-each-%EC%98%88%EC%A0%9C -->
+							                <div class="question-choice" style="display: none" th:each="choice : ${#strings.arraySplit(leveltest.choice, ';')}">
+							                
+							                    <div class="question-choice-group">
+							                        <span class="numbering choice-numbering" th:text="${choiceStat.index} + 1">0</span>
+							                        <span class="question-choice-option" th:text="${choice}">choice</span>
+							                    </div>
+							                    
+							                </div>
+							                
+							                <div class="question-answer" style="display: none">
+							                    	정답: <select name="submitAnswer">
+							                    	<option value=""></option>
+							                        <option th:each="choice : ${#strings.arraySplit(leveltest.choice, ';')}" th:value="${choiceStat.index} + 1" th:text="${choiceStat.index} + 1">0</option>
+							                    </select>
+							                    <input type="hidden" id="correctAnswer" th:value="${leveltest.correctAnswer}">
+						                    	<input type="hidden" name="isCorrect">
+							                </div>
+							            </div>
+		<!-- 							</th:block> -->
+									
+		<!-- 			           		<th:block th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'SA'"> -->
+				                        <div class="leveltest" th:if="${leveltest.leveltestTypeCode.leveltestTypeCode} == 'SA'">
+									      	<input type="hidden" name="leveltestId" th:value="${leveltest.leveltestId}">
+				                            <div class="question">
+				                                <span class="numbering question-numbering" th:text="${leveltest.questionNumber}">0</span>
+				                                <span class="question-content" th:text="${leveltest.content}">content</span>
+				                                <span class="icon icon-plus leveltest-toggle"></span>
+				                            </div>
+				                            <div class="question-answer" style="display: none">
+												정답: <input name="submitAnswer" class="question-answer-input" type="text">
+												<input type="hidden" id="correctAnswer" th:value="${leveltest.correctAnswer}">
+							                    <input type="hidden" name="isCorrect">
+				                            </div>
+				                        </div>
+									
+		<!-- 							</th:block> -->
+								
+								</th:block>
+								
+							</div>
+							
+							<div class="leveltest-btn-container">
+								<div class="join-form-btn reset-btn">
+									<input type="reset" id="leveltest-rewrite-btn" value="다시 작성하기"></button>
+								</div>
+								<div class="join-form-btn">
+									<button type="button" id="leveltest-submit-btn">답안 제출</button>
+								</div>
+								<div class="join-form-btn">
+									<button type="button" id="leveltest-skip-btn">건너뛰기</button>
+								</div>
+							</div>
+						
 						
 					</div>
 					
-					<input class="input-btn" type="reset" value="다시 작성하기">
-					<input class="input-btn" type="submit" value="제출하기">
-					<input class="input-btn" type="submit" value="건너뛰기">
+				</section>
+				
+				<section class="pay-section" style="display:none;" th:if="${memberPoint}">
+				
 					
-				</form>
+					<div class="page-header">
+						<div class="page-title">		
+							<h4>포인트 결제하기</h4>
+							<hr>
+						</div>
+						<div class="page-description">
+							<p>-	본 스터디는 프리미엄 스터디로, 신청 시 포인트가 차감됩니다.</p>
+						</div>
+					</div>
+						
+					<div class="page-content" id="payArea">
+						
+						<div class="point-form">			
+							
+							<span class="point-title label-checkbox100">보유 포인트</span>
+							<div class="point-amount">
+								<span id="current-point" th:text="${memberPoint.point}">-</span>P
+							</div>
+							
+							<hr/>
+							
+							<span class="point-title label-checkbox100">결제 예정 포인트</span>
+							<div class="point-amount">
+								<span id="pay-point" th:text="${study.price.price}">-</span>P
+							</div>
+							
+							<hr/>
+							
+							<span class="point-title label-checkbox100">차감 후 포인트</span>
+							<div class="point-amount">
+								<span id="after-point" th:text="${memberPoint.point - study.price.price}">-</span>P
+							</div>
+							
+							<hr/>
+							
+							<div id="pay-alert-container" style="display:none;">
+								<span id="pay-alert-msg">
+									포인트가 부족합니다!<br/>
+									스터디를 신청하려면 포인트를 충전하세요.
+								</span>
+							</div>
+							
+							<div class="pay-btn-container">
+								<div class="join-form-btn">
+									<button type="button" id="point-charge-btn">충전하기</button>
+								</div>
+								<div class="join-form-btn">
+									<button type="button" id="point-pay-btn">결제하기</button>
+								</div>
+							</div>
+							
+						</div>
+					</div>
 					
-			</div>
+					<input type="hidden" name="price" th:value="${study.price.price}">
+					<input type="hidden" name="pointid" th:value="${memberPoint.pointid}">
+				
+				</section>
+				
+				
+			</form>
 			
 		</div>
 	</div>
 
 	<th:block layout:fragment="customScript">
-		<script type="text/javascript">
+		<script type="text/javascript" th:inline="javascript">
+		/* <![CDATA[ */       
+	
+
 		
+			<!-- Spring Security ~ Ajax 관련 추가 코드 BY 성호님 - 시작 -->
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			
+			$(function() {
+				$(document).ajaxSend(function(e, xhr, options) {
+					xhr.setRequestHeader(header, token);
+				});
+			});
+			<!-- Spring Security ~ Ajax 관련 추가 코드 BY 성호님 - 끝 -->
+			
+
+			var studyId = /*[[ ${study.studyId} ]]*/;
+			var childWindowObj;
+			
 			$(document).ready(function() {
 				
-				enableToggle;
+				enableToggle();
 				submitForm();
+				
+				console.log('studyId = ' + studyId);
 				
 			});
 			
 			
-
 	        function enableToggle() {
-	
-	            // 참고:  https://stackoverflow.com/a/40949843, https://stackoverflow.com/a/9331127, https://codepedia.info/click-event-for-dynamic-button-jquery/
-	            // 원본:  $(".leveltest-toggle").on( "click", function() {
-	            // 문제:  맨 마지막에 추가되는 요소의 인덱스를 기준으로, 짝/홀수의 요소만 토글되는 에러 발생.
-	            // 원인:  DOM 에 새로 추가되는 요소에는 이벤트가 적용되지 않아 발생한 내부적인 에러로 추정. 이벤트가 발생하는 모든 요소를 감싸는 부모 요소에 이벤트를 등록하면 해결된다고 한다. (ex. document, body 등)
-	            // 해결:  코드를 아래처럼 변경함. (1줄에 해당)
+	            
 	            $(".leveltest-container").on("click", ".leveltest-toggle", function () {
-	
-	                    console.log('Entered enableToggle()...');
-	
-	                    var icon = $(this);
-	                    var $qContent = icon.siblings(".question-content");
-	                    var $qEdit = icon.siblings(".question-edit");
-	                    var text = "";
-	
-	                    icon.toggleClass("icon-plus icon-minus");
-	                    icon.closest(".leveltest").find(".question-choice, .question-answer").toggle();
-	
-	                    if ($qContent.css('display') != 'none') {
-	                        text = $qContent.text();
-	                        $qEdit.val(text);
-	
-	                    } else {
-	                        text = $qEdit.val();
-	                        $qContent.text(text);
-	                    }
-	
-	                    $qContent.toggle();
-	                    $qEdit.toggle();
-	                });
+	            	
+                    var icon = $(this);
+
+                    icon.toggleClass("icon-plus icon-minus");
+                    icon.closest(".leveltest").find(".question-choice, .question-answer").toggle();
+
+            	});
+	            
 	        }
 	            
 	            
 	        function submitForm() {
 	        	
-				$('.input-btn').on('click', "[type='submit']", function(e) {
+	        	
+	        	// 1. 레벨테스트
+				$('.leveltest-btn-container .join-form-btn:not(.reset-btn)').on('click', function() {
+
+					console.log($(this));
 					
-					e.preventDefault();
+					var targetBtn = $(this).find("button").attr("id");  
 					
-					if($(this).val() == "건너뛰기") {
-						
-						$('.leveltest-container').remove();						
+					switch(targetBtn) {
+
+						case "leveltest-submit-btn":
+							
+							var $answer;
+							var submitAnswer;
+							var correctAnswer;
+							var isCorrect;
+							
+							for(var i=0; i<$('.leveltest').length; i++) {
+								$answer = $($('.leveltest')[i]).find('.question-answer');
+								submitAnswer = $answer.find("[name='submitAnswer']").val();
+								correctAnswer = $answer.find("[id='correctAnswer']").val();
+								isCorrect = (submitAnswer == correctAnswer)? 1 : 0;
+								$answer.find("[name='isCorrect']").val(isCorrect);
+							}
+							// json 등 객체로 만들어서 스크립트단에 보관할 수 있나?
+							// null 값 들어가는지 확인할 것
+							
+							break;
+							
+						case "leveltest-skip-btn":
+							
+							$('.leveltest-container').remove();	
+							
+							if($('.pay-section') == null) {
+								
+				                $("form").attr("action", "/study/joinConfirm/");
+				                $("form").attr("method", "post");
+				                $("form").submit();
+				                
+							}
+							break;
+					
 					}
 					
-	                $("form").attr("action", "/study/join/" + $("input[name='studyId']").val());
-	                $("form").attr("method", "post");
-	                $("form").submit();
+					$('.leveltest-section').css('display', 'none');
+					$('.pay-section').css('display', 'block');
+					
+				})
+	        	
+				
+				// 2. 포인트 결제
+				$('.pay-btn-container .join-form-btn').on('click', function() {
+					
+					var thisBtn = $(this).attr('id');
+					console.log("thisBtn = " + thisBtn);
+					
+					switch(thisBtn) {
+					
+						case "point-pay-btn":
+							if( $(this).hasClass('disabled') || $('#current-point').val() < $('#pay-point').val() ) {
+								$('#point-pay-btn').addClass('disabled');
+								$('#pay-alert-container').show();
+								
+								return false;
+								
+							} else {
+								$('#point-pay-btn').removeClass('disabled');
+								$('#pay-alert-container').hide();
+								
+				                $("form").attr("action", "/study/joinConfirm/");
+				                $("form").attr("method", "post");
+				                $("form").submit();
+
+							}
+							break;
+							
+						case "point-charge-btn":
+							
+							// https://rongscodinghistory.tistory.com/33, https://all-record.tistory.com/149
+							
+							window.name = "joinProcess";
+							childWindowObj = window.open("/member/point/charge");
+							
+							
+							break;
+							
+					}
 					
 				});
 				
-	            $(".leveltest-container").on("click", ".leveltest-toggle", function () {
-	
-	                    var icon = $(this);
-	
-	                    icon.toggleClass("icon-plus icon-minus");
-	                    icon.closest(".leveltest").find(".question-choice, .question-answer").toggle();
-	
-                });
-	        
+				
+				
 	        }
 	
 			
-		
+	        /* ]]> */
 		</script>
 	</th:block>
 </body>

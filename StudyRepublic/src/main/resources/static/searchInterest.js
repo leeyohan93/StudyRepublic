@@ -68,7 +68,7 @@ var target;
             }
             for(var i=1; i<selected.length; i++){
             	selectedinterest2 += selected[i].text;
-            	addInterest2List += "<input type='text' name='interest' value="+selected[i].value+" class="+selected[1].text+">"
+            	addInterest2List += "<input type='hidden' name='interest' value="+selected[i].value+" class="+selected[1].text+">"
             	
             }
             console.log(interest2List);

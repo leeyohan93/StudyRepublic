@@ -132,8 +132,8 @@ public String membermodiresult(Model model, HttpServletRequest request,@RequestP
 public String update_password(@RequestParam("password") String password) {
    Authentication auth =SecurityContextHolder.getContext().getAuthentication();
    String id = auth.getName();
-   Member member =  mbr.findById(id).get();
    
+   Member member =  mbr.findById(id).get();
    
    member.setPassword(password);
    member.setPassword(bcryptpasswordencoder.encode(member.getPassword()));

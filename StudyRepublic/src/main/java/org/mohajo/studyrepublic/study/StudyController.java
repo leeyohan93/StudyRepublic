@@ -22,6 +22,7 @@ import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Leveltest;
 import org.mohajo.studyrepublic.domain.LeveltestList;
+import org.mohajo.studyrepublic.domain.LeveltestResponse;
 import org.mohajo.studyrepublic.domain.LeveltestResponseList;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberPoint;
@@ -57,6 +58,7 @@ import org.mohajo.studyrepublic.repository.StudyLocationRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberStatusCDRepository;
 import org.mohajo.studyrepublic.repository.StudyNoticeboardRepository;
+import org.mohajo.studyrepublic.repository.StudyPriceRepository;
 import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.mohajo.studyrepublic.repository.StudyViewRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
@@ -156,6 +158,9 @@ public class StudyController {
 	
 	@Autowired
 	MemberPointRepository mpr;
+	
+	@Autowired
+	StudyPriceRepository spr;
 	
 	@Autowired
 	TypeCD typeCd;
@@ -394,153 +399,182 @@ public class StudyController {
 	
 	@Transactional
 	@RequestMapping("/register")
-	public String register(@ModelAttribute Study study, @RequestParam String id, @ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
+	public String register(@ModelAttribute Study study, @RequestParam String id, @ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, HttpServletResponse response, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 //	public String register(@ModelAttribute StudyView study, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 		
-		log.info("register() called...");
-		log.info("원본 = " + study.toString());
+		String studyId;
 		
-		Member leader = mr.findById(id).get();
-		
-//		if(!study.getMember().getGradeCD().getGradeCode().equals("T") && study.getTypeCode().getTypeCode().equals("P")) {
-		if((!leader.getGradeCD().getGradeCode().equals("T")) && study.getTypeCode().getTypeCode().equals("P")) {
-			log.info("Invalid member tried to open premium study");
-			// 작성중인 내용 세션에 저장하도록 추가할 것
-			model.addAttribute("errorMsg", "Your grade is not 'tutor'");
-			return "/study/error";
-		}
-		
-		
-		// 참고:  https://stackoverflow.com/a/2009224
-		// 설명:   "unparseable date" exception can here only be thrown by SimpleDateFormat#parse()
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-		
-		// 문제:  AM, PM 을 파싱하지 못하는 에러 - a 는 한국 기준 '오전/오후', 미국 기준 'AM/PM'
-		// 해결:  Locale 을 지정
-		// 참고:  https://stackoverflow.com/a/3618809, https://bvc12.tistory.com/168
-	    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.US);
-	    
-		String startDateStr = studyHelper.getStartDateStr().trim();
-		String endDateStr = studyHelper.getEndDateStr().trim();
-
-		String startTimeStr = studyHelper.getStartTimeStr().trim();
-		String endTimeStr = studyHelper.getEndTimeStr().trim();
-		
-		if(startTimeStr != "") {
-			Date startDate = dateFormat.parse(startDateStr);
-			Date endDate = dateFormat.parse(endDateStr);
-
-			Date preStartTime = (Date)timeFormat.parse(startTimeStr);
-			Date preEndTime = (Date)timeFormat.parse(endTimeStr);
-			
-		    java.sql.Time startTime = new java.sql.Time(preStartTime.getTime());
-		    java.sql.Time endTime = new java.sql.Time(preEndTime.getTime());
-		
-			study.setStartDate(startDate);
-			study.setEndDate(endDate);
-			study.setStartTime(startTime);
-			study.setEndTime(endTime);
-		}
-		log.info("----------------[ date & time processed ]----------------");
-		
-		List<StudyLocation> studyLocations = study.getStudyLocation();
-		List<StudyInterest> studyInterests = study.getStudyInterest();
-		
-		if(studyLocations != null) {
-			for(int i=studyLocations.size()-1; i>=0; i--) {
-				StudyLocation studyLocation = studyLocations.get(i);
-				if(studyLocation.getInterestLocation() == null) {
-					studyLocations.remove(i);
-				}
-			}
-		}
-
-		if(studyInterests != null) {
-			for(int i=studyInterests.size()-1; i>=0; i--) {
-				StudyInterest studyInterest = studyInterests.get(i);
-				if(studyInterest.getInterest2code() == null) {
-					studyInterests.remove(i);
-				}
-			}
-		}
-		log.info("----------------[ location & interest processed ]----------------");
-
-		String studyId = sr.getNewStudyId(study.getTypeCode().getTypeCode(), study.getOnoffCode().getOnoffCode());
-		
-		if(studyId == null) {
-			log.info("studyId is null");
-			// 작성중인 내용 세션에 저장하도록 추가할 것
-			model.addAttribute("errorMsg", "Could not generate study_id");
-			return "/study/error";
-		}
-		log.info("new studyId = " + studyId);
-		study.setStudyId(studyId);
-		log.info("----------------[ studyId generated ]----------------");
-
-		log.info(studyPrice.toString());	
-		studyPrice.setStudyId(studyId);
-		study.setPrice(studyPrice);
-		log.info(studyPrice.toString());
-		log.info("----------------[ price processed ]----------------");
-
-		log.info("수정 = " + study.toString());
 		try {
-			sr.save(study);
-	//		svr.save(study);	//java.sql.SQLException: The target table study_view of the INSERT is not insertable-into
-			log.info("----------------[ study save completed ]----------------");
 			
+			log.info("register() called...");
+			log.info("원본 = " + study.toString());
+			
+			Member leader = mr.findById(id).get();
+			
+	//		if(!study.getMember().getGradeCD().getGradeCode().equals("T") && study.getTypeCode().getTypeCode().equals("P")) {
+			if((!leader.getGradeCD().getGradeCode().equals("T")) && study.getTypeCode().getTypeCode().equals("P")) {
+				log.info("Invalid member tried to open premium study");
+				// 작성중인 내용 세션에 저장하도록 추가할 것
+				model.addAttribute("errorMsg", "Your grade is not 'tutor'");
+				return "/study/error";
+			}
+			
+			
+			// 참고:  https://stackoverflow.com/a/2009224
+			// 설명:   "unparseable date" exception can here only be thrown by SimpleDateFormat#parse()
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+			
+			// 문제:  AM, PM 을 파싱하지 못하는 에러 - a 는 한국 기준 '오전/오후', 미국 기준 'AM/PM'
+			// 해결:  Locale 을 지정
+			// 참고:  https://stackoverflow.com/a/3618809, https://bvc12.tistory.com/168
+		    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+		    
+			String startDateStr = studyHelper.getStartDateStr().trim();
+			String endDateStr = studyHelper.getEndDateStr().trim();
+	
+			String startTimeStr = studyHelper.getStartTimeStr().trim();
+			String endTimeStr = studyHelper.getEndTimeStr().trim();
+			
+			if(startTimeStr != "") {
+				Date startDate = dateFormat.parse(startDateStr);
+				Date endDate = dateFormat.parse(endDateStr);
+	
+				Date preStartTime = (Date)timeFormat.parse(startTimeStr);
+				Date preEndTime = (Date)timeFormat.parse(endTimeStr);
+				
+			    java.sql.Time startTime = new java.sql.Time(preStartTime.getTime());
+			    java.sql.Time endTime = new java.sql.Time(preEndTime.getTime());
+			
+				study.setStartDate(startDate);
+				study.setEndDate(endDate);
+				study.setStartTime(startTime);
+				study.setEndTime(endTime);
+			}
+			log.info("----------------[ date & time processed ]----------------");
+			
+			List<StudyLocation> studyLocations = study.getStudyLocation();
+			List<StudyInterest> studyInterests = study.getStudyInterest();
+			
+			if(studyLocations != null) {
+				for(int i=studyLocations.size()-1; i>=0; i--) {
+					StudyLocation studyLocation = studyLocations.get(i);
+					if(studyLocation.getInterestLocation() == null) {
+						studyLocations.remove(i);
+					}
+				}
+			}
+	
+			if(studyInterests != null) {
+				for(int i=studyInterests.size()-1; i>=0; i--) {
+					StudyInterest studyInterest = studyInterests.get(i);
+					if(studyInterest.getInterest2code() == null) {
+						studyInterests.remove(i);
+					}
+				}
+			}
+			log.info("----------------[ location & interest processed ]----------------");
+	
+			studyId = sr.getNewStudyId(study.getTypeCode().getTypeCode(), study.getOnoffCode().getOnoffCode());
+			
+			if(studyId == null) {
+				log.info("studyId is null");
+				// 작성중인 내용 세션에 저장하도록 추가할 것
+				model.addAttribute("errorMsg", "Could not generate study_id");
+				
+				return "/study/error";
+			}
+			
+			log.info("new studyId = " + studyId);
+			study.setStudyId(studyId);
+			log.info("----------------[ studyId generated ]----------------");
 
-			/*StudyMember studyMember = new StudyMember();
 			
-			StudyMemberId studyMemberId = new StudyMemberId();
+			log.info("수정 = " + study.toString());
 			
-//			studyMember.setStudy(study);
-//			studyMember.setId(study.getMember().getId());
-			studyMemberId.setId(id);
-			studyMemberId.setStudyId(studyId);
-//			studyMember.setStudyMemberId(studyMemberId);
-//			studyMember.setMember(leader);
-			
-			StudyMemberStatusCD studyMemberStatusCode = new StudyMemberStatusCD();
-			studyMemberStatusCode.setStudyMemberStatusCode("LE");
-			studyMember.setStudyMemberStatusCode(studyMemberStatusCode);
-			
-			smr.save(studyMember);*/
-			
-			saveStudyMember(id, studyId, "LE");
-			
-			log.info("----------------[ studyMember save completed ]----------------");
-			
-		} catch(Exception e) {
+			try {
+				sr.save(study);
+		//		svr.save(study);	//java.sql.SQLException: The target table study_view of the INSERT is not insertable-into
+				log.info("----------------[ study save completed ]----------------");
+				
+
+				log.info("StudyPrice = " + studyPrice);
+				
+				if(study.getTypeCode().getTypeCode().equals("P")) {
+					log.info(studyPrice.toString());
+					studyPrice.setStudyId(studyId);
+					log.info(studyPrice.toString());
+					
+					spr.save(studyPrice);
+					log.info("----------------[ price processed ]----------------");
+				}
+				
+				// 밑과 같이 하면 에러남
+				/*StudyMember studyMember = new StudyMember();
+				
+				StudyMemberId studyMemberId = new StudyMemberId();
+				
+	//			studyMember.setStudy(study);
+	//			studyMember.setId(study.getMember().getId());
+				studyMemberId.setId(id);
+				studyMemberId.setStudyId(studyId);
+	//			studyMember.setStudyMemberId(studyMemberId);
+	//			studyMember.setMember(leader);
+				
+				StudyMemberStatusCD studyMemberStatusCode = new StudyMemberStatusCD();
+				studyMemberStatusCode.setStudyMemberStatusCode("LE");
+				studyMember.setStudyMemberStatusCode(studyMemberStatusCode);
+				
+				smr.save(studyMember);*/
+				
+				saveStudyMember(id, studyId, "LE");
+				
+				log.info("----------------[ studyMember save completed ]----------------");
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+				model.addAttribute("errorMsg", "Could not save study");
+				return "/study/error";
+			}
+	
+			List<Leveltest> leveltestList = leveltests.getLeveltests();
+	
+			if(leveltestList != null) {
+				log.info(leveltestList.toString());
+		
+				for(int i=0; i<leveltestList.size(); i++) {
+					leveltestList.get(i).setStudyId(studyId);
+				}
+				log.info(leveltestList.toString());
+				lr.saveAll(leveltestList);
+				log.info("----------------[ leveltest save completed ]----------------");
+			}
+	
+			if(file != null && file.getSize() != 0) {
+				log.info("file = " + file.toString());
+				List<MultipartFile> files = mhsRequest.getFiles("file");
+				doUpload(mhsRequest, model, files, studyId);
+				log.info("----------------[ file save completed ]----------------");
+			}
+		
+		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("errorMsg", "Could not save study");
+			model.addAttribute("errorMsg", "Unexpected error has occured during register");
+			
 			return "/study/error";
 		}
-
-		List<Leveltest> leveltestList = leveltests.getLeveltests();
-
-		if(leveltestList != null) {
-			log.info(leveltestList.toString());
-	
-			for(int i=0; i<leveltestList.size(); i++) {
-				leveltestList.get(i).setStudyId(studyId);
-			}
-			log.info(leveltestList.toString());
-			lr.saveAll(leveltestList);
-			log.info("----------------[ leveltest save completed ]----------------");
-		}
-
-		if(file != null) {
-			log.info("file = " + file.toString());
-			List<MultipartFile> files = mhsRequest.getFiles("file");
-			doUpload(mhsRequest, model, files, studyId);
-			log.info("----------------[ file save completed ]----------------");
-		}
-
-		model.addAttribute("test", study);
+		
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+			
+		out.println("<script>alert('스터디 개설이 완료되었습니다!'); window.location.href='/study/detail/" + studyId + "';</script>");
+		out.flush();
+			
+		
+		model.addAttribute("study", study);
 		
 		
-		return "/study/test";
+//			return "redirect:/study/pleaseLogin/?pathname='/study/join/'" + studyId;
+		return "/study/detail/" + studyId;
 	}
 
 	private void doUpload(HttpServletRequest request, Model model, List<MultipartFile> files, String studyId) throws IOException {
@@ -634,7 +668,7 @@ public class StudyController {
 			
 			log.info("----------------[ Anonymous user ]----------------");
 			
-			out.println("<script>alert('로그인 후 신청할 수 있어요!'); window.location.href='/study/pleaseLogin/?pathname='/study/join" + studyId + "';</script>");
+			out.println("<script>alert('로그인 후 신청할 수 있어요!'); window.location.href='/study/pleaseLogin/?pathname=/study/join/" + studyId + "';</script>");
 			out.flush();
 			
 			return "redirect:/study/pleaseLogin/?pathname='/study/join/'" + studyId;
@@ -699,11 +733,12 @@ public class StudyController {
 			
 		}
 		
-		if(study.getTypeCode().getTypeCode() == "P") {
+		log.info(study.getTypeCode().getTypeCode());
+		
+		if(study.getTypeCode().getTypeCode().equals("P")) {
 			// memberpointrepository 에서 사용자의 포인트 정보 조회 --> model 에 add
-			MemberPoint memberPoint = mpr.findById(id).get();
+			MemberPoint memberPoint = mpr.inqueryPoint(id);
 			
-			model.addAttribute("study", study);
 			model.addAttribute("memberPoint", memberPoint);
 			
 			checkStudy += 1;
@@ -718,21 +753,46 @@ public class StudyController {
 			redirectAttr.addAttribute("studyId", studyId);
 			log.info("----------------[ Fast-forward join ]----------------");
 
-			return "redirect:/study/join/confirm";
+			return "redirect:/study/joinConfirm";
 		}
-			
+		model.addAttribute("study", study);
+		
 		return "/study/join/process";
 		
 	}
 	
-	@RequestMapping("/join/confirm")
-	public String joinConfirm(@RequestParam("id") String id, @RequestParam("studyId") String studyId, @ModelAttribute LeveltestResponseList leveltestResponseList, Model model) {
+	@Transactional
+	@RequestMapping("/joinConfirm")
+	public String joinConfirm(@RequestParam("id") String id, @RequestParam("studyId") String studyId, @RequestParam("price") int price, @RequestParam("pointid") int pointid, @ModelAttribute LeveltestResponseList leveltestResponseList, Model model) {
+		
+		log.info("joinConfirm() called...");
 		
 		if(id == null || studyId == null) {
 			model.addAttribute("errorMsg", "스터디 가입 실패! 예기치 못한 문제가 발생하였습니다. 다시 시도해주세요.");
 			
 			return "/study/error";
 			
+		}
+		
+		List<LeveltestResponse> leveltestResponses = leveltestResponseList.getLeveltesResponses();
+
+		if(leveltestResponses != null) {
+			log.info(leveltestResponses.toString());
+	
+			for(int i=0; i<leveltestResponses.size(); i++) {
+				leveltestResponses.get(i).setStudyId(studyId);
+			}
+			log.info(leveltestResponses.toString());
+			lrr.saveAll(leveltestResponses);
+			log.info("----------------[ leveltestResponses save completed ]----------------");
+		}
+		
+		if(studyId.substring(0, 1).equals("P")) {
+			MemberPoint memberPoint = mpr.findById(pointid).get();
+			int currentPoint = memberPoint.getPoint();
+			memberPoint.setPoint(currentPoint - price);
+			mpr.save(memberPoint);
+			log.info("----------------[ memberpoint saved ]----------------");
 		}
 		
 		try {
@@ -744,10 +804,9 @@ public class StudyController {
 			
 			return "/study/error";
 		}
-		
 		model.addAttribute("studyId", studyId);
 		
-		return "/study/join/confirm";
+		return "/study/join/complete";
 		
 	}
 	
@@ -875,7 +934,7 @@ public class StudyController {
 //				}
 //			}
 //			
-//			return "/study/join/confirm";
+//			return "/study/joinConfirm";
 //			
 //		}
 //		/* 2. 레벨테스트 응시 후 매핑되는 경우 */
@@ -908,7 +967,7 @@ public class StudyController {
 //				lrr.saveAll(leveltestResponses);
 //				session.removeAttribute("leveltestResponses");
 //				
-//				return "/study/join/confirm";
+//				return "/study/joinConfirm";
 //				
 //			}
 //			
@@ -947,7 +1006,7 @@ public class StudyController {
 //				
 //				saveStudyMember(id, studyId);
 //				
-//				return "/study/join/confirm";
+//				return "/study/joinConfirm";
 //				
 //			}
 //		}
@@ -986,11 +1045,12 @@ public class StudyController {
 		// studyMemberStatusCD 확인하기
 		log.info("-------------------- studyMember saved --------------------");
 		
-		if(!studyMemberStatus.equals("LE")) {
+		// 모임장이 승인해야 plus
+/*		if(!studyMemberStatus.equals("LE")) {
 			// [Request processing failed; nested exception is org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query] with root cause
 			sr.plusEnrollActual(studyId);
 			log.info("-------------------- study enrollActual updated --------------------");
-		}
+		}*/
 	}
 	
 	

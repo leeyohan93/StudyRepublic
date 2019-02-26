@@ -22,6 +22,18 @@
     		z-index: -9999;
     	}
     	
+    	h1, h2, h3, h4, h5, h6 {
+    		text-align: left !important;
+    	}
+    	
+    	.inside-inner {
+    		background: white !important;
+    	}
+    	
+    	.tab-item:nth-of-type(4) a:hover {
+    		color: rgba(0, 0, 0, 0.2) !important;
+    	}
+    	
     	form {
    		    overflow-x: unset !important;
     	}
@@ -39,20 +51,26 @@
    		    display: inline-block !important;
     	}
     	
-    	.wrap-input100_container input:not(.yshbtn) {
+    	#basicInfoArea .input-study-type-alert {
+    		font-size: 0.8rem !important;
+    		padding-left: 5.5rem !important;
+    	}
+    	
+    	
+    	#basicInfoArea .wrap-input100_container input:not(.yshbtn) {
     		display: none !important;
     		opacity: 0;
     		position: absolute;
     	}
     	
-    	.wrap-input100 {
+    	#basicInfoArea .wrap-input100 {
     		display: inline-block !important;
     		width: fit-content !important;
     		height: 65px !important;
     		padding: unset !important;
     	}
     	
-    	.label-input100 {
+    	#basicInfoArea .label-input100 {
 /* 		  font-size: 18px; */
 /* 		  color: #999999; */
 		  line-height: 1.2;
@@ -66,24 +84,33 @@
 	      font-size: 0.8rem !important;
 		}
 
-		.input100 {
+		#basicInfoArea .input100 {
 	        padding: 25% 0px 25% 15% !important;
 		    width: 9rem !important;
 		}
 		
-		.input100:focus {
+		#basicInfoArea .input100:focus {
 		  height: 48px !important;
 		}
 		
-		.input100:focus + .focus-input100 + .label-input100 {
+		#basicInfoArea .input100:focus + .focus-input100 + .label-input100 {
 		  top: 5px !important;
 		  font-size: 13px;
 		}
     	
-    	.input100#input-study-name {
+    	#basicInfoArea .input100#input-study-name {
     	    width: 100% !important;
 		    padding: unset !important;
 		    padding-left: 20px !important;
+    	}
+    	
+    	#introduction-section input.input100 {
+    		padding-bottom: 25px !important;
+    	}
+    	
+    	#introduction-section .label-input100 {
+    		font-size: 14px !important;
+    		top: 15px !important;
     	}
     	
     	select:not(.shsel) {
@@ -533,17 +560,31 @@
             display: inline-block;
         }
         
+        #leveltestArea #leveltest-delete {
+             color: black;
+             display: inline-block;
+            width: 5rem;
+        }
+        
         #leveltestArea #leveltest-delete-btn:after {
         	content: "\f1f8";
     	   	font-family: "Font Awesome 5 Free";
             font-weight: 900;
-            color: black;
             font-size: 1.5rem;
             vertical-align: middle;
             text-align: center;
             margin-left: 5px;
-            transition: all .2s ease-in-out;
+/*             transition: all .2s ease-in-out; */
+            transition: font-size .4s ease-in-out;
+            
         }
+        
+         #leveltestArea #leveltest-delete-btn:hover:after {
+/*         	transform: scale(4); */
+/* 			font-size: 50px; */
+        	
+        }
+        
         
         /* https://css-tricks.com/snippets/css/scale-on-hover-with-webkit-transition/ */
         .scaleUp {
@@ -563,20 +604,24 @@
         }
         
         #progress-bar {
+       	    transition: width .3s ease;
+        }
+        
+        #progress-bar, #progress-bar[data-step-1='1'] {
         	width: 12.5%;
         }
         
-        #procress-bar.step2 {
+        #progress-bar[data-step-2='2'] {
             width: 37.5%;
         }
         
-        #progress-bar.step3 {
+        #progress-bar[data-step-3='3'] {
         	width: 62.5%; 
         }
         
         
         .wizard-footer prev-next-container {
-        	padding: 2rem 0;
+       	    padding: 0 0.5rem 3rem 0.5rem !important;
         }
         
         #btn-previous, #btn-next, #btn-finish {
@@ -617,6 +662,8 @@
 		  90% { transform: translate(0.5px, 1.5px) rotate(0deg); }
 		  100% { transform: translate(0.5px, -1.5px) rotate(-1deg); }
 		}
+		
+		
 				
     </style>
     
@@ -656,425 +703,434 @@
 
     <div layout:fragment="main">
         <div class="inner wizard-card" id="studyOpen">
-	        
-	        <div class="row">
-	        	<h4>스터디 개설하기</h4>
-        	</div>
-	        
-	        
-			<div class="wizard-navigation progress-nav-container">
-				<div class="progress-with-circle">
-				     <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3"></div>
-				</div>
-				<ul class="tab-item-container tab-title nav nav-pills">
-					
-                    <li class="tab-item active">
-                    	
-						<a href="#basicInfo-section" data-toggle="tab">
-							<div class="icon-circle">
-								<i class="ti-user"></i>
-							</div>
-							<span>기본정보</span>
-						</a>
-					</li>
-                    <li class="tab-item">
-						<a href="#introduction-section" data-toggle="tab">
-							<div class="icon-circle">
-								<i class="ti-settings"></i>
-							</div>
-							<span>스터디소개</span>
-						</a>
-					</li>
-                    <li class="tab-item">
-						<a href="#leveltest-section" data-toggle="tab">
-							<div class="icon-circle">
-								<i class="ti-map"></i>
-							</div>
-							<span>레벨테스트</span>
-						</a>
-					</li>
-                    <li class="tab-item">
-						<a href="#" data-toggle="tab" onclick="return false">
-							<div class="icon-circle">
-								<i class="ti-map"></i>
-							</div>
-							<span>개설완료</span>
-						</a>
-					</li>
-                </ul>
-			</div>
-            
-			<div id="tab-pane-container tab-content">
-            
-				<form id="basicForm" enctype="multipart/form-data">
-                    <input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' />
-					<input type="hidden" name="id" th:value="${loggedInUser.id}">
-				
-		           <section class="tab-pane basicInfo-container ghost" id="basicInfo-section">
-		           		
-		           		<div id="basicInfoArea">
-				            <div class="row input input-field-type">
-								<div class="col-md-2 input-title">유형</div>
-				                <div class="col-md-10 input-content" style="font-size: 0">
-			                        <label th:each="typeCode : ${typeCode}"><input type="radio" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode.typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label>
-<!-- <label th:each="typeCode : ${typeCode}"><input type="text" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label> -->
-				                    <span class="input-study-type-alert" style="display:none">알림!
-				                        프리미엄 스터디는 유료로 진행되는 강의형 스터디로, 인증 절차를 <br/>
-				                        완료한 강사 등급의 회원만 개설할 수 있습니다.<br/>
-				                        <a th:href="@{/tutor/signup}">강사 등급 신청하기</a>
-				                    </span>
-				                </div>
-				            </div>
-				            <div class="row input input-field-onoff">
-				                <div class="col-md-2 input-title">진행방식</div>
-				                <div class="col-md-10 input-content">
-				                    <label th:each="onoffCode : ${onoffCode}"><input type="radio" class="none-radio" name="onoffCode.onoffCode" th:value="${onoffCode.onoffCode}"><span class="btn-radio" th:text="${onoffCode.codeValueKorean}"></span></label>
-				                </div>
-				            </div>
-				            <div class="row input input-field-location">
-				                <div class="col-md-2 input-title">지역</div>
-				                <div class="col-md-10 input-content">
-									
-									<div class="row">
-										
-					                	<!-- 소스:  성호님 코드 -->
-										
-										<div class="join-form-btn" style = "float:left; margin: 0px 0px 0px 50px; width:12px" >	
-								 			<button type = "button" id = "addLoctaion" onclick = "addInterestLocation_join()"> 검색하기 </button>
-										</div>
-									</div>
-									
-									<div class="col-md-auto">
-										<div class="row join-input100" id = "loc">
-											<div id="guide" style="color:#999;display:none;"></div>
-										<span class="focus-input100"></span>
-										</div>
-									</div>
-
-				                </div>
-				            </div>
-				            <div class="row input input-field-period">
-				                <div class="col-md-2 input-title">기간</div>
-				                <div class="col-md-10 input-content">
-				                	<div class="wrap-input100">
-				                    	<input type="text" name="startDateStr" id="input-study-startDate" class="input100 input-date" placeholder="시작일" readonly> 
-				                    	<span class="focus-input100"></span>
-<!-- 				                    	<span class="label-input100">시작일</span> -->
-				                    </div>
-				                    	부터
-				                    <div class="wrap-input100">
-				                    	<input type="text" name="endDateStr" id="input-study-endDate" class="input100 input-date" placeholder="종료일" readonly> 
-				                    	<span class="focus-input100"></span>
-<!-- 				                    	<span class="label-input100">종료일</span> -->
-				                    </div>
-				                    	까지
-				                    	(총 <input type="number" name="studyCount" id="input-study-studyCount" placeholder="-" readonly>회)
-				                </div>
-				            </div>
-
-				            <div class="row input input-field-schedule">
-				                <div class="col-md-2 input-title">일시</div>
-				                <div class="col-md-10 input-content">
-				                	<div class="row col-md-auto">
-				                    	매주&nbsp;
-				                    	<select name="dayCode.dayCode" readonly onclick="return false">
-				                            <option th:each="dayCode : ${dayCode}" th:value="${dayCode.dayCode}" th:text="${dayCode.codeValueKorean}"></option>
-				                        </select>요일
-			                        </div>
-			                       	<div class="row col-md-auto time-input-container">
-			                       	   	<div class="wrap-input100">
-						                    <input type="text" name="startTimeStr" class="input100 only-time" id="input-study-startTime" placeholder="시작 시각" readonly>
-					                   	 	<span class="focus-input100"></span>
-<!-- 				                    		<span class="label-input100">시작 시각</span> -->
-				                    	</div>
-					                   	 부터 
-					                   	 <div class="wrap-input100">
-						                    <input type="text" name="endTimeStr" class="input100 only-time" id="input-study-endTime" placeholder="종료 시각" readonly>
-					                  	 	<span class="focus-input100"></span>
-<!-- 				                    		<span class="label-input100">종료 시각</span> -->
-				                    	</div>
-					                  	 까지
-
-<!-- 					                    (<input type="text" name="timeDiff" id="input-study-timeDiff" placeholder="-" readonly>분) -->
-					                    (<input type="text" id="input-study-timeDiff" placeholder="-" readonly>분)
-				                    </div>
-				                </div>
-				            </div>
-				            <div class="row input input-field-enrollCapacity">
-				                <div class="col-md-2 input-title">모집인원</div>
-				                <div class="col-md-10 input-content">
-				                    <button id="btn-enrollCapacity-minus" class="btn-enrollCapacity">
-				                        &lt;
-				                    </button>
-				                    <div class="wrap-input100">
-					                    <input type="text" class="input" name="enrollCapacity" id="input-study-enrollCapacity">
-              	                   	 	<span class="focus-input"></span>
-				                    </div>
-				                    <button id="btn-enrollCapacity-plus" class="btn-enrollCapacity">
-				                        &gt;
-				                    </button>
-				                </div>
-				            </div>
-				            <div class="row input input-field-interest">
-				            
-				                <div class="col-md-2 input-title">분야</div>
-				                <div class="col-md-10 input-content">
-				                
-				                	<!-- 성호님 코드 시작 -->
-				                	<div class="row">
-				                		<div class="col-md-5 interest-selector">
-		            						<div class="wrap-input100_head validate-input" style="float: left;">
-												<span class="yshspan">강의희망분야 1차</span>
-											</div>
-											<div class="select-input100" style="float: left; border: none; margin-bottom: 50px;">
-												<select class = "shsel" name="interest1cd" id="interest1cd" size='4' multiple='multiple' onchange="iinterest1(this)">
-													<option th:each="i1 :  ${interest1cd}" th:value="${i1.interest1Code}" th:text="${i1.codeValueKorean}"></option>
-												</select>
-											</div>
-										</div>
-										<div class="col-md-7 interest-selector">
-											<div class="interest2-placeholder">
-												<span class="interest2-placeholder-text">
-												1차 분야를 선택하면<br/>
-												활성화됩니다.
-												</span>
-											</div>
-										
-											<div class="wrap-input100_head validate-input" id="2int" style="float: left; margin: 0; display: none">
-												<span class="yshspan">강의희망분야 2차</span>
-											</div>
-											<div class="select-input100_2" id="ddinterest2cd" style="float: left; border: none;">
-												<span class="dinterest2cd" name="dinterest2cd"> 
-													<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
-															<option th:each="di2 :  ${dinterest2cd}" th:value="${di2.interest2Code}" th:text="${di2.codeValueKorean}"></option>
-													</select>
-												</span>
-											</div>
-					
-											<div class="select-input100_2" id="nninterest2cd" style="float: left; border: none;">
-												<span class="ninterest2cd" name="ninterest2cd"> 
-													<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
-														<option th:each="ni2 :  ${ninterest2cd}" th:value="${ni2.interest2Code}" th:text="${ni2.codeValueKorean}"></option>
-													</select>
-												</span>
-											</div>
-					
-					
-											<div class="select-input100_2" id="ppinterest2cd" style="float: left; border: none;">
-												<span class="pinterest2cd" name="pinterest2cd">
-													<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
-														<option th:each="pi2 :  ${pinterest2cd}" th:value="${pi2.interest2Code}" th:text="${pi2.codeValueKorean}"></option>
-													</select>
-												</span>
-											</div>
-					
-											<div class="select-input100_2" id="wwinterest2cd" style="float: left; border: none;">
-												<span class="winterest2cd" name="winterest2cd">
-													<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
-														<option th:each="wi2 :  ${winterest2cd}" th:value="${wi2.interest2Code}" th:text="${wi2.codeValueKorean}"></option>
-													</select>
-												</span>
-											</div>
-										</div>
-									</div>
-									
-									<div class="col-md-auto">
-										<div class="row wrap-input100_container">
-											<div class="wrap-input100_ validate-input">
-												<div id="interest1cd" name="interest1cd">
-													<div id="int1"></div>
-												</div>
-											</div>
-				
-											<div class="wrap-input100_ validate-input">
-												<div id="interest2cd" name="interest2cd">
-													<div id="int2"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-				                	<!-- 성호님 코드 끝 -->
-									
-				                </div>
-				            </div>
-				            <div class="row input input-field-level">
-				                <div class="col-md-2 input-title">레벨</div>
-				                <div class="col-md-10 input-content">
-				                    <select name="levelCode.levelCode">
-				                    	<option value="H">상</option>
-				                    	<option value="M" selected>중</option>
-				                    	<option value="L">하</option>
-				                    </select>
-				                </div>
-				            </div>
-				            <div class="row input input-field-price">
-				                <div class="col-md-2 input-title">가격</div>
-				                <div class="col-md-10 input-content">
-				                	<div>
-					                    	회차 당
-	   				                	<div class="wrap-input100">
-					                    	<input type="number" class="input100" id="input-study-unitPrice"> 
-					                    	<span class="focus-input100"></span>
-					                    </div>
-					                    	P
-				                    </div>
-				                    <div>
-					                    	총합
-					                    <div class="wrap-input100">
-					                    	<input type="number" class="input100" id="input-study-totalPrice"> 
-					                    	<span class="focus-input100"></span>
-					                    </div>
-					                    	P
-			                    	</div>
-				                </div>
-				            </div>
-				            <div class="row input input-field-hidden">
-						           <input type="hidden" name="member.id" id="input-study-member" th:value="${loggedInUser.id}"><br/>
-		           	                <input type="hidden" id="input-study-member-gradeCode" th:value="${loggedInUser.gradeCD.gradeCode}"><br/>
-					                <input type="hidden" name="studyStatusCode.studyStatusCode" id="input-study-studyStatusCode" value="O">
-				            </div>
-			            </div>
-			            
-					</section>
-		            
-					<section class="tab-pane introduction-container ghost" id="introduction-section">
-						
-						<div class="info-text">
-							<h5>스터디를 소개해주세요!</h5>
-						</div>
-						
-						<div class="row">
-			                <div class="col-md-2 input-title">스터디명</div>
-                       	   	<div class="col-md-10 wrap-input100">
-			                    <input type="text" name="name" class="input100" id="input-study-name">
-		                   	 	<span class="focus-input100"></span>
-	                    	</div>
-						</div>
-						
-						<div id="smartEditorArea"> 
-							<!--  /********************************** Smart Editor - HTML 시작  **********************************/ -->
-							<div id="editor">
-								<div class="input">
-			<!-- 						<textarea name="content" id="smarteditor" rows="10" cols="100" style="width: 700px; height: 1000px;"></textarea> -->
-									<textarea name="introduction" id="smarteditor" rows="10" cols="100" style="width: 700px; height: 1000px;"></textarea>
-								</div>
-							</div>
-<!-- 							<span class="previewBtn"> -->
-<!-- 								<button class="btn btn-default" name="writePreview" id="writePreview" type="button">미리보기</button> -->
-<!-- 							</span> -->
-<!-- 							<span class="registerBtn"> -->
-<!-- 								<button class="btn btn-default" name="boardRegister" id="boardRegister" type="submit">확인</button> -->
-<!-- 							</span> -->
-							<!--  /********************************** Smart Editor - HTML 끝  **********************************/ -->
-						</div>
-						
-				
-						<div id="file-container">
-							<input type="file" name="file" multiple>
-						</div>
-					
-<!-- 						<input type="hidden" th:name="${_csrf.parameterName}" -->
-<!-- 							th:value="${_csrf.token}" /> -->
-					</section>
-					
-<!-- 				</form> -->
-				
-						
-				
-				
-				<section class="tab-pane introduction-container ghost" id="leveltest-section">
-				
-					<div class="row info-text">
-						<h5>레벨테스트를 추가하시려면 내용을 작성해주세요!</h5>
+		       
+	       <div class="inside-inner">
+		        
+		        <div></div>
+		        
+		        <div class="row">
+		        	<h4>스터디 개설하기</h4>
+	        	</div>
+		        
+		        
+				<div class="wizard-navigation progress-nav-container">
+					<div class="progress-with-circle">
+					     <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" data-step="1"></div>
 					</div>
+					<ul class="tab-item-container tab-title nav nav-pills">
+						
+	                    <li class="tab-item active">
+	                    	
+							<a href="#basicInfo-section" data-toggle="tab">
+								<div class="icon-circle">
+									<i class="ti-user"></i>
+								</div>
+								<span>기본정보</span>
+							</a>
+						</li>
+	                    <li class="tab-item">
+							<a href="#introduction-section" data-toggle="tab">
+								<div class="icon-circle">
+									<i class="ti-settings"></i>
+								</div>
+								<span>스터디소개</span>
+							</a>
+						</li>
+	                    <li class="tab-item">
+							<a href="#leveltest-section" data-toggle="tab">
+								<div class="icon-circle">
+									<i class="ti-map"></i>
+								</div>
+								<span>레벨테스트</span>
+							</a>
+						</li>
+	                    <li class="tab-item">
+							<a href="#" data-toggle="tab" onclick="return false">
+								<div class="icon-circle">
+									<i class="ti-map"></i>
+								</div>
+								<span>개설완료</span>
+							</a>
+						</li>
+	                </ul>
+				</div>
+	            
+				<div id="tab-pane-container tab-content">
+	            
+					<form id="basicForm" enctype="multipart/form-data">
+	                    <input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' />
+						<input type="hidden" name="id" th:value="${loggedInUser.id}">
 					
-		            <div id="leveltestArea">
-		
-		                <!-- /********************************** leveltest - HTML 시작 **********************************/ -->
-		                <div class="leveltest-maker-container">
-		                    <button class="leveltest-maker multiple-choice-leveltest-maker">객관식
-		                        문제 블록</button>
-		                    <button class="leveltest-maker short-answer-leveltest-maker">주관식
-		                        문제 블록</button>
-		                     <span id="leveltest-delete-btn"></span>
-		                </div>
-		
-<!-- 		                <form id="leveltestForm"> -->
-<!-- 		                    <input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' /> -->
-		
-		                    <div class="leveltest-container">
-		
-<!-- 		                        <div class="leveltest"> -->
-		
-<!-- 		                            <div class="question"> -->
-<!-- 		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="MC"> -->
-<!-- 		                                <input class="numbering question-numbering" type="number" name="questionNumber" readonly value="1"> -->
-<!-- 		                                <span class="question-content">Feeds</span> -->
-<!-- 		                                <input class="question-edit"name="content" type="text" style="display: none"> -->
-<!-- 		                                <span class='icon icon-plus leveltest-toggle'></span> -->
-<!-- 		                            </div> -->
-<!-- 		                            <div class="question-choice" style="display: none"> -->
-<!-- 		                                <input type="hidden" name="choice" value=""> -->
-<!-- 		                                <div class="question-choice-group"> -->
-<!-- 		                                    <span class="numbering choice-numbering">1</span> -->
-<!-- 		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test1" /> -->
-<!-- 		                                </div> -->
-<!-- 		                                <div class="question-choice-group"> -->
-<!-- 		                                    <span class="numbering choice-numbering">2</span> -->
-<!-- 		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test2" /> -->
-<!-- 		                                </div> -->
-<!-- 		                                <div class="question-choice-placeholder">보기를 추가하려면 클릭하세요!</div> -->
-<!-- 		                            </div> -->
-<!-- 		                            <div class="question-answer" style="display: none"> -->
-<!-- 		                                정답: <select name="correctAnswer"> -->
-<!-- 		                                    <option>1</option> -->
-<!-- 		                                    <option>2</option> -->
-<!-- 		                                </select> -->
-<!-- 		                            </div> -->
-		
-<!-- 		                        </div> -->
-		
-<!-- 		                        <div class="leveltest"> -->
-		
-<!-- 		                            <div class="question"> -->
-<!-- 		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="SA"> -->
-<!-- 		                                <input class="numbering question-numbering" name="questionNumber" readonly value="2"> -->
-<!-- 		                                <span class="question-content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam rem numquam tenetur. Laboriosam quam iure eos beatae ad pariatur, culpa molestiae accusamus corrupti quasi placeat maxime fugiat optio in nulla!</span> -->
-<!-- 		                                <input class="question-edit" name="content" type="text" style="display: none"> -->
-<!-- 		                                <span class="icon icon-plus leveltest-toggle"></span> -->
-<!-- 		                            </div> -->
-<!-- 		                            <div class="question-answer" style="display: none"> -->
-<!-- 		                                정답: <input name="correctAnswer" class="question-answer-input" type="text" value="nulla"> -->
-<!-- 		                            </div> -->
-		
-<!-- 		                        </div> -->
-		                    </div>
-		                    <input type="hidden" name="hasLeveltest" value="0">
-							<input type="hidden" th:name="${_csrf.parameterName}"
-								th:value="${_csrf.token}" />
+			           <section class="tab-pane basicInfo-container ghost" id="basicInfo-section">
+			           		
+			           		<div id="basicInfoArea">
+					            <div class="row input input-field-type">
+									<div class="col-md-2 input-title">유형</div>
+					                <div class="col-md-10 input-content" style="font-size: 0">
+				                        <label th:each="typeCode : ${typeCode}"><input type="radio" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode.typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label>
+	<!-- <label th:each="typeCode : ${typeCode}"><input type="text" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label> -->
+					                    <span class="input-study-type-alert" style="display:none">알림!
+					                        프리미엄 스터디는 유료로 진행되는 강의형 스터디로, 인증 절차를 <br/>
+					                        완료한 강사 등급의 회원만 개설할 수 있습니다.<br/>
+					                        <a th:href="@{/tutor/signup}">강사 등급 신청하기</a>
+					                    </span>
+					                </div>
+					            </div>
+					            <div class="row input input-field-onoff">
+					                <div class="col-md-2 input-title">진행방식</div>
+					                <div class="col-md-10 input-content">
+					                    <label th:each="onoffCode : ${onoffCode}"><input type="radio" class="none-radio" name="onoffCode.onoffCode" th:value="${onoffCode.onoffCode}"><span class="btn-radio" th:text="${onoffCode.codeValueKorean}"></span></label>
+					                </div>
+					            </div>
+					            <div class="row input input-field-location">
+					                <div class="col-md-2 input-title">지역</div>
+					                <div class="col-md-10 input-content">
+										
+										<div class="row">
+											
+						                	<!-- 소스:  성호님 코드 -->
+											
+											<div class="join-form-btn" style = "float:left; margin: 0px 0px 0px 50px; width:12px" >	
+									 			<button type = "button" id = "addLoctaion" onclick = "addInterestLocation_join()"> 검색하기 </button>
+											</div>
+										</div>
+										
+										<div class="col-md-auto">
+											<div class="row join-input100" id = "loc">
+												<div id="guide" style="color:#999;display:none;"></div>
+											<span class="focus-input100"></span>
+											</div>
+										</div>
+	
+					                </div>
+					            </div>
+					            <div class="row input input-field-period">
+					                <div class="col-md-2 input-title">기간</div>
+					                <div class="col-md-10 input-content">
+					                	<div class="wrap-input100">
+					                    	<input type="text" name="startDateStr" id="input-study-startDate" class="input100 input-date" placeholder="시작일" readonly> 
+					                    	<span class="focus-input100"></span>
+	<!-- 				                    	<span class="label-input100">시작일</span> -->
+					                    </div>
+					                    	부터
+					                    <div class="wrap-input100">
+					                    	<input type="text" name="endDateStr" id="input-study-endDate" class="input100 input-date" placeholder="종료일" readonly> 
+					                    	<span class="focus-input100"></span>
+	<!-- 				                    	<span class="label-input100">종료일</span> -->
+					                    </div>
+					                    	까지
+					                    	(총 <input type="number" name="studyCount" id="input-study-studyCount" placeholder="-" readonly>회)
+					                </div>
+					            </div>
+	
+					            <div class="row input input-field-schedule">
+					                <div class="col-md-2 input-title">일시</div>
+					                <div class="col-md-10 input-content">
+					                	<div class="row col-md-auto">
+					                    	매주&nbsp;
+					                    	<select name="dayCode.dayCode" readonly disabled>
+					                            <option th:each="dayCode : ${dayCode}" th:value="${dayCode.dayCode}" th:text="${dayCode.codeValueKorean}"></option>
+					                        </select>요일
+				                        </div>
+				                       	<div class="row col-md-auto time-input-container">
+				                       	   	<div class="wrap-input100">
+							                    <input type="text" name="startTimeStr" class="input100 only-time" id="input-study-startTime" placeholder="시작 시각" readonly>
+						                   	 	<span class="focus-input100"></span>
+	<!-- 				                    		<span class="label-input100">시작 시각</span> -->
+					                    	</div>
+						                   	 부터 
+						                   	 <div class="wrap-input100">
+							                    <input type="text" name="endTimeStr" class="input100 only-time" id="input-study-endTime" placeholder="종료 시각" readonly>
+						                  	 	<span class="focus-input100"></span>
+	<!-- 				                    		<span class="label-input100">종료 시각</span> -->
+					                    	</div>
+						                  	 까지
+	
+	<!-- 					                    (<input type="text" name="timeDiff" id="input-study-timeDiff" placeholder="-" readonly>분) -->
+						                    (<input type="text" id="input-study-timeDiff" placeholder="-" readonly>분)
+					                    </div>
+					                </div>
+					            </div>
+					            <div class="row input input-field-enrollCapacity">
+					                <div class="col-md-2 input-title">모집인원</div>
+					                <div class="col-md-10 input-content">
+					                    <button id="btn-enrollCapacity-minus" class="btn-enrollCapacity">
+					                        &lt;
+					                    </button>
+					                    <div class="wrap-input100">
+						                    <input type="text" class="input" name="enrollCapacity" id="input-study-enrollCapacity">
+	              	                   	 	<span class="focus-input"></span>
+					                    </div>
+					                    <button id="btn-enrollCapacity-plus" class="btn-enrollCapacity">
+					                        &gt;
+					                    </button>
+					                </div>
+					            </div>
+					            <div class="row input input-field-interest">
+					            
+					                <div class="col-md-2 input-title">분야</div>
+					                <div class="col-md-10 input-content">
+					                
+					                	<!-- 성호님 코드 시작 -->
+					                	<div class="row">
+					                		<div class="col-md-5 interest-selector">
+			            						<div class="wrap-input100_head validate-input" style="float: left;">
+													<span class="yshspan">강의희망분야 1차</span>
+												</div>
+												<div class="select-input100" style="float: left; border: none; margin-bottom: 50px;">
+													<select class = "shsel" name="interest1cd" id="interest1cd" size='4' multiple='multiple' onchange="iinterest1(this)">
+														<option th:each="i1 :  ${interest1cd}" th:value="${i1.interest1Code}" th:text="${i1.codeValueKorean}"></option>
+													</select>
+												</div>
+											</div>
+											<div class="col-md-7 interest-selector">
+												<div class="interest2-placeholder">
+													<span class="interest2-placeholder-text">
+													1차 분야를 선택하면<br/>
+													활성화됩니다.
+													</span>
+												</div>
+											
+												<div class="wrap-input100_head validate-input" id="2int" style="float: left; margin: 0; display: none">
+													<span class="yshspan">강의희망분야 2차</span>
+												</div>
+												<div class="select-input100_2" id="ddinterest2cd" style="float: left; border: none;">
+													<span class="dinterest2cd" name="dinterest2cd"> 
+														<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
+																<option th:each="di2 :  ${dinterest2cd}" th:value="${di2.interest2Code}" th:text="${di2.codeValueKorean}"></option>
+														</select>
+													</span>
+												</div>
+						
+												<div class="select-input100_2" id="nninterest2cd" style="float: left; border: none;">
+													<span class="ninterest2cd" name="ninterest2cd"> 
+														<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
+															<option th:each="ni2 :  ${ninterest2cd}" th:value="${ni2.interest2Code}" th:text="${ni2.codeValueKorean}"></option>
+														</select>
+													</span>
+												</div>
+						
+						
+												<div class="select-input100_2" id="ppinterest2cd" style="float: left; border: none;">
+													<span class="pinterest2cd" name="pinterest2cd">
+														<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
+															<option th:each="pi2 :  ${pinterest2cd}" th:value="${pi2.interest2Code}" th:text="${pi2.codeValueKorean}"></option>
+														</select>
+													</span>
+												</div>
+						
+												<div class="select-input100_2" id="wwinterest2cd" style="float: left; border: none;">
+													<span class="winterest2cd" name="winterest2cd">
+														<select class = "shsel" size='4' multiple='multiple' onchange="iinterest2(this)">
+															<option th:each="wi2 :  ${winterest2cd}" th:value="${wi2.interest2Code}" th:text="${wi2.codeValueKorean}"></option>
+														</select>
+													</span>
+												</div>
+											</div>
+										</div>
+										
+										<div class="col-md-auto">
+											<div class="row wrap-input100_container">
+												<div class="wrap-input100_ validate-input">
+													<div id="interest1cd" name="interest1cd">
+														<div id="int1"></div>
+													</div>
+												</div>
+					
+												<div class="wrap-input100_ validate-input">
+													<div id="interest2cd" name="interest2cd">
+														<div id="int2"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+					                	<!-- 성호님 코드 끝 -->
+										
+					                </div>
+					            </div>
+					            <div class="row input input-field-level">
+					                <div class="col-md-2 input-title">레벨</div>
+					                <div class="col-md-10 input-content">
+					                    <select name="levelCode.levelCode">
+					                    	<option value="H">상</option>
+					                    	<option value="M" selected>중</option>
+					                    	<option value="L">하</option>
+					                    </select>
+					                </div>
+					            </div>
+					            <div class="row input input-field-price">
+					                <div class="col-md-2 input-title">가격</div>
+					                <div class="col-md-10 input-content">
+					                	<div>
+						                    	회차 당
+		   				                	<div class="wrap-input100">
+						                    	<input type="number" class="input100" id="input-study-unitPrice"> 
+						                    	<span class="focus-input100"></span>
+						                    </div>
+						                    	P
+					                    </div>
+					                    <div>
+						                    	총합
+						                    <div class="wrap-input100">
+						                    	<input type="number" class="input100" id="input-study-totalPrice"> 
+						                    	<span class="focus-input100"></span>
+						                    </div>
+						                    	P
+				                    	</div>
+					                </div>
+					            </div>
+					            <div class="row input input-field-hidden">
+							           <input type="hidden" name="member.id" id="input-study-member" th:value="${loggedInUser.id}"><br/>
+			           	                <input type="hidden" id="input-study-member-gradeCode" th:value="${loggedInUser.gradeCD.gradeCode}"><br/>
+						                <input type="hidden" name="studyStatusCode.studyStatusCode" id="input-study-studyStatusCode" value="O">
+					            </div>
+				            </div>
+				            
+						</section>
+			            
+						<section class="tab-pane introduction-container ghost" id="introduction-section">
+							
+							<div class="info-text">
+								<h5>스터디를 소개해주세요!</h5>
+							</div>
+							
+							<div class="row col-md-auto">
+<!-- 				                <div class="col-md-2 input-title">스터디명</div> -->
+	                       	   	<div class="col-md-12 wrap-input100">
+				                    <input type="text" name="name" class="input100" id="input-study-name">
+			                   	 	<span class="focus-input100"></span>
+			                   	 	<span class="label-input100">스터디명</span>
+			                   	 	
+		                    	</div>
+							</div>
+							
+							<div id="smartEditorArea"> 
+								<!--  /********************************** Smart Editor - HTML 시작  **********************************/ -->
+								<div id="editor">
+									<div class="input">
+				<!-- 						<textarea name="content" id="smarteditor" rows="10" cols="100" style="width: 700px; height: 1000px;"></textarea> -->
+										<textarea name="introduction" id="smarteditor" rows="10" cols="100" style="width: 700px; height: 1000px;"></textarea>
+									</div>
+								</div>
+	<!-- 							<span class="previewBtn"> -->
+	<!-- 								<button class="btn btn-default" name="writePreview" id="writePreview" type="button">미리보기</button> -->
+	<!-- 							</span> -->
+	<!-- 							<span class="registerBtn"> -->
+	<!-- 								<button class="btn btn-default" name="boardRegister" id="boardRegister" type="submit">확인</button> -->
+	<!-- 							</span> -->
+								<!--  /********************************** Smart Editor - HTML 끝  **********************************/ -->
+							</div>
+							
+					
+							<div id="file-container">
+								<input type="file" name="file" multiple>
+							</div>
+						
+	<!-- 						<input type="hidden" th:name="${_csrf.parameterName}" -->
+	<!-- 							th:value="${_csrf.token}" /> -->
+						</section>
+						
+	<!-- 				</form> -->
+					
+							
+					
+					
+					<section class="tab-pane introduction-container ghost" id="leveltest-section">
+					
+						<div class="row info-text">
+							<h5>레벨테스트를 추가하시려면 내용을 작성해주세요!</h5>
+						</div>
+						
+			            <div id="leveltestArea">
+			
+			                <!-- /********************************** leveltest - HTML 시작 **********************************/ -->
+			                <div class="leveltest-maker-container">
+			                    <button class="leveltest-maker multiple-choice-leveltest-maker">객관식
+			                        문제 블록</button>
+			                    <button class="leveltest-maker short-answer-leveltest-maker">주관식
+			                        문제 블록</button>
+			                     <div id="leveltest-delete">
+			                     	<span id="leveltest-delete-btn">삭제</span>
+			                     </div>
+			                </div>
+			
+	<!-- 		                <form id="leveltestForm"> -->
+	<!-- 		                    <input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' /> -->
+			
+			                    <div class="leveltest-container">
+			
+	<!-- 		                        <div class="leveltest"> -->
+			
+	<!-- 		                            <div class="question"> -->
+	<!-- 		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="MC"> -->
+	<!-- 		                                <input class="numbering question-numbering" type="number" name="questionNumber" readonly value="1"> -->
+	<!-- 		                                <span class="question-content">Feeds</span> -->
+	<!-- 		                                <input class="question-edit"name="content" type="text" style="display: none"> -->
+	<!-- 		                                <span class='icon icon-plus leveltest-toggle'></span> -->
+	<!-- 		                            </div> -->
+	<!-- 		                            <div class="question-choice" style="display: none"> -->
+	<!-- 		                                <input type="hidden" name="choice" value=""> -->
+	<!-- 		                                <div class="question-choice-group"> -->
+	<!-- 		                                    <span class="numbering choice-numbering">1</span> -->
+	<!-- 		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test1" /> -->
+	<!-- 		                                </div> -->
+	<!-- 		                                <div class="question-choice-group"> -->
+	<!-- 		                                    <span class="numbering choice-numbering">2</span> -->
+	<!-- 		                                    <input class="question-choice-option" type="text" placeholder='보기의 내용을 입력하세요' value="test2" /> -->
+	<!-- 		                                </div> -->
+	<!-- 		                                <div class="question-choice-placeholder">보기를 추가하려면 클릭하세요!</div> -->
+	<!-- 		                            </div> -->
+	<!-- 		                            <div class="question-answer" style="display: none"> -->
+	<!-- 		                                정답: <select name="correctAnswer"> -->
+	<!-- 		                                    <option>1</option> -->
+	<!-- 		                                    <option>2</option> -->
+	<!-- 		                                </select> -->
+	<!-- 		                            </div> -->
+			
+	<!-- 		                        </div> -->
+			
+	<!-- 		                        <div class="leveltest"> -->
+			
+	<!-- 		                            <div class="question"> -->
+	<!-- 		                                <input type="hidden" name="leveltestTypeCode.leveltestTypeCode" value="SA"> -->
+	<!-- 		                                <input class="numbering question-numbering" name="questionNumber" readonly value="2"> -->
+	<!-- 		                                <span class="question-content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam rem numquam tenetur. Laboriosam quam iure eos beatae ad pariatur, culpa molestiae accusamus corrupti quasi placeat maxime fugiat optio in nulla!</span> -->
+	<!-- 		                                <input class="question-edit" name="content" type="text" style="display: none"> -->
+	<!-- 		                                <span class="icon icon-plus leveltest-toggle"></span> -->
+	<!-- 		                            </div> -->
+	<!-- 		                            <div class="question-answer" style="display: none"> -->
+	<!-- 		                                정답: <input name="correctAnswer" class="question-answer-input" type="text" value="nulla"> -->
+	<!-- 		                            </div> -->
+			
+	<!-- 		                        </div> -->
+			                    </div>
+			                    <input type="hidden" name="hasLeveltest" value="0">
+								<input type="hidden" th:name="${_csrf.parameterName}"
+									th:value="${_csrf.token}" />
+				            </section>
 		                </form>
 		                <!-- /********************************** leveltest - HTML 끝 **********************************/ -->
 		                
 		            </div>
+		            
 	            
-	            </section>
+	            <div class="wizard-footer prev-next-container">
+	                <div class="pull-right">
+	                    <input type='button' id="btn-next" class='btn btn-next btn-fill btn-warning btn-wd' name='next' value='다음' />
+	                    <input type='button' id="btn-finish" class='btn btn-finish btn-fill btn-warning btn-wd' name='finish' value='개설' />
+	                </div>
+	
+	                <div class="pull-left">
+	                    <input type='button' id="btn-previous" class='btn btn-previous btn-default btn-wd' name='previous' value='이전' />
+	                </div>
+	                <div class="clearfix"></div>
+	            </div>
+	            
             </div>
             
-            <div class="wizard-footer prev-next-container">
-                <div class="pull-right">
-                    <input type='button' id="btn-next" class='btn btn-next btn-fill btn-warning btn-wd' name='next' value='다음' />
-                    <input type='button' id="btn-finish" class='btn btn-finish btn-fill btn-warning btn-wd' name='finish' value='개설' />
-                </div>
-
-                <div class="pull-left">
-                    <input type='button' id="btn-previous" class='btn btn-previous btn-default btn-wd' name='previous' value='이전' />
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            
-            
-        </div>
-    </div>
+          </div>
+          
+      </div>
 
 
 	<th:block layout:fragment="customScript">
@@ -1096,14 +1152,16 @@
 	            makeQuestion();
 	            addQuestionChoice();
 	            removeQuestionChoiceOption();
+	            dragToRemove();
 	            submitForm();
 	            notifyLeveltest();
+              	deleteLeveltest();
 	
 	            /* basicInfo */
 	            setEnrollCapacityByButton();
 	            setEnrollCapacityByInput();
 	            showInputField();
-              	$('#input-study-enrollCapacity').attr("value", 7);
+              	$('#input-study-enrollCapacity').attr("value", 5);
               	calculatePrice();
               	
 	            /* Tab menu */
@@ -1160,9 +1218,95 @@
 	                cancel: ".leveltest-toggle, .question-edit, .question-choice-option, .question-answer > select, .question-answer-input",
 	                placeholder: "leveltest-placeholder",
 	                stop: addNumberToQuestions
+	                ,  sort: function( event, ui ) {
+	                	console.log("shake exc " + $(this)[0].id);
+		        		$('.leveltest').not(this).addClass('shake');
+	                }
+	                ,   connectWith: "#leveltest-delete"
+
 	            });
+	            
+	            $("#leveltest-delete").sortable({
+	            	cancel: "#leveltest-delete-btn"
+	        		, receive: function( event, ui ) {
+						console.log("received");
+						console.log(event.target); //받는 애
+						console.log($(this));
+						console.log($(ui.sender)); //보낸 애
+						console.log($(this).children('.leveltest').remove());
+	        		 }		
+	            });
+	            
+	            $(".leveltest-container, #leveltest-delete").disableSelection();
 	        }
+		
+	        function deleteLeveltest() {
+	        	
+	            console.log('Entered removeLeveltest()...');
+	        	
+	            
+	            
+	            
+	        }
+
+
+	        function dragToRemove() {
+
+		        // 참고:	https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_draganddrop, 
 	
+		        https://www.zerocho.com/category/HTML&DOM/post/5942c4ed858a010018a8c32f
+	
+		        $('.leveltest').prop('draggable', true);
+	
+		        $('.leveltest').on({
+		        	
+		        	dragstart: function(e) {
+			        	e.dataTransfer.setData('text', e.target.id);
+			    	}
+		        	, dragstart: function(e) {
+		        		// 참고:	https://stackoverflow.com/a/437979/11111203
+		        		$('.leveltest').not(this).addClass('shake');
+		        	}
+		        	, dragend: function() {
+		        		$('.leveltest').not(this).removeClass('shake');
+		        	}
+		        	
+		        });
+	
+		        $('#leveltest-delete-btn').on({
+	
+		        	dragover: function(e) {
+		        		e.preventDefault();
+		        		
+		        	}
+		        	, drop: function(e) {
+		        		e.preventDefault();
+	        		    $(this).removeClass('scaleUp');
+		        		$('.leveltest').not(this).removeClass('shake');
+		        		
+		        		var data = e.dataTransfer.getData('text');
+		        		// e.target.appendChild(document.getElementById(data));
+		        		var deletedItem = document.getElementById(data);
+		        		target.parentNode.removeChild(deletedItem);
+		        	}
+		        	, dragenter: function (e) {
+	        		  if ( e.target.id == "leveltest-delete-btn" ) {
+	        		    $(this).addClass('scaleUp');
+	        		  }
+	        		  console.log(this);
+	        		}
+
+		        	, dragleave: function dragLeave(e) {
+	        		  if ( e.target.id == "leveltest-delete-btn" ) {
+	        		    $(this).removeClass('scaleUp');
+	        		  }
+	        		  console.log(this);
+	        		}
+	
+		        });
+
+	        }
+	        
 	        function addNumberToQuestions() {
 	
 	            console.log('Entered addNumberToQuestions()...');
@@ -1304,61 +1448,6 @@
 	
 	        }
 	            
-
-	        function dragToRemove() {
-
-		        // 참고:	https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_draganddrop, 
-	
-		        https://www.zerocho.com/category/HTML&DOM/post/5942c4ed858a010018a8c32f
-	
-		        $('.leveltest').prop('draggable', true);
-	
-		        $('.leveltest').on({
-		        	
-		        	dragstart: function(e) {
-			        	e.dataTransfer.setData('text', e.target.id);
-			    	}
-		        	, dragstart: function(e) {
-		        		// 참고:	https://stackoverflow.com/a/437979/11111203
-		        		$('.leveltest').not(this).addClass('shake');
-		        	}
-		        	, dragend: function() {
-		        		$('.leveltest').not(this).removeClass('shake');
-		        	}
-		        	
-		        });
-	
-		        $('#leveltest-delete-btn').on({
-	
-		        	dragover: function(e) {
-		        		e.preventDefault();
-		        		
-		        	}
-		        	, drop: function(e) {
-		        		e.preventDefault();
-	        		    $(this).removeClass('scaleUp');
-		        		$('.leveltest').not(this).removeClass('shake');
-		        		
-		        		var data = e.dataTransfer.getData('text');
-		        		// e.target.appendChild(document.getElementById(data));
-		        		var deletedItem = document.getElementById(data);
-		        		target.parentNode.removeChild(deletedItem);
-		        	}
-		        	, dragenter: function (e) {
-	        		  if ( e.target.id == "leveltest-delete-btn" ) {
-	        		    $(this).addClass('scaleUp');
-	        		  }
-	        		}
-
-		        	, dragleave: function dragLeave(e) {
-	        		  if ( e.target.id == "leveltest-delete-btn" ) {
-	        		    $(this).removeClass('scaleUp');
-	        		  }
-	        		}
-	
-		        });
-
-	        }
 	
 	
 	        // CSS
@@ -1386,7 +1475,22 @@
 	        //  3. question-choice-group 동적으로 생성 by tab --> by button
 	        //  answer 도 같이 생성되어야 한다.
 	        //  hover 시 삭제 버튼이 나와야 한다.
-	    
+	    	
+	        function validateForm() {
+	        	
+	        	// 1. type
+	        	// 2. onoff
+	        	// 3. location
+	        	// 4. date
+	        	// 5. time
+	        	// 6. enroll
+	        	// 7. interest
+	        	// 8. level
+	        	
+	        	
+	        	
+	        	
+	        }
 	    
 	        function submitForm() {
 	
@@ -1394,6 +1498,8 @@
 	            $("#btn-finish").on("click", function (e) {
 	
 	                e.preventDefault();
+	                
+	                validateForm();
 	
 	                // 1. leveltest submit 전처리 
 	                
@@ -1433,7 +1539,7 @@
 	                
 	                // 3. basicInfo submit 전처리
 	                if( $("input[name='typeCode.typeCode']:checked").val() == "P" ) {
-	                	$("#basicForm #input-study-totalPrice").attr("name", "price.price");
+	                	$("#basicForm #input-study-totalPrice").attr("name", "price");
 	                } else {
 	                	$("#basicForm #input-study-totalPrice").removeAttr("name");
 	                }
@@ -1883,7 +1989,6 @@
 				$($btnContainer).find('.btn-previous').addClass('disable');
                 $($btnContainer).find('.btn-finish').hide();
 	        	
-	        	
 				$('ul.tab-title li:not(:nth-of-type(4))').click(function(){
 					
 					/* 탭 내용 */
@@ -1896,7 +2001,6 @@
 					
 					/* 이전, 다음, 제출 */
 					if($(this).index()+1 < $total-1) {
-						console.log('다음 버튼 나오쇼');
 						$($btnContainer).find('.btn-next').show();
 						$($btnContainer).find('.btn-finish').hide();
 						$($btnContainer).find('.btn-previous').removeClass('disable');
@@ -1906,7 +2010,6 @@
 						
 						
 					} else {
-						console.log('완료 버튼 나오쇼');
                         $($btnContainer).find('.btn-next').hide();
                         $($btnContainer).find('.btn-finish').show();
 						$($btnContainer).find('.btn-previous').removeClass('disable');
@@ -1916,9 +2019,10 @@
 					/* Progress bar */
                     var move_distance = 100 / $total;
                     move_distance = move_distance * $(this).index() + move_distance / 2;
-					console.log($(this).index() + " 잘 보시오 " + move_distance);
+					console.log($(this).index()+1 + " 입니다");
 //                     $btnContainer.find($('.progress-bar')).css({width: move_distance + '% !important'});
-                    $('#progress-bar').css("width", move_distance + '% !important');
+//                     $('#progress-bar').css("width", move_distance + '% !important');
+					$('#progress-bar').attr("data-step-"+($(this).index()+1), $(this).index()+1);
                     $btnContainer.find($('.wizard-card .nav-pills li.active .icon-circle')).addClass('checked');
 				});
 				

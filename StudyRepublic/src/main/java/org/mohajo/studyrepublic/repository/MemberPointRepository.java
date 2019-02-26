@@ -18,10 +18,11 @@ import org.springframework.data.jpa.repository.Query;
  * 
  */
 
-public interface MemberPointRepository extends JpaRepository<MemberPoint, String>{
+public interface MemberPointRepository extends JpaRepository<MemberPoint, Integer>{
 	
 			@Query(value = "select * from member_point where id = :id", nativeQuery = true) 
 			MemberPoint inqueryPoint(String id);
+
 
 }
 

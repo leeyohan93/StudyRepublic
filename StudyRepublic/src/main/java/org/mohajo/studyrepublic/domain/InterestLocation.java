@@ -26,8 +26,8 @@ public class InterestLocation {
 	@Column(name = "interest_location")
 	private String interestLocation;
 	
-	
-/*	@ManyToOne
+
+	/*	@ManyToOne
 	@JoinColumn(name = "id")
 	Member member;*/
 	
