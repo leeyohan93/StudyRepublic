@@ -10,6 +10,9 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +26,9 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.RequestBoardReply;
+import org.apache.http.auth.AUTH;
+import org.mohajo.studyrepublic.domain.Leveltest;
+import org.mohajo.studyrepublic.domain.LeveltestResponse;
 import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberStatusCD;
@@ -30,6 +36,7 @@ import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboardReply;
 import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.mohajo.studyrepublic.domain.StudyQnaboardReply;
+import org.mohajo.studyrepublic.domain.StudyStatusCD;
 import org.mohajo.studyrepublic.domain.TutorUploadFile;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardFileRepository;
@@ -68,6 +75,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import lombok.extern.java.Log;
 
 @Log
@@ -126,7 +134,7 @@ public class StudyPageController {
 			sendString[0] = "/StudyPage/Management";
 			sendString[1] = "관리";
 		}else if(findStudyMemberLEMEbyStudyIdAndId.getStudyMemberStatusCode().getStudyMemberStatusCode().equals("ME")) {
-			sendString[0] = "#";
+			sendString[0] = "#personalExit";
 			sendString[1] = "탈퇴";
 		}
 		log.info(sendString[0], sendString[1]);
@@ -159,7 +167,13 @@ public class StudyPageController {
 		//session으로 연결할 경우 해당 페이지마다 식별이 어려울 것이기 때문에, model을 통한 값 전달 및 링크 전송을 통한 값 전달을 실행함.
 		//session으로 하는 방법도 있지만, 그렇게 할 경우 여러페이지의 페이지를 띄우더라도 결국은 session에 남은 하나의 페이지만 관리 될 수 있음.
 		log.info("스터디 이름" + studyId + "/" + "유저 이름" + userId);
-		
+		try {
+			StudyMember studymember = smr.findStudyMemberLEMEbyStudyIdAndId(studyId, userId, "LE", "ME");
+		}catch(Exception e){
+			log.info("걸렸는데 error가 리턴이 안됨...");
+			return "studypage/error";
+		}
+		log.info("여기로 왜 오냐????");
 
 		try {
 			log.info("findbystudymember");
@@ -186,10 +200,10 @@ public class StudyPageController {
 
 	@RequestMapping("/Noticeboard")
 	public String studyNoticeboard(Model model, @Param(value="studyId") String studyId) {
-		log.info(studyId);
-		
-		studyId = "BB00001";
-		String id = "aaa123";
+		/*studyId = "BB00001";
+		String id = "aaa123";*/
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		log.info("id : " + id + " / " + "studyId : " + studyId);
 
 		model.addAttribute("findAllStudyNoticeboard", studyNoticeboardRepository.findNoticeboardListByStudyId(studyId));
 		return "studypage/studypage_notice";
@@ -199,6 +213,12 @@ public class StudyPageController {
 	public String studyQnaboard(Model model,PageDTO pageDTO) {
 		String studyId = "BB00001";
 		String id = "aaa123";
+
+/*	public String studyQnaboard(Model model, String studyId) {
+		String studyId = "BB00001";
+		String id = "aaa123";
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		log.info("id : " + id + " / " + "studyId : " + studyId);*/
 
 		//페이징 갯수
 		pageDTO.setSize(10);
@@ -214,9 +234,12 @@ public class StudyPageController {
 	}
 
 	@RequestMapping("/Fileshareboard")
-	public String studyFileshareboard(Model model) {
-		String studyId = "BB00001";
-		String id = "aaa123";
+	public String studyFileshareboard(Model model, String studyId) {
+		/*String studyId = "BB00001";
+		String id = "aaa123";*/
+		
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		log.info("id : " + id + " / " + "studyId : " + studyId);
 
 		model.addAttribute("findAllStudyFileshareboard",
 				predicate.studyFileshareResultPredicate(studyId, 10, studyFileshareboardRepository));
@@ -224,19 +247,24 @@ public class StudyPageController {
 	}
 	
 	@RequestMapping("/Management")
-	public String studyManagement(Model model) {
-		String studyId = "BB00001";
-		String id = "aaa123";
-		
+	public String studyManagement(Model model, String studyId) {
+		/*String studyId = "BB00001";
+		String id = "aaa123";*/
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		log.info("id : " + id + " / " + "studyId : " + studyId);
 		model.addAttribute("findStudyMemberLEMEbyStudyIdANDStudyStatusCode", smr.findStudyMemberbyStudyIdANDStudyStatusCode(studyId,"ME"));
-		model.addAttribute("findStudyMemberWAbyStudyIdANDStudyStatusCode", smr.finStudyMemberWAbyStudyIdANDStudyStatusCode(studyId, "WA"));
+		model.addAttribute("findStudyMemberWAbyStudyIdANDStudyStatusCode", smr.findStudyMemberWAbyStudyIdANDStudyStatusCode(studyId, "WA"));
+
 		return "studypage/studypage_management";
 	}
 	
 	@RequestMapping("/VideoCalling")
-	public String studyVideoCalling(Model model) {
-		String studyId = "BB00001";
-		String id = "aaa123";
+	public String studyVideoCalling(Model model, String studyId) {
+		/*String studyId = "BB00001";
+		String id = "aaa123";*/
+		
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		log.info("id : " + id + " / " + "studyId : " + studyId);
 
 		return "video_calling/video_calling";
 	}
@@ -342,6 +370,35 @@ public class StudyPageController {
 		return "studypage/studypage_preview";
 	}
 	
+	@RequestMapping(value="/Exit")
+	@ResponseBody
+	public boolean exitUser(@RequestBody String studyId) {
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		log.info(studyId + "/" + id);
+	
+		StudyMember studyMember = smr.findStudyMemberLEMEbyStudyIdAndId(studyId, id, "ME", "ME");
+		
+		if(studyMember != null) {
+			log.info("조회에 성공함");
+			log.info("아이디 : " + studyMember.getId()
+					+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
+			try {
+				log.info("try 진입");
+				studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD("EX"));
+				smr.save(studyMember);
+				log.info("update까지 성공함.");
+				return true;
+			}catch(Exception e) {
+				log.info("실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+				e.printStackTrace();
+				return false;
+			}
+		}else {
+			log.info("조회에 실패함");
+			return false;
+		}
+	}
+	
 	@RequestMapping(value="/GetoutUser")
 	@ResponseBody
 	public boolean getoutUser(@RequestBody HashMap getoutUserInfo) {
@@ -418,8 +475,281 @@ public class StudyPageController {
 			log.info("리스트에 값이 추가 됨.");*/
 		}
 		
-		//extraTest
+		return sqlResultList;
+	}
+	
+	@RequestMapping(value="/DenyUser")
+	@ResponseBody
+	public boolean denyUser(@RequestBody HashMap getoutUserInfo) {
+		String studyId = (String)getoutUserInfo.get("studyId");
+		String nickName = (String)getoutUserInfo.get("nickName");
+		log.info(studyId + "/" + nickName);
+		StudyMember studyMember = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "WA");
+		if(studyMember != null) {
+			log.info("조회에 성공함");
+			log.info("닉네임 : " + studyMember.getMember().getNickname()
+					+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
+			String id = studyMember.getId();
+			log.info("아이디 : " + id);
+			try {
+				log.info("try 진입");
+				studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD("DE"));
+				smr.save(studyMember);
+				log.info("update까지 성공함.");
+				return true;
+			}catch(Exception e) {
+				log.info("실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+				e.printStackTrace();
+				return false;
+			}
+		}else {
+			log.info("조회에 실패함");
+			return false;
+		}
+	}
+	
+	@RequestMapping(value="/OKUser")
+	@ResponseBody
+	public boolean okUser(@RequestBody HashMap getoutUserInfo) {
+		String studyId = (String)getoutUserInfo.get("studyId");
+		String nickName = (String)getoutUserInfo.get("nickName");
+		log.info(studyId + "/" + nickName);
+		StudyMember studyMember = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "WA");
+		int capacity = studyMember.getStudy().getEnrollCapacity();
+		int actual = studyMember.getStudy().getEnrollActual();
+		if(studyMember != null) {
+			log.info("조회에 성공함");
+			log.info("닉네임 : " + studyMember.getMember().getNickname()
+					+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
+			String id = studyMember.getId();
+			log.info("아이디 : " + id);
+			if(capacity > actual) {
+				try {
+					log.info("try 진입");
+					studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD("ME"));
+					studyMember.getStudy().setEnrollActual(actual+1);
+					log.info("스터디원 추가가 완료 됨");
+					smr.save(studyMember);
+					log.info("update까지 성공함.");
+					return true;
+				}catch(Exception e) {
+					log.info("실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+					e.printStackTrace();
+					return false;
+				}
+			}else {
+				return false;
+			}
+		}else {
+			log.info("조회에 실패함");
+			return false;
+		}
+	}
+	@RequestMapping(value="/SelectedAllOKDenyButton")
+	@ResponseBody
+	public List selectedAllOKDenyButton(@RequestBody List<HashMap> checkedList) {
 		
+		List sqlResultList = new ArrayList();
+		String studyId;
+		String nickName;
+		String selectOption;
+		String userStatus;
+		for (HashMap hashMap : checkedList) {
+			studyId = (String)hashMap.get("studyId");
+			nickName = (String)hashMap.get("nickName");
+			selectOption = (String)hashMap.get("selectOption");
+			if(selectOption.equals("OK")) {
+				log.info("touch : " + selectOption);
+				userStatus = "ME";
+			}else if(selectOption.equals("Deny")) {
+				log.info("touch : " + selectOption);
+				userStatus = "DE";
+			}else {
+				log.info("변조 된 값 수령" + selectOption);
+				return null;
+			}
+			try {
+				log.info("첫번째 try 진입");
+				StudyMember studyMember = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "WA");
+				int capacity = studyMember.getStudy().getEnrollCapacity();
+				int actual = studyMember.getStudy().getEnrollActual();
+				if(studyMember != null) {
+					log.info("조회에 성공함");
+					log.info("닉네임 : " + studyMember.getMember().getNickname()
+							+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
+					String id = studyMember.getId();
+					log.info("아이디 : " + id);
+					if(userStatus=="ME"&& capacity > actual) {
+						try {
+							log.info("두번째 try 진입");
+							studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD(userStatus));
+							//원래라면 이하 같은 과정에는 Transaction을 적용해줘야 하지만, 현재는 시간의 여유가 없으므로 그냥 넘어간다...
+							if(userStatus=="ME") {
+								studyMember.getStudy().setEnrollActual(actual+1);
+								log.info("스터디원 추가가 완료 됨");
+							}
+							smr.save(studyMember);
+							log.info("update까지 성공함.");
+							sqlResultList.add(true);
+						}catch(Exception e) {
+							log.info("두번째 try 실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+							e.printStackTrace();
+							sqlResultList.add(false);
+						}
+						
+					}
+				}else {
+					sqlResultList.add(false);
+				}
+			}
+			catch(Exception e){
+				log.info("첫번째 try 실패");
+				e.printStackTrace();
+				sqlResultList.add(false);
+			}
+			
+			//이하 테스트 코드
+			/*log.info(studyId + "/" + nickName + "/" + selectOption);
+			sqlResultList.add(true);
+			log.info("리스트에 값이 추가 됨.");*/
+		}
+		return sqlResultList;
+	}
+	
+	@RequestMapping(value="/CloseStudy")
+	@ResponseBody
+	public boolean studypageCloseStudy(@RequestBody String studyId) {
+		
+		String id = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(id==null||studyId==null) {
+			log.info("id : " + id + " / " + "studyId : " + studyId);
+			log.info("아이디 혹은 studyId를 찾을 수 없음");
+			return false;
+		}
+		try{
+			log.info("폐쇄 시작");
+			StudyMember studyMember = smr.findStudyMemberLEMEbyStudyIdAndId(studyId, id, "LE", "LE");
+			studyMember.getStudy().setStudyStatusCode(new StudyStatusCD("D", "해체"));
+			smr.save(studyMember);
+			log.info("폐쇄 완료");
+			return true;
+		}
+		catch(Exception e){
+			log.info("폐쇄 실패");
+			return false;
+		}
+	}
+	
+	@RequestMapping(value="/TestView")
+	@ResponseBody
+	public List<HashMap> studypageTestView(Model model, @RequestBody HashMap userId){
+		
+		String studyId = (String)userId.get("studyId");
+		String nickName = (String)userId.get("nickName");
+		
+		List testView = new ArrayList<HashMap>();
+		List<LeveltestResponse> testResultList = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "WA").getLeveltestResponse();
+		if(testResultList.isEmpty()==false) {
+			Collections.sort(testResultList, new LevelTestComparator());
+			
+			for(LeveltestResponse levelTestResponse : testResultList){
+				Leveltest levelTest = levelTestResponse.getLeveltest();
+				
+				HashMap map = new HashMap();
+				map.put("questionNumber", levelTest.getQuestionNumber());
+				map.put("levelTestTypeCode", levelTest.getLeveltestTypeCode().getCodeValueKorean());
+				map.put("content", levelTest.getContent());
+				map.put("correctAnswer", levelTest.getCorrectAnswer());
+				map.put("submitAnswer", levelTestResponse.getSubmitAnswer());
+				
+				if(levelTestResponse.getIsCorrect()==1) {
+					map.put("isCorrect", "O");
+				}else {
+					map.put("isCorrect", "X");
+				}
+				
+				
+				testView.add(map);
+			}
+			
+			return testView;
+			//levelTest
+			/*for(LeveltestResponse leveltestResponse : testResultList) {
+				System.out.println(leveltestResponse);
+			}
+			return null;*/
+		}else {
+			return null;
+		}
+	}
+	
+	@RequestMapping(value="/TestModify")
+	@ResponseBody
+	public List studypageTestModify(@RequestBody List<HashMap> checkedList) {
+		
+		List sqlResultList = new ArrayList();
+		String studyId;
+		String nickName;
+		String selectOption;
+		int selectNumber;
+		int correct;
+		for (HashMap hashMap : checkedList) {
+			studyId = (String)hashMap.get("studyId");
+			nickName = (String)hashMap.get("nickName");
+			selectOption = (String)hashMap.get("selectOption");
+			selectNumber = Integer.parseInt((String)hashMap.get("selectNumber"));
+			
+			if(selectOption.equals("O")) {
+				log.info("touch : " + selectOption);
+				correct = 1;
+			}else if(selectOption.equals("X")) {
+				log.info("touch : " + selectOption);
+				correct = 0;
+			}else {
+				log.info("변조 된 값 수령" + selectOption);
+				return null;
+			}
+			try {
+				log.info("첫번째 try 진입");
+				StudyMember studyMember = smr.findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(studyId, nickName, "WA");
+				if(studyMember != null) {
+					//List 형태의 정보를 가지고 온다.
+					if(selectNumber >= 0 && selectNumber <= studyMember.getLeveltestResponse().size()) {
+						studyMember.getLeveltestResponse().get(selectNumber-1).setIsCorrect(correct);
+						smr.save(studyMember);
+						log.info(studyMember.getLeveltestResponse().get(selectNumber-1).toString());
+					}
+					/*log.info("조회에 성공함");
+					log.info("닉네임 : " + studyMember.getMember().getNickname()
+							+ "/스터디명  : " + studyMember.getStudyId() + "/권한 : " + studyMember.getStudyMemberStatusCode());
+					String id = studyMember.getId();
+					log.info("아이디 : " + id);
+					try {
+						log.info("두번째 try 진입");
+						studyMember.setStudyMemberStatusCode(new StudyMemberStatusCD(userStatus));
+						smr.save(studyMember);
+						log.info("update까지 성공함.");
+						sqlResultList.add(true);
+					}catch(Exception e) {
+						log.info("두번째 try 실패 : update 하는 과정중에 데이터가 변경됐을 가능성이 있음.");
+						e.printStackTrace();
+						sqlResultList.add(false);
+					}*/
+				}else {
+					sqlResultList.add(false);
+				}
+			}
+			catch(Exception e){
+				log.info("첫번째 try 실패");
+				e.printStackTrace();
+				sqlResultList.add(false);
+			}
+			
+			//이하 테스트 코드
+			log.info(studyId + " / " + nickName + " / " + selectOption + " / " + selectNumber);
+			sqlResultList.add(true);
+			log.info("리스트에 값이 추가 됨.");
+		}
 		return sqlResultList;
 	}
 	

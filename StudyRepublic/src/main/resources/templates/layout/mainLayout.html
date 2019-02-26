@@ -410,7 +410,7 @@ a {
 			$('#joinStudy').on('change', function joinStudy() {		//스터디페이지이동..js
 				
 				//studyText에 있는 studyName이 obj(현재는 셀렉트 박스)의 value 값과 같을 때, joinStudyListValue에 해당되는 joingStudyId 리스트의 StudyId 값을 배치한다.
-				
+
 				if(this.selectedIndex!=0){
 					var selectStudyName = this.options[this.selectedIndex].value;
 					console.log(selectStudyName);
@@ -422,6 +422,7 @@ a {
 					moveStudy.target = studyNameAndStudyIdMap[selectStudyName];
 					moveStudy.method = "post";
 					moveStudy.submit();
+					this.selectedIndex = 0;
 				}
 				
 				/* for ( var i = 0; i < studyName.length; i++) {

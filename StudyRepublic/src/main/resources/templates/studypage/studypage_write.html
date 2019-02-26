@@ -154,22 +154,23 @@
 		#smarteditor{
 			width: 99%;
 		}
+		.utilDiv{
+			padding: 2%;
+		}
 	  </style>
 	  <div class="rightContent rightAll" >
 		<form id="boardWriteForm" th:action="@{/StudyPage/Register}" enctype="multipart/form-data"  method="post">
 		<!-- 제목 -->
 		  <div>
 			<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
-			<!-- <input id ="boardWriter" name ='id' type='hidden' value="aaa123"> <br/> -->
 		  </div
 		  	>
-		  	 <input id="datepicker" width="276" />
-			    <script>
-			        $('#datepicker').datepicker({
-			            uiLibrary: 'bootstrap4'
-			        });
-			    </script>
+		  <div class="utilDiv">
+		  	<input type="date" id="startDate" name="day"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="time" id="startTime" name="startTime"/>부터<input type="time" id="endTime" name="endTime"/>까지<br>
+		  </div>
+		  <div class="utilDiv">
 		  	<input type="file" name="file" multiple="multiple">
+		  </div>
 		  <!-- 받는 컨트롤러에서 넣는것을 각각 해줘야 한다. 배열로해서  -->
 		  <!-- 스마트 에디터 적용 글내용 -->
 		  <div id = "editor">
@@ -181,6 +182,7 @@
 		  <!--스마트 에디터 버튼들  -->
 		  <div id = "buttonDiv">
 			  <div class="cancelBtn">
+			  	<!-- 미결 : 스마트 에디터 전송 버튼 클릭시 어떤 데이터가 넘어가도록 해놨는지 아직 판단이 안된다. -->
 			  	<input type="hidden" id="boardName" name="boardName" th:value="${boardName}"/>
 			  	<button class ="btn btn-dark" role="button" id="cancel" type="button">취소</button> 
 			  </div>

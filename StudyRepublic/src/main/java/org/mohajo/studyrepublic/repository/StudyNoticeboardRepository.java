@@ -23,7 +23,7 @@ public interface StudyNoticeboardRepository extends JpaRepository<StudyNoticeboa
 	@Query(value = "select *\r\n" + 
 			"from study_noticeboard\r\n" + 
 			"where study_id = :studyId and status = 0\r\n" + 
-			"order by number desc", nativeQuery = true)
+			"order by study_noticeboard_id desc", nativeQuery = true)
 	List<StudyNoticeboard> findNoticeboardListByStudyId(@Param(value="studyId") String studyId);
 	
 	//스터디 id, 글번호를 바탕으로 글 내용, 덧글 추출

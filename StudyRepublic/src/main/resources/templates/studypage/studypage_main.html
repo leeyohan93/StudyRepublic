@@ -200,7 +200,8 @@
 						><div class="rightRight rightTitle" th:text="${fasn.location}"></div>
 						<div class="collapse contentForm" th:id="'write'+${fasn.number}">
 							<input type="hidden" th:id="${fasn.number}">
-							<div class="contentDate" th:text="${#dates.dayOfWeekName(fasn.day)} + ' ' + ${#dates.format(fasn.startTime, 'HH:mm')}+'~'+${#dates.format(fasn.endTime, 'HH:mm')}">
+							<!-- <div class="contentDate" th:text="${#dates.dayOfWeekName(fasn.day)} + ' ' + ${#dates.format(fasn.startTime, 'HH:mm')}+'~'+${#dates.format(fasn.endTime, 'HH:mm')}"> -->
+							<div class="contentDate" th:text="${#dates.dayOfWeekName(fasn.day)} + ' ' + ${fasn.startTime}+'~'+${fasn.endTime}">
 							</div>
 							<div class="contentWriteDate">
 								<div class="" th:text="${#dates.format(fasn.date, 'yyyy/MM/dd')}"></div>
