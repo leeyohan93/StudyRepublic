@@ -159,7 +159,7 @@
 						><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${fasq.studyMember.member.profileSaveName}}"
 						><div class="profileName" th:text = "${fasq.studyMember.member.nickname}"></div
 					></div
-					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasq.number}"  th:name=|${fasq.studyQnaboardId}| data-toggle="collapse" class="boardList"
+					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasq.number}" th:name=|${fasq.studyQnaboardId}| data-toggle="collapse" class="boardList"
 							th:text="${fasq.title}" th:id="${fasq.number}"></a>
 					</div
 					><div class="rightRight rightTitle contentWriteDate">
