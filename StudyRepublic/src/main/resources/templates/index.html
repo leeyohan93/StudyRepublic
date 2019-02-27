@@ -163,8 +163,7 @@
 											</div>
 											<div class="content">
 												<div class="main">
-													<p th:text="${study.introduction}"
-														style="margin-bottom: 10px; height: 40px; overflow: hidden;"></p>
+													<div th:utext="${study.introduction}" style="margin-bottom: 10px; height: 40px;overflow: hidden;"></div>
 													<p th:text="|일시 : ${study.startDate}~${study.endDate}|"
 														style="margin-bottom: 3px;"></p>
 													<p
@@ -325,8 +324,7 @@
 											</div>
 											<div class="content">
 												<div class="main">
-													<p th:text="${study.introduction}"
-														style="margin-bottom: 10px; height: 40px; overflow: hidden;"></p>
+													<div th:utext="${study.introduction}" style="margin-bottom: 10px; height: 40px;overflow: hidden;"></div>
 													<p th:text="|일시 : ${study.startDate}~${study.endDate}|"
 														style="margin-bottom: 3px;"></p>
 													<p
