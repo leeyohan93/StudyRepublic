@@ -33,7 +33,7 @@
 	border: 1px solid #ccc;
 }
 #goBeforeFreePage, #goAfterFreePage, #likeCountBtn, #viewRepotBtn {
-	background-color: white;
+		background-color: white;
 	color: rgb(66, 161, 226);
 	border: 1px solid;
 	text-align: center;
@@ -156,7 +156,7 @@ margin: 0px;
     color: rgb(66, 161, 226);
 }
 .commentToday{
-     background-color: red;
+     background-color:  rgb(66, 161, 226);
     color: white;
     border-radius: 100%;
     font-size: 5px;
@@ -270,11 +270,11 @@ height: 90px !important;
 			<!-- 이전글 다음글 -->
 		<div class="inner" id="beforeAfter">
 
-			<a class="btn" role="button" id="goBeforeRequestPage"
-				name="goBeforeRequestPage"
+			<a class="btn" role="button" id="goBeforeFreePage"
+				name="goBeforeFreePage"
 				th:href="@{'goBeforeRequestPage'(requestBoardId=${requestBoard.requestBoardId})}">이전글
-				▼</a> <a class="btn" role="button" id="goAfterRequestPage"
-				name="goAfterRequestPage"
+				▼</a> <a class="btn" role="button" id="goAfterFreePage"
+				name="goAfterFreePage"
 				th:href="@{'goAfterRequestePage'(requestBoardId=${requestBoard.requestBoardId})}">다음글
 				▲</a>
 		</div>

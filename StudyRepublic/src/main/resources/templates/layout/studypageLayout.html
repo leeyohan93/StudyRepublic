@@ -25,6 +25,8 @@
   	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 </div>
 <style>
+
+
   
 
 </style>
@@ -51,6 +53,76 @@
 						font-size: 0.8em;
 						background-color: black;
 					}
+					 
+					
+/* 신고모달 css */
+.reportOption{
+ text-align: center;
+ width: 40%;
+ float: left;
+ font-weight: bold;
+}
+#reportBody{
+ border: 1px solid #ccc;
+ padding: 5px;
+}
+.reportContent{
+text-align: center;
+ width: 59.5%;
+ float: right;
+}
+#reportClose{
+    padding: 9px;
+    height: 40px;
+    margin: 0px;
+        width: 36px;
+}
+#reprotContentOption{
+    height: 93px;
+}
+#reportHeader{
+padding: 1.5rem 40px 1rem;
+font-weight: bold;
+}
+#reportForm{
+margin: 0px;
+}
+#reportForm input{
+ border: 0.5px solid;
+ border-radius: 3px;
+ margin: 0.6px;
+}
+#reportForm select{
+    border: 1px solid;
+    border-radius: 3px;
+    height: 50px;
+        padding-left: 40px;
+}
+#reportForm textarea{
+height: 90px !important;
+    border: 1px solid;
+    padding: 10px;
+    margin-top: 2px;
+    border-radius: 3px;
+    text-align: left;
+}
+#reportCancel,#reportRegister{
+ background-color: white;
+	color: rgb(66, 161, 226) !important;
+	text-align: center;
+	display: inline-block;
+	margin: 0px;
+	cursor: pointer;
+	padding: 9px 2px 2px 2px;
+	width: 100px;
+	height: 50px;
+	border: 1px solid ;
+	border-radius: 3px;
+	margin: 5px;
+	font-size: 19px;
+
+}
+					
 				</style><div id="left" layout:fragment="left"
 				>
 				<div id="leftTop"><div id="studyTitleDiv"
@@ -89,8 +161,9 @@
 				
 			<!-- 신고 modal  -->
 
-			<div class="modal fade" id="reportModal" tabindex="-1">
-				<div class="modal-dialog">
+			<div class="modal" id="reportModal" tabindex="-1">
+			
+				 <div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 						  <div>
@@ -147,17 +220,21 @@
 						</div>
 
 					</div>
-				</div>
+				</div> 
 
 			</div>
 
 		<!-- 신고 모달 끝 -->
 				
-	        <script>
+	        <script type="text/javascript">
 	        
-	        $('#reportModal').on('show.bs.modal', function(e) {
+	         
+	        
+	       /*  $('#reportModal').on('show.bs.modal', function(e) {
+	    	 e.preventDefault();
+	        	$('#reportModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
 	    		
-	    	});
+	    	});  */
 /* 	        $('document').ready(function(){
 	        	$('.check').on('click', function(e){
 	        		var form = $('#formAction');
@@ -214,7 +291,7 @@
 						        	+"<script>$('#OKBye2').on('click', function(){"
 						        	+"console.log('실행됨?');"
 						        	+"var studyId = window.name; console.log('확인합니다'+studyId); alert('???');"
-						        	+"$.ajax({"
+						         	+"$.ajax({"
 						        		+"type : 'POST',"
 						        		+"type : 'POST',"
 						        		+"contentType : 'application/json; charset=UTF-8',"
@@ -224,7 +301,7 @@
 										+"success : function(data) { console.log('성공함'); self.close()"
 										+"},error : function(data) {"
 										+"console.log('실패함');}"
-										+"});});"							        
+										+"}); });"							        
 						      );
 						}else if(data[1]=="관리"){
 							$("#leftDown").append("<button class='check' value='" + data[0] + "'>" + data[1] + "</button></br>");
@@ -245,7 +322,7 @@
 					}
 				});
 		       
-	        });
+	        }); 
 	        
 	/* $('#reportModal').on('show.bs.modal', function(e) {
 		$('#reportModal').modal({backdrop: 'static'});
