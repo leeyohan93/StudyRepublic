@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.mohajo.studyrepublic.domain.QInterest2CD;
 import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.QStudyInterest;
 import org.mohajo.studyrepublic.domain.QStudyLocation;
@@ -74,6 +75,16 @@ public class MainPredicate {
 		builder.and(study.studyStatusCode.studyStatusCode.notIn("C","D"));
 		
 		System.out.println(builder.toString());
+		return builder;
+	}
+	
+	public static Predicate recommendMember() {
+		
+		BooleanBuilder builder = new BooleanBuilder();
+		
+		QInterest2CD interest2CD = QInterest2CD.interest2CD;
+		
+		
 		return builder;
 	}
 }

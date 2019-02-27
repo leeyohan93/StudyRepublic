@@ -276,15 +276,19 @@ public class StudyController {
 		switch(studyTypeCode) {
 			case "B":
 				leaderInfo = mr.findById(leaderId).get();
+				log.info(leaderInfo.toString());
 				studyActivity = smr.findStudyActivityById(leaderId);
 				
 				model.addAttribute("leaderInfo", leaderInfo);
-			
+				break;
+				
 			case "P":
 				tutorInfo = tr.findByTutor(leaderId);
+				log.info(tutorInfo.toString());
 				studyActivity = smr.findTutorActivityById(leaderId);
 				
 				model.addAttribute("tutorInfo", tutorInfo);
+				break;
 		}
 		
 		model.addAttribute("studyActivity", studyActivity);
@@ -404,8 +408,8 @@ public class StudyController {
 	
 	@Transactional
 	@RequestMapping("/register")
-	public String register(@ModelAttribute Study study, @RequestParam String id, 
-			@ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, 
+	public String register(@ModelAttribute Study study,/* @RequestParam String id,*/ 
+			@ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, @RequestParam(value="dayCode.dayCode", required=false) int dayCode, 
 			MultipartHttpServletRequest mhsRequest, HttpServletResponse response, 
 			@RequestParam MultipartFile file, 
 			@ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
@@ -417,6 +421,9 @@ public class StudyController {
 			
 			log.info("register() called...");
 			log.info("원본 = " + study.toString());
+			
+			Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+			String id = auth.getName();
 			
 			Member leader = mr.findById(id).get();
 			
@@ -471,6 +478,8 @@ public class StudyController {
 						studyLocations.remove(i);
 					}
 				}
+				study.setStudyLocation(studyLocations);
+				log.info("----------------[ location processed ]----------------");
 			}
 	
 			if(studyInterests != null) {
@@ -480,10 +489,14 @@ public class StudyController {
 						studyInterests.remove(i);
 					}
 				}
+				study.setStudyInterest(studyInterests);
+				log.info("----------------[ interest processed ]----------------");
 			}
-			log.info("----------------[ location & interest processed ]----------------");
 	
-			studyId = sr.getNewStudyId(study.getTypeCode().getTypeCode(), study.getOnoffCode().getOnoffCode());
+			String typeCode = study.getTypeCode().getTypeCode();
+			String onoffCode = study.getOnoffCode().getOnoffCode();
+			
+			studyId = sr.getNewStudyId(typeCode, onoffCode);
 			
 			if(studyId == null) {
 				log.info("studyId is null");
@@ -495,13 +508,21 @@ public class StudyController {
 			
 			log.info("new studyId = " + studyId);
 			study.setStudyId(studyId);
+//			study = new Study(studyId);
 			log.info("----------------[ studyId generated ]----------------");
 
+			study.setMember(leader);
+			
+			log.info("dayCode = " + dayCode);
+			log.info("study.getDayCode.getDayCode = " + study.getDayCode().getDayCode());
+			DayCD dayCD = dcr.findById(dayCode).get();
+			study.setDayCode(dayCD);
+			log.info("----------------[ set dayCode ]----------------");
 			
 			log.info("수정 = " + study.toString());
 			
 			try {
-				sr.save(study);
+				sr.save(study);	//org.springframework.orm.ObjectRetrievalFailureException: Object [id=null] was not of the specified subclass [org.mohajo.studyrepublic.domain.Study] : class of the given object did not match class of persistent copy; nested exception is org.hibernate.WrongClassException: Object [id=null] was not of the specified subclass [org.mohajo.studyrepublic.domain.Study] : class of the given object did not match class of persistent copy
 		//		svr.save(study);	//java.sql.SQLException: The target table study_view of the INSERT is not insertable-into
 				log.info("----------------[ study save completed ]----------------");
 				
@@ -1040,6 +1061,8 @@ public class StudyController {
 	private void saveStudyMember(String id, String studyId, String studyMemberStatus) {
 //	private void saveStudyMember(StudyMember studyMember, String studyId) {
 
+		log.info("saveStudyMember() called...");
+		
 		StudyMember studyMember = new StudyMember();
 		
 		//org.springframework.orm.jpa.JpaSystemException: Could not set field value [aaa123] value by reflection : [class org.mohajo.studyrepublic.domain.StudyMemberId.id] setter of org.mohajo.studyrepublic.domain.StudyMemberId.id; nested exception is org.hibernate.PropertyAccessException: Could not set field value [aaa123] value by reflection : [class org.mohajo.studyrepublic.domain.StudyMemberId.id] setter of org.mohajo.studyrepublic.domain.StudyMemberId.id] with root cause
@@ -1082,6 +1105,7 @@ public class StudyController {
 	@RequestMapping("/pleaseLogin")
 	public String pleaseLogin(@RequestParam String pathname) {
 		
+		log.info("pleaseLogin() called...");
 		log.info("pathname = " + pathname);
 		
 		// 참고:  https://best421.tistory.com/53

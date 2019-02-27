@@ -46,6 +46,13 @@ import lombok.ToString;
 //@DiscriminatorValue("STUDY")
 public class Study implements Serializable {
 
+	public Study(){
+		
+	}
+	public Study(String studyId){
+		this.studyId = studyId;
+	}
+	
 	@Id
 	private String studyId;							//스터디 코드
 	

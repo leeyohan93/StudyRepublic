@@ -37,7 +37,7 @@ public class UserDetatilsServiceImpl implements UserDetailsService {
 	
 	public static String status = "일반";
 	
-
+	public static String socketId;
 
 
 	@Override
@@ -51,7 +51,8 @@ public class UserDetatilsServiceImpl implements UserDetailsService {
 		status = mr.findById(username).get().getMemberStatusCD().getMemberStatusCode();
 		
 		Member member = mr.findById(username).get();       
-			
+		socketId = member.getId();
+		
 		System.out.println("회원상태: " + status);
 		
 		if(status.equals("P")) {

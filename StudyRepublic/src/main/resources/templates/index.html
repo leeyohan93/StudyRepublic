@@ -27,19 +27,25 @@
 					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 					<li data-target="#myCarousel" data-slide-to="1"></li>
 					<li data-target="#myCarousel" data-slide-to="2"></li>
+					<li data-target="#myCarousel" data-slide-to="3"></li>
 				</ul>
 
 				<!-- The slideshow -->
 				<div class="carousel-inner">
 					<div class="carousel-item active">
-						<img src="images/pic01.jpg" alt="first" width="1100" height="300">
+						<img src="images/main_banner_2.jpg" alt="Second" width="1100" height="300">
 					</div>
 					<div class="carousel-item">
-						<img src="images/pic02.jpg" alt="Second" width="1100" height="300">
+						<img src="images/main_banner_3.jpg" alt="Third" width="1100" height="300">
 					</div>
 					<div class="carousel-item">
-						<img src="images/pic03.jpg" alt="Third" width="1100" height="300">
+						<img src="images/main_banner_4.jpg" alt="first" width="1100" height="300">
+					</div>					
+					<div class="carousel-item">
+						<img src="images/main_banner_1.jpg" alt="first" width="1100" height="300">
 					</div>
+
+
 				</div>
 
 				<!-- Left and right controls -->
@@ -160,8 +166,7 @@
 											</div>
 											<div class="content">
 												<div class="main">
-													<p th:text="${study.introduction}"
-														style="margin-bottom: 10px; height: 40px; overflow: hidden;"></p>
+													<div th:utext="${study.introduction}" style="margin-bottom: 10px; height: 40px;overflow: hidden;"></div>
 													<p th:text="|일시 : ${study.startDate}~${study.endDate}|"
 														style="margin-bottom: 3px;"></p>
 													<p
@@ -197,8 +202,8 @@
 											</div>
 										</div>
 										<!-- end back panel -->
-										
-										
+
+
 									</div>
 									<!-- end card -->
 								</div>
@@ -323,8 +328,7 @@
 											</div>
 											<div class="content">
 												<div class="main">
-													<p th:text="${study.introduction}"
-														style="margin-bottom: 10px; height: 40px; overflow: hidden;"></p>
+													<div th:utext="${study.introduction}" style="margin-bottom: 10px; height: 40px;overflow: hidden;"></div>
 													<p th:text="|일시 : ${study.startDate}~${study.endDate}|"
 														style="margin-bottom: 3px;"></p>
 													<p
@@ -434,7 +438,7 @@
 										class="list-group-item">aaa123</a>
 								</div> -->
 								<div class="list-group"
-									th:each="member : ${recommendTutorMember}">
+									th:each="member : ${recommendNomalMember}">
 									<div class="dropdown">
 										<a class="list-group-item" data-toggle="dropdown"
 											th:text="${member.nickname}"></a>

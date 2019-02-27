@@ -153,7 +153,7 @@ layout:decorate="~{/layout/mainLayout}"><head>
 				
 					case "sns-naver":
 						window.open('http://share.naver.com/web/shareView.nhn?url=' + encodeURIComponent(window.location.origin + '/study/detail/' + studyId) + '&title=' + encodeURIComponent(document.title), 
-								'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+								'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=496,width=600');
 						return false;
 						break;
 						
@@ -165,7 +165,7 @@ layout:decorate="~{/layout/mainLayout}"><head>
 						
 					case "sns-twitter":
 						window.open('https://twitter.com/intent/tweet?text=[%EA%B3%B5%EC%9C%A0]%20' + encodeURIComponent(window.location.origin + '/study/detail/' + studyId) + '%20-%20' + encodeURIComponent(studyName),
-								'twittersharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+								'twittersharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=406,width=600');
 						return false;
 						break;
 						

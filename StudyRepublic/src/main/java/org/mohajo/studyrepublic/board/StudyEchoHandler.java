@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.mohajo.studyrepublic.security.UserDetatilsServiceImpl;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -24,17 +23,27 @@ public class StudyEchoHandler extends TextWebSocketHandler{
 	Map<String, WebSocketSession> userSessions = new HashMap<>();
 	
 	
+	
 	//소켓이 연결됬을떄 발생
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception{
-//		log.info("afterConnectionEstablished:" + session);
-//		log.info(session.toString());
-//		sessions.add(session);
+		log.info("afterConnectionEstablished:" + session);
+		log.info(session.toString());
+		sessions.add(session);
+	    
+		System.out.println("이것만 나오게하면 되는거죠?: " + UserDetatilsServiceImpl.socketId);
+		
+		
 //		Authentication auth = SecurityContextHolder.getContext().getAuthentication();	
 //		auth.getName();
-//		String senderId = "ccc123";
-//		log.info(senderId);
-//		userSessions.put(senderId, session);
+//		String senderId =UserDetatilsServiceImpl.socketId;
+		
+		String senderId = UserDetatilsServiceImpl.socketId;
+		System.out.println(senderId);
+
+		log.info("senderId:"+senderId);
+		userSessions.put(senderId, session);
+		log.info("userSessions :"+userSessions.toString());
 	}
 	
 	
@@ -53,21 +62,16 @@ public class StudyEchoHandler extends TextWebSocketHandler{
 				String replyWriter = strs[1];
 				String boardWriter = strs[2];
 				String bno = strs[3];
-				String loginUser =strs[4];
 				
-				log.info(session.toString());
-				sessions.add(session);
 				
-				String senderId = loginUser;
-				log.info(senderId);
-				userSessions.put(senderId, session);
-				
-				userSessions.put(senderId, session);
-				
+			
 				WebSocketSession boardWriterSession = userSessions.get(boardWriter);
-				if ("reply".equals(cmd) && boardWriterSession != null) {
+				log.info("boardWriterSession :" + boardWriterSession);
+				
+				if ("study".equals(cmd) && boardWriterSession != null) {
 					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
 							+ "<a href='/board/viewBoard?freeBoardId=" + bno + "'>" + bno + "</a>번 게시글에 댓글을 달았습니다!");
+					log.info("=============================");
 					boardWriterSession.sendMessage(tmpMsg);
 				}
 			}

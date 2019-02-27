@@ -36,6 +36,7 @@ public class MainServiceImpl implements MainService{
 	Interest1CDRepository interest1CDRepository;
 	@Autowired
 	Interest2CDRepository interest2CDRepository;
+	
 		
 	@Override
 //	public List<Study> getPopularPremiumStudy() {
@@ -58,9 +59,8 @@ public class MainServiceImpl implements MainService{
 	}
 
 	@Override
-	public void getRecommendNomalMember() {
-		// TODO Auto-generated method stub
-		// 성호 로그인 정보 가져오는것 정보공유 후 진행 예정
+	public List<Member> getRecommendNomalMember() {
+		return memberRepository.getRecommendNomalMember();
 	}
 	
 	@Override

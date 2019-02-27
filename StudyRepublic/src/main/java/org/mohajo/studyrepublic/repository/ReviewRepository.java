@@ -18,4 +18,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	@Query(value = "select r from Review r where r.studyId = ?1 and r.id <> ?2")
 	public List<Review> findByStudyId(String studyId, String id);
 	
+	@Query(value = "select r from Review r where r.studyId in ?1 and r.id = ?2")
+	public List<Review> findStudyReview(String[] studyList, String id);
+	
 }

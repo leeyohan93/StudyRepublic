@@ -180,7 +180,7 @@ public class TutorController implements Serializable {
 		Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>(); 
 		
 		
-			authoritySet.add(new SimpleGrantedAuthority(ROLE_PREFIX + "W"));
+		authoritySet.add(new SimpleGrantedAuthority(ROLE_PREFIX + "W"));
 		
 		
 		Authentication newAuth = new UsernamePasswordAuthenticationToken(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), "", authoritySet);

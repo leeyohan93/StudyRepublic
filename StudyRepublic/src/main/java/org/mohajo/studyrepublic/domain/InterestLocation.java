@@ -30,6 +30,8 @@ public class InterestLocation {
 	/*	@ManyToOne
 	@JoinColumn(name = "id")
 	Member member;*/
+	@Column(name = "id")
+	private String id;
 	
 	
 }

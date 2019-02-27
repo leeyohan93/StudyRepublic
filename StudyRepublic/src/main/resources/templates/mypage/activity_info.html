@@ -14,97 +14,56 @@
 
 </head>
 <body>
+	<!-- Main -->
+	<div id="main" layout:fragment="main">
+		<div class="inner">
+			<header>
+				<h1 style="display: inline-block; margin-bottom: 30px;">활동정보</h1><a href="/mypage" class="button primary" style="float: right;'">뒤로가기</a><br>
+				<p>멤버의 게시판, 일반스터디, 프리미임스터디의 활동 정보를 확인할 수 있습니다.</p>
+				
+			</header>
+			<section class="tiles">
+			<div class="col-sm-4">
+				<article class="style1" style="width: 15em">
+					<span class="image"> <img src="images/pic01.jpg" alt="" />
+					</span> <a href="allboard">
+						<h3>커뮤니티<br>활동내역</h3>
+						<div class="content">
+							<p>자유게시판, 요청게시판, 문의게시판 모두를 확인할 수 있습니다.</p>
+						</div>
+					</a>
+				</article>
+				</div>
+				<div class="col-sm-4">
+				<article class="style2" style="width: 15em">
+					<span class="image"> <img src="images/pic02.jpg" alt="" />
+					</span> <a href="basicstudylist">
+						<h3>일반<br>스터디<br> 활동내역</h3>
+						<div class="content">
+							<p>일반 스터디 내역을 확인하고 종료된 스터디의 경우 리뷰를 남길 수 있습니다.</p>
+						</div>
+					</a>
+				</article>
+				</div>
+				<div class="col-sm-4">
+				<article class="style3" style="width: 15em">
+					<span class="image"> <img src="images/pic03.jpg" alt="" />
+					</span> <a href="premiumstudylist">
+						<h3>프리미엄<br>스터디<br>활동내역</h3>
+						<div class="content">
+							<p>프리미엄 스터디 내역을 확인하고 종료된 스터디의 경우 리뷰를 남길 수 있습니다..</p>
+						</div>
+					</a>
+				</article>
+				</div>
+			</section>
+		</div>
+	</div>
 
 
-<div id="main" layout:fragment="main">
-<div class="inner">
 
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12 my-3">
-            <div class="pull-right">
-                <div class="btn-group">
 
-                    <button class="btn btn-danger" id="grid">
-                        Back
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> 
-    <div id="products" class="row view-group">
-                <div class="item col-xs-4 col-lg-4">
-                    <div class="thumbnail card">
-                        <div class="img-event">
-                            <img class="group list-group-image img-fluid" src="https://www.radiokorea.com/images/news/2016/02/11/210367/1.png" alt="" />
-                        </div>
-                        <div class="caption card-body">
-                            <h4 class="group card-title inner list-group-item-heading">
-                               MY-Community</h4>
-                            <p class="group inner list-group-item-text">
-                               <a href="allboard">내가쓴 모든 게시물 보기</a></p>
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6">
-                                </div>
-                                   
-                                <div class="col-xs-12 col-md-6">
-                                    <a class="btn btn-success" href="http://www.jquery2dotnet.com">My-activity</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item col-sm-4 col-lg-4">
-                    <div class="thumbnail card">
-                        <div class="img-event">
-                            <img class="group list-group-image img-fluid" src="https://www.radiokorea.com/images/news/2016/02/11/210367/1.png" alt="" />
-                        </div>
-                        <div class="caption card-body">
-                            <h4 class="group card-title inner list-group-item-heading">
-                                Basic Study</h4>
-                            <p class="group inner list-group-item-text">
-                             </p>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6">
-                                  	
-                                </div>
-                                <div class="col-sm-12 col-md-6">
-                                    <a class="btn btn-success" href="basicstudylist">My-activity</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item col-sm-4 col-lg-4">
-                    <div class="thumbnail card">
-                        <div class="img-event">
-                            <img class="group list-group-image img-fluid" src="https://www.radiokorea.com/images/news/2016/02/11/210367/1.png" alt="" />
-                        </div>
-                        <div class="caption card-body">
-                            <h4 class="group card-title inner list-group-item-heading">
-                                Premium -Study</h4>
-                            <p class="group inner list-group-item-text">
-                               </p>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6">
-                                   
-                                </div>
-                                <div class="col-sm-12 col-md-6">
-                                    <a class="btn btn-success" href="premiumstudylist">My-activity</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-            
-            </div>
-</div>
-
-
-</div>
-</div>
 
 </body>
 </html>

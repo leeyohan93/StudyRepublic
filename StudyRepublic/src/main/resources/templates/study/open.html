@@ -7,12 +7,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    
     <!-- 참고:  https://jqueryui.com/sortable/#portlets -->
     <!-- 설명:  jQuery UI 의 sortable - portlets 예제를 기반으로 수정 / 발전시킨 코드 -->
     <title>스터디 오픈</title>
 </head>
 
 <th:block layout:fragment="customCss">
+   
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+	<!-- Datepicker -->
+<!-- 	<link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"> -->
+<!-- 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script> -->
+<!-- 	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> -->
+
+	<!-- 성호님 -->
+	<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+    
+    <!-- Sortable (for leveltest) -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+	<!-- Smart Editor -->
+	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+	
+	<!-- Paper Bootstrap Wizard -->
+	<link href="/paperBootstrapWizard/assets/css/paper-bootstrap-wizard.css" rel="stylesheet" />
+	
 
     <style>
     
@@ -131,6 +155,11 @@
 			color: silver !important;
 		}
     
+    	#basicInfoArea .interest2-placeholder-text {
+	    	margin-top: 50%;
+		    transform: translateY(-115%);
+    	}
+    	
         /********************************** basicInfo - CSS 시작 **********************************/
         
         /* Air Datepicker CSS */
@@ -671,28 +700,7 @@
 		
 				
     </style>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-
-	<!-- Datepicker -->
-<!-- 	<link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"> -->
-<!-- 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script> -->
-<!-- 	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> -->
-
-	<!-- 성호님 -->
-	<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
-    
-    <!-- Sortable (for leveltest) -->
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	
-	<!-- Smart Editor -->
-	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
-	
-	<!-- Paper Bootstrap Wizard -->
-	<link href="/paperBootstrapWizard/assets/css/paper-bootstrap-wizard.css" rel="stylesheet" />
-	
+ 
 </th:block>
 <!-- 			<th:block layout:fragment="bootCss"></th:block> -->
 <!-- 			<th:block layout:fragment="script"></th:block> -->
@@ -833,7 +841,8 @@
 					                <div class="col-md-10 input-content">
 					                	<div class="row col-md-auto">
 					                    	매주&nbsp;
-					                    	<select name="dayCode.dayCode" readonly disabled>
+					                    	<select name="dayCode.dayCode" readonly>
+					                    		<option value="" selected="true"></option>
 					                            <option th:each="dayCode : ${dayCode}" th:value="${dayCode.dayCode}" th:text="${dayCode.codeValueKorean}"></option>
 					                        </select>요일
 				                        </div>
@@ -1161,6 +1170,7 @@
 	            submitForm();
 	            notifyLeveltest();
               	deleteLeveltest();
+              	$("select[name='dayCode.dayCode']").click(function(e) {e.preventDefault();});
 	
 	            /* basicInfo */
 	            setEnrollCapacityByButton();
@@ -1634,10 +1644,16 @@
 	        
 	        var selectedDays = [];
 	        
+	        // 참고:  https://stackoverflow.com/a/23081260
+	        var today = new Date();
+	        var tomorrow = new Date();
+	        tomorrow.setDate(today.getDate()+1);
+
+	        
 	     	$('#input-study-startDate').datepicker({
 
 	            language: 'ko'
-	            , minDate: new Date()
+	            , minDate: tomorrow
 	            , onSelect: function onSelect(fd, date) {
 	            	
 	            	console.log('startDate onSelect()...');
@@ -1721,7 +1737,7 @@
 			    dateFormat: ' '
 			    , timepicker: true
 			    , timeFormat: 'hh:ii aa'
-			    , startDate: new Date('2019/02/21 02:00 pm')
+			    , startDate: new Date('2019/02/21 00:00 am')
 			    , classes: 'only-timepicker'
 			    , minutesStep: '10'
 			    , dateTimeSeparator: ''
@@ -1788,7 +1804,7 @@
 			    dateFormat: ' '
 			    , timepicker: true
 			    , timeFormat: 'hh:ii aa'
-		    	, startDate: new Date('2019/02/21 03:00 pm')
+		    	, startDate: new Date('2019/02/21 01:00 am')
 			    , classes: 'only-timepicker'
 			    , minutesStep: '10'
 	        	, minHours: '14'

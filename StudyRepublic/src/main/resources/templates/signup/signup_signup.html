@@ -37,7 +37,9 @@ layout:decorate="~{/layout/mainLayout}">
 
 <style>
 
-
+#main {
+background-color:#f8f9fa00;
+}
 </style>
 
 </head>
@@ -52,7 +54,7 @@ layout:decorate="~{/layout/mainLayout}">
 				
 
 
-				<form id = "memberjoin" class="login100-form validate-form" method="post" autocomplete = "off" action = "/member/insert">
+				<form id = "memberjoin" class="login100-form validate-form" method="post" autocomplete = "off" action = "/member/insert" >
 							
 					 <span class="login100-form-title p-b-43">
 						StudyRepublic
@@ -164,7 +166,7 @@ layout:decorate="~{/layout/mainLayout}">
 						<span class="label-input100">스터디 관심지역</span>
 						</div>
 						
-						<div class="join-input100" id = "loc" style = "float:left; height:50px;">
+						<div class="join-input100" id = "loc" style = "float:left; height:50px; width:450px">
 						<div id="guide" style="color:#999;display:none;"></div>
 						<span class="focus-input100"></span>
 						
@@ -674,7 +676,7 @@ $(function() {
                       	
                     var locValue = "<input class = 'memberinterest' type = 'text' id = 'interestlocation" +count+ 
                    	"' name = 'interestlocation[" + count + 
-                    "].interestLocation'> <button type ='button' class = 'memberinterest' id = 'del" + count + "' value = '삭제' onclick = 'deleteLocation_join(" + count + ")'>X</button>"
+                    "].interestLocation'> <button type ='button' class = 'memberinterest' id = 'del" + count + "' value = '삭제' onclick = 'deleteLocation_join(" + count + ")' style = 'padding:0'>X</button>"
                    	$('#loc').append(locValue);
 
                    	document.getElementById("loc").style.height = "100%";

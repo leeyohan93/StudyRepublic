@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.member.MemberController;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,9 +45,12 @@ public class ModifyMemberController {
    @Autowired
    private MemberRepository mbr;
    
+   @Autowired
+   private MemberController membercontroller;
+   
    BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 
-@RequestMapping("/passwordmodi")
+@RequestMapping("/mypage/passwordmodi")
 public String pwdmodi(Model model) {
    Authentication auth =SecurityContextHolder.getContext().getAuthentication();
    String id = auth.getName();
@@ -98,7 +102,7 @@ public Map <Object,Object> passwordcheck(@RequestBody String password){
 */
 
 
-@RequestMapping("/memberexit") /*탈퇴버튼 클릭시 회원상태변경*/
+@RequestMapping("/mypage/memberexit") /*탈퇴버튼 클릭시 회원상태변경*/
 public String memberexit(@ModelAttribute Member member) {
    Authentication auth =SecurityContextHolder.getContext().getAuthentication();
    String id = auth.getName();
@@ -128,7 +132,7 @@ public String membermodiresult(Model model, HttpServletRequest request,@RequestP
    return "redirect:mypage/member_modify";
 }*/
 
-@RequestMapping("/passwordResult") /*비밀번호 변경하기*/
+@RequestMapping("/mypage/passwordResult") /*비밀번호 변경하기*/
 public String update_password(@RequestParam("password") String password) {
    Authentication auth =SecurityContextHolder.getContext().getAuthentication();
    String id = auth.getName();
@@ -140,11 +144,11 @@ public String update_password(@RequestParam("password") String password) {
    mbr.save(member);
 
    
-   return "redirect:index";
+   return "redirect:/index";
 
 }
 
-@RequestMapping("/modimember2")//이메일, 폰번호, 공개여부 변경
+@RequestMapping("/mypage/modimember2")//이메일, 폰번호, 공개여부 변경
 public String update_email(@RequestParam("email")String email, @RequestParam("phonenumber")String phonenumber,@RequestParam("visibility")int visibility) {
    Authentication auth =SecurityContextHolder.getContext().getAuthentication();
    String id = auth.getName();
@@ -156,11 +160,11 @@ public String update_email(@RequestParam("email")String email, @RequestParam("ph
    
    mbr.save(member);
    System.out.println(777);
-   return "redirect:mypage";
+   return "redirect:/mypage";
    
 }
 
-@RequestMapping("/emailAuth")
+@RequestMapping("/mypage/emailAuth")
 @ResponseBody 
 public Map <String, Integer> chk_email(@RequestParam String email) {      
    
@@ -174,7 +178,7 @@ public Map <String, Integer> chk_email(@RequestParam String email) {
    return map;   
 }
 //완료버튼 클릭시 비밀번호 체크하는건데 지금 우선 사용금지 
-@RequestMapping(value="/passwordAuth", method=RequestMethod.POST)
+@RequestMapping(value="/mypage/passwordAuth", method=RequestMethod.POST)
 @ResponseBody 
 public Map <String, Integer> chk_password(@RequestParam String password) {      
    System.out.println(password);
@@ -194,10 +198,15 @@ public Map <String, Integer> chk_password(@RequestParam String password) {
 
 
 
-@RequestMapping(value="/attachments", method=RequestMethod.POST)
+@RequestMapping(value="/mypage/attachments", method=RequestMethod.POST)
 public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,HttpSession session, @RequestPart MultipartFile sourceFile)throws IOException{
    Authentication auth =SecurityContextHolder.getContext().getAuthentication();
    String id = auth.getName();
+   
+   Member member = mbr.findById(id).get();
+
+   
+   
    
    String sourceFileName = sourceFile.getOriginalFilename();
    String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName).toLowerCase();
@@ -228,8 +237,13 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
    response.setFileContentType(sourceFile.getContentType());
    response.setAttachmentUrl("http://localhost:8080/member_image/" + saveFileName);
    
+   member.setProfileSaveName(saveFileName);
+   mbr.save(member);
+   
    int uploadResult = mbr.changeProfile(sourceFileName+sourceFileNameExtension, saveFileName, id);
    
+   membercontroller.createSession(session, member);
+   System.out.println("발동중??");
    
    return new ResponseEntity<>(response,HttpStatus.OK);
 }
@@ -244,7 +258,7 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
 		private String attachmentUrl;
 	}
 	
-	@RequestMapping("/setdefault_img")
+	@RequestMapping("/mypage/setdefault_img")
 	public String defaultimg(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -252,7 +266,7 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
 		int uploadResult = mbr.changeProfile("default_img.png", "default_img.png", id);
 		
 		
-		return "redirect:/modimember";
+		return "redirect:/mypage/modimember";
 	}
 	
 	

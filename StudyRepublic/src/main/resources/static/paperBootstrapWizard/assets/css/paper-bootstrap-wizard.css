@@ -1396,7 +1396,7 @@ input[type="button"]:focus {
   padding: 105px 20px 10px;
 }
 .wizard-card .wizard-footer {
-  padding: 0 15px 5px;
+  padding: 0 50px 30px 50px;
 }
 .wizard-card .disabled {
   display: none;

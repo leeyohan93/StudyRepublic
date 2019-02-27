@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.mohajo.studyrepublic.domain.PageDTO;
+import org.mohajo.studyrepublic.domain.PageMaker;
+import org.mohajo.studyrepublic.domain.RequestBoardReply;
 import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboardReply;
 import org.mohajo.studyrepublic.domain.StudyQnaboard;
+import org.mohajo.studyrepublic.domain.StudyQnaboardReply;
 import org.mohajo.studyrepublic.domain.TutorUploadFile;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardFileRepository;
@@ -39,6 +44,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,6 +54,8 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -184,12 +193,19 @@ public class StudyPageController {
 	}
 
 	@RequestMapping("/Qnaboard")
-	public String studyQnaboard(Model model) {
+	public String studyQnaboard(Model model,PageDTO pageDTO) {
 		String studyId = "BB00001";
 		String id = "aaa123";
 
-		model.addAttribute("findQnaboardInfoByStudyId",
-				predicate.studyQnaResultPredicate(studyId, 10, studyQnaboardRepository));
+		//페이징 갯수
+		pageDTO.setSize(10);
+		
+		Pageable page = pageDTO.makePageable(0, "studyId");
+		Page<StudyQnaboard> list = studyQnaboardRepository.findAll(studyQnaboardRepository.makePredicate(studyId), page);
+		
+		model.addAttribute("findQnaboardInfoByStudyId",new PageMaker<>(list));
+//		model.addAttribute("findQnaboardInfoByStudyId",
+//				predicate.studyQnaResultPredicate(studyId, 10, studyQnaboardRepository));
 		//model.addAttribute("findQnaboardInfoByStudyId", studyQnaboardRepository.findQnaboardInfoByStudyId(studyId));
 		return "studypage/studypage_qna";
 	}
@@ -444,4 +460,54 @@ public class StudyPageController {
 		outputStream.close();
 		return "tutor/tutor_signupinquery";
 	}*/
+	
+		//질문게시판 댓글
+		@PostMapping("/qnaBoardReplyRegister")
+		@ResponseBody
+		public StudyQnaboardReply qnaBoardReplyRegister(int studyQnaBoardId, String studyId, String content, int replyGroup, int replystep) {
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			String id = auth.getName();
+		 
+		 StudyQnaboardReply studyQnaboardReply = new StudyQnaboardReply();
+		
+		 studyQnaboardReply.setStudyqnaboardId(studyQnaBoardId);
+		 studyQnaboardReply.setStudyId(studyId);
+		 studyQnaboardReply.setContent(content);
+		 studyQnaboardReply.setReplyGroup(replyGroup);
+		 studyQnaboardReply.setReplyStep(replystep);
+		 studyQnaboardReply.setId(id);
+		
+			return studyQnaboardReplyRepository.save(studyQnaboardReply);
+
+		}
+		
+		@GetMapping("/qnaBoardReplyList")
+		@ResponseBody
+		public List<StudyQnaboardReply> qnaBoardReplyList(int studyQnaBoardId) {
+			
+			log.info("studyQnaBoardId:" + studyQnaBoardId);
+		
+			log.info("=================");
+			 StudyQnaboard studyQnaboard = studyQnaboardRepository.findById(studyQnaBoardId).get();
+			 log.info("왜안되냐고!!!:"+studyQnaboard.toString());
+			 log.info(studyQnaboard.getStudyQnaboardReply().toString());
+			
+			return studyQnaboard.getStudyQnaboardReply();
+			
+			
+		}
+		
+		@PostMapping("/qnaBoardReplyDelete/{studyQnaboardReplyId}")
+		@ResponseBody
+		public int qnaBoardReplyDelete(@PathVariable int studyQnaboardReplyId) {
+
+			log.info("=======================");
+			log.info("studyQnaboardReplyId:"+studyQnaboardReplyId);
+			log.info("=======================");
+			studyQnaboardReplyRepository.deleteById(studyQnaboardReplyId);
+			return studyQnaboardReplyId;
+		}
+		
+		
 }

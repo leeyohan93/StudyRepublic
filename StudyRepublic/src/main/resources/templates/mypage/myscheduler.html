@@ -3,6 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>풀캘린더</title>
 <style type="text/css">
     body {
@@ -16,6 +17,10 @@
         margin : 0 auto;
     }
 </style>
+
+<link rel="stylesheet" th:href="@{/assets/css/main.css}">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"type="text/css">
 <link href="./fullcalendar-3.10.0/fullcalendar.css" rel="stylesheet"/>
 <link href="./fullcalendar-3.10.0/fullcalendar.print.css" rel="stylesheet" media="print"/>
 <script type="text/javascript" src="./fullcalendar-3.10.0/lib/moment.min.js"></script>
@@ -23,7 +28,7 @@
 <script type="text/javascript" src="./fullcalendar-3.10.0/fullcalendar.js"></script>
 <script type="text/javascript" src="./moment.js"></script>
 <script type="text/javascript">
-              var biginfo = [];// 컨트롤러에서 가져오는값 담는 그릇 
+            var biginfo = [];// 컨트롤러에서 가져오는값 담는 그릇 
             var miniinfo = []; // 가져온값을 api 에 맞게 담는그릇
     jQuery(document).ready(function() {
    
@@ -39,13 +44,9 @@
                      for(var i=0; i < biginfo.length; i++){
                         miniinfo.push({});
                         
-                        //miniinfo[i].allDay = false;
                         miniinfo[i].id = biginfo[i].study.studyId;
                         miniinfo[i].title = biginfo[i].study.name;
-                         //miniinfo[i].start = biginfo[i].study.startDate;
-                        //miniinfo[i].end = biginfo[i].study.endDate;
-   /*                      miniinfo[i].startTime = biginfo[i].study.startTime;
-                         miniinfo[i].endTime = biginfo[i].study.endTime; */
+                    
                          var moment1 = moment(biginfo[i].study.startDate).format('YYYY-MM-DD');
                          var moment2 = moment(biginfo[i].study.endDate).format('YYYY-MM-DD');
                          
@@ -55,26 +56,11 @@
                             end: moment2
                          }];
                          
-   
-                         //miniinfo[i].ranges[0].start = moment1;
-                        //miniinfo[i].ranges[0].end = moment2;
-                         
-                         
-                       /*    miniinfo[i].ranges=[{
-                             
-                     isRecurring : event.isRecurring,
-                         start : biginfo[i].study.startDate(from),
-                         end : biginfo[i].study.endDate(to);
-                          }];
-                          */
-                         console.log(biginfo[i].study.startDate);
-                         //ranges: [{ //repeating events are only displayed if they are within one of the following ranges.
-                     //        start: moment().startOf('week'), //next two weeks
-                     //        end: moment().endOf('week').add(7,'d'),
-                     //    }
-                        //miniinfo[i].rendering = 'background';
-                        
-                         miniinfo[i].dow = []; 
+                        miniinfo[i].start = moment1;
+						miniinfo[i].end = moment2;
+                        console.log(biginfo[i].study.startDate);
+
+                        miniinfo[i].dow = []; 
                         
                         miniinfo[i].dow.push(Number(biginfo[i].study.dayCode.dayCode));
                         console.log(miniinfo[i].dow);
@@ -101,21 +87,13 @@
                   center: 'title',
                   right: 'month,listYear'
                   },
-                  /* eventRender: function(event, element, view){
-                      if (event.isRecurrring) {
-                        return (event.ranges.filter(function(range){
-                          return (biginfo[i].study.startDate(event.start).isBefore(range.end) &&
-                                biginfo[i].study.endDate(event.end).isAfter(range.start));
-                        }).length) > 0;
-                      }
-                    },    */
                         
             displayEventTime: false, // don't show the time column in list view
-                           
-            eventClick: function(event,view, jsEvent) {
-            // opens events in a popup window
-            //window.open('http://naver.com', 'gcalevent', 'width=700,height=600');
-            return false;
+            eventClick:  function(event, jsEvent, view) {
+                $('#modalTitle').html(event.title);
+                $('#modalBody').html(event.description);
+                $('#eventUrl').attr('href',event.url);
+                $('#fullCalModal').modal();
             }
              ,defaultDate : new Date() //오늘날짜 
                , editable : true
@@ -141,8 +119,26 @@
    
    
 });
+            
+            
 </script>
 <body>
 <div id="calendar"></div>
+<div id="fullCalModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title"></h4>
+            </div>
+            <div id="modalBody" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary"><a id="eventUrl" target="_blank">Event Page</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
