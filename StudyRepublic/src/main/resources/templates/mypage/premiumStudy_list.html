@@ -9,7 +9,7 @@
    content="width=device-width, initial-scale=1, user-scalable=no" />
 <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
 <meta id="_csrf_header" name="_csrf_header"
-	th:content="${_csrf.headerName}" />
+   th:content="${_csrf.headerName}" />
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
@@ -133,7 +133,7 @@
                        data: formData,
 
                        success: function () {
-                    	   location.reload();
+                          location.reload();
                        },
                        error :function(){
                            alert("error");
@@ -147,8 +147,8 @@
                   </div>
                   </th:block>
                   <th:block th:unless="${#strings.contains(isReview,premium.study.studyId)}==false">
-				리뷰완료
-				</th:block>
+            리뷰완료
+            </th:block>
                </td>
                <td th:unless="${premium.study.studyStatusCode.codeValueKorean == '완료'}">-</td>
             </tr>

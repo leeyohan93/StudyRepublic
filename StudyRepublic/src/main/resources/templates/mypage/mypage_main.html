@@ -15,6 +15,8 @@
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
    type="text/css">
+   
+
 
 <style type="text/css">
 .sidebar {
@@ -79,39 +81,7 @@
 .w3-modal-content {
    background-color: transparent;
 }
-)
 
-/* .container-fluid{
-      font-style:normal;
-   }
-
-
-   
-   .border-top{
-      width:100%;
-      height:60px;
-      text-align:left;
-   }
-   .myschedulerbtn{
-      width:100%;
-      height: 15%
-      
-   }
-   .profile{
-      width: 100%;
-      height: 100%;
-
-   }
-   .studyinfo{
-      height:80%; 
-      margin-top:3px;
-      text-align:left;
-   }
-
-   
-   
-   
- */
  
     #img_profile{
         border-radius: 100%;
@@ -159,7 +129,7 @@
     border: solid 1px;
     color: black;
 }
-    }
+    
       
       
    
@@ -192,7 +162,7 @@
 }
    .w3-modal-content {
     background-color:transparent;
-   )
+   }
  
 </style>
 
@@ -261,7 +231,7 @@
         <div class="row"  th:each="mbr : ${mbr}" style="height: auto; margin-bottom: 8%;" >
                         <div class="col-md-6 how-img" style = "text-align: center; margin-top:11px">
                            <img id="img_profile" th:src="@{'/member_image/'+${mbr.profileSaveName}}" style = "border-radius: 100%; width:200px; height:240px"onclick="document.getElementById('modal01').style.display='block" />
-                           <br><a class="btn modifybtn" id="modifybtn" th:href="@{modimember}" role="button" style="background-color:rgb(179,220,248);">수정하기</a>
+                           <br><a class="btn modifybtn" id="modifybtn" th:href="@{/mypage/modimember}" role="button" style="background-color:rgb(179,220,248);">수정하기</a>
                             <div id="modal01" class="w3-modal" onclick="this.style.display='none'">
                                <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
                                <div class="w3-modal-content w3-animate-zoom">
@@ -270,24 +240,25 @@
                             </div>
                         </div>
                      
-                        <div class="col-md-6">
-                           
+                        <div class="col-md-6" >
+                             
                             <h4 style="color: #ffa500;">MY ABOUT</h4>
-                         <h4 class="subheading userinfo">ID:  <span th:text=${mbr.id} ></span>
+                         <h5 class="subheading userinfo" style="margin-top: 18%;">
+                            ID:  <span th:text=${mbr.id} ></span>
                         <input type="hidden" id="memberid" name="memberid" th:value=${mbr.id}/>
                         <br> 
-                              이름: <span th:text=${mbr.name} ></span>
+                                 이름: <span th:text=${mbr.name} ></span>
                         <br> 
                          
-                              닉네임: <span th:text=${mbr.nickname} ></span>
+                                 닉네임: <span th:text=${mbr.nickname} ></span>
                         <br> 
-                              성별: <span th:text=${mbr.gender} ></span>
+                                    성별: <span th:text=${mbr.gender} ></span>
                         <br> 
-                              생년월일: <span th:text=${mbr.birth} ></span>
+                                 생년월일: <span th:text=${mbr.birth} ></span>
                         <br> 
                               E-Mail: <span th:text=${mbr.email} ></span>
                         <br> 
-                               연락처: <span th:text=${mbr.phonenumber} ></span></h4>
+                                  연락처: <span th:text=${mbr.phonenumber} ></span></h5>
                        
                         </div>
             </div> <!-- th:each 닫히는 div 태그  -->   
@@ -299,7 +270,7 @@
                   <div class="col-md-6 studyinfo" style="height: 227px; border:solid;">
                     <h4 style="font-weight: 900;">일반스터디</h4><br>
                           <div th:each="smr : ${smr}">
-                           <div th:text="${smr.study.name}"></div>
+                           <h5 th:text="${smr.study.name}" style="font-weight: 900;"></h5>
                         </div>
                     
                   </div>  

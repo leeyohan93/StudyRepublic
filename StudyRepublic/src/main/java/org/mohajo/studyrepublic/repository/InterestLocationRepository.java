@@ -7,9 +7,11 @@ import java.util.List;
 
 import org.mohajo.studyrepublic.domain.InterestLocation;
 import org.mohajo.studyrepublic.domain.Member;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Producer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -30,11 +32,7 @@ public interface InterestLocationRepository extends JpaRepository<InterestLocati
 	@Query(value = "delete from interest_location where id = :id", nativeQuery=true)
 	int deleteLocationById(String id);
 
-	*//**
-	 * @param memberlocation
-	 * @param id
-	 * @return
-	 *//*
+
 	@Query(value ="Insert into interest_location values(:interestLocation, :id)",nativeQuery=true)
 	List<InterestLocation> save(String interestLocation, String id);*/
 	
@@ -43,20 +41,7 @@ public interface InterestLocationRepository extends JpaRepository<InterestLocati
 	@Query(value = "delete from interest_location where id = :id", nativeQuery = true)
 	void deleteLocation(String id);
 
-	/**
-	 * @param interestLocation
-	 */
-	
 
-	/**
-	 * @param insertLocation
-	 * @param member
-	 * @return
-	 */
-/*	@Transactional
-	@Modifying
-	@Query(value = "insert into interest_location (interest_location, id) values(:interestLocation, :id)", nativeQuery=true)
-	int insertLocation(String interestLocation, String id);*/
 	
 	
 	
