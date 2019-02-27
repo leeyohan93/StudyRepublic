@@ -1,3 +1,4 @@
+
 package org.mohajo.studyrepublic.admin;
 
 import java.util.List;
@@ -71,7 +72,6 @@ public class AdminMemberController {
 		return "redirect:"+request.getHeader("Referer");
 
 	}
-	
 	@RequestMapping(value = "/message")
 	public String message(Model model,String[] selectedId,String sendId,String messageContent,HttpServletRequest request) {
 		for(String receiveId : selectedId) {
@@ -234,3 +234,5 @@ public class AdminMemberController {
 		return adminMemberService.exiteMember(selectedId);
 	}
 */}
+
+

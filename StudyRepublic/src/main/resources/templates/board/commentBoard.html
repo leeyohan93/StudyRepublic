@@ -188,7 +188,7 @@ background: white;
 					<input id="commentGroup" name="commentGroup" type="hidden" th:value="${board.commentGroup}">
 					<input id="commentStep" name="commentStep" type="hidden" th:value="${board.commentStep}">
 					<input id="commentStep" name="commentStep" type="hidden" th:value="${board.commentIndent}">
-					 <input id="boardNotice" name="notice" type="checkbox" value="0"><span>비공개</span>
+					 <input id="boardHide" name="hide" type="checkbox" value="0"><span>비공개</span>
 				</span> 
 				
 				<!--제목, 공지옵션, 비공개옵션 끝 -->
@@ -265,6 +265,8 @@ $(document).ready(function(){
 	    
 
 	    });
+	    
+	    
 	     
 	    //전송버튼 클릭이벤트
 	    $("#registerBtn").click(function(){
@@ -300,6 +302,23 @@ $(document).ready(function(){
 	        $("#boardWriteForm").submit();
 	       }
 	    }); 
+	    
+	    //비공개 
+	    $("#boardHide").change(function(){
+	    	
+	    	if($("#boardHide").is(":checked")){ 	
+	    	
+	    		var c = $("#boardHide").val(1);
+	    		console.log(c.val());
+	    		
+
+	    	}else{
+	    		var d= $("#boardHide").val(0);  
+	    		console.log(d.val());
+	    		
+	    	};  
+	    	
+	    });
  
 	    //답글 앞머리
 	 

@@ -192,7 +192,7 @@ public class MypageController {
 		return map;
 	}
 
-	@RequestMapping("/member/modify/interest") 
+	@RequestMapping("/mypage/modify/interest") 
 	public String modifyInterest(Model model, @RequestParam String[] minterest) {
 		
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
@@ -229,7 +229,7 @@ public class MypageController {
 	}
 	
 	
-	@RequestMapping("/member/modify/location") 
+	@RequestMapping("/mypage/modify/location") 
 	public String modifyLocation(Model model, @RequestParam String[] mlocation) {
 		
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();

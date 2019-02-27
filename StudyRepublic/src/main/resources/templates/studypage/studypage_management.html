@@ -3,6 +3,8 @@
  layout:decorate="~{/layout/studypageLayout}">
 <head>
 <meta charset="UTF-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
 <title>스터디 관리 페이지 입니다.</title>
 
 </head>
@@ -43,6 +45,7 @@
 					width: 30%;
 				}
 				.getOutButtonDiv{
+					display: inline-block;
 					width: 55%;
 				}
 				.userImage{
@@ -77,9 +80,6 @@
 				#managementp{
 					font-weight: 400;
 				}
-				.okButton{
-					margin-right: 5%;
-				}
 				.btn-dark{
 					background-color: dimgrey;
 					padding-left: 3%;
@@ -104,6 +104,56 @@
 			  		color : white !important;
 			  		box-shadow: none;
 			  	}
+			  	#warnning{
+			  		font-weight: 800 !important;
+    				color: red !important;
+			  	}
+			  	#reallyClose{
+			  		font-weight: 750 !important;
+			  		font-size: x-large;
+			  	}
+			  	#doNotResolve{
+			  		font-weight: 650 !important;
+			  		color: red !important;
+			  	}
+			  	#OKBye{
+			  		width:40%;
+			  	}
+			  	#OKBye:hover{
+			  		color : red !important;
+			  		font-style : normal;
+			  		font-weight: 700 !important;
+			  		width:40%;
+			  	}
+			  	#NOIdidnt{
+			  		width:40%;
+			  	}
+			  	#NOIdidnt:hover{
+			  		color : black !important;
+			  		font-style : normal;
+			  		font-weight: 700 !important;
+			  		width:40%;
+			  	}
+			  	#modal-footerId{
+			  		display: inline-block !important;
+			  	}
+			  	.okButton{
+					margin-right: 3%;
+				}
+				.denyButton{
+					margin-right: 3%;
+				}
+			  	.testViewButton{
+			  		margin-right: 3%;
+			  	}
+			  	#level-dialog {
+				    max-width: 80% !important;
+				    margin: 1.75rem auto;
+				}
+				.tableShape{
+					text-align: center;
+				}
+				
 			</style>
 	</th:block>
                 <div id="management">
@@ -115,8 +165,9 @@
 					  </nav>
 					  <div class="tab-content" id="nav-tabContent">
 					    <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="nav-home-tab">
-					    	<form id="" action=""
-					    		><div id="allCheckbox"
+					    	<!-- tab1 에서 사람들을 관리하는 부분임. check 된 내용에 대해서 처리하는 javscript 및 ajax 처리가 필요함 -->
+					    	<!-- 버튼 클릭의 경우에는 해당되는 버튼이 가지는 닉네임에 대한 처리를 하도록 한다. 그리고 페이지를 조작하는 사이에 DB 상에서 닉네임이 없어지는 경우를 대비해서 예외 처리를 실시한다.  -->
+					    	<div id="allCheckbox"
 					    			><div id="allCheckboxLeft"
 					    				><input type="checkbox" class="userAllSelect" name="userAllSelect" value="userAllSelect"></input></div
 					    			><div id="allCheckboxRight"
@@ -128,20 +179,20 @@
 					    			></div
 					    			><div class="userImageDiv"
 					    				><img class="userImage" th:src = "@{'/member_image/'+${findStudyMemberLEME.member.profileSaveName}}"
-					    				><font color="black" class="userNickName"    th:text="${findStudyMemberLEME.member.nickname}"></font
+					    				><font color="black" class="userNickName" th:text="${findStudyMemberLEME.member.nickname}"></font
 					    			></div
 					    			><div class="getOutButtonDiv"
-					    				><button class="getOutButton btn btn-dark">내보내기</button
+					    				><button class="getOutButton btn btn-dark" th:name="${findStudyMemberLEME.member.nickname}">내보내기</button
 					    			></div
 					    		></div
 					    		><div id="getOutSelectMemberButton">
-					    			<button class="btn btn-dark">선택 된 대상 내보내기</button>
+					    			<button class="btn btn-dark" id = "selectedAllGetOutButton">선택 된 대상 내보내기</button>
 					    		</div
-					    	></form>
+					    	>
 					    </div>
-					    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="nav-profile-tab">
-				    	 	<form id="" action=""
-					    		><div id="allCheckbox"
+					    <!-- tab2 시작부 -->
+					    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="nav-profile-tab"
+					    	><div id="allCheckbox"
 					    			><div id="allCheckboxLeft"
 					    				><input type="checkbox" class="userAllSelect2" name="userAllSelect" value="${findStudyMemberWA.member.nickname}"></input></div
 					    			><div id="allCheckboxRight"
@@ -156,17 +207,71 @@
 					    				><font color="black" class="userNickName" th:text="${findStudyMemberWA.member.nickname}"></font
 					    			></div
 					    			><div class="getOutButtonDiv"
-					    				><button class="testViewButton btn btn-dark" th:if="${findStudyMemberWA.leveltestResponse.isEmpty()==false}">테스트 결과 보기</button
-					    				><button class="okButton btn btn-dark" th:value="${findStudyMemberWA.member.nickname}">수락</button
-					    				><button class="denytton btn btn-dark" th:value="${findStudyMemberWA.member.nickname}">거절</button
-					    			></div
+					    				><span th:if="${findStudyMemberWA.leveltestResponse.isEmpty()}==false"
+					    					><button class="testViewButton btn btn-dark" data-toggle="modal" data-target="#testResultModal" th:value="${findStudyMemberWA.member.nickname}">테스트 결과 보기</button
+					    				></span
+					    				><span><button class="okButton btn btn-dark" th:name="${findStudyMemberWA.member.nickname}">수락</button
+					    					><button class="denyButton btn btn-dark" th:name="${findStudyMemberWA.member.nickname}">거절</button
+					    				></span>
+					    			</div
 					    		></div
 					    		><div id="getOutSelectMemberButton">
-					    			<button id="selectAllOkButton" class="btn btn-dark">수락</button>
-					    			<button id="selctAllDenyButton" class="btn btn-dark">거절</button>
+					    			<button id="selectAllOkButton" class="btn btn-dark selectedAllOKDenyButton" value="OK">수락</button>
+					    			<button id="selectAllDenyButton" class="btn btn-dark selectedAllOKDenyButton" value="Deny">거절</button>
 					    		</div
-					    	></form>
-					    </div>
+					    	><div class="modal fade" id="testResultModal" role="dialog">
+							    <div class="modal-dialog" id="level-dialog">
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header">
+							          <h4 class="modal-title" id="testResult" >레벨 테스트 결과</h4>
+							          <button type="button" class="close" data-dismiss="modal">×</button>
+							        </div>
+							        <!-- <div class="modal-body">
+							        	<div id="testResultTitle">
+							        		<span id="checkArea"></span>
+							        		<span id="numberArea">No</span>
+							        		<span id="typeArea">구분</span>
+							        		<span id="exampleArea">문항</span>
+							        		<span id="correctArea">정답</span>
+							        		<span id="differentArea">제출한답</sapn>
+							        		<span id="resultArea">결과</span>
+							        	</div>
+							        	<div class="testResultBody">
+							        		<span class="checkArea"><input type="checkBox" value=""/></span>
+							        		<span class="numberArea"></span>
+							        		<span class="typeArea"></span>
+							        		<span class="exampleArea"></span>
+							        		<span class="correctArea"></span>
+							        		<span class="differentArea"></sapn>
+							        		<span class="resultArea"></span>
+							        	</div>
+							        </div> -->
+							        <div class="modal-body">
+							        	<input type="hidden" id="nickNamehidden">
+							        	<table id="testResultTable">
+							        		<tr id="testResultTitle">
+							        			<th class="tableShape"> </th>
+							        			<th class="tableShape">NO</th>
+							        			<th class="tableShape">구분</th>
+							        			<th class="tableShape">문항</th>
+							        			<th class="tableShape">정답</th>
+							        			<th class="tableShape">제출한 답</th>
+							        			<th class="tableShape">결과</th>
+							        		</tr>
+							        	</table>
+							        	<button type="button" class="btn btn-default OXButton" id="correctButton" value="O">정답 처리</button>
+							        	<button type="button" class="btn btn-default OXButton" id="differentButton" value="X">오답 처리</button>
+							        </div>
+							        <div class="modal-footer" id="modal-footerId">
+							        	<div id="testUserProfile"></div>
+							        	<div id="testResultPercent"></div>
+							        </div>
+							      </div>
+							    </div>
+			 				</div>
+			 			</div>
+					    <!-- tab3 시작부 -->
 					    <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="nav-contact-tab">
 					    	<div id="managementNotice">
 					    		<h5 id=managementh5><font color="black">스터디를 해체하시겠습니까?</font></h5></br></br>
@@ -174,19 +279,55 @@
 					    		</p><br><br>
 					    	</div>
 					    	<div>
-					    		<button class="btn btn-dark">스터디 해체하기</button>
+					    		<button class="btn btn-dark" data-toggle="modal" data-target="#closeModal">스터디 해체하기</button>
 					    	</div>
+					    	<div class="modal fade" id="closeModal" role="dialog">
+							    <div class="modal-dialog">
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header">
+							          <h4 class="modal-title" id="warnning">경고</h4>
+							          <button type="button" class="close" data-dismiss="modal">×</button>
+							        </div>
+							        <div class="modal-body">
+							          <p id="reallyClose">정말로 스터디를 폐쇄하시겠습니까?</p>
+							          <p id="doNotResolve">폐쇄 된 스터디는 절대로 복구할 수 없습니다.</p>
+							        </div>
+							        <div class="modal-footer" id="modal-footerId">
+							        	<button type="button" class="btn btn-default" id="OKBye" data-dismiss="modal">예</button>
+							        	<button type="button" class="btn btn-default" id="NOIdidnt" data-dismiss="modal">아니오</button>
+							        </div>
+							      </div>
+							      
+							    </div>
+							  </div>
 					    </div>
 					  </div>
 					</div>
 				</div>
 			<script>
+					var studyId;
+					var nickName;
+					var getoutUserInfo;
+					var contentCheck;
+					var contentCheck2 = new Array();
 					//체크시 전체 선택, 모두 해제시 체크 해제
+					var token = $("meta[name='_csrf']").attr("content");
+					var header = $("meta[name='_csrf_header']").attr("content");
+					$(function() {
+						$(document).ajaxSend(
+								function(e, xhr, options) {
+									xhr.setRequestHeader(header,token);
+								});
+					});
+					
 					$(document).ready(function(e){
+						//tab1 에서 All select/Deselect를 할 경우 해당 되는 내용들이 모두 체크 되거나, 풀리도록 처리하는 함수.
 						$('.userAllSelect').on("click", function(){
 							 $( '.userCheckBox' ).prop( 'checked', this.checked );
 						});
 				
+						//tab1에서 CheckBox 1개를 클릭했을 때, checkbox 상황을 확인해서, 모두 체크일 경우 All select를 체크하고 아니면 체크 해체하는 함수
 						var extraVar = $('.userCheckBox');
 						extraVar.on("click", function(){
 							var count=0;
@@ -207,11 +348,11 @@
 							}
 						});
 						
-						
+						//tab2 체크박스 전체 선택/해체 함수
 						$('.userAllSelect2').on("click", function(){
 							 $( '.userCheckBox2' ).prop( 'checked', this.checked );
 						});
-						
+						//tab2 체크박스 상태 감지 함수
 						var extraVar2 = $('.userCheckBox2');
 						extraVar2.on("click", function(){
 							var count=0;
@@ -231,6 +372,351 @@
 								$('.userAllSelect2')[0].checked=false;
 							}
 							
+						});
+						
+						//tab1에서 내보내기 버튼 클릭시 단일 인자를 삭제하는 함수
+						$(".getOutButton").on("click", function(){
+							studyId =  window.name;
+							nickName = this.name;
+					        console.log("창 테스트 : " + studyId);
+					        console.log("버튼 테스트 : " + nickName);
+					        
+					        getoutUserInfo = new Array();
+					        console.log("버튼 테스트 : " + getoutUserInfo);
+					        
+					        getoutUserInfo = {studyId, nickName};
+					        console.log("버튼 테스트 : " + getoutUserInfo);
+					        
+					        var thisContent = this;
+					        
+				        	$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/GetoutUser",
+								data : JSON.stringify(getoutUserInfo),
+								dataType : "json",
+								success : function(data) {
+									console.log("실행됨");
+									if(data==true){
+										console.log("완전 성공");
+										thisContent.parentElement.parentElement.outerHTML = "";
+									}else{
+										console.log("잘못 된 시도 발생")
+										window.location.reload();
+									}
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
+						});
+						
+						//tab1 에서 선택 된 요소를 모두 내보내는 함수
+						$('#selectedAllGetOutButton').on("click", function(){
+							var allUserCheckBox = $(".userCheckBox");
+							var checkedUserInfoMapList= new Array();
+							var checkedElementList = new Array();
+							var studyId = window.name;
+							var checkedCount = 0;
+							for(let count = 0; count<allUserCheckBox.length; count++){
+								if(allUserCheckBox[count].checked == true){
+									//체크 돼있는거면
+									let nickName = allUserCheckBox[count].value;
+									
+									checkedUserInfoMapList[checkedCount] = {studyId, nickName};
+									
+									console.log(checkedUserInfoMapList);
+									//contentCheck = checkedUserInfoMapList;
+									contentCheck2[checkedCount] = allUserCheckBox[count];
+									checkedElementList[checkedCount] = allUserCheckBox[count];
+									checkedCount++;
+								}
+							}
+							//전송한 리스트에 상응하는 element를 저장한 것을 기준으로 성공 여부에 따라서 해당 요소를 지우기 위해서 해당 알고리즘을 추가함.
+							//리턴 받은 boolean List의 길이만큼 반복하고, if문으로 booleanlist의 요소가 true인지 확인한다. 그리고 true일 경우
+							//해당 booleanList번호에 상응하는 요소를 remove한다.
+							/* for(let count = 0; count<checkedElementList.length; count++){
+									//체크 돼있는거면
+									console.log(checkedElementList[count]);
+									checkedElementList[count].parentElement.parentElement.remove();
+							} */
+							$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/SelectedAllGetout",
+								data : JSON.stringify(checkedUserInfoMapList),
+								dataType : "json",
+								success : function(data) {
+									console.log("실행됨");
+									console.log(data.length);
+									contentCheck = data;
+									for(let listCount=0; listCount<data.length; listCount++){
+										if(data[listCount]==true){
+											console.log("삭제하는 인자 : " + checkedElementList[listCount].parentElement.parentElement);
+											checkedElementList[listCount].parentElement.parentElement.remove();
+										}else{
+											console.log("수행도중 값 변경");
+										}
+									}
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
+						});
+						
+						//tab2에서 거절 버튼 클릭시 단일 인자를 삭제하는 함수
+						$(".denyButton").on("click", function(){
+							studyId =  window.name;
+							nickName = this.name;
+					        console.log("tab2 창 테스트 : " + studyId);
+					        console.log("tab2 버튼 테스트 : " + nickName);
+					        
+					        getoutUserInfo = new Array();
+					        console.log("tab2 버튼 테스트 : " + getoutUserInfo);
+					        
+					        getoutUserInfo = {studyId, nickName};
+					        console.log("tab2 버튼 테스트 : " + getoutUserInfo);
+					        
+					        var thisContent = this;
+					        
+				        	$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/DenyUser",
+								data : JSON.stringify(getoutUserInfo),
+								dataType : "json",
+								success : function(data) {
+									console.log("Deny 실행됨");
+									if(data==true){
+										console.log("완전 성공");
+										contentCheck = thisContent.parentElement.parentElement.parentElement;
+										thisContent.parentElement.parentElement.parentElement.remove();
+										//thisContent.parentElement.parentElement.outerHTML = "";
+									}else{
+										console.log("잘못 된 시도 발생")
+										window.location.reload();
+									}
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
+						});
+						
+						//tab2에서 수락 버튼 클릭시 단일 인자를 삭제하는 함수
+						$(".okButton").on("click", function(){
+							studyId =  window.name;
+							nickName = this.name;
+					        console.log("tab2 창 테스트 : " + studyId);
+					        console.log("tab2 버튼 테스트 : " + nickName);
+					        
+					        getoutUserInfo = new Array();
+					        console.log("tab2 버튼 테스트 : " + getoutUserInfo);
+					        
+					        getoutUserInfo = {studyId, nickName};
+					        console.log("tab2 버튼 테스트 : " + getoutUserInfo);
+					        
+					        var thisContent = this;
+					        
+				        	$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/OKUser",
+								data : JSON.stringify(getoutUserInfo),
+								dataType : "json",
+								success : function(data) {
+									console.log("OK 실행됨");
+									if(data==true){
+										console.log("완전 성공");
+										contentCheck = thisContent.parentElement.parentElement.parentElement;
+										thisContent.parentElement.parentElement.parentElement.remove();
+										//thisContent.parentElement.parentElement.outerHTML = "";
+									}else{
+										console.log("잘못 된 시도 발생")
+										window.location.reload();
+									}
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
+						});
+						
+						//tab2 에서 선택 된 요소를 모두 거절하거나, 수락하는 함수
+						$('.selectedAllOKDenyButton').on("click", function(){
+							var allUserCheckBox = $(".userCheckBox2");
+							var checkedUserInfoMapList= new Array();
+							var checkedElementList = new Array();
+							var studyId = window.name;
+							var checkedCount = 0;
+							let selectOption = this.value;
+							let nickName;
+							for(let count = 0; count<allUserCheckBox.length; count++){
+								if(allUserCheckBox[count].checked == true){
+									//체크 돼있는거면
+									nickName = allUserCheckBox[count].value;
+									
+									//StudyId와 nickName을 Map에 넣고, List에 다시 넣는다.
+									checkedUserInfoMapList[checkedCount] = {studyId, nickName, selectOption};
+									
+									console.log(checkedUserInfoMapList);
+									//contentCheck = checkedUserInfoMapList;
+									contentCheck2[checkedCount] = allUserCheckBox[count];
+									checkedElementList[checkedCount] = allUserCheckBox[count];
+									checkedCount++;
+								}
+							}
+							$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/SelectedAllOKDenyButton",
+								data : JSON.stringify(checkedUserInfoMapList),
+								dataType : "json",
+								success : function(data) {
+									console.log("실행됨");
+									console.log(data.length);
+									contentCheck = data;
+									for(let listCount=0; listCount<data.length; listCount++){
+										if(data[listCount]==true){
+											console.log("삭제하는 인자 : " + checkedElementList[listCount].parentElement.parentElement);
+											//contentCheck = checkedElementList[listCount].parentElement.parentElement;
+											checkedElementList[listCount].parentElement.parentElement.remove();
+										}else{
+											console.log("수행도중 값 변경");
+										}
+									}
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
+						});
+						
+						$('#OKBye').on("click", function(){
+							var studyId = window.name;
+							$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/CloseStudy",
+								data : studyId,
+								dataType : "text",
+								success : function(data) {
+									console.log("실행됨");
+									alert(data);
+									self.close();
+									alert("스터디가 해체되었습니다.")
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
+						});
+						
+						$('#nav-home-tab').on('click', function(){
+							window.location.reload();
+						});
+						
+						//요소를 결과에 따라 요소를 만들어주는 함수
+						$(".testViewButton").on("click", function(){
+							let studyId = window.name;
+							let nickName = this.value;
+							$("#nickNamehidden").val(nickName);
+							
+							var userInfo = {studyId, nickName};
+							console.log(userInfo);
+							$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/TestView",
+								data : JSON.stringify(userInfo),
+								dataType : "json",
+								success : function(data) {
+									$('.addTr').remove();
+									console.log("성공함");
+									console.log(data);
+									contentCheck = data;
+									let correctCount = 0;
+									for(let i=0; i<data.length; i++){
+										$('#testResultTable').append(
+										"<tr class='addTr'>"+
+					        			"<td><input type='checkBox' class='addCheckBox' value='" + data[i].questionNumber +"'/></td>"+
+					        			"<td class='tableShape numberArea'>" + data[i].questionNumber + "</td>"+
+					        			"<td class='tableShape typeArea'>" + data[i].levelTestTypeCode + "</td>"+
+					        			"<td class='tableShape exampleArea'>" + data[i].content + "</td>"+
+					        			"<td class='tableShape correctArea'>" + data[i].correctAnswer + "</td>"+
+					        			"<td class='tableShape differentArea'>" + data[i].submitAnswer + "</td>"+
+					        			"<td class='tableShape resultArea'>"+ data[i].isCorrect + "</td>"+
+					        			"</tr>");
+										
+										if(data[i].isCorrect=="O"){
+											correctCount++;
+										}
+									}
+									$('#testResultPercent').append("총 " + data.length + "문제 중 " + correctCount
+											+ "문제 정답 (정답률 "+ Math.floor(correctCount/data.length*100) +"%)")
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
+						});
+						
+						//tab2 에서 선택 된 요소를 모두 거절하거나, 수락하는 함수
+						$('.OXButton').on("click", function(){
+							var allOXCheckBox = $(".addCheckBox");
+							var checkedUserInfoMapList= new Array();
+							var checkedElementList = new Array();
+							var studyId = window.name;
+							var checkedCount = 0;
+							let nickName = $('#nickNamehidden').val();
+							let selectOption = this.value;
+							let selectNumber;
+							for(let count = 0; count<allOXCheckBox.length; count++){
+								if(allOXCheckBox[count].checked == true){
+									//체크 돼있는거면
+									selectNumber = allOXCheckBox[count].value;
+									//StudyId와 nickName을 Map에 넣고, List에 다시 넣는다.
+									checkedUserInfoMapList[checkedCount] = {studyId, nickName, selectOption, selectNumber};
+									
+									console.log(checkedUserInfoMapList);
+									//contentCheck = checkedUserInfoMapList;
+									contentCheck2[checkedCount] = allOXCheckBox[count];
+									checkedElementList[checkedCount] = allOXCheckBox[count];
+									checkedCount++;
+								}
+							}
+							
+							//OX 테스트 구문
+							for(let count = 0; count<checkedElementList.length; count++){
+								checkedElementList[count].parentElement.parentElement.children[6].textContent = selectOption;
+								console.log(checkedElementList[count].parentElement.parentElement.children[6].textContent);
+							}
+							
+							$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=UTF-8",
+								url : "/StudyPage/TestModify",
+								data : JSON.stringify(checkedUserInfoMapList),
+								dataType : "json",
+								success : function(data) {
+									console.log("실행됨");
+									/* console.log(data.length);
+									contentCheck = data;
+									for(let listCount=0; listCount<data.length; listCount++){
+										if(data[listCount]==true){
+											console.log("변경되는 인자 : " + checkedElementList[listCount].parentElement.parentElement);
+											//contentCheck = checkedElementList[listCount].parentElement.parentElement;
+											checkedElementList[listCount].parentElement.parentElement.children[6].textContent=selectOption;
+										}else{
+											console.log("수행도중 값 변경");
+										}
+									} */
+								},error : function(data) {
+									alert("실패함");
+									console.log(data);
+								}
+							});
 						});
 					});
             

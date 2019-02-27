@@ -391,7 +391,9 @@ a {
 	<script th:src="@{/searchInterest.js}"></script>
 	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 	<script th:src="@{/map.js}"></script>
-	<script th:src="@{/assets/js/jquery.min.js}"></script>
+	<th:block layout:fragment="jquery">
+		<script th:src="@{/assets/js/jquery.min.js}"></script>
+	</th:block>
 	<script th:src="@{/assets/js/browser.min.js}"></script>
 	<script th:src="@{/assets/js/breakpoints.min.js}"></script>
 	<script th:src="@{/assets/js/util.js}"></script>
@@ -423,6 +425,7 @@ a {
 					moveStudy.target = studyNameAndStudyIdMap[selectStudyName];
 					moveStudy.method = "post";
 					moveStudy.submit();
+					this.selectedIndex = 0;
 				}
 				
 				/* for ( var i = 0; i < studyName.length; i++) {
@@ -479,18 +482,19 @@ a {
 	//웹소켓 설정
 	var socket = null;
 	$(document).ready(function(){
-		connectWS();
 		
+		connectWS();
 
 	});
 	
-	function connectWS() {
-	    console.log("소켓연결")
+	
+	 function connectWS() {
+	   
 	   var ws = new SockJS("/StudyEcho"); 
 	    socket = ws;
 	    
 	    ws.onopen = function () {
-	        console.log('소켓연결 open');
+	        
 	    };
 
 	    ws.onmessage = function (event) {
@@ -520,23 +524,16 @@ a {
 	    };
 
 	    ws.onclose = function (event) { 
-	        console.log('소켓닫음');
+	       
 	        
 	    };
 	    ws.onerror = function (err) { console.log('Error:', err); };
-	}
+	} 
 	
 	
-
-
-
 	
 	</script>
-	
-	
 
 	
-	
-
 </body>
 </html>

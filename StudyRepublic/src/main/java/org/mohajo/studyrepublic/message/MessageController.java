@@ -12,12 +12,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.ReceiveMessage;
+import org.mohajo.studyrepublic.domain.Report;
+import org.mohajo.studyrepublic.domain.ReportTypeCD;
+import org.mohajo.studyrepublic.domain.ReportWhyCD;
 import org.mohajo.studyrepublic.domain.SendMessage;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.ReceiveMessageRepository;
+import org.mohajo.studyrepublic.repository.ReportRepository;
 import org.mohajo.studyrepublic.repository.SendMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,8 +34,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.java.Log;
 
@@ -44,6 +51,11 @@ public class MessageController {
 	private SendMessageRepository sendmessagerepository;
 	@Autowired
 	private ReceiveMessageRepository receivemessagerepository;
+	
+	@Autowired
+	MemberRepository memberRepository;
+	@Autowired
+	ReportRepository reportRepository;
 	
 	/*받은쪽지함
 	@RequestMapping("/receiveMessage")
@@ -228,20 +240,21 @@ public class MessageController {
 	public String receiveMessageView(Model model, @RequestParam("messageReceiveId") int messageReceiveId) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		
-		List<ReceiveMessage> viewReceiveMessage = receivemessagerepository.findByMessageReceiveId(messageReceiveId,id);
+		Member member = memberRepository.findById(id).get();
+	    model.addAttribute("member",member);
+
+
+	    ReceiveMessage viewReceiveMessage = receivemessagerepository.findById(messageReceiveId).get();
+	    System.out.println(viewReceiveMessage.toString());
 		model.addAttribute("viewReceiveMessage", viewReceiveMessage);
+		
+//		List<ReceiveMessage> viewReceiveMessage = receivemessagerepository.findByMessageReceiveId(messageReceiveId,id);
+//		model.addAttribute("viewReceiveMessage", viewReceiveMessage);
 		
 		return "MessageTest/viewreceiveMessage";
 		
 	}
-		
-		
-		
-		
-		
-		
-		
+	
 	
 	
 	/*보낸 쪽지 삭제 상태값 변환*/
@@ -358,7 +371,28 @@ public class MessageController {
 		    return "redirect:"+ referer;
 	}
 
-		
+	//신고하기
+		@PostMapping("/reportMessage")
+		@ResponseBody
+		public int boardReport(Model model, String id,String target,String reportTypeCD,int reportWhyCD,String content) {
+	   
+	  
+	     
+	     
+	     Report report = new Report();
+	     report.setId(id);
+	     report.setTarget(target);
+
+	     report.setReportTypeCD(new ReportTypeCD(reportTypeCD));
+	     report.setReportWhyCD(new ReportWhyCD(reportWhyCD));
+	     report.setContent(content);
+	     
+	     reportRepository.save(report);
+	     
+		      
+			return 1;
+	      
+		}
 		
 		
 }

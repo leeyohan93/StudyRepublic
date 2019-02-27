@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}"><head>
+<meta charset="UTF-8">
+<title>레벨테스트</title>
+</head>
+
+<th:block layout:fragment="customCss">
+	<style>
+	
+		h4 {
+		    letter-spacing: 3px;
+    		padding: 0.5em;
+		}
+
+		/* 출처:	https://tiblog.tistory.com/42 */
+		.sns-go {text-align:center; padding: 20px 0;}
+		.sns-go li {display:inline-block; margin: 0 5px; }
+		.sns-go li img {border-radius:50%;}	
+		
+		.sns-go a {
+			font-size: 0 !important; 
+		}
+
+		.main {
+			background-color: white !important;
+		}
+		
+		section {
+			margin-top: 3rem !important;
+			margin-bottom: 3rem !important;
+			margin-left: 50%;
+			transform: translateX(-50%);
+			width: 70%;	
+		}
+		
+		.page-title {
+			text-align: center;
+			font-weight: bold;
+			letter-spacing: 0.15em !important;
+    		font-weight: 600 !important;
+		}
+		
+		.page-go {
+		    width: 25rem;
+        	margin-left: 50%;
+		   transform: translateX(-50%);
+		   /* color: black; */
+		   margin-top: 2rem;
+		   margin-bottom: 2rem;
+		
+		}
+		
+		.join-form-btn {
+		    width: 100% !important;
+	        margin: 1rem auto;
+            font-size: 1rem !important;
+    		font-weight: 540;
+		    
+		}
+		
+		.href-btn {
+			display: block;
+		}
+		
+		ul {
+			padding: unset !important;
+		}
+		
+		
+		
+	</style>
+	<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+	
+</th:block>
+
+<body>
+
+	<div layout:fragment="main" class="main">
+		<div class="inner">
+		
+			<section>
+				<div class="page-header">
+					<div class="page-title">
+						<h3>스터디 가입 신청이 완료되었습니다.</h3>
+						<h4>리더가 승인하면 가입이 확정됩니다.</h4>
+						<hr>
+					</div>
+					<div class="page-description">
+						<p>
+						-	신청 상태는 마이페이지에서 확인하실 수 있습니다.<br/>
+						-	공유하기 버튼을 눌러 내가 신청한 스터디를 지인들과 공유해보세요!
+						</p>
+					</div>
+				</div>
+				
+				<div class="page-footer">
+					
+					<div class="page-go">
+						<a class="href-btn join-form-btn" href="/activityinfo">신청 상태 확인하기</a>
+						<a class="href-btn join-form-btn" th:href="'/study/detail/' + ${studyId}">스터디 상세 페이지로 이동</a>
+					</div>
+					
+					<!-- 출처:	https://tiblog.tistory.com/42 -->
+					<!-- 창 크기를 조정할 것 -->
+					<!-- 연결되는 링크를 /study/detail/studyId 로 변경할 것 -->
+					<div class="sns-go">
+					  <ul>
+					    <li>
+	<!-- 				      <a href="#" onclick="javascript:window.open('http://share.naver.com/web/shareView.nhn?url=' +encodeURIComponent(document.URL)+'&title='+encodeURIComponent(document.title), 'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Naver" ><img src="/images/sns/sns_naver.png" width="40" alt="네이버 블러그 공유하기"></a> -->
+					      <a id="sns-naver" href="#" target="_blank" alt="Share on Naver" ><img src="/images/sns/sns_naver.png" width="40" alt="네이버 블로그 공유하기"></a>
+					    </li>
+					    <li>
+					    	<!-- 페이스북은 오류 발생. 다음 링크를 참고하여 변경할 것 .... 또 잘 나오길래 놔두었다ㅎㅎ -->
+					    	<!-- https://developers.facebook.com/docs/sharing/web -->
+					      <a id="sns-facebook" href="#" target="_blank" alt="Share on Facebook" ><img src="/images/sns/sns_face.png" width="40" alt="페이스북 공유하기"></a>
+					    </li>
+					    <li>
+					      <a id="sns-twitter" href="#" target="_blank" alt="Share on Twitter" ><img src="/images/sns/sns_tw.png" width="40" alt="트위터 공유하기"></a>
+					    </li>
+					    <li>
+					      <a id="sns-googlePlus" href="#" target="_blank" alt="Share on Google+"><img src="/images/sns/sns_google.png" width="40" alt="구글 플러스 공유하기"></a>
+					    </li>
+					    <li>
+					      <a id="sns-kakao" href="#" target="_blank" alt="Share on kakaostory"><img src="/images/sns/sns_kakao.png" width="40" alt="카카오스토리 공유하기"></a>
+					    </li>
+					  </ul>
+					</div>
+					
+				</div>			
+			</section>
+		
+		</div>
+	</div>
+
+	<th:block layout:fragment="customScript">
+		<script type="text/javascript" th:inline="javascript">
+		
+			/* <![CDATA[ */   
+
+			var studyId = /*[[${studyId}]]*/;
+			var studyName = /*[[${studyName}]]*/;
+
+			/* ]]> */
+			
+			
+			$('.sns-go ul li a').click(function() {
+				
+				var targetId = $(this).attr('id');
+				
+				switch(targetId) {
+				
+					case "sns-naver":
+						window.open('http://share.naver.com/web/shareView.nhn?url=' + encodeURIComponent(window.location.origin + '/study/detail/' + studyId) + '&title=' + encodeURIComponent(document.title), 
+								'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=496,width=600');
+						return false;
+						break;
+						
+					case "sns-facebook":
+						window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.origin + '/study/detail/' + studyId) + '&t=' + encodeURIComponent(studyName), 
+								'facebooksharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+						return false;
+						break;
+						
+					case "sns-twitter":
+						window.open('https://twitter.com/intent/tweet?text=[%EA%B3%B5%EC%9C%A0]%20' + encodeURIComponent(window.location.origin + '/study/detail/' + studyId) + '%20-%20' + encodeURIComponent(studyName),
+								'twittersharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=406,width=600');
+						return false;
+						break;
+						
+					case "sns-googlePlus":
+						window.open('https://plus.google.com/share?url=' +encodeURIComponent(window.location.origin + '/study/detail/' + studyId), 
+								'googleplussharedialog','menubar=no,toolbar=no,resizable=yes, scrollbars=yes,height=350,width=600');
+						return false; 
+						break;
+						
+					case "sns-kakao":
+						window.open('https://story.kakao.com/s/share?url=' +encodeURIComponent(window.location.origin + '/study/detail/' + studyId), 
+								'kakaostorysharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes, height=400,width=600');
+						return false;
+						break;
+
+				}
+				
+			});
+			
+			
+
+		</script>
+	</th:block>
+</body>
+</html>

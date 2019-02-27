@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mainLayout}">
+<head>
+
+
+
+
+<title>강사신청내역</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+default header name is X-CSRF-TOKEN
+<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
+===============================================================================================
+<link rel="icon" type="image/png"
+	href="/Login_v18/images/icons/favicon.ico" />
+===============================================================================================
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/bootstrap/css/bootstrap.min.css">
+===============================================================================================
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+===============================================================================================
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+===============================================================================================
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/animate/animate.css">
+===============================================================================================
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/css-hamburgers/hamburgers.min.css">
+===============================================================================================
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/animsition/css/animsition.min.css">
+===============================================================================================
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/select2/select2.min.css">
+===============================================================================================
+<link rel="stylesheet" type="text/css"
+	href="/Login_v18/vendor/daterangepicker/daterangepicker.css">
+===============================================================================================
+<link rel="stylesheet" type="text/css" href="/Login_v18/css/util.css">
+<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+===============================================================================================
+
+<style>
+ table {
+    border: 1px solid #444444;
+    border-collapse: collapse;
+    border-radius:100%;
+    }
+    
+table td {
+padding: 2em 1.2em;
+    border: 1px solid #444444;
+    border-collapse: collapse;
+} 
+
+<style>  
+  table {
+    width: 100%;
+    border-top: 1px solid #444444;
+    border-collapse: collapse;
+  }
+/*   table td {
+  	padding:1.5em 1em;
+  } */
+  tr, td {
+    border-bottom: 1px solid #444444;
+    padding: 10px;
+    text-align: center;
+ 
+  }
+  
+
+  tr:nth-child(2n), td:nth-child(2n) {
+    background-color: #eee;
+
+  }
+  tr:nth-child(2n+1), td:nth-child(2n+1) {
+    background-color: #c9c9c9a6;
+    /*  font-weight:bold  */
+  }
+  
+  td:nth-child(2n+1) {
+  font-weight:bold
+  }
+
+</style>
+
+</head>
+<body>
+
+	<div id="wrapper">
+		<div layout:fragment="main">
+			<div class="inner">
+
+
+
+				<div class="limiter">
+
+
+					<div class="filePicture">
+						<div th:each="md : ${mdu}">
+							<form class="login100-form validate-form" name="image_Form"
+								id="image_Form" action="attachments" method="post"
+								style="margin-top: 50px; margin-bottom: 0; width: 940px; padding: 50px 55px 0px 55px;">
+								<span class="login100-form-title p-b-43"> 프리미엄등급 신청 내역 </span>
+
+								<div class="wrap-input100_label" th:each = "member : ${mdu}"style="width: auto; height: auto; margin-bottom: 120px" >
+									<span class="label-input100_label"  th:text = "${member.name} + '님 신청내역'"style="width: 220px; font-size:25px">
+										</span>
+								</div>
+
+
+								<div class="wrap-input100_label"
+									style="width: auto; height: auto; margin-bottom: 80px">
+									<span class="label-input100_label" style="width: 60px;">
+										프로필</span>
+								</div>
+								
+								<div class="wrap-input100_ validate-input" style = "width:250px; float:left;">
+								<img id="img_profile"
+									th:src="@{'/member_image/'+${md.profileSaveName}}"
+									style="width: 200px; height: 240px; border-radius:100%;"  />
+									</div>
+
+								   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+								   
+								<div class="wrap-input100_ validate-input" style = "width:500px;float:left; top:53px;">	
+								
+								<div th:each="member : ${mdu}" >
+								<div th:text= "${member.name}"></div>
+								</div>
+								
+								</div>	
+								
+						<div class="join-input100" style = "float:left;"> 
+			
+						<span class="focus-input100"></span>
+						<span class="label-input100">윤성호</span>
+						<span class="label-input100">이름</span>
+						</div>
+							
+					<div class="wrap-input100_ validate-input" style = "width:500px;float:left;">
+					<table id="table" class="bluetop" th:each="member : ${mdu}" th:inline = "text" border = "1">
+					
+					<tr >
+					<td>이름</td><td th:text = "${member.name}"></td>
+					<td>생년월일</td><td th:text = "${member.birth}"></td>
+					</tr>
+					<tr>
+					<td>닉네임</td><td th:text = "${member.nickname}"></td>
+					<td>최종학력</td><td th:text = "${tutorEducationCD}"></td>
+					</tr>
+					<tr>
+					<td>이메일</td><td th:text = "${member.email}"></td>
+				    <td>연락처</td><td th:text = "${member.phonenumber}"></td>
+					</tr>
+					
+					</table>
+					</div>
+							
+							</form>
+
+						</div>
+					</div>
+
+				<form id="tutorjoin" class="login100-form validate-form" method="post" autocomplete="off" action="/tutor/delete/inquery" enctype="multipart/form-data" style="width: 940px; padding: 0px 55px 55px 55px;">
+
+
+						<input class="input100" type="text" id="id" name="member"
+							th:value="${id}" readonly="readonly" style="display: none">
+
+
+						<div class="wrap-input100_label"
+							style="width: auto; height: auto; margin-bottom: 30px"></div>
+
+
+
+
+						<div class="wrap-input100_label"
+							style="width: auto; height: auto; margin-bottom: 70px">
+							<span class="label-input100_label" style="width: 80px;">
+								경력사항</span>
+						</div>
+											
+						
+						
+							<div class="wrap-input100 validate-input" style="padding: 20px; margin: auto; margin-bottom: 40px;">
+
+							<div class="wrap-input100_ validate-input_">
+								<div th:each="selc : ${selectedtutorcareer}">
+								<div id="career" name="career">
+									<div class="ysh" id="sedu" style="margin-bottom: 20px; padding: 0"><span class="yshspan">></span></div>
+									<div class="ysh" id="sedu" style="margin-bottom: 20px;"><span class="yshspan" th:text = "${selc.careerCD.codeValueKorean}">&gt;</span></div>
+								</div>
+								
+							</div>
+							</div>
+							</div>
+							
+							
+						<div class="wrap-input100_label"
+							style="width: auto; height: auto; margin-bottom: 70px">
+							<span class="label-input100_label" style="width: 132px;">
+								스터디희망분야</span>
+						</div>
+							
+							
+							<div class="wrap-input100 validate-input" style="padding: 20px; margin: auto; margin-bottom: 40px;">
+
+							<div class="wrap-input100_ validate-input_">
+								<div th:each="seli : ${selectedtutorinterest}">
+								<div id="interest" name="interest">
+									<div class="ysh" id="sedu" style="margin-bottom: 20px; padding: 0"><span class="yshspan">></span></div>
+									<div class="ysh" id="sedu" style="margin-bottom: 20px;"><span class="yshspan" th:text = "${seli.interest2CD.codeValueKorean}">&gt;</span></div>
+								</div>
+								
+							</div>
+							</div>
+							
+
+
+
+							<div class="wrap-input100_ validate-input">
+								<div id="interest1cd" name="interest1cd">
+									<div id="int1"></div>
+								</div>
+							</div>
+
+							<div class="wrap-input100_ validate-input">
+								<div id="interest2cd" name="interest2cd">
+									<div id="int2"><input type="text" id="isel0" name="tutorinterest[0].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel0" onclick="deleteInterest(0)" style="display: none;"><div id="liisel0" class="ysh"><span class="yshspan"> &gt; 네트워크관리</span> <input class="yshbtn" type="button" value="X" id="liidel0" onclick="deleteInterest(0)"></div><input type="text" id="isel1" name="tutorinterest[1].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel1" onclick="deleteInterest(1)" style="display: none;"><div id="liisel1" class="ysh"><span class="yshspan"> &gt; LINUX</span> <input class="yshbtn" type="button" value="X" id="liidel1" onclick="deleteInterest(1)"></div><input type="text" id="isel2" name="tutorinterest[2].interest2CD" style="display: none;"> <input type="button" value="삭제" id="idel2" onclick="deleteInterest(2)" style="display: none;"><div id="liisel2" class="ysh"><span class="yshspan"> &gt; 서버관리</span> <input class="yshbtn" type="button" value="X" id="liidel2" onclick="deleteInterest(2)"></div></div>
+								</div>
+							</div>
+
+						</div>					
+							
+						
+
+
+						<div class="wrap-input100 validate-input"
+							style="width: auto; margin: 0; border: none; margin: auto;">
+							<div class="wrap-input100_label"
+								style="width: auto; display: block; margin-bottom: 20px">
+								<span class="label-input100_label" style="width: 95px;">
+									자기소개</span>
+							</div>
+						</div>
+
+						<div class="join-input100" th:each = "tutor : ${tutor}"
+							style="width: 100%; height: 500px; align-items: baseline">
+							<div class="input100" name="introduction"  th:text = "${tutor.introduction}"
+								style="padding: 20px; width: 830px; height: 500px"></div>
+						</div>
+
+
+						<div class="wrap-input100 validate-input"
+							style="width: auto; margin: 0; border: none; margin: auto;">
+							<div class="wrap-input100_label"
+								style="width: auto; display: block; margin-bottom: 20px">
+								<span class="label-input100_label" style="width: 100px;">*
+									증명서류</span>
+							</div>
+						</div>
+
+
+
+						<div class="wrap-input100 validate-input" id="fileDumy" style="height: 100%; padding: 30px;  width:800px; margin-bottom: 40px; float: left;">
+					
+						 <input name = "tutorNumber" th:value = "${tutor.tutorNumber}" style = "display:none"> 
+						<div th:each = "tf : ${tutoruploadfile}"  >
+						<div class = "file_input" style = "margin:10px 50px 0 0; width: 300px" > 
+						<span th:text = "${tf.tutorfileOriginname}" ></span>
+						<input id = "fileUrl" name = "tutorFileFullUrl" type = "text" th:value = "${tf.tutorFileFullUrl}" style = "display:none">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+						<a th:href = "${tf.tutorfilePartUrl}" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a>
+						<a th:href = "@{'/tutor/file'(tutorFileFullUrl=${tf.tutorFileFullUrl})}" style = "color:blue">다운로드</a> 
+						</div>
+						<a th:href = "@{'/tutor/file/delete'(tutorFileFullUrl=${tf.tutorFileFullUrl})}">X(삭제)</a> 
+						</div>
+
+						</div>
+
+
+
+
+
+
+						<div class="wrap-input100 validate-input"
+							style="border: none; margin: auto; width: 400px">
+							<div class="join-form-btn"
+								style="display: inline-block; width: auto; height: auto; margin: auto;">
+								<button type="button" onclick="location.href='/index'">
+									돌아가기</button>
+							</div>
+
+							<div class="join-form-btn"
+								style="display: inline-block; width: auto; height: auto; margin: auto;">
+								<button type="submit" id="signup">신청취소</button>
+							</div>
+						</div>
+						
+						
+				
+						<input type="hidden" th:name="${_csrf.parameterName}"
+							th:value="${_csrf.token}" />
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+							<input type = "submit" value = "신청취소">
+				</form>
+
+
+
+
+
+</div>
+
+
+			</div>
+
+
+
+
+			===============================================================================================
+			<script src="/Login_v18/vendor/jquery/jquery-3.2.1.min.js"></script>
+			===============================================================================================
+			<script src="/Login_v18/vendor/animsition/js/animsition.min.js"></script>
+			===============================================================================================
+			<script src="/Login_v18/vendor/bootstrap/js/popper.js"></script>
+			<script src="/Login_v18/vendor/bootstrap/js/bootstrap.min.js"></script>
+			===============================================================================================
+			<script src="/Login_v18/vendor/select2/select2.min.js"></script>
+			===============================================================================================
+			<script src="/Login_v18/vendor/daterangepicker/moment.min.js"></script>
+			===============================================================================================
+			<script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
+			===============================================================================================
+			<script src="/Login_v18/js/main.js"></script>
+
+			<script
+				src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			<script>
+			
+</script>
+
+		</div>
+	</div>
+	
+
+
+
+</body>
+</html>

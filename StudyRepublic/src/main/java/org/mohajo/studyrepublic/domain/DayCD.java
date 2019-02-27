@@ -21,7 +21,8 @@ import lombok.Data;
 public class DayCD implements Serializable {
 
 	@Id
-	private String dayCode;
+//	private String dayCode;
+	private int dayCode;
 	
 	private String codeValueEnglish;
 	

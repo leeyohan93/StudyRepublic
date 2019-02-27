@@ -1,10 +1,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{/layout/mainLayout}">
-
 <head>
 <title>Main Page</title>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
 <style>
 .dropdown-toggle::after {
 	border: none !important;
@@ -192,7 +194,8 @@
 											</div>
 											<div class="footer">
 												<div class="social-links text-center">
-													<a href="#">신청</a> <a
+													<input type="hidden" class="studyId-container" th:value="${study.studyId}">
+													<a class="btn-join-study" th:href="@{'/study/join/' + ${study.studyId}}">신청</a> <a
 														th:href="@{'/study/detail/' + ${study.studyId}}">상세</a>
 												</div>
 											</div>
@@ -353,7 +356,8 @@
 											</div>
 											<div class="footer">
 												<div class="social-links text-center">
-													<a href="#">신청</a> <a
+													<input type="hidden" class="studyId-container" th:value="${study.studyId}">
+													<a class="btn-join-study" th:href="@{'/study/join/' + ${study.studyId}}">신청</a> <a
 														th:href="@{'/study/detail/' + ${study.studyId}}">상세</a>
 												</div>
 											</div>
@@ -432,176 +436,406 @@
 									<a th:text="${member.nickname}" href="#"
 										class="list-group-item">aaa123</a>
 								</div> -->
-								<div class="list-group"
-									th:each="member : ${recommendNomalMember}">
-									<div class="dropdown">
-										<a class="list-group-item" data-toggle="dropdown"
-											th:text="${member.nickname}"></a>
+								<div class="list-group"	th:each="member : ${recommendTutorMember}">
+										<div class="dropdown">
+         								<a class="list-group-item" data-toggle="dropdown" th:text="${member.nickname}"></a>
+          								<div class="dropdown-menu">
+								        <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${member.id}" >쪽지쓰기</a>
+								        <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${member.id}" >유저정보</a>
+								        <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${member.id}" >신고하기</a>
+								        </div>
+    								</div>	
 
-										<div class="dropdown-menu">
-											<a class="dropdown-item" data-toggle="modal"
-												data-target="#messagewrite"
-												th:data-receive-id="${member.id}">쪽지쓰기</a> <a
-												class="dropdown-item" data-toggle="modal"
-												data-target="#memberinfo" th:data-member-info="${member.id}">유저정보</a>
-										</div>
-									</div>
 								</div>
-								<!-- 모달창 쪽지쓰기창 시작 -->
+								
 								<div class="modal" id="messagewrite">
-									<div class="modal-dialog">
-										<div class="modal-content">
+               <div class="modal-dialog">
+                  <div class="modal-content">
+                  
+                    <div class="modal-header">
+                      <h4 class="modal-title">쪽지쓰기</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    
+                    <div class="modal-body">
+                      
+                    <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
+                        <div class="card border-primary rounded-0">
+                            <div class="card-header p-0">
+                                <div class="bg-info text-white text-center py-2" style="width: 100%;">
+                                    <h3><i class="fa fa-envelope"></i> </h3>
+                                    <p class="m-0">쪽지쓰기</p>
+                                </div>
+                            </div>
+                            <div class="card-body p-3">
 
-											<div class="modal-header">
-												<h4 class="modal-title">쪽지쓰기</h4>
-												<button type="button" class="close" data-dismiss="modal">&times;</button>
-											</div>
+                                <!--Body-->
+                                <div class="form-group">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="border: solid 1px;"><i class="fa fa-user text-info"></i></div>
+                                        </div> 
+                                        <input type="text" class="form-control" id="receiveId" name="receiveId" placeholder="받는사람을 입력해주세요." value="" required style="margin-left: 1%;
+                                     border: solid 1px;">
+                                    </div>
+                                </div>
+  
+                                <div class="form-group">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend" style="border: solid 1px;border-radius: 5px; margin-bottom: 1%;">
+                                            <div class="input-group-text"><i class="fa fa-comment text-info"></i></div>
+                                        </div>
+                                        <div class="textarea-wrapper" style="width: 100%; border:solid 1px; border-radius: 5px;">
+                                        <textarea class="form-control" name="messageContent" id="messageContent" placeholder="내용을 입력해주세요."  required></textarea>
+                                        </div> 
+                                    </div>
+                                </div>
+                                <div class="text-center" style="width:100%;">
+                                      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+                                    <input type="submit" value="전송하기" class="btn btn-info btn-block rounded-0 py-2" id="gomessage">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
 
+                           
+                                        
+                                 
 
-											<div class="modal-body">
-												<form method="POST" action="/modalmessageWriteResult"
-													name="modalmessage">
-													<div class="card border-primary rounded-0">
-														<div class="card-header p-0">
-															<div class="bg-info text-white text-center py-2">
-																<h3>
-																	<i class="fa fa-envelope"></i>
-																</h3>
-																<p class="m-0">쪽지쓰기</p>
-															</div>
-														</div>
-														<div class="card-body p-3">
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal"> Close</button>
+                    </div>
+                  </div>
+               </div>
+            </div>
+            
+            <!-- 모달창 쪽지쓰기창 끝 -->
+            
+            <!-- 모달창 유저정보 시작 -->
+            <div class="modal" id="memberinfo">
+              <div class="modal-dialog">
+                <div class="modal-content" style="background-color:white";>
+            
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">회원정보</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+            
+                  <!-- Modal body -->
+                  <div class="modal-body2" id="modal_memberInfolist" style="text-align: center;">
+                  
+                  </div>
+            
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+            
+                </div>
+              </div>
+            </div>
+            
+            
+            
+              <!-- 모달창 유저정보 끝 -->
+              
+              <!-- 신고 modal  -->
 
-
-															<div class="form-group">
-																<div class="input-group mb-2">
-																	<div class="input-group-prepend">
-																		<div class="input-group-text">
-																			<i class="fa fa-user text-info"></i>
-																		</div>
-																	</div>
-																	<input type="text" class="form-control" id="receiveId"
-																		name="receiveId" placeholder="받는사람을 입력해주세요." value=""
-																		required />
-																</div>
-															</div>
-
-															<div class="form-group">
-																<div class="input-group mb-2">
-																	<div class="input-group-prepend">
-																		<div class="input-group-text">
-																			<i class="fa fa-comment text-info"></i>
-																		</div>
-																	</div>
-																	<textarea class="form-control" name="messageContent"
-																		id="messageContent" placeholder="내용을 입력해주세요." required></textarea>
-																</div>
-															</div>
-
-															<div class="text-center">
-																<input type="hidden" th:name="${_csrf.parameterName}"
-																	th:value="${_csrf.token}" /> <input type="button"
-																	value="전송하기" data-toggle="modal"
-																	data-target="#completemessage"
-																	class="btn btn-info btn-block rounded-0 py-2"
-																	onclick="gomessage()">
-															</div>
-															<span><a
-																class="btn btn-info btn-block rounded-0 py-2"
-																id="modimember" th:href="@{receiveMessage}"
-																role="button">취소</a></span>
-
-
-														</div>
-
-													</div>
-												</form>
-											</div>
-
-
-											<div class="modal-footer">
-												<button type="button" class="btn btn-danger"
-													data-dismiss="modal">Close</button>
-											</div>
-
-
-										</div>
+			<div class="modal fade" id="reportModal" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+						  <div>
+							<h3 id= "reportHeader">신고하기</h3>
+							</div>
+							
+							<button class="close" id="reportClose" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body" id="reportBody" style="text-align: center;">
+							<form id="reportForm">
+							  <input type="hidden" name = "reportTypeCD" value="member">
+						
+							   <input type="hidden" name = "id" id="reportUser" value="">
+							    <input type="hidden" name ="target" id="reportTarget" th:value="${member.id}">
+							<div>
+								<input class="reportOption" type="text" value="신고자" readonly>
+								<input class="reportContent" id ="reportUserNickname"name="idNickname" type="text"
+									value="" readonly>
 									</div>
-								</div>
-
-								<!-- 모달창 쪽지쓰기창 끝 -->
-								<!-- 모달창 완료 메세지 -->
-								<div class="modal" id="completemessage">
-
-									<div class="modal-dialog modal-sm">
-										<div class="modal-content">
-
-											<!-- Modal body -->
-											<div class="modal-body">쪽지가 전송되었습니다.</div>
-											<!-- Modal footer -->
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary"
-													data-dismiss="modal">Close</button>
-											</div>
-										</div>
+									<div>
+									 <input
+									class="reportOption" type="text" value="신고일" readonly>
+						<input class="reportContent" name="date" type="text" id="reportDate"
+									value=""
+									readonly> 
 									</div>
-								</div>
-
-								<!-- 모달창 유저정보 시작 -->
-								<div class="modal" id="memberinfo">
-									<div class="modal-dialog">
-										<div class="modal-content" style="background-color: white;">
-
-											<!-- Modal Header -->
-											<div class="modal-header">
-												<h4 class="modal-title">Modal Heading</h4>
-												<button type="button" class="close" data-dismiss="modal">&times;</button>
-											</div>
-
-											<!-- Modal body -->
-											<div class="modal-body">
-												<input type="text" id="memberInfo" name="memberInfo" value= />
-
-											</div>
-
-											<!-- Modal footer -->
-											<div class="modal-footer">
-												<button type="button" class="btn btn-danger"
-													data-dismiss="modal">Close</button>
-											</div>
-
-										</div>
+									<div>
+									<input class="reportOption"
+									type="text" value="신고대상자" readonly> <input
+									class="reportContent" name="targetNickname" id="reportTargetNickname" type="text"
+									th:value="${member.nickname}" readonly> 
 									</div>
-								</div>
-								<!-- 모달창 유저정보 끝 -->
-								<script>
-									$('#messagewrite')
-											.on(
-													'show.bs.modal',
-													function(e) {
-														var receiveId = $(
-																e.relatedTarget)
-																.data(
-																		'receive-id');
-														$(e.currentTarget)
-																.find(
-																		'input[name="receiveId"]')
-																.val(receiveId);
-													});
+									<div>
+									 <input
+									class="reportOption" type="text" value="신고유형" readonly>
+								<select class="reportContent" id="reportWhyCD" name="reportWhyCD">
+									<option value="1">영리목적 및 홍보성</option>
+									<option value="2">불법정보</option>
+									<option value="3">음란성 및 선정성</option>
+									<option value="4">욕설 및 인신공격</option>
+									<option value="5">개인정보노출</option>
+									<option value="6">반복게시 및 도배</option>
+									<option value="7">기타</option>
+								</select> 
+                                 </div>
+                                 <div>
+ 									<input class="reportOption" type="text" value="신고내용" id="reprotContentOption" readonly> <textarea class="reportContent" id="reportContent" name="content" placeholder="신고내용을 작성해주세요."
+									></textarea>
+									</div>
+						</div>
+						<div class="modal-footer" id="reportFooter">
+							<a class="btn" id="reportCancel" data-dismiss="modal">취소</a>
+							<a class="btn" id="reportRegister" data-toggle="model" data-target="#reportConfirm">신고하기</a>
+							</form>
+						</div>
 
-									$('#memberinfo')
-											.on(
-													'show.bs.modal',
-													function(e) {
-														var memberInfo = $(
-																e.relatedTarget)
-																.data(
-																		'member-info');
-														$(e.currentTarget)
-																.find(
-																		'input[name="memberInfo"]')
-																.val(memberInfo);
-													});
+					</div>
+				</div>
+
+			</div>
+
+		<!-- 신고 모달 끝 -->
+		
+			<!--신고자 신고자 닉네임  -->
+             <input type="hidden" id="loginUser" th:value="${session.userid}"/>
+             <input type="hidden" id="loginNickname" th:value="${session.nickname}"/>
+            
+            <!--신고자 신고자 닉네임  끝-->
+								
+								
+								<script type="text/javascript">
+								
+								var loginUser = $('#loginUser').val();
+								var loginNickname = $('#loginNickname').val();
+								var loginToday  = new Date().toLocaleString();
+								
+								
+								//ajax사용하기위한 전역변수
+								 var token = $("meta[name='_csrf']").attr("content");
+								 var header = $("meta[name='_csrf_header']").attr("content");
+
+							     $(document).ready(function() {
+							    	 
+							    	 
+							    	 //ajax사용
+							    	 $(document).ajaxSend(function(e, xhr, options) {
+							             xhr.setRequestHeader(header, token);
+							         });
+							     });
+							     
+								 //쪽지쓰기
+								$('#messagewrite').on('show.bs.modal', function(e) {
+							          var receiveId = $(e.relatedTarget).data('receive-id');
+							          $(e.currentTarget).find('input[name="receiveId"]').val(receiveId);
+							      });
+
+							      $('#memberinfo').on('show.bs.modal', function(e) {
+							          var memberInfo = $(e.relatedTarget).data('member-info');
+							          $(e.currentTarget).find('input[name="memberInfo"]').val(memberInfo);
+							          console.log("memberInfo: " +memberInfo);
+							          $.ajax({
+							             url: '/board/modalmember',
+							              type: 'get', 
+							              data: {id : memberInfo},
+							              datatype: 'JSON',
+							              success:function(data){
+							                 var mydata = data
+							                 var a = '';
+							                 /* alert(mydata); */
+							                 $("#img_profile").attr('src','/member_image/'+mydata.profileSaveName);
+							               if(mydata.visibility == 0){ 
+							                  a += '<img id="img_profile" src="/member_image/'+mydata.profileSaveName+'" style="border-radius:100%; width:200px; height:120px;" /><br>'
+							                  a +=  'Member ID :<font id="modal_memberId" name="modal_memberId" >'+mydata.id+'</font><br>'
+							                  a += 'Member Nick Name : <font id="modal_memberNickname" name="modal_memberNickname">'+mydata.nickname+'</font><br>'
+							                  a += '성별 : <font id="modal_memberGender" name="modal_memberGender">'+mydata.gender+'</font><br></div>'
+							               }else {
+							                  a += '<p>비공개입니다</p>'
+							                  
+							               }      
+							               $('.modal-body2').html(a);
+							                  
+							         
+							              },error : function(data, status, err){
+							                 
+							                 
+							                 console.log(status + ":" + err);
+							              }
+							          });
+							       
+							      });
+
+							      $('#gomessage').click(function(){
+							         
+							          alert("쪽지 전송이 완료되었습니다.")
+							      });
+							      
+							      $('#reportModal').on('show.bs.modal', function(e) {
+							    	  console.log("신고");
+							    	  
+							    	  var memberInfo = $(e.relatedTarget).data('member-info');
+							          $(e.currentTarget).find('input[name="memberInfo"]').val(memberInfo);
+							          console.log("memberInfo: " +memberInfo);
+							          $.ajax({
+								             url: 'board/modalmember',
+								              type: 'get', 
+								              data: {id : memberInfo},
+								              success:function(data){
+								            	  
+								            	  $('#reportTarget').val(data.id);
+								            	  $('#reportUser').val(loginUser);
+								            	  $('#reportTargetNickname').val(data.nickname);
+								            	  $('#reportUserNickname').val(loginNickname);
+								            	  $('#reportDate').val(loginToday);
+								            	  
+								              },
+								              
+								              error : function(data){
+								            	  console.log("실패");
+								              }
+								              });
+							      });
+							      
+							    //신고하기
+							       $('#reportRegister').click(function(){
+							      var reportData = $("#reportForm").serialize(); 
+							    	  console.log("reportData:" + reportData);
+							    	  
+							    	  if($('#reportTarget').val()== loginUser){
+							    		  Swal.fire("나를 신고 할수 없습니다.","");
+							    	  }else if($('#reportWhyCD').val()== ""){
+							    		  Swal.fire("신고유형을 선택해주세요.","");
+							    	  }else if($('#reportContent').val()== "" || $('#reportContent').val() == null || $('#reportContent').val() == '&nbsp;'){
+							    		  Swal.fire("신고내용을 입력해주세요.","");
+							    	  }
+							    	  else {
+							    		  reportInsert(reportData);
+							    	  }
+							     }); 
+
+							      function reportInsert(reportData){
+							    	  console.log(reportData);
+							    	  
+							    	  $.ajax({
+							    			url : '/board/report',
+							    			type :'post',
+							    			data : reportData,
+							    			success : function(){
+							    				console.log("성공");
+							    				Swal.fire("신고 처리 되었습니다.","");
+							    				$('#reportWhyCD').val("");
+							    				$('#reportContent').val("");
+							    				$("#reportModal .close").click()
+							    			},
+							    				
+							    			error :function(){
+							    				console.log("실패");
+							    			}
+							    		});
+							      }; 
+									
+									
+									
+								<!-- Spring Security ~ Ajax 관련 추가 코드 BY 성호님 -->
+								var token = $("meta[name='_csrf']").attr("content");
+								var header = $("meta[name='_csrf_header']").attr("content");
+								$(function() {
+									$(document).ajaxSend(function(e, xhr, options) {
+										xhr.setRequestHeader(header, token);
+									});
+								});
+									
+									<!-- 스터디 가입 신청 전 체크 -->
+										$('.btn-join-study').on('click', function(e) {
+											// 모집 마감된 스터디는 버튼을 비활성화 한다.
+											if ($('.btn-join-study').hasClass('disable')) {
+												e.preventDefault();
+												return;
+											}
+
+											// 1) 비로그인 유저의 경우 --> 로그인 페이지
+											// *** 로그인 여부 판별하는 방법 확인하기
+											var joinBtn = $('.btn-join-study')[0];
+											
+											var pathname = window.location.pathname;
+//							 				var studyId = pathname.replace('/study/detail/', '');
+											var studyId = $(this).prev('.studyId-container').val();
+											var originUrl = window.location.origin;
+											var location = "";
+											var userId = document.getElementById('loggedInUserId').value;
+
+											if (joinBtn.dataset.userType == "anonymous") {
+												alert("로그인 후 신청할 수 있어요!");
+												location = "/study/pleaseLogin/?pathname=" + pathname;
+												window.location.href = originUrl + location;
+//							 					location = "/login";
+//							 					window.location.replace = originUrl + location;					
+												// 로그인 후 스터디 가입 페이지로 이동하도록 처리할 것! ******** --> SecurityConfig.java 에서 처리 완료
+												// ==> 스터디 상세 페이지로 다시 이동해야 신청 권한 검증이 가능함. 처리 필요. 
+
+											} else if (joinBtn.dataset.userType == "authenticated") {
+												// 3) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우 --> 메시지	==> 예기치 못한 Ajax...
+												$.ajax({
+													type : "GET",
+													contentType : "application/json",
+													url : "/study/prejoin",
+													data : {
+														"studyId" : studyId,
+														"userId" : userId
+													},
+													/* dataType : 'json', */
+													cache : false,
+													timeout : 600000,
+													success : function(data) {
+														console.log("Success: " + data);
+														
+														if (!data) {
+															var answer = confirm("이 스터디에 가입하시겠어요?");
+															if(answer) {
+																location = "/study/join/" + studyId/*  + "?id=" + userId */;
+																window.location.href = originUrl + location;
+															} else {
+																return;
+															}
+														}
+														/* var jsonData = JSON.parse(data);
+														var studyMemberStatusCode = jsonData.studyMemberStatusCode.studyMemberStatusCode; */
+														var studyMemberStatusCode = data.studyMemberStatusCode.studyMemberStatusCode;
+														console.log("studyMemberStatusCode = " + studyMemberStatusCode);
+
+														switch (studyMemberStatusCode) {
+															case "WA":
+																alert("승인 대기중인 스터디입니다.");
+																return;
+															case "ME":
+															case "LE":
+																alert("이미 가입된 스터디입니다.");
+																return;
+															case "EX":
+															case "DE":
+																alert("가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.");
+																return;
+														}
+													},
+													error : function(e) {
+														console.log("Error: " + e);
+														return false;
+													}
+												});
+											}
+										});
 								</script>
 							</article>
 						</div>

@@ -3,6 +3,10 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{/layout/mainLayout}">
 <head>
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header"
+   th:content="${_csrf.headerName}" />
 <meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
 <title>Study List View</title>
 <style layout:fragment="customCss">
@@ -24,6 +28,26 @@
 h2 {
 	font-size: 0.3vm;
 }
+/*페이징 css  */
+.pagination {
+	justify-content: center;
+	margin: 20px;
+}
+
+.pagination li {
+	padding: 0px;
+}
+
+.page-link {
+	color: black !important;
+}
+
+.page-item.active .page-link {
+	background-color: rgb(179,220,248) !important;
+	border-color: rgb(179,220,248) !important;
+	color: white !important;
+}
+
 </style>
 </head>
 <body>
@@ -99,8 +123,9 @@ h2 {
 							</div>
 							<div class="footer">
 								<div class="social-links text-center">
-									<a href="#">신청</a>
-									<a th:href="@{'/study/detail/' + ${study.studyId}}">상세</a>
+									<input type="hidden" class="studyId-container" th:value="${study.studyId}">
+									<a class="btn-join-study" th:href="@{'/study/join/' + ${study.studyId}}">신청</a> <a
+										th:href="@{'/study/detail/' + ${study.studyId}}">상세</a>
 								</div>
 							</div>
 						</div>
@@ -113,19 +138,37 @@ h2 {
 			
 
 			<!-- 페이지 번호 출력 -->
-            <nav>
-               <div>
-                  <ul class="pagination">
-                     <li class="page-item" th:if="${pagedList.prevPage}"><a th:href="${pagedList.prevPage.pageNumber}">[[${pagedList.prevPage}]]</a></li>
-                     <li class="page-item" th:classappend="${page.pageNumber == pagedList.currentPageNum -1}? active: ''" th:each="page : ${pagedList.pageList}"><a th:href="${page.pageNumber}+1">[[${page.pageNumber}+1]]</a></li>
-                     <li class="page-item" th:if="${pagedList.nextPage}"><a th:href="${pagedList.nextPage.pageNumber}">[[${pagedList.nextPage}]]</a></li>
-                  </ul>
-               </div>
-            </nav>
+
+            
+            <!-- 페이징   -->
+
+
+					<nav>
+						<div class="pageForm">
+							<ul class="pagination">
+								<li class="page-item" th:if="${pagedList.prevPage}"><a
+									class="page-link" th:href="${pagedList.prevPage.pageNumber}+ 1">
+										〈&nbsp&nbsp이전 </a></li>
+								<li class="page-item" th:each="p:${pagedList.pageList}"
+									th:classappend="${p.pageNumber == pagedList.currentPageNum -1}?active: '' "><a
+									class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
+										+ 1]]</a></li>
+
+								<li class="page-item" th:if="${pagedList.nextPage}"><a
+									class="page-link" th:href="${pagedList.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!--페이징 끝  -->
             
             <!-- 페이지 번호를 통해 이동 1 -->
             <th:block th:if="${search}!=null">
             <form id="pageForm" th:action="@{/search}" method="get">
+            	<input type='hidden' th:name='${_csrf.parameterName}' th:value='${_csrf.token}' />
+<!-- 				<input type="hidden" name="id" th:value="${loggedInUser.id}"> -->
+						
                <input type="hidden" name="page" th:value="${pagedList.currentPageNum}">
                <input type="hidden" name="size" th:value="${pagedList.currentPage.pageSize}">
                <input type="hidden" name="name" th:value="${name}">
@@ -156,6 +199,16 @@ h2 {
    
    <div layout:fragment="customScript">   
       <script th:inline="javascript">
+
+		<!-- Spring Security ~ Ajax 관련 추가 코드 BY 성호님 -->
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$(function() {
+			$(document).ajaxSend(function(e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+		});
+      
          $(document).ready(function() {
             
             var pageForm = $("#pageForm");
@@ -164,6 +217,87 @@ h2 {
                pageForm.find('[name="page"]').val($(this).attr('href'));
                pageForm.submit();
             });
+            
+
+			<!-- 스터디 가입 신청 전 체크 -->
+				$('.btn-join-study').on('click', function(e) {
+					// 모집 마감된 스터디는 버튼을 비활성화 한다.
+					if ($('.btn-join-study').hasClass('disable')) {
+						e.preventDefault();
+						return;
+					}
+
+					// 1) 비로그인 유저의 경우 --> 로그인 페이지
+					// *** 로그인 여부 판별하는 방법 확인하기
+					var joinBtn = $('.btn-join-study')[0];
+					
+					var pathname = window.location.pathname;
+//	 				var studyId = pathname.replace('/study/detail/', '');
+					var studyId = $(this).prev('.studyId-container').val();
+					var originUrl = window.location.origin;
+					var location = "";
+					var userId = document.getElementById('loggedInUserId').value;
+
+					if (joinBtn.dataset.userType == "anonymous") {
+						alert("로그인 후 신청할 수 있어요!");
+						location = "/study/pleaseLogin/?pathname=" + pathname;
+						window.location.href = originUrl + location;
+//	 					location = "/login";
+//	 					window.location.replace = originUrl + location;					
+						// 로그인 후 스터디 가입 페이지로 이동하도록 처리할 것! ******** --> SecurityConfig.java 에서 처리 완료
+						// ==> 스터디 상세 페이지로 다시 이동해야 신청 권한 검증이 가능함. 처리 필요. 
+
+					} else if (joinBtn.dataset.userType == "authenticated") {
+						// 3) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우 --> 메시지	==> 예기치 못한 Ajax...
+						$.ajax({
+							type : "GET",
+							contentType : "application/json",
+							url : "/study/prejoin",
+							data : {
+								"studyId" : studyId,
+								"userId" : userId
+							},
+							/* dataType : 'json', */
+							cache : false,
+							timeout : 600000,
+							success : function(data) {
+								console.log("Success: " + data);
+								
+								if (!data) {
+									var answer = confirm("이 스터디에 가입하시겠어요?");
+									if(answer) {
+										location = "/study/join/" + studyId/*  + "?id=" + userId */;
+										window.location.href = originUrl + location;
+									} else {
+										return;
+									}
+								}
+								/* var jsonData = JSON.parse(data);
+								var studyMemberStatusCode = jsonData.studyMemberStatusCode.studyMemberStatusCode; */
+								var studyMemberStatusCode = data.studyMemberStatusCode.studyMemberStatusCode;
+								console.log("studyMemberStatusCode = " + studyMemberStatusCode);
+
+								switch (studyMemberStatusCode) {
+									case "WA":
+										alert("승인 대기중인 스터디입니다.");
+										return;
+									case "ME":
+									case "LE":
+										alert("이미 가입된 스터디입니다.");
+										return;
+									case "EX":
+									case "DE":
+										alert("가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.");
+										return;
+								}
+							},
+							error : function(e) {
+								console.log("Error: " + e);
+								return false;
+							}
+						});
+					}
+				});
             
          });
       </script>

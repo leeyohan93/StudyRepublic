@@ -31,6 +31,9 @@ public class ReportTypeCD {
 	 * @param reportTypeCode
 	 * @param codeValue
 	 */
+	public ReportTypeCD() {
+		
+	}
 	public ReportTypeCD(String reportTypeCode) {
 		super();
 		this.reportTypeCode = reportTypeCode;

@@ -65,7 +65,7 @@ input::-moz-focus-inner {
 	padding: 0;
 }
 
-/* input, select, textarea {		//checkbox, 泥댄겕諛뺤뒪, �븞蹂댁씠寃뚰븯�뒗臾몄젣�썝�씤.
+/* input, select, textarea {		//checkbox, 체크박스, 안보이게하는문제원인.
 	-moz-appearance: none;		
 	-webkit-appearance: none;
 	-ms-appearance: none;

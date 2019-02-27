@@ -68,6 +68,7 @@ public class StudyQnaboard /*extends StudyBoard*/ implements Serializable{
 	@JoinColumn(name="study_qnaboard_id")
 	private List<StudyQnaboardFile> studyQnaboardFile;
 	
+	
 	@OneToMany
 	@JoinColumn(name="study_qnaboard_id")
 	private List<StudyQnaboardReply> studyQnaboardReply;
