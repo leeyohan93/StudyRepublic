@@ -117,7 +117,7 @@ public class MypageController {
 	
 
 	
-	@RequestMapping("/modimember")
+	@RequestMapping("/mypage/modimember")
 	public String modifyMember(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -130,15 +130,7 @@ public class MypageController {
 		
 	}
 		
-/*	@RequestMapping("/")
-	public String activityinfo(Model model) {
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
-		
-		
-		return "";
-	}*/
-	
+
 	@RequestMapping("/activityinfo")
 	public String allboard(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
@@ -221,42 +213,46 @@ public class MypageController {
 		
 		
 		map.put("result", result);
-		   System.out.println(result);
+		 /*  System.out.println(result);*/
 		return map;
 	} 
 		
 
-	/* 관심지역 하던중 
-	@RequestMapping(value="/insertLocation",method=RequestMethod.POST)
+	 //관심지역 하던중 
+	@RequestMapping(value="/insertLocation")
 	@ResponseBody
-	public void insertLocation(@RequestParam(value="insertList[i].toString()",required=false)Member interestLocation) {
+	public Integer insertLocation(Model model, HttpServletRequest request, @RequestParam String interestLocation) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		 
 		
-		String result="false";
 		
-		System.out.println("인서트");
-		 List <InterestLocation> interestlocation;
+		//insertInterestLocation
+		System.out.println("인서트"+interestLocation);
+		//List <InterestLocation> interestlocation;
 		
-		Member memberlocation = new Member();
-		memberlocation.setInterestlocation(interestLocation);
+		int result = iir.insertInterestLocation(interestLocation, id);
 		
-		iir.save(interestLocation, id);
+		//Member memberlocation = new Member();
+		//member.setInterestlocation(interestlocation);
+		
+		
+		//mbr.save(member);
 		
 		
 	
 		
-		Map<Object, Object> map = new HashMap<Object, Object>();
+		//Map<Object, Object> map = new HashMap<Object, Object>();
 		//if(insertCnt > 0) {
 		//  result = "true";
 		//}
 		//map.put("result", insertCnt);
-		return 	iir.save(interestLocation,id);
+		 System.out.println(result);
+		return result;
 	}
 		
 			
-		*/
+		
 		
 			
 			

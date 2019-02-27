@@ -25,14 +25,26 @@
 
 
 <style type="text/css">
+	#img_profile{
+	  	border-radius: 100%;
+  		width: 50%;
+  	    height: 120px;
+    	margin-left: 21%;
+   	    margin-top: 13%;
+	
+	}
+
+
+
    .sidebar{
    
       position:sticky;
       text-align:center;
       border-right:1px solid #eee;
       font-size:small;
-      background-color: #f7f7f7;
+      background-color: white;
       margin-top: 4%;
+      border: solid 3px;
    }
    
     .border-top{
@@ -45,11 +57,24 @@
     }
     
    .modifybtn{
-      margin-left: 77%;
-      margin-top: 2%;
+      	background-color: rgb(179,220,248);
+   		color: white;
+   	    font-weight: bolder;
+         margin-top: 14%;
+   		 margin-left: 3%;
+   		 width: 92%;
+   		 
+}
+	.flex-column{
+		
+	 margin-top: 22%;
+    border: solid 1px;
+    color: black;
+}
+    }
       
       
-   }
+   
    .studyinfo{
       width: 100%;
       height: 200px;
@@ -69,20 +94,8 @@
    .profile{
       margin: 3%;
    }
-   .memberinterest {
-      display:inline-block;
-   }
+
    
-         /* 관심분야 */
-      
-      #ppinterest2cd, #ddinterest2cd, #wwinterest2cd, #nninterest2cd {
-          display: none; 
-      }
-      
-      .wrap-input100_head, .select-input100, .select-input100_2, .shsel {
-         padding: unset;
-         margin-right: 1.5rem !important;
-      }
      .w3-modal {
    
     width: 100%;
@@ -95,37 +108,6 @@
          
 
 
-   /* .container-fluid{
-      font-style:normal;
-   }
-
-
-   
-   .border-top{
-      width:100%;
-      height:60px;
-      text-align:left;
-   }
-   .myschedulerbtn{
-      width:100%;
-      height: 15%
-      
-   }
-   .profile{
-      width: 100%;
-      height: 100%;
-
-   }
-   .studyinfo{
-      height:80%; 
-      margin-top:3px;
-      text-align:left;
-   }
-
-   
-   
-   
- */
    
 </style>
 
@@ -134,11 +116,32 @@
 <body>
 
 <div id="main" layout:fragment="main">
-<div class="inner">
+<div class="inner" style="background-color:white; margin-top: 2%;">
    
    <div class="container-fluid">
       <div class="row">
          <nav class="col-md-2 sidebar" style="height: 500px;">
+         
+         	<ul class="nav nav-pills flex-column">
+					<li class="nav-item">
+					     쪽지페이지         
+					</li>
+					<li class="nav-item">   
+						<a  class="nav-link" href="receiveMessage">쪽지함</a> 
+                  	</li> 
+            </ul>	
+              <ul class="nav nav-pills flex-column">    	
+					<li class="nav-item">
+					     활동정보페이지              
+					</li> 
+					<li class="nav-item">  
+                    	<a  class="nav-link" href="activityinfo">활동정보</a>
+					</li> 
+				</ul>	
+			
+					
+					
+			
 				
 
 				<ul class="nav nav-pills flex-column">
@@ -150,6 +153,7 @@
 					<li class="nav-item">   <!-- -->
 						<a sec:authorize="hasRole('N')" class="nav-link" href="/tutor/signup">신청하기</a>
 						<a sec:authorize="hasAnyRole('W','T')" class="nav-link" href="/tutor/inquery">신청현황</a>
+						
 					</li>  
 			
 				</ul>		
@@ -163,75 +167,71 @@
 					</li>   	
 				</ul>
 			</nav>
+			
+         <div class="col-md-10" style="padding-left: 3%;">
+            <h3 style="margin-top: 3%;">My PAGE</h3>
+           
+		  <div class="row"  th:each="mbr : ${mbr}" style="height: auto; margin-bottom: 8%;" >
+                        <div class="col-md-6 how-img">
+                           <img id="img_profile" th:src="@{'/member_image/'+${mbr.profileSaveName}}"onclick="document.getElementById('modal01').style.display='block'" />
+                           <br><a class="btn modifybtn" id="modifybtn" th:href="@{/mypage/modimember}" role="button" style="background-color:rgb(179,220,248);">수정하기</a>
+                   			<div id="modal01" class="w3-modal" onclick="this.style.display='none'">
+                      		   <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
+                         		<div class="w3-modal-content w3-animate-zoom">
+	                         	  <img th:src="@{'/member_image/'+${mbr.profileSaveName}}" style="border-radius:100%; width:50%; background-color:none; ">
+                        	 	</div>
+                      		</div>
+                        </div>
+                     
+                        <div class="col-md-6">
+                        	
+                            <h4 style="color: #ffa500;">MY ABOUT</h4>
+                         <h4 class="subheading userinfo">ID:  <span th:text=${mbr.id} ></span>
+                        <input type="hidden" id="memberid" name="memberid" th:value=${mbr.id}/>
+                        <br> 
+                     	   	이름: <span th:text=${mbr.name} ></span>
+                        <br> 
+                         
+                     	   	닉네임: <span th:text=${mbr.nickname} ></span>
+                        <br> 
+                       		 성별: <span th:text=${mbr.gender} ></span>
+                        <br> 
+                    	   	 생년월일: <span th:text=${mbr.birth} ></span>
+                        <br> 
+                       		 E-Mail: <span th:text=${mbr.email} ></span>
+                        <br> 
+                  	     	  연락처: <span th:text=${mbr.phonenumber} ></span></h4>
+                       
+                        </div>
+            </div> <!-- th:each 닫히는 div 태그  -->	
 
          
-         <div class="col-md-10 ">
-            <h3 style="margin-top: 3%;">마이페이지</h3>
-            <div class="row text-left placeholders" style="height: auto;">
-               <div class="col-md-7 placeholder">
-                  <div class="col-md-12 border border-top">
-                     <span th:text="${session.nickname}"></span>님이 접속중입니다.<br>
-                     <a href="receiveMessage">쪽지함</a> 
-                     <a href="activityinfo">활동정보</a>
-                     <a href="activityinfo">결제정보</a>
+                     
+              	   <h4 style="color: #ffa500;">현재 진행중인 스터디</h4><br>
+               <div class="row" style="height: auto; margin-bottom: 10%;">
+               	<div class="col-md-6 studyinfo" style="height: 227px; border:solid;">
+              	   <h4 style="font-weight: 900;">일반스터디</h4><br>
+                   		 <div th:each="smr : ${smr}">
+                    	    <div th:text="${smr.study.name}"></div>
+                    	 </div>
+               	</div>  
+              	   
+                  <div class="col-md-6 studyinfo" style="height: 227px; border:solid; ">
+                     <h4 style="font-weight: 900;">프리미엄스터디</h4><br>
+                     	<div th:each="smr2 : ${smr2}" >
+                        	<h5  th:text="${smr2.study.name}" style="font-weight: 900;" ></h5>
+                     	</div>
                   </div>
-               <div class="row profileinfo" th:each="mbr : ${mbr}">      
-                  <div class="col-md-4 profile">
-                     <img id="img_profile" th:src="@{'/member_image/'+${mbr.profileSaveName}}" style="border-radius:100%; width:100%; height:120px;" onclick="document.getElementById('modal01').style.display='block'" />
-                     
-                     <div id="modal01" class="w3-modal" onclick="this.style.display='none'">
-                         <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
-                         <div class="w3-modal-content w3-animate-zoom">
-                           <img th:src="@{'/member_image/'+${mbr.profileSaveName}}" style="border-radius:100%; width:50%; background-color:none; ">
-                         </div>
-                      </div>
-                                          
-                  </div>   
-                  <div class="col-sm-7 border userinfo">
-                        ID:   <span th:text=${mbr.id} ></span>
-                        <br> 
-                        이름: <span th:text=${mbr.name} ></span>
-                        <br> 
-                        성별: <span th:text=${mbr.gender} ></span>
-                        <br> 
-                        생년월일: <span th:text=${mbr.birth} ></span>
-                        <br> 
-                        E-Mail: <span th:text=${mbr.email} ></span>
-                        <br> 
-                        연락처: <span th:text=${mbr.phonenumber} ></span>
-                        <br>
-                  </div>
-               
-                     <a class="btn modifybtn" id="modifybtn" th:href="@{modimember}" role="button"
-                      style="background-color:rgb(179,220,248);">수정하기</a>
+                  	
+                        	
                   
-               </div>   
-                     
-                     
-                  
-                  
+		                  
+                  <a class="btn myschedulerbtn" th:href="@{scheduler}" role="button"  style="background-color:rgb(179,220,248); width: 100%;">MY 스케줄러</a>
                </div>
-                     
-                     
-               <div class="col-6 col-sm-5 placeholder">
-                  
-                  <div class="border studyinfo">
-                     현재진행중인 스터디<br> 
-                     <br>(일반스터디)<br>
-                     <div th:each="smr : ${smr}">
-                        <div th:text="${smr.study.name}"></div>
-                     </div>
                
                         
                   
-                     <br>(프리미엄스터디)<br>
-                     <div th:each="smr2 : ${smr2}">
-                        <div th:text="${smr2.study.name}"></div>
-                     </div>
-                  </div>
-                  <a class="btn myschedulerbtn" th:href="@{scheduler}" role="button"  style="background-color:rgb(179,220,248); width: 100%;">MY 스케줄러</a>
-               </div>
-            </div>
+            
                         
                      
                   
@@ -244,17 +244,19 @@
           
             <div class="row text-center placeholders" style="height: auto;">
                <div class="col-6 col-sm-12">
-
-                  <div class="join-input100" style = "border: 0; margin: 10px 111px 29px 0px;">
+					<div class="locationHeader">
+                	  <div class="join-input100">
                   <span class="label-input100">스터디 관심지역</span>
                   </div>
+				<!-- 	<div th:each="iir : ${iir}"> 
+                     <input type="text" th:text="${iir.interestLocation}" style="align: left;"></li>   
+                  </div>      -->            
+				</div>
                   
 				<form name="interestLocationForm" id="interestLocationForm" method="post" action="/insertLocation">                 
                   <div class="join-input100 border" id = "loc" style = "float:left; text-align:left; width:650px; height:50px; margin-bottom: 3%; padding-bottom: 3%;">
                   <div id="guide" style="color:#999;display:none;"></div>
-              <!--     <div th:each="iir : ${iir}"> 
-                     <li th:text="${iir.interestLocation}"></li>   
-                  </div> -->
+              
                   <span class="focus-input100"></span>
                   
                   </div>
@@ -387,11 +389,11 @@
                
             
          
+		  </div> 
       </div>
    
    
    </div>
-   
 
 
 <!--===============================================================================================-->
@@ -502,9 +504,6 @@ function addInterestLocation_join() {
    if(document.getElementsByClassName("memberinterest").length == 0 ) {
       document.getElementById("loc").style.height = "50px";
    }
-   
-   deleteList.push(num);
-	//[1,2,3]
  } 
 
  
@@ -512,6 +511,7 @@ function addInterestLocation_join() {
 	var insertList = [];
 	var sendData = {};
 	var interestlocation = [];
+	var result = 0;
 	//memberinterest 클래스를 가진 input태그의 개수를 가져온다. (그거만큼 포문 돌아야되니까.)
 	var locationLength = $("input[class=memberinterest]").length; 
 	
@@ -521,7 +521,7 @@ function addInterestLocation_join() {
 			//memberinterest라는 클래스를가진 input의 i번째의 id를 가져옴.
 			var interestLoc = $("input[class=memberinterest]").eq(i).val();
 			
-			console.log(interestLoc);
+			/* console.log(interestLoc); */
 			
 			//substring을 이용하여 id의 맨뒤 숫자만 추출하여
 			//locationCount = locationCount.substring(16);
@@ -534,45 +534,44 @@ function addInterestLocation_join() {
 		 $.ajax({
 	         type:"GET",
 	         url:"./deleteLocation",
-	         data : {}, //{email : $("#email").val()}
+	         data : {},         
 	         datatype:"JSON",
 	         success:function(success){
-	            if(success.result == "true"){
-	               alert("삭제되었습니다.");
-	            }else{
-	               alert("삭제 할 데이터가 없습니다.");
-	            }
 	            
 	            /*2. for문을 돌면서 인서트*/
 	      		 for(var i=0; i<insertList.length; i++){
-	      			console.log(insertList);
-	      			sendData = {'interestlocation[0].interestLocation' : insertList[i].toString()};
-	      			console.log(sendData);
-	      			 //위에서 만들어놓은 insertList의 크기만큼 돈다.(ex: [1,4,5]면 0번째, 1번째, 2번째 3번이 돌겠지.)
+	      			
+	      			 //위에서 만들어놓은 insertList의 크기만큼 돈다.(ex: [1,4,5]면 0번째, 1번째, 2번째 3번이 돌고)
 	      			 $.ajax({
 	      		         type:"POST",
 	      		         url:"./insertLocation",
-	      		         data : sendData, //{email : $("#email").val()}
+	      		         data : {interestLocation : insertList[i]}, 
 	      		         datatype:"JSON",
 	      		         success:function(success){
 	      		            console.log(success);
-	      		          $('#interestLocationForm').submit();
+	      		          	result = 'result'+1;
+
 	      		         },
 	      		         error:function(error){
 	      		            console.log(error);
+	      		            
 	      		         }
 	      		         
 	      		      });
-	      		 } 
+	      		 }
+	            
+	            if(result != null){
+	            	alert('나의 관심지역이 설정되었습니다.');
+	            }else{
+	            	alert('다시 시도해주세요.');
+	            }
 	      		
-	         },
-	         error:function(error){
+	         },error:function(error){
 	            console.log(error);
 	         }
 	         
 	      });
 		    
-		
 		 
 		
 		 
@@ -581,7 +580,10 @@ function addInterestLocation_join() {
 		alert('수정할 데이터가 없습니다.');
 	}
  }
- 
+  function alertEvent(){
+	 
+  }
+  
  
  
  
@@ -607,8 +609,7 @@ function addInterestLocation_join() {
  
  /* 관심분야 스크립트*/
  
-var Allselect_Box = document
-						.getElementsByClassName("select-input100_2");
+var Allselect_Box = document.getElementsByClassName("select-input100_2");
 
 				function education(obj) {
 					var educationListValue = obj.options[obj.selectedIndex].value;
