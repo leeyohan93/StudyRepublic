@@ -85,6 +85,9 @@ padding: 2em 1.2em;
   td:nth-child(2n+1) {
   font-weight:bold
   }
+  
+  
+  
 </style>
 
 </head>
@@ -268,7 +271,7 @@ padding: 2em 1.2em;
 					
 						 <input name = "tutorNumber" th:value = "${tutor.tutorNumber}" style = "display:none"> 
 						<div th:each = "tf : ${tutoruploadfile}"  >
-						<div class = "file_input" style = "margin:10px 0px 0 0; width: 500px" > 
+						<div class = "file_input" style = "margin:10px 0px 0 0; width: auto" > 
 						<!-- <span th:text = "${tf.tutorfileOriginname}" ></span> -->
 						<input id = "fileUrl" name = "tutorFileFullUrl" type = "text" th:value = "${tf.tutorFileFullUrl}" style = "display:none">
 						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 

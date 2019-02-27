@@ -47,7 +47,8 @@
 }
 
 a {
-    color: #007bff;
+    /* color: #007bff; */
+    color: gray ;
     text-decoration: none;
     background-color: transparent;
 }
@@ -103,9 +104,10 @@ a {
 						
 					
 						<ul id = "displaying" style= "float:right; margin-top: 10px;">
-						<li id = "loginli" class = "drop"><a th:href="@{/mypage}">마이페이지</a></li>	<br>	
+							
+					 <li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li> <li id = "loginli"><a>/</a></li> <li id = "loginli" class = "drop"><a th:href="@{/mypage}">마이페이지</a></li> <br>
 						<li id = "loginli" class = "drop"><a th:text = "'보유포인트: ' + ${session.memberpoint}" href = "/member/point/charge"></a></li>	<br>
-						<li id = "loginli"><a th:href="@{/logout}">로그아웃</a></li>		
+								
 						                     
             
 						</ul>
