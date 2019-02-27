@@ -314,24 +314,39 @@ public class StudyPageController {
 	@RequestMapping(value="/Register", method= RequestMethod.POST)
 	public String writeRegister(Model model, @ModelAttribute StudyNoticeboard studyNoticeboard,
 			@ModelAttribute StudyFileshareboard studyfileshare, @ModelAttribute StudyQnaboard studyQnaboard,
-			@RequestParam(name="boardName") String boardName,@RequestParam MultipartFile file, MultipartHttpServletRequest mpsr){
-		
-		
-		/*List<MultipartFile> role = find한 결과를 가온다.;*/
-		
-		log.info(boardName);
-		
+			@RequestParam(name="boardName") String boardName, @RequestParam(name="studyNameId") String studyNameId,
+			@RequestParam MultipartFile file, MultipartHttpServletRequest mpsr){
+
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
-		studyNoticeboard.setId(id);
-		studyNoticeboard.setStudyId("BB00001");
+		StudyMember studyMember;
 		
-		
-		
-		model.addAttribute("memberid", id);
+		//값이 조회되는지 확인한다.
+		try{
+			studyMember = smr.findByStudyIdAndId(studyNameId, id);
+		}catch(Exception e) {
+			log.info("ID 및 studyId로 정보를 조회할 수 없습니다.");
+			return null;
+		}
 		
 		switch(boardName) {		
 		
 		case "Noticeboard":
+			studyNoticeboard.setId(id);
+			studyNoticeboard.setStudyId(studyNameId);
+			
+			List<StudyNoticeboard> studyNoticeboardList = studyNoticeboardRepository.findNoticeboardListByStudyId(studyNameId);
+			if(studyMember==null) {
+				log.info("값은 조회됐지만, null임");
+				return null;
+			}else {
+				//조회되는 리스트의 갯수를 확인하고 해당 리스트 + 1 해서 number를 설정해준다.
+				int number = studyNoticeboardList.size();
+				log.info("제대로 된 값이 들어옴");
+				studyNoticeboard.setNumber(number+1);
+			}
+			
+			model.addAttribute("memberid", id);
+			
 			log.info(studyNoticeboard.getStudyId());
 			log.info(studyNoticeboard.toString());
 			studyNoticeboardRepository.save(studyNoticeboard);

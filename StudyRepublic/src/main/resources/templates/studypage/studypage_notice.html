@@ -168,7 +168,7 @@
 							<div class="" th:text="${#dates.format(fasn.date, 'yyyy/MM/dd')}"></div>
 							<div class="" th:text="${#dates.format(fasn.date, 'HH:mm:ss')}+' 작성'"></div>
 						</div>
-						<div class="content" th:text="${fasn.content}">
+						<div class="content" th:utext="${fasn.content}">
 						</div>
 						<div class="contentReplyForm"
 							><div class="contentReply" th:text="${fasn.studyNoticeboardReply}">
