@@ -79,68 +79,79 @@
 
 <div id="main" layout:fragment="main">
 <div class="inner">
-
-<span th:text="${session.nickname}"></span>님 회원정보입니다.<br>
-
-<div th:each="md : ${mdu}">
-
-    <div>
-    <form name="image_Form" id="image_Form" action="attachments" method="post">
-    <img id="img_profile" th:src="@{'/member_image/'+${md.profileSaveName}}" style="border-radius:100%; width:200px; height:200px"/>
-  
-   <br>
-   <input name="sourceFile" id="sourceFile" type="file">
-   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-   <input type="button"  id="newimg_upload" name="newimg_upload" value="이미지변경"/>
-   </form>
-   
-   <form name="basicimage" action="setdefault_img">
-      <input type="submit"value="기본이미지로 변경"/>
-   </form>
-   
- 	</div>
-	
-
-<div class="container contact-form">
-	<form name="image_Form" id="image_Form" action="attachments" method="post">
-            <div class="contact-image">
-                <img id="img_profile" th:src="@{'/member_image/'+${md.profileSaveName}}" style="border-radius:100%; width:200px; height:200px"/>
-           		 <input name="sourceFile" id="sourceFile" type="file">
- 				  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-				   <input type="button"  id="newimg_upload" name="newimg_upload" value="이미지변경"/>
-   			</div>
-   	</form>
- 
- </div>
-  			 <form name="basicimage" action="setdefault_img">
-     			 <input type="submit"value="기본이미지로 변경"/>
-           
-			</form>
-            <form method="post">
-                <h3>Drop Us a Message</h3>
-               <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <input type="text" name="txtName" class="form-control" placeholder="Your Name *" value="" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="txtEmail" class="form-control" placeholder="Your Email *" value="" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="txtPhone" class="form-control" placeholder="Your Phone Number *" value="" />
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" name="btnSubmit" class="btnContact" value="Send Message" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <textarea name="txtMsg" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </form>
-</div>
+<div class="tab-content">
+            <div class="tab-pane active" id="home">
+                <hr>
+                  <form class="form" action="##" method="post" id="registrationForm">
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="first_name"><h4>First name</h4></label>
+                              <input type="text" class="form-control" name="first_name" id="first_name" placeholder="first name" title="enter your first name if any.">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                            <label for="last_name"><h4>Last name</h4></label>
+                              <input type="text" class="form-control" name="last_name" id="last_name" placeholder="last name" title="enter your last name if any.">
+                          </div>
+                      </div>
+          
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="phone"><h4>Phone</h4></label>
+                              <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" title="enter your phone number if any.">
+                          </div>
+                      </div>
+          
+                      <div class="form-group">
+                          <div class="col-xs-6">
+                             <label for="mobile"><h4>Mobile</h4></label>
+                              <input type="text" class="form-control" name="mobile" id="mobile" placeholder="enter mobile number" title="enter your mobile number if any.">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="email"><h4>Email</h4></label>
+                              <input type="email" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email.">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="email"><h4>Location</h4></label>
+                              <input type="email" class="form-control" id="location" placeholder="somewhere" title="enter a location">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="password"><h4>Password</h4></label>
+                              <input type="password" class="form-control" name="password" id="password" placeholder="password" title="enter your password.">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                            <label for="password2"><h4>Verify</h4></label>
+                              <input type="password" class="form-control" name="password2" id="password2" placeholder="password2" title="enter your password2.">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                           <div class="col-xs-12">
+                                <br>
+                              	<button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                               	<button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                            </div>
+                      </div>
+              	</form>
+              
+              <hr>
+              
+             </div><!--/tab-pane-->
 
 
 </div>

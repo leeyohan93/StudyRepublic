@@ -1,122 +1,120 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{/layout/mainLayout}"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{/layout/mainLayout}"
+   xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!-- layout:decorate="~{/layout/mainLayout}" -->
 <head>
 <meta charset="UTF-8">
 <title>마이페이지</title>
 <meta name="viewport"
-	content="width=device-width, initial-scale=1, user-scalable=no" />
+   content="width=device-width, initial-scale=1, user-scalable=no" />
 <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
-	type="text/css">
+   type="text/css">
 <link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> -->
+<link rel="icon" type="image/png"
+   href="/Login_v18/images/icons/favicon.ico" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+   href="/Login_v18/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+   href="/Login_v18/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+   href="/Login_v18/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+   href="/Login_v18/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+   href="/Login_v18/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+   href="/Login_v18/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+   href="/Login_v18/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css"
+   href="/Login_v18/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="/Login_v18/css/util.css">
+<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+
 
 
 <style type="text/css">
 .sidebar {
-	position: sticky;
-	text-align: center;
-	border-right: 1px solid #eee;
-	font-size: small;
-	background-color: #f7f7f7;
+   position: sticky;
+   text-align: center;
+   border-right: 1px solid #eee;
+   font-size: small;
+   background-color: #f7f7f7;
 }
 
 .border-top {
-	padding: 10px;
+   padding: 10px;
 }
 
 .userinfo {
-	
+   
 }
 
 .modifybtn {
-	margin-left: 79%;
+   margin-left: 79%;
 }
 
 .studyinfo {
-	width: 100%;
-	height: 200px;
+   width: 100%;
+   height: 200px;
 }
 
 .placeholders {
-	padding-bottom: 3rem;
-	height: 300px;
-	margin-bottom: 3em;
+   padding-bottom: 3rem;
+   height: 300px;
+   margin-bottom: 3em;
 }
 
 .profileinfo {
-	margin-left: 5%;
-	margin-top: 2%;
+   margin-left: 5%;
+   margin-top: 2%;
 }
 
 .profile {
-	margin: 3%;
+   margin: 3%;
 }
 
 .memberinterest {
-	display: inline-block;
+   display: inline-block;
 }
 
 /* 관심분야 */
 #ppinterest2cd, #ddinterest2cd, #wwinterest2cd, #nninterest2cd {
-	display: none;
+   display: none;
 }
 
 .wrap-input100_head, .select-input100, .select-input100_2, .shsel {
-	padding: unset;
-	margin-right: 1.5rem !important;
+   padding: unset;
+   margin-right: 1.5rem !important;
 }
 
 .w3-modal {
-	width: 100%;
-	height: 100%;
+   width: 100%;
+   height: 100%;
 }
 
 .w3-modal-content {
-	background-color: transparent;
+   background-color: transparent;
 }
-)
 
-/* .container-fluid{
-      font-style:normal;
-   }
-
-
-   
-   .border-top{
-      width:100%;
-      height:60px;
-      text-align:left;
-   }
-   .myschedulerbtn{
-      width:100%;
-      height: 15%
-      
-   }
-   .profile{
-      width: 100%;
-      height: 100%;
-
-   }
-   .studyinfo{
-      height:80%; 
-      margin-top:3px;
-      text-align:left;
-   }
-
-   
-   
-   
- */
  
     #img_profile{
         border-radius: 100%;
@@ -164,7 +162,7 @@
     border: solid 1px;
     color: black;
 }
-    }
+    
       
       
    
@@ -197,7 +195,7 @@
 }
    .w3-modal-content {
     background-color:transparent;
-   )
+   }
  
 </style>
 
@@ -205,15 +203,15 @@
 </head>
 <body>
 
-	<div id="main" layout:fragment="main" style = "background-color:white">
-		<div class="inner">
+   <div id="main" layout:fragment="main" style = "background-color:white">
+      <div class="inner">
 
-			<div class="container-fluid">
+         <div class="container-fluid">
 
 
 
-				<div class="row">
-					<nav class="col-md-2 sidebar" style="height: 500px;">
+            <div class="row">
+               <nav class="col-md-2 sidebar" style="height: 500px;">
 
         <ul class="nav nav-pills flex-column">
                <li class="nav-item">
@@ -255,7 +253,7 @@
                </li>      
             </ul>
             
-					</nav>
+               </nav>
 
 
 
@@ -264,9 +262,9 @@
             <h3 style="margin-top: 3%;">My PAGE</h3>
            
         <div class="row"  th:each="mbr : ${mbr}" style="height: auto; margin-bottom: 8%;" >
-                        <div class="col-md-6 how-img" style = "text-align: center;">
-                           <img id="img_profile" th:src="@{'/member_image/'+${mbr.profileSaveName}}" style = "border-radius: 100%; width:200px"onclick="document.getElementById('modal01').style.display='block" />
-                           <br><a class="btn modifybtn" id="modifybtn" th:href="@{modimember}" role="button" style="background-color:rgb(179,220,248);">수정하기</a>
+                        <div class="col-md-6 how-img" style = "text-align: center; margin-top:11px">
+                           <img id="img_profile" th:src="@{'/member_image/'+${mbr.profileSaveName}}" style = "border-radius: 100%; width:200px; height:240px"onclick="document.getElementById('modal01').style.display='block" />
+                           <br><a class="btn modifybtn" id="modifybtn" th:href="@{/mypage/modimember}" role="button" style="background-color:rgb(179,220,248);">수정하기</a>
                             <div id="modal01" class="w3-modal" onclick="this.style.display='none'">
                                <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
                                <div class="w3-modal-content w3-animate-zoom">
@@ -278,21 +276,22 @@
                         <div class="col-md-6">
                            
                             <h4 style="color: #ffa500;">MY ABOUT</h4>
-                         <h5 class="subheading userinfo">ID:  <span th:text=${mbr.id} ></span>
+                         <h4 class="subheading userinfo">
+                     	    ID:  <span th:text=${mbr.id} ></span>
                         <input type="hidden" id="memberid" name="memberid" th:value=${mbr.id}/>
                         <br> 
-                              이름: <span th:text=${mbr.name} ></span>
+                              	이름: <span th:text=${mbr.name} ></span>
                         <br> 
                          
-                              닉네임: <span th:text=${mbr.nickname} ></span>
+                             	 닉네임: <span th:text=${mbr.nickname} ></span>
                         <br> 
-                              성별: <span th:text=${mbr.gender} ></span>
+                           		   성별: <span th:text=${mbr.gender} ></span>
                         <br> 
-                              생년월일: <span th:text=${mbr.birth} ></span>
+                            	  생년월일: <span th:text=${mbr.birth} ></span>
                         <br> 
                               E-Mail: <span th:text=${mbr.email} ></span>
                         <br> 
-                               연락처: <span th:text=${mbr.phonenumber} ></span></h5>
+                            	   연락처: <span th:text=${mbr.phonenumber} ></span></h4>
                        
                         </div>
             </div> <!-- th:each 닫히는 div 태그  -->   
@@ -324,470 +323,470 @@
 
 
 
-					<form  action="/member/modify/location" method="post" >
-					
-								<div class="row text-center placeholders" style="height: auto; margin-bottom:0; padding-bottom:0">
-								<div class="col-6 col-sm-12">
+               <form  action="/member/modify/location" method="post" >
+               
+                        <div class="row text-center placeholders" style="height: auto; margin-bottom:0; padding-bottom:0">
+                        <div class="col-6 col-sm-12">
 
-							<div class="wrap-input100_label"
-							style="width: auto; height: auto; margin-bottom: 70px; ">
-							<span class="label-input100_label" style="width: 80px;height:auto" >
-								관심지역</span>
-							</div>
-									
-						<div id="guide" style="color: #999; display: none;"></div>
-																
-									
-									<div>
-								<div class="join-input100" style = "height:auto; width:670px; margin-bottom:0; float:left">
-									
-										
-									
-									<div id = "memberIntLoc" style = "width:100%">
-									<div th:each="iir : ${iir}">
-												
-												<div id = "memberlocationList" style = "width:auto; float:left">
-												<input type="text" id="isel" name="mlocation" th:value  = "${iir.interestLocation}" style = "padding:0 0 0 26px; display:inline">
-												<input class="yshbtn" type="button" value="X" id="liidel" onclick="deleteLocation2(this)" style = "padding:0; display:inline">	
-												</div>
-												
-												</div>
-												</div>
-									</div>
-									
-									
+                     <div class="wrap-input100_label"
+                     style="width: auto; height: auto; margin-bottom: 70px; ">
+                     <span class="label-input100_label" style="width: 80px;height:auto" >
+                        관심지역</span>
+                     </div>
+                           
+                  <div id="guide" style="color: #999; display: none;"></div>
+                                                
+                           
+                           <div>
+                        <div class="join-input100" style = "height:auto; width:670px; margin-bottom:0; float:left">
+                           
+                              
+                           
+                           <div id = "memberIntLoc" style = "width:100%">
+                           <div th:each="iir : ${iir}">
+                                    
+                                    <div id = "memberlocationList" style = "width:auto; float:left">
+                                    <input type="text" id="isel" name="mlocation" th:value  = "${iir.interestLocation}" style = "padding:0 0 0 26px; display:inline">
+                                    <input class="yshbtn" type="button" value="X" id="liidel" onclick="deleteLocation2(this)" style = "padding:0; display:inline">   
+                                    </div>
+                                    
+                                    </div>
+                                    </div>
+                           </div>
+                           
+                           
 <!--  -->
-							<div class="wrap-input100 validate-input"
-							style="border: none; margin: auto; width: auto;margin-left: 600px; height:auto; ">
-							<div class="join-form-btn" style = "width:50px; margin-left: 20px;" >
+                     <div class="wrap-input100 validate-input"
+                     style="border: none; margin: auto; width: auto;margin-left: 600px; height:auto; ">
+                     <div class="join-form-btn" style = "width:50px; margin-left: 20px;" >
 
-							<button type="button" id="addLoctaion"
-											onclick="addInterestLocation_join()" style = "width:50px; height:auto; font-weight: bold; font-size:14px">+</button>
-							</div></div>
+                     <button type="button" id="addLoctaion"
+                                 onclick="addInterestLocation_join()" style = "width:50px; height:auto; font-weight: bold; font-size:14px">+</button>
+                     </div></div>
 <!--  -->
 
 
-										
-																	
-	<!-- 									<div class="join-form-btn"
-										style="float: right; margin: 0px 0px 0px 50px; width: 12px">
-										<button type="submit">적용</button>
-									</div> -->
-									
-								</div>
+                              
+                                                   
+   <!--                            <div class="join-form-btn"
+                              style="float: right; margin: 0px 0px 0px 50px; width: 12px">
+                              <button type="submit">적용</button>
+                           </div> -->
+                           
+                        </div>
 
-							</div>
-							</div>
-							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-							
-							<div class="wrap-input100 validate-input"
-							style="border: none; margin: auto; width: auto;margin-left: 600px; height:auto; ">
-							<div class="join-form-btn" style = "margin: 40px 40px 40px -30px"  >
+                     </div>
+                     </div>
+                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                     
+                     <div class="wrap-input100 validate-input"
+                     style="border: none; margin: auto; width: auto;margin-left: 600px; height:auto; ">
+                     <div class="join-form-btn" style = "margin: 40px 40px 40px -30px"  >
 
-							<button type="submit" style = "width:auto; height:auto; font-weight: bold; font-size:14px; ">적용</button>
-							</div></div>
-					</form>
-
-
-						<!--관심지역 정보 가져올것    <div th:each="iir : ${iir}"> -->
-						<form id = "enrollInt" action="/member/modify/interest" method="post" >
-
-							<div class="row input input-field-interest"
-								style="height: auto; padding-bottom: 17%;">
-
-								<div class="col-md-10 input-content">
-
-									<!-- 성호님 코드 시작 -->
-									<div class="row">
-										<div class="col-md-5 interest-selector">
-											<div class="wrap-input100_head validate-input"
-												style="float: left;">
-												<span class="yshspan">스터디 관심분야 1차</span>
-											</div>
-											<div class="select-input100"
-												style="float: left; border: none; margin-bottom: 50px;">
-												<select class="shsel" name="interest1cd" id="interest1cd"
-													size='4' multiple='multiple' onchange="iinterest1(this)">
-													<option th:each="i1 :  ${interest1cd}"
-														th:value="${i1.interest1Code}"
-														th:text="${i1.codeValueKorean}"></option>
-												</select>
-											</div>
-										</div>
-										<div class="col-md-7 interest-selector">
-											<div class="wrap-input100_head validate-input" id="2int"
-												style="float: left; margin: 0; display: none">
-												<span class="yshspan">스터디관심분야 2차</span>
-											</div>
-											<div class="select-input100_2" id="ddinterest2cd"
-												style="float: left; border: none;">
-												<span class="dinterest2cd" name="dinterest2cd"> <select
-													class="shsel" size='4' multiple='multiple'
-													onchange="iinterest2(this)">
-														<option th:each="di2 :  ${dinterest2cd}"
-															th:value="${di2.interest2Code}"
-															th:text="${di2.codeValueKorean}"></option>
-												</select>
-												</span>
-											</div>
-										
-										
-										
-											<div class="select-input100_2" id="nninterest2cd"
-												style="float: left; border: none;">
-												<span class="ninterest2cd" name="ninterest2cd"> <select
-													class="shsel" size='4' multiple='multiple'
-													onchange="iinterest2(this)">
-														<option th:each="ni2 :  ${ninterest2cd}"
-															th:value="${ni2.interest2Code}"
-															th:text="${ni2.codeValueKorean}"></option>
-												</select>
-												</span>
-											</div>
+                     <button type="submit" style = "width:auto; height:auto; font-weight: bold; font-size:14px; ">적용</button>
+                     </div></div>
+               </form>
 
 
-											<div class="select-input100_2" id="ppinterest2cd"
-												style="float: left; border: none;">
-												<span class="pinterest2cd" name="pinterest2cd"> <select
-													class="shsel" size='4' multiple='multiple'
-													onchange="iinterest2(this)">
-														<option th:each="pi2 :  ${pinterest2cd}"
-															th:value="${pi2.interest2Code}"
-															th:text="${pi2.codeValueKorean}"></option>
-												</select>
-												</span>
-											</div>
+                  <!--관심지역 정보 가져올것    <div th:each="iir : ${iir}"> -->
+                  <form id = "enrollInt" action="/member/modify/interest" method="post" >
 
-											<div class="select-input100_2" id="wwinterest2cd"
-												style="float: left; border: none;">
-												<span class="winterest2cd" name="winterest2cd"> <select
-													class="shsel" size='4' multiple='multiple'
-													onchange="iinterest2(this)">
-														<option th:each="wi2 :  ${winterest2cd}"
-															th:value="${wi2.interest2Code}"
-															th:text="${wi2.codeValueKorean}"></option>
-												</select>
-												</span>
-											</div>
-										</div>
-									</div>
+                     <div class="row input input-field-interest"
+                        style="height: auto; padding-bottom: 17%;">
 
-									<div class="col-md-auto">
-										<div class="row wrap-input100_container">
-											<div class="wrap-input100_ validate-input">
-												<div id="interest1cd" name="interest1cd">
-													<div id="int1"></div>
-												</div>
-											</div>
-										</div>
-										
+                        <div class="col-md-10 input-content">
+
+                           <!-- 성호님 코드 시작 -->
+                           <div class="row">
+                              <div class="col-md-5 interest-selector">
+                                 <div class="wrap-input100_head validate-input"
+                                    style="float: left;">
+                                    <span class="yshspan">스터디 관심분야 1차</span>
+                                 </div>
+                                 <div class="select-input100"
+                                    style="float: left; border: none; margin-bottom: 50px;">
+                                    <select class="shsel" name="interest1cd" id="interest1cd"
+                                       size='4' multiple='multiple' onchange="iinterest1(this)">
+                                       <option th:each="i1 :  ${interest1cd}"
+                                          th:value="${i1.interest1Code}"
+                                          th:text="${i1.codeValueKorean}"></option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div class="col-md-7 interest-selector">
+                                 <div class="wrap-input100_head validate-input" id="2int"
+                                    style="float: left; margin: 0; display: none">
+                                    <span class="yshspan">스터디관심분야 2차</span>
+                                 </div>
+                                 <div class="select-input100_2" id="ddinterest2cd"
+                                    style="float: left; border: none;">
+                                    <span class="dinterest2cd" name="dinterest2cd"> <select
+                                       class="shsel" size='4' multiple='multiple'
+                                       onchange="iinterest2(this)">
+                                          <option th:each="di2 :  ${dinterest2cd}"
+                                             th:value="${di2.interest2Code}"
+                                             th:text="${di2.codeValueKorean}"></option>
+                                    </select>
+                                    </span>
+                                 </div>
+                              
+                              
+                              
+                                 <div class="select-input100_2" id="nninterest2cd"
+                                    style="float: left; border: none;">
+                                    <span class="ninterest2cd" name="ninterest2cd"> <select
+                                       class="shsel" size='4' multiple='multiple'
+                                       onchange="iinterest2(this)">
+                                          <option th:each="ni2 :  ${ninterest2cd}"
+                                             th:value="${ni2.interest2Code}"
+                                             th:text="${ni2.codeValueKorean}"></option>
+                                    </select>
+                                    </span>
+                                 </div>
+
+
+                                 <div class="select-input100_2" id="ppinterest2cd"
+                                    style="float: left; border: none;">
+                                    <span class="pinterest2cd" name="pinterest2cd"> <select
+                                       class="shsel" size='4' multiple='multiple'
+                                       onchange="iinterest2(this)">
+                                          <option th:each="pi2 :  ${pinterest2cd}"
+                                             th:value="${pi2.interest2Code}"
+                                             th:text="${pi2.codeValueKorean}"></option>
+                                    </select>
+                                    </span>
+                                 </div>
+
+                                 <div class="select-input100_2" id="wwinterest2cd"
+                                    style="float: left; border: none;">
+                                    <span class="winterest2cd" name="winterest2cd"> <select
+                                       class="shsel" size='4' multiple='multiple'
+                                       onchange="iinterest2(this)">
+                                          <option th:each="wi2 :  ${winterest2cd}"
+                                             th:value="${wi2.interest2Code}"
+                                             th:text="${wi2.codeValueKorean}"></option>
+                                    </select>
+                                    </span>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <div class="col-md-auto">
+                              <div class="row wrap-input100_container">
+                                 <div class="wrap-input100_ validate-input">
+                                    <div id="interest1cd" name="interest1cd">
+                                       <div id="int1"></div>
+                                    </div>
+                                 </div>
+                              </div>
+                              
 </div>
 
-							<div class="wrap-input100_label"
-							style="width: auto; height: auto; margin-bottom: 70px; ">
-							<span class="label-input100_label" style="width: 132px;height:auto" >
-								스터디희망분야</span>
-						</div>
+                     <div class="wrap-input100_label"
+                     style="width: auto; height: auto; margin-bottom: 70px; ">
+                     <span class="label-input100_label" style="width: 132px;height:auto" >
+                        스터디희망분야</span>
+                  </div>
 
 
-									<!-- 관심분야 조회, 수정, 삭제  : 352 줄 ~ 371줄-->
-											<div class="join-input100" style = "height:auto; width:740px; margin-bottom:0">
-												<div id="interest2cd" name="interest2cd" >
-												
-												<div id="int2">
-												
-												<div th:each="myinterest : ${mymemberinterest}" style = "width:755px">
-												
-												<div id = "memberInterestList" style = "width:auto; float:left">
-												<input type="text" id="isel" name="minterest" th:value  = "${myinterest.interest2cd.interest2Code}" style="display: none;">	
-												<input type="text" id="isel" name = "mInterestTest"th:value  = "${myinterest.interest2cd.codeValueKorean}" style="display: none;">										
-												<span class="yshspan" th:text = "' > ' + ${myinterest.interest2cd.codeValueKorean}" style = "padding:0 0 0 26px"></span> 
-												<input class="yshbtn" type="button" value="X" id="liidel" onclick="deleteInterest2(this)">
-												</div>
-												
-												</div>
-												
-												
-												
-												</div>
-												</div>
+                           <!-- 관심분야 조회, 수정, 삭제  : 352 줄 ~ 371줄-->
+                                 <div class="join-input100" style = "height:auto; width:740px; margin-bottom:0">
+                                    <div id="interest2cd" name="interest2cd" >
+                                    
+                                    <div id="int2">
+                                    
+                                    <div th:each="myinterest : ${mymemberinterest}" style = "width:755px">
+                                    
+                                    <div id = "memberInterestList" style = "width:auto; float:left">
+                                    <input type="text" id="isel" name="minterest" th:value  = "${myinterest.interest2cd.interest2Code}" style="display: none;">   
+                                    <input type="text" id="isel" name = "mInterestTest"th:value  = "${myinterest.interest2cd.codeValueKorean}" style="display: none;">                              
+                                    <span class="yshspan" th:text = "' > ' + ${myinterest.interest2cd.codeValueKorean}" style = "padding:0 0 0 26px"></span> 
+                                    <input class="yshbtn" type="button" value="X" id="liidel" onclick="deleteInterest2(this)">
+                                    </div>
+                                    
+                                    </div>
+                                    
+                                    
+                                    
+                                    </div>
+                                    </div>
 
-												</div>
-												
-								<div class="wrap-input100 validate-input"
-											style="border: none; margin: 0; height:40px">
-											<span class="login100-form-title-error p-b-43"
-												id="duplicationmsg"> </span>
-										</div>
-												
-										<!-- 관심분야 조회, 수정, 삭제  : 352 줄 ~ 371줄-->
-
-
-								
+                                    </div>
+                                    
+                        <div class="wrap-input100 validate-input"
+                                 style="border: none; margin: 0; height:40px">
+                                 <span class="login100-form-title-error p-b-43"
+                                    id="duplicationmsg"> </span>
+                              </div>
+                                    
+                              <!-- 관심분야 조회, 수정, 삭제  : 352 줄 ~ 371줄-->
 
 
-										
-										
-							<div class="wrap-input100 validate-input"
-							style="border: none; margin: auto; width: auto;margin-left: 600px; height:auto;">
-							<div class="join-form-btn">
-												<input type="hidden" th:name="${_csrf.parameterName}"
-													th:value="${_csrf.token}" />
-
-												<button id = "enrollInt" type="button" onclick = "enrollInterest()" style = "width:auto; height:auto; font-weight: bold; font-size:14px">적용</button>
-							</div></div>
-										
+                        
 
 
+                              
+                              
+                     <div class="wrap-input100 validate-input"
+                     style="border: none; margin: auto; width: auto;margin-left: 600px; height:auto;">
+                     <div class="join-form-btn">
+                                    <input type="hidden" th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}" />
 
-
-										<!-- 성호님 코드 끝 -->
-
-									</div>
-								</div>
-						</form>
+                                    <button id = "enrollInt" type="button" onclick = "enrollInterest()" style = "width:auto; height:auto; font-weight: bold; font-size:14px">적용</button>
+                     </div></div>
+                              
 
 
 
 
-				</div>
-				
-				
-				
-				
+                              <!-- 성호님 코드 끝 -->
+
+                           </div>
+                        </div>
+                  </form>
 
 
 
-				<!--===============================================================================================-->
-				<script src="/Login_v18/vendor/jquery/jquery-3.2.1.min.js"></script>
-				<!--===============================================================================================-->
-				<script src="/Login_v18/vendor/animsition/js/animsition.min.js"></script>
-				<!--===============================================================================================-->
-				<script src="/Login_v18/vendor/bootstrap/js/popper.js"></script>
-				<script src="/Login_v18/vendor/bootstrap/js/bootstrap.min.js"></script>
-				<!--===============================================================================================-->
-				<script src="/Login_v18/vendor/select2/select2.min.js"></script>
-				<!--===============================================================================================-->
-				<script src="/Login_v18/vendor/daterangepicker/moment.min.js"></script>
-				<script src="/Login_v18/vendor/daterangepicker/daterangepicker.js"></script>
-				<!--===============================================================================================-->
-				<script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
-				<!--===============================================================================================-->
-				<script src="/Login_v18/js/main.js"></script>
 
-				<script
-					src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-				<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-				<script type="text/javascript">
-					function addInterestLocation_join() {
+            </div>
+            
+            
+            
+            
 
-						new daum.Postcode(
-								{
-									oncomplete : function(data) {
 
-										var roadAddr = data.roadAddress; // 도로명 주소 변수
-										var jibunAddress = data.jibunAddress;
-										var road = data.roadname;
-										var sido = data.sido;
-										var sigungu = data.sigungu;
-										var dong = data.bname;
-										var upmyeonli = data.bname1;
 
-										var dongaddress = sido + "" + sigungu
-												+ "" + dong + "" + upmyeonli;
-										var doroaddress = sido + sigungu + road;
+            <!--===============================================================================================-->
+            <script src="/Login_v18/vendor/jquery/jquery-3.2.1.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="/Login_v18/vendor/animsition/js/animsition.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="/Login_v18/vendor/bootstrap/js/popper.js"></script>
+            <script src="/Login_v18/vendor/bootstrap/js/bootstrap.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="/Login_v18/vendor/select2/select2.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="/Login_v18/vendor/daterangepicker/moment.min.js"></script>
+            <script src="/Login_v18/vendor/daterangepicker/daterangepicker.js"></script>
+            <!--===============================================================================================-->
+            <script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
+            <!--===============================================================================================-->
+            <script src="/Login_v18/js/main.js"></script>
 
-										var extraRoadAddr = ''; // 참고 항목 변수
+            <script
+               src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+            <script type="text/javascript">
+               function addInterestLocation_join() {
 
-										if (data.bname !== ''
-												&& /[동|로|가]$/g.test(data.bname)) {
-											extraRoadAddr += data.bname;
-										}
+                  new daum.Postcode(
+                        {
+                           oncomplete : function(data) {
 
-										if (data.buildingName !== ''
-												&& data.apartment === 'Y') {
-											extraRoadAddr += (extraRoadAddr !== '' ? ', '
-													+ data.buildingName
-													: data.buildingName);
-										}
+                              var roadAddr = data.roadAddress; // 도로명 주소 변수
+                              var jibunAddress = data.jibunAddress;
+                              var road = data.roadname;
+                              var sido = data.sido;
+                              var sigungu = data.sigungu;
+                              var dong = data.bname;
+                              var upmyeonli = data.bname1;
 
-										var guideTextBox = document
-												.getElementById("guide");
+                              var dongaddress = sido + "" + sigungu
+                                    + "" + dong + "" + upmyeonli;
+                              var doroaddress = sido + sigungu + road;
 
-										if (data.autoRoadAddress) {
-											var expRoadAddr = data.autoRoadAddress
-													+ extraRoadAddr;
-											guideTextBox.innerHTML = '(예상 도로명 주소 : '
-													+ expRoadAddr + ')';
-											guideTextBox.style.display = 'block';
+                              var extraRoadAddr = ''; // 참고 항목 변수
 
-										} else {
-											guideTextBox.innerHTML = '';
-											guideTextBox.style.display = 'none';
-											/*찍히는 값과 x 삭제버튼 이걸로 위치지정*/
-						locValue = "<div id = 'memberLocationList' style = 'width:auto; float:left'>" +
-						"<input type='text' id='interestlocation" + count + "' name='mlocation' style = 'padding:0 0 0 26px; display:inline'>" + 										
-						"<input class='yshbtn' type='button' value='X' id='liidel' onclick='deleteLocation2(this)' style = 'padding:0; display:inline'></div>"		 							
-											
-											
-/* 											var locValue = "<input class = 'memberinterest' type = 'text' id = 'interestlocation" +count+ 
+                              if (data.bname !== ''
+                                    && /[동|로|가]$/g.test(data.bname)) {
+                                 extraRoadAddr += data.bname;
+                              }
+
+                              if (data.buildingName !== ''
+                                    && data.apartment === 'Y') {
+                                 extraRoadAddr += (extraRoadAddr !== '' ? ', '
+                                       + data.buildingName
+                                       : data.buildingName);
+                              }
+
+                              var guideTextBox = document
+                                    .getElementById("guide");
+
+                              if (data.autoRoadAddress) {
+                                 var expRoadAddr = data.autoRoadAddress
+                                       + extraRoadAddr;
+                                 guideTextBox.innerHTML = '(예상 도로명 주소 : '
+                                       + expRoadAddr + ')';
+                                 guideTextBox.style.display = 'block';
+
+                              } else {
+                                 guideTextBox.innerHTML = '';
+                                 guideTextBox.style.display = 'none';
+                                 /*찍히는 값과 x 삭제버튼 이걸로 위치지정*/
+                  locValue = "<div id = 'memberLocationList' style = 'width:auto; float:left'>" +
+                  "<input type='text' id='interestlocation" + count + "' name='mlocation' style = 'padding:0 0 0 26px; display:inline'>" +                               
+                  "<input class='yshbtn' type='button' value='X' id='liidel' onclick='deleteLocation2(this)' style = 'padding:0; display:inline'></div>"                            
+                                 
+                                 
+/*                                  var locValue = "<input class = 'memberinterest' type = 'text' id = 'interestlocation" +count+ 
                "' name = 'interestlocation[" + count + 
              "].interestLocation' style = 'display:inline'> <button type ='button' class = 'memberinterest' id = 'del"
-													+ count
-													+ "' value = '삭제' onclick = 'deleteLocation_join("
-													+ count + ")'>X</button>" */
-											$('#memberIntLoc').append(locValue);
+                                       + count
+                                       + "' value = '삭제' onclick = 'deleteLocation_join("
+                                       + count + ")'>X</button>" */
+                                 $('#memberIntLoc').append(locValue);
 
-					/* 						document.getElementById("loc").style.height = "auto"; */
+               /*                   document.getElementById("loc").style.height = "auto"; */
 
-											/*                        var locText = "<div id = 'selloc' ><ul><li>" +dongaddress+ "</li></ul></div>"
-											 $('#loc').append(locText); */
+                                 /*                        var locText = "<div id = 'selloc' ><ul><li>" +dongaddress+ "</li></ul></div>"
+                                  $('#loc').append(locText); */
 
-											document
-													.getElementById("interestlocation"
-															+ count).value = dongaddress;
+                                 document
+                                       .getElementById("interestlocation"
+                                             + count).value = dongaddress;
 
-											count++;
+                                 count++;
 
-										}
+                              }
 
-									}
-								}).open();
-					}
+                           }
+                        }).open();
+               }
 
-					function deleteLocation_join(num) {
-						var standard = num;
-						$('#interestlocation' + standard).remove();
-						$('#del' + standard).remove();
+               function deleteLocation_join(num) {
+                  var standard = num;
+                  $('#interestlocation' + standard).remove();
+                  $('#del' + standard).remove();
 
-						if (document.getElementsByClassName("memberinterest").length == 0) {
-							document.getElementById("loc").style.height = "50px";
-						}
+                  if (document.getElementsByClassName("memberinterest").length == 0) {
+                     document.getElementById("loc").style.height = "50px";
+                  }
 
-					}
+               }
 
-					/* 관심분야 스크립트*/
+               /* 관심분야 스크립트*/
 
-					var Allselect_Box = document
-							.getElementsByClassName("select-input100_2");
+               var Allselect_Box = document
+                     .getElementsByClassName("select-input100_2");
 
-					var interestArr = [ "데이터베이스", "네트워크보안", "응용프로그래밍", "웹프로그래밍" ];
-					var count = 0;
+               var interestArr = [ "데이터베이스", "네트워크보안", "응용프로그래밍", "웹프로그래밍" ];
+               var count = 0;
 
-					var ssinterest1 = "";
-					var ppinterest2cd = document
-							.getElementById("ppinterest2cd")
-					var checkNum = 0;
-
-
-					
-					function iinterest1(obj) {
-						document.getElementById('2int').style.display = 'inline-block';
-						ssinterest1 = obj.options[obj.selectedIndex].text;
-						for (var i = 0; i < Allselect_Box.length; i++) {
-							Allselect_Box[i].style.display = 'none';
-							if (ssinterest1 == interestArr[i]) {
-								checkNum = i;
-							}
-						}
-						Allselect_Box[checkNum].style.display = 'inline-block';
-						
-						
-					}
-
-					var iinterest2List = new Array();
-					var sselectedinterest2 = "";
-					var aaddInterest2List;
-					var interestInput = "";
-					var interestDelete = "";
-					
-					var inputInterestList = "";
-					
-					 var dupTest = document.getElementsByName('mInterestTest'); 
-					
-					function iinterest2(obj) {
-						
-					
-						document.getElementById("duplicationmsg").innerText = "";
-						
-						for( var i = 0; i < dupTest.length; i++) {
-
-							inputInterestList += dupTest[i].value;
-
-						}
-						
-						
-						
-						var target = document.getElementById("int2");
-						uniqueinterest2List = iinterest2List;
-
-						if (~inputInterestList
-								.indexOf(obj.options[obj.selectedIndex].text)) {
-								 	document.getElementById("duplicationmsg").innerText = "이미 선택한 분야 입니다."; 
-						} else {
-							iinterest2List
-									.push(obj.options[obj.selectedIndex].text);
-							sselectedinterest2 += iinterest2List[iinterest2List.length - 1];
+               var ssinterest1 = "";
+               var ppinterest2cd = document
+                     .getElementById("ppinterest2cd")
+               var checkNum = 0;
 
 
-									aaddinterestListValue = "<div id = 'memberInterestList' style = 'float:left; width:auto'>" +
-									"<input type='text' id='isel" + count + "' name='minterest' style='display: none;'>	" + 										
-									"<span id = 'iselText'" + count + "class='yshspan' style= 'padding:0 0 0 26px'> > "+ iinterest2List[iinterest2List.length - 1] +"</span>" + 
-									"<input class='yshbtn' type='button' value='X' id='liidel' onclick='deleteInterest2(this, " + count +")'></div>"
-									
-									$('#int2').append(aaddinterestListValue);
-									document.getElementById('isel' + count).value = obj.options[obj.selectedIndex].value;
+               
+               function iinterest1(obj) {
+                  document.getElementById('2int').style.display = 'inline-block';
+                  ssinterest1 = obj.options[obj.selectedIndex].text;
+                  for (var i = 0; i < Allselect_Box.length; i++) {
+                     Allselect_Box[i].style.display = 'none';
+                     if (ssinterest1 == interestArr[i]) {
+                        checkNum = i;
+                     }
+                  }
+                  Allselect_Box[checkNum].style.display = 'inline-block';
+                  
+                  
+               }
 
-							document.getElementById("duplicationmsg").innerText = "";
+               var iinterest2List = new Array();
+               var sselectedinterest2 = "";
+               var aaddInterest2List;
+               var interestInput = "";
+               var interestDelete = "";
+               
+               var inputInterestList = "";
+               
+                var dupTest = document.getElementsByName('mInterestTest'); 
+               
+               function iinterest2(obj) {
+                  
+               
+                  document.getElementById("duplicationmsg").innerText = "";
+                  
+                  for( var i = 0; i < dupTest.length; i++) {
 
-							interestInput = document.getElementById('isel'
-									+ count);
-							interestInput.style.display = 'none';
-							interestDelete = document.getElementById('idel'
-									+ count);
+                     inputInterestList += dupTest[i].value;
+
+                  }
+                  
+                  
+                  
+                  var target = document.getElementById("int2");
+                  uniqueinterest2List = iinterest2List;
+
+                  if (~inputInterestList
+                        .indexOf(obj.options[obj.selectedIndex].text)) {
+                            document.getElementById("duplicationmsg").innerText = "이미 선택한 분야 입니다."; 
+                  } else {
+                     iinterest2List
+                           .push(obj.options[obj.selectedIndex].text);
+                     sselectedinterest2 += iinterest2List[iinterest2List.length - 1];
 
 
-							count++;
-						}
-						inputInterestList += obj.options[obj.selectedIndex].text
-					}
+                           aaddinterestListValue = "<div id = 'memberInterestList' style = 'float:left; width:auto'>" +
+                           "<input type='text' id='isel" + count + "' name='minterest' style='display: none;'>   " +                               
+                           "<span id = 'iselText'" + count + "class='yshspan' style= 'padding:0 0 0 26px'> > "+ iinterest2List[iinterest2List.length - 1] +"</span>" + 
+                           "<input class='yshbtn' type='button' value='X' id='liidel' onclick='deleteInterest2(this, " + count +")'></div>"
+                           
+                           $('#int2').append(aaddinterestListValue);
+                           document.getElementById('isel' + count).value = obj.options[obj.selectedIndex].value;
 
-					function deleteInterest2(obj, num) {
- 						inputInterestList = inputInterestList.replace(iinterest2List[num], ""); // 중복금지차원  
-								/* alert(num); */
-						$(obj).parent().remove();
+                     document.getElementById("duplicationmsg").innerText = "";
 
-					}
-					
-					function deleteLocation2(obj) {
-						$(obj).parent().remove();
-					}
-					
- 					function enrollInterest() {
-		
-						if(document.getElementsByName('minterest').length != 0) {				
-							document.getElementById('enrollInt').submit();					
-							} else {
-							alert("관심분야를 1개 이상 설정해주세요.");
-						} 
-						
-/* 						if(document.getElementsByName('minterest').length == 0) {
-							alert("false");
-							return false;
-						} else if (document.getElementsByName('minterest').length > 0){
-							alert("true");
-							return true;
-						} */
-						
-					} 
-					
-				</script>
+                     interestInput = document.getElementById('isel'
+                           + count);
+                     interestInput.style.display = 'none';
+                     interestDelete = document.getElementById('idel'
+                           + count);
 
-			</div>
-			<!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
-		</div>
-		<!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
-	</div>
-	</div>
+
+                     count++;
+                  }
+                  inputInterestList += obj.options[obj.selectedIndex].text
+               }
+
+               function deleteInterest2(obj, num) {
+                   inputInterestList = inputInterestList.replace(iinterest2List[num], ""); // 중복금지차원  
+                        /* alert(num); */
+                  $(obj).parent().remove();
+
+               }
+               
+               function deleteLocation2(obj) {
+                  $(obj).parent().remove();
+               }
+               
+                function enrollInterest() {
+      
+                  if(document.getElementsByName('minterest').length != 0) {            
+                     document.getElementById('enrollInt').submit();               
+                     } else {
+                     alert("관심분야를 1개 이상 설정해주세요.");
+                  } 
+                  
+/*                   if(document.getElementsByName('minterest').length == 0) {
+                     alert("false");
+                     return false;
+                  } else if (document.getElementsByName('minterest').length > 0){
+                     alert("true");
+                     return true;
+                  } */
+                  
+               } 
+               
+            </script>
+
+         </div>
+         <!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
+      </div>
+      <!-- 메인과 이너 영역 인데 이것을써서 내것을 추가    -->
+   </div>
+   </div>
 </body>
 </html>
