@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +55,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -90,7 +93,7 @@ public class BoardCotroller {
 	RequestBoardFileRepository requestBoardFileRepository;
 	
 	@Autowired
-	ReportRepository ReportRepository;
+	ReportRepository reportRepository;
 	
 	@Autowired
 	BoardLikeRepository boardLikeRepository;
@@ -132,6 +135,9 @@ public class BoardCotroller {
 		Pageable page = pageDTO.makePageable(0, "commentGroup");
 		Page<InquireBoard> list = inquireBoardRepository.findAll(inquireBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),page);
 
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String id = auth.getName();
+	    model.addAttribute("memberId",id);
 		model.addAttribute("list", new PageMaker<>(list));
 		model.addAttribute("boardName", "문의게시판");
 
@@ -962,11 +968,21 @@ public class BoardCotroller {
      report.setReportWhyCD(new ReportWhyCD(reportWhyCD));
      report.setContent(content);
      log.info(report.toString());
-     ReportRepository.save(report);
+     reportRepository.save(report);
      
 	      
 		return 1;
       
+	}
+	
+	//유저정보 
+	@GetMapping("/modalmember")
+	@ResponseBody
+	public Member modalmeber(Model model, @RequestParam String id){
+		
+		Member member = memberRepository.findById(id).get();
+		log.info(member.toString());
+		return member;
 	}
 	
 	//공지숨기기

@@ -2,12 +2,17 @@ package org.mohajo.studyrepublic.repository;
 
 import java.util.List;
 
+import org.mohajo.studyrepublic.domain.QStudyNoticeboard;
+import org.mohajo.studyrepublic.domain.QStudyQnaboard;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 
 public interface StudyNoticeboardRepository extends JpaRepository<StudyNoticeboard, Integer>, QuerydslPredicateExecutor<StudyNoticeboard>{
 
@@ -32,4 +37,15 @@ public interface StudyNoticeboardRepository extends JpaRepository<StudyNoticeboa
 			"where study_noticeboard.study_id=:studyId and number=:number\r\n" + 
 			"order by replygroup asc, replystep asc", nativeQuery=true)
 	StudyNoticeboard findNoticeboardByStudyIdANDNumber(@Param(value="studyId") String studyId, @Param(value="number") int number);
+	
+
+	public default Predicate makePredicate(String studyId) {
+		BooleanBuilder builder = new BooleanBuilder();
+
+		QStudyNoticeboard studynoticeboard = QStudyNoticeboard.studyNoticeboard;
+
+		builder.and(studynoticeboard.studyId.like(studyId));
+
+		return builder; 
+	}
 }

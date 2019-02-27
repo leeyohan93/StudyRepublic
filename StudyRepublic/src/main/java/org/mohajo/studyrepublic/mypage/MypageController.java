@@ -229,7 +229,7 @@ public class MypageController {
 	}
 	
 	
-	@RequestMapping("/member/modify/location") 
+/*	@RequestMapping("/member/modify/location") 
 	public String modifyLocation(Model model, @RequestParam String[] mlocation) {
 		
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
@@ -251,7 +251,7 @@ public class MypageController {
 		}
 		
 		return "redirect:/mypage";
-	}
+	}*/
 
 	
 		
