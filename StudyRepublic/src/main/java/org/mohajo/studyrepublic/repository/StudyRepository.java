@@ -95,12 +95,13 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 	 * studyId 생성 sql
 	 */
 	
-	@Query(value = "select * from type_cd t, onoff_cd o where TYPE_CODE = :typeCode and ONOFF_CODE = :onoffCode", nativeQuery=true)
-	public Boolean validateInputCodes(String typeCode, String onoffCode);
+	@Query(value = "select TYPE_CODE from type_cd t, onoff_cd o where TYPE_CODE = :typeCode and ONOFF_CODE = :onoffCode", nativeQuery=true)
+	public String validateInputCodes(String typeCode, String onoffCode);
 	
-	@Query(value = "select substring(study_id, 1, 2) as prefix, substring(study_id, 3)+1 as counter from study where type_code = :typeCode and onoff_code = :onoffCode order by study_id desc limit 1", nativeQuery=true)
-	public StudyIdGenerator getPrefixAndCounter(String typeCode, String onoffCode);
+	@Query(value = "select substring(study_id, 1, 2) as prefix from study where type_code = :typeCode and onoff_code = :onoffCode order by study_id desc limit 1", nativeQuery=true)
+	public String getPrefix(String typeCode, String onoffCode);
 
-	
+	@Query(value = "select substring(study_id, 3)+1 as counter from study where type_code = :typeCode and onoff_code = :onoffCode order by study_id desc limit 1", nativeQuery=true)
+	public double getCounter(String typeCode, String onoffCode);	
 	
 }

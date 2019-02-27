@@ -15,7 +15,7 @@ import lombok.Data;
 public class StudyIdGenerator implements Serializable {
 
 	private String prefix;
-	private int counter;
+	private double counter;
 	
 	
 }

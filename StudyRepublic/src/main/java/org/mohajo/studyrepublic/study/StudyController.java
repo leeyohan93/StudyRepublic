@@ -498,7 +498,7 @@ public class StudyController {
 			String onoffCode = study.getOnoffCode().getOnoffCode();
 			
 //			studyId = sr.getNewStudyId(typeCode, onoffCode);
-			studyId = generateStudyId(typeCode, "G", model);
+			studyId = generateStudyId(typeCode, onoffCode);
 			
 			if(studyId == null) {
 				log.info("studyId is null");
@@ -1109,41 +1109,49 @@ public class StudyController {
 	 *	studyId 생성 메소드 
 	 */
 	
-	public String generateStudyId(String typeCode, String onoffCode, Model model) {
+	public String generateStudyId(String typeCode, String onoffCode) {
 		
 		log.info("generateStudyId() called...");
 		
 		String result = "";
 		
 		// 1. input 검증
-		Boolean isValidInput = sr.validateInputCodes(typeCode, onoffCode);
+		String isValidInput = sr.validateInputCodes(typeCode, onoffCode);
 		
-		if(isValidInput = false) {
-			model.addAttribute("errorMsg", "비정상적인 코드를 입력했습니다.");
+		if(isValidInput == null) {
+			log.info("isnull");
 			
-			return "/study/error";
+			return null;
 		}
 		
 		// 2. 값 검증
-		StudyIdGenerator sig = sr.getPrefixAndCounter(typeCode, onoffCode);
+		String prefix;
+		int counter;
+		
+		try {
+			prefix = sr.getPrefix(typeCode, onoffCode);
+			counter = (int)sr.getCounter(typeCode, onoffCode);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			return null;
+		}
 		
 		// 해당 코드 조합으로 최초 생성되는 경우
-		if(sig == null) {
-			sig.setPrefix(typeCode + onoffCode);
-			sig.setCounter(1);
+		if(prefix == null) {
+			prefix = typeCode + onoffCode;
+			counter = 1;
 		}
 		
 		// 코드 자리수를 초과하는 경우
-		if(sig.getCounter() > 99999) {
-			model.addAttribute("errorMsg", "스터디 개수가 한계 용량을 초과했습니다. 관리자에게 문의 바랍니다.");
-			
-			return "/study/error";
+		if(counter > 99999) {
+			return null;
 		}
 		
-		String prefix = sig.getPrefix();
 		log.info("prefix = " + prefix);
 		
-		String counterStr = String.format("%05d", sig.getCounter());
+		String counterStr = String.format("%05d", counter);
 		log.info("counterStr = " + counterStr);
 		
 		result = prefix + counterStr;
