@@ -244,7 +244,7 @@ public class MypageController {
 		System.out.println("interest" + i + " : " + mlocation[i]);
 		
 		InterestLocation interestlocation = new InterestLocation();
-		interestlocation.setMember(member);
+		interestlocation.setId(member.getId());
 		interestlocation.setInterestLocation(mlocation[i]);
 		iir.save(interestlocation);
 
