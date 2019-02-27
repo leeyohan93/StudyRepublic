@@ -17,13 +17,61 @@
 				<td>제목</td>
 				<td>작성일시</td>
 			</tr>
-			<tr th:each="fasf : ${findAllStudyFileshareboard}">
+			<div th:with="result=${findAllStudyFileshareboard.list}">
+			<tr th:each="fasf : ${result.content}">
 				<td th:text = "${fasf.studyMember.member.profileSaveName}"></td>
 				<td th:text = "${fasf.studyMember.member.nickname}"></td>
 				<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${fasf.title}"></a></td>
 				<td th:text = "${#dates.format(fasf.date, 'yyyy/MM/dd HH:mm:ss')}"></td>
 			</tr>
+			</div>
 		</table>
+			
+			<!-- 페이징   -->
+
+
+			 		<nav>
+						<div class="pageForm">
+							<ul class="pagination">
+								<li class="page-item" th:if="${findAllStudyFileshareboard.prevPage}"><a
+									class="page-link" th:href="${findAllStudyFileshareboard.prevPage.pageNumber}+ 1">
+										〈&nbsp&nbsp이전 </a></li>
+								<li class="page-item" th:each="p:${findAllStudyFileshareboard.pageList}"
+									th:classappend="${p.pageNumber == findAllStudyFileshareboard.currentPageNum -1}?active: '' "><a
+									class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
+										+ 1]]</a></li>
+
+								<li class="page-item" th:if="${findAllStudyFileshareboard.nextPage}"><a
+									class="page-link" th:href="${findAllStudyFileshareboard.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
+								</li>
+							</ul>
+						</div>
+					</nav> 
+					
+					
+					<form id="f1" th:action="@{Fileshareboard}" method="get">
+						<input type="hidden" name="page" th:value=${findAllStudyFileshareboard.currentPageNum}>
+						<input type="hidden" name="size"
+							th:value=${findAllStudyFileshareboard.currentPage.pageSize}>
+					</form>
+
+					<!--페이징 끝  -->
+			
 	</div>
+	
+	<script type="text/javascript">
+	
+	//페이징
+	var formObj = $("#f1");
+	$(".pagination a").click(function(e) {
+
+		e.preventDefault();
+  
+		formObj.find('[name="page"]').val($(this).attr('href'));
+
+		formObj.submit();
+
+	});
+	</script>
 </body>
 </html>

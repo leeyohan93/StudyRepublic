@@ -24,6 +24,26 @@
 h2 {
 	font-size: 0.3vm;
 }
+/*페이징 css  */
+.pagination {
+	justify-content: center;
+	margin: 20px;
+}
+
+.pagination li {
+	padding: 0px;
+}
+
+.page-link {
+	color: black !important;
+}
+
+.page-item.active .page-link {
+	background-color: rgb(179,220,248) !important;
+	border-color: rgb(179,220,248) !important;
+	color: white !important;
+}
+
 </style>
 </head>
 <body>
@@ -113,15 +133,30 @@ h2 {
 			
 
 			<!-- 페이지 번호 출력 -->
-            <nav>
-               <div>
-                  <ul class="pagination">
-                     <li class="page-item" th:if="${pagedList.prevPage}"><a th:href="${pagedList.prevPage.pageNumber}">[[${pagedList.prevPage}]]</a></li>
-                     <li class="page-item" th:classappend="${page.pageNumber == pagedList.currentPageNum -1}? active: ''" th:each="page : ${pagedList.pageList}"><a th:href="${page.pageNumber}+1">[[${page.pageNumber}+1]]</a></li>
-                     <li class="page-item" th:if="${pagedList.nextPage}"><a th:href="${pagedList.nextPage.pageNumber}">[[${pagedList.nextPage}]]</a></li>
-                  </ul>
-               </div>
-            </nav>
+
+            
+            <!-- 페이징   -->
+
+
+					<nav>
+						<div class="pageForm">
+							<ul class="pagination">
+								<li class="page-item" th:if="${pagedList.prevPage}"><a
+									class="page-link" th:href="${pagedList.prevPage.pageNumber}+ 1">
+										〈&nbsp&nbsp이전 </a></li>
+								<li class="page-item" th:each="p:${pagedList.pageList}"
+									th:classappend="${p.pageNumber == pagedList.currentPageNum -1}?active: '' "><a
+									class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
+										+ 1]]</a></li>
+
+								<li class="page-item" th:if="${pagedList.nextPage}"><a
+									class="page-link" th:href="${pagedList.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!--페이징 끝  -->
             
             <!-- 페이지 번호를 통해 이동 1 -->
             <th:block th:if="${search}!=null">

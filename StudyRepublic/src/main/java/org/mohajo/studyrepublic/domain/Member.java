@@ -26,6 +26,7 @@ import javax.persistence.TemporalType;
 /*import org.springframework.security.core.authority.SimpleGrantedAuthority;*/
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity

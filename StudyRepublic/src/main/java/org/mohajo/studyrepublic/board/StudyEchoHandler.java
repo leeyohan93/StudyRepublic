@@ -61,7 +61,7 @@ public class StudyEchoHandler extends TextWebSocketHandler{
 				String cmd = strs[0];
 				String replyWriter = strs[1];
 				String boardWriter = strs[2];
-				String bno = strs[3];
+				String freeBoardId = strs[3];
 				
 				
 			
@@ -70,7 +70,7 @@ public class StudyEchoHandler extends TextWebSocketHandler{
 				
 				if ("study".equals(cmd) && boardWriterSession != null) {
 					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
-							+ "<a href='/board/viewBoard?freeBoardId=" + bno + "'>" + bno + "</a>번 게시글에 댓글을 달았습니다!");
+							+ "<a href='/board/viewBoard?freeBoardId=" + freeBoardId + "'>" + freeBoardId + "</a>번 게시글에 댓글을 달았습니다!");
 					log.info("=============================");
 					boardWriterSession.sendMessage(tmpMsg);
 				}

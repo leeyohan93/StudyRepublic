@@ -182,16 +182,27 @@ public class StudyPageController {
 	}
 
 	@RequestMapping("/Noticeboard")
-	public String studyNoticeboard(Model model, @Param(value="studyId") String studyId) {
+	public String studyNoticeboard(Model model, @Param(value="studyId") String studyId,PageDTO pageDTO) {
 		log.info(studyId);
 		
 		studyId = "BB00001";
 		String id = "aaa123";
+		///페이징 갯수
+		pageDTO.setSize(10);
+		log.info("====");
+		
+		Pageable page = pageDTO.makePageable(0, "studyId");
+		log.info("==========================================");
+		Page<StudyNoticeboard> list = studyNoticeboardRepository.findAll(studyNoticeboardRepository.makePredicate(studyId), page);
+		log.info("=======================================================");
+		model.addAttribute("findAllStudyNoticeboard",new PageMaker<>(list));
+		log.info("=======================================================");
 
-		model.addAttribute("findAllStudyNoticeboard", studyNoticeboardRepository.findNoticeboardListByStudyId(studyId));
+//		model.addAttribute("findAllStudyNoticeboard", studyNoticeboardRepository.findNoticeboardListByStudyId(studyId));
 		return "studypage/studypage_notice";
 	}
 
+	
 	@RequestMapping("/Qnaboard")
 	public String studyQnaboard(Model model,PageDTO pageDTO) {
 		String studyId = "BB00001";
@@ -211,12 +222,18 @@ public class StudyPageController {
 	}
 
 	@RequestMapping("/Fileshareboard")
-	public String studyFileshareboard(Model model) {
+	public String studyFileshareboard(Model model,PageDTO pageDTO) {
 		String studyId = "BB00001";
 		String id = "aaa123";
 
-		model.addAttribute("findAllStudyFileshareboard",
-				predicate.studyFileshareResultPredicate(studyId, 10, studyFileshareboardRepository));
+		pageDTO.setSize(10);
+		
+		Pageable page = pageDTO.makePageable(0, "studyId");
+		Page<StudyFileshareboard> list = studyFileshareboardRepository.findAll(studyFileshareboardRepository.makePredicate(studyId), page);
+		
+		model.addAttribute("findAllStudyFileshareboard",new PageMaker<>(list));
+//		model.addAttribute("findAllStudyFileshareboard",
+//				predicate.studyFileshareResultPredicate(studyId, 10, studyFileshareboardRepository));
 		return "studypage/studypage_fileshare";
 	}
 	
@@ -481,7 +498,7 @@ public class StudyPageController {
 			return studyQnaboardReplyRepository.save(studyQnaboardReply);
 
 		}
-		
+		//댓글리스트
 		@GetMapping("/qnaBoardReplyList")
 		@ResponseBody
 		public List<StudyQnaboardReply> qnaBoardReplyList(int studyQnaBoardId) {
@@ -497,7 +514,7 @@ public class StudyPageController {
 			
 			
 		}
-		
+		//댓글삭제
 		@PostMapping("/qnaBoardReplyDelete/{studyQnaboardReplyId}")
 		@ResponseBody
 		public int qnaBoardReplyDelete(@PathVariable int studyQnaboardReplyId) {

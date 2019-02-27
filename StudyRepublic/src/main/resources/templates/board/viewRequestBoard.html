@@ -388,7 +388,7 @@ height: 90px !important;
 							  <input type="hidden" name = "reportTypeCD" value="request">
 						
 							   <input type="hidden" name = "id" th:value="${memberId}">
-							    <input type="hidden" name ="target" id="reportTarget" th:value="${requestBoard.member.id}">
+							    <input type="hidden" name ="target" id="reportTarget" th:value="${requestBoard.requestBoardId}">
 							<div>
 								<input class="reportOption" type="text" value="신고자" readonly>
 								<input class="reportContent" name="idNickname" type="text"
@@ -396,16 +396,15 @@ height: 90px !important;
 									</div>
 									<div>
 									 <input
-									class="reportOption" type="text" value="신고일" readonly>
-						<input class="reportContent" name="date" type="text"
-									th:value="${#dates.format(requestBoard.date,'yyyy-MM-dd HH:mm')}"
+									class="reportOption" type="text" value="신고일" i readonly>
+						<input class="reportContent" name="date" type="text" id="reportDay" value=""
 									readonly> 
 									</div>
 									<div>
 									<input class="reportOption"
-									type="text" value="신고대상자" readonly> <input
+									type="text" value="신고 게시판" readonly> <input
 									class="reportContent" name="targetNickname" type="text"
-									th:value="${requestBoard.member.nickname}" readonly> 
+									th:value="${requestBoard.title}" readonly> 
 									</div>
 									<div>
 									 <input
@@ -493,6 +492,7 @@ height: 90px !important;
  var requestBoardId = [[${requestBoard.requestBoardId}]];
  var likeCount = [[${requestBoard.likeCount}]];
  var memberId = [[${memberId}]];
+ var reportDay = new Date().toLocaleString();
  $(document).ready(function(){
 	  
 	 
@@ -772,6 +772,11 @@ height: 90px !important;
     $(".fileForm").toggle();
   });
  
+  //신고 클릭
+  $('#reportModal').on('show.bs.modal', function(e) {
+ 	$('#reportDay').val(reportDay);
+  });
+ 
   
   //신고하기
    $('#reportRegister').click(function(){
@@ -800,6 +805,8 @@ height: 90px !important;
  			success : function(){
  				console.log("성공");
  				Swal.fire("신고 처리 되었습니다.","");
+ 				$('#reportWhyCD').val("");
+				$('#reportContent').val("");
  				$("#reportModal .close").click()
  			},
  				

@@ -478,18 +478,19 @@ a {
 	//웹소켓 설정
 	var socket = null;
 	$(document).ready(function(){
-		connectWS();
 		
+		connectWS();
 
 	});
 	
-	function connectWS() {
-	    console.log("소켓연결")
+	
+	 function connectWS() {
+	   
 	   var ws = new SockJS("/StudyEcho"); 
 	    socket = ws;
 	    
 	    ws.onopen = function () {
-	        console.log('소켓연결 open');
+	        
 	    };
 
 	    ws.onmessage = function (event) {
@@ -519,11 +520,13 @@ a {
 	    };
 
 	    ws.onclose = function (event) { 
-	        console.log('소켓닫음');
+	       
 	        
 	    };
 	    ws.onerror = function (err) { console.log('Error:', err); };
-	}
+	} 
+	
+	
 	
 	
 
