@@ -11,7 +11,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
  * @version	0.0
  * - 기능 설명 1
  */
-public interface StudyPriceRepository extends JpaRepository<StudyPrice, String>, QuerydslPredicateExecutor<Study> {
+public interface StudyPriceRepository extends JpaRepository<StudyPrice, String> {
 
 
 }

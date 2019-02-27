@@ -32,7 +32,8 @@ public class payController {
 	MemberPointRepository  memberpointrepository;
 	
 	@RequestMapping("/member/point/charge")
-	public String chargePoint(Model model, HttpSession session) {
+	public String chargePoint(Model model, HttpSession session
+			, @RequestParam(value="indicator", required=false) String indicator, @RequestParam(value = "needPoint") int needPoint) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -43,6 +44,12 @@ public class payController {
     	         
         session.setAttribute("memberpoint", memberpoint.getPoint());
         System.out.println("보유포인트갱신: " + memberpoint.getPoint());
+        
+        if(indicator != null && indicator.equals("min")) {
+        	model.addAttribute("needPoint", needPoint);
+        	
+    		return "member/pointChargeMin";
+        }
         
 		return "member/pointCharge";
 		

@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -164,6 +166,9 @@ public class StudyController {
 	
 	@Autowired
 	TypeCD typeCd;
+	
+	@PersistenceContext
+	EntityManager em;
 	
 	String origin = "http://localhost:8080";
 	String pathname = "";
@@ -399,7 +404,11 @@ public class StudyController {
 	
 	@Transactional
 	@RequestMapping("/register")
-	public String register(@ModelAttribute Study study, @RequestParam String id, @ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, HttpServletResponse response, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
+	public String register(@ModelAttribute Study study, @RequestParam String id, 
+			@ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, 
+			MultipartHttpServletRequest mhsRequest, HttpServletResponse response, 
+			@RequestParam MultipartFile file, 
+			@ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 //	public String register(@ModelAttribute StudyView study, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 		
 		String studyId;
@@ -654,6 +663,7 @@ public class StudyController {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		log.info("Logged in user = " + id);
+		model.addAttribute("id", id);
 
 		
 		/************************* StudyMember 로 사용자 재검증 ******************************/
@@ -763,9 +773,18 @@ public class StudyController {
 	
 	@Transactional
 	@RequestMapping("/joinConfirm")
-	public String joinConfirm(@RequestParam("id") String id, @RequestParam("studyId") String studyId, @RequestParam("price") int price, @RequestParam("pointid") int pointid, @ModelAttribute LeveltestResponseList leveltestResponseList, Model model) {
+	public String joinConfirm(@RequestParam("studyId") String studyId,
+			@RequestParam(value = "price", required=false) Integer price, 
+			@RequestParam(value = "pointid", required=false) Integer pointid, 
+			@ModelAttribute LeveltestResponseList leveltestResponseList, 
+			Model model) {
+			// Optional int parameter 'pointid' is present but cannot be translated into a null value due to being declared as a primitive type. Consider declaring it as object wrapper for the corresponding primitive type.
+		
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
 		
 		log.info("joinConfirm() called...");
+		log.info("id = " + id + ", studyId = " + studyId);
 		
 		if(id == null || studyId == null) {
 			model.addAttribute("errorMsg", "스터디 가입 실패! 예기치 못한 문제가 발생하였습니다. 다시 시도해주세요.");
@@ -773,30 +792,32 @@ public class StudyController {
 			return "/study/error";
 			
 		}
+		log.info("1 ----------- " + leveltestResponseList.toString());
 		
-		List<LeveltestResponse> leveltestResponses = leveltestResponseList.getLeveltesResponses();
+		List<LeveltestResponse> leveltestResponses = leveltestResponseList.getLeveltestResponseList();
 
-		if(leveltestResponses != null) {
-			log.info(leveltestResponses.toString());
-	
-			for(int i=0; i<leveltestResponses.size(); i++) {
-				leveltestResponses.get(i).setStudyId(studyId);
-			}
-			log.info(leveltestResponses.toString());
-			lrr.saveAll(leveltestResponses);
-			log.info("----------------[ leveltestResponses save completed ]----------------");
-		}
-		
-		if(studyId.substring(0, 1).equals("P")) {
-			MemberPoint memberPoint = mpr.findById(pointid).get();
-			int currentPoint = memberPoint.getPoint();
-			memberPoint.setPoint(currentPoint - price);
-			mpr.save(memberPoint);
-			log.info("----------------[ memberpoint saved ]----------------");
-		}
-		
 		try {
+	
+			if(studyId.substring(0, 1).equals("P")) {
+				MemberPoint memberPoint = mpr.findById(pointid).get();
+				int currentPoint = memberPoint.getPoint();
+				memberPoint.setPoint(currentPoint - price);
+				mpr.save(memberPoint);
+				log.info("----------------[ memberpoint saved ]----------------");
+			}
+		
 			saveStudyMember(id, studyId, "WA");
+			
+			if(leveltestResponses != null) {
+				log.info("2 ----------- " + leveltestResponses.toString());
+				
+				for(int i=0; i<leveltestResponses.size(); i++) {
+					leveltestResponses.get(i).setStudyId(studyId);
+				}
+				log.info(leveltestResponses.toString());
+				lrr.saveAll(leveltestResponses);
+				log.info("----------------[ leveltestResponses save completed ]----------------");
+			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -804,7 +825,9 @@ public class StudyController {
 			
 			return "/study/error";
 		}
+		String studyName = sr.findById(studyId).get().getName();
 		model.addAttribute("studyId", studyId);
+		model.addAttribute("studyName", studyName);
 		
 		return "/study/join/complete";
 		
@@ -1030,6 +1053,8 @@ public class StudyController {
 //		studyMemberId.setStudyId(studyId);
 //		studyMember.setStudyMemberId(studyMemberId);
 		
+		log.info("id = " + id + ", studyId = " + studyId);
+		
 		Member member = mr.findById(id).get();
 		Study study = sr.findById(studyId).get();
 		// 참고:  https://stackoverflow.com/a/27467933/11111203
@@ -1072,6 +1097,25 @@ public class StudyController {
 
 		return "/study/review";
 	}
+	
+	@RequestMapping("/memberPointInquiry")
+	@ResponseBody
+	public MemberPoint memberPointInquiry() {
+		
+		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		
+		MemberPoint memberpoint = mpr.inqueryPoint(id);
+		
+		log.info("-------------------- point charged --------------------");
+		log.info(memberpoint.toString());
+		
+		return memberpoint;
+		
+	}
+
+	
+	
 	
 	// 테스트 시작.
 	@RequestMapping("/test")

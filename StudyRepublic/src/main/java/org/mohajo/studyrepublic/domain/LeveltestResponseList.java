@@ -14,6 +14,7 @@ import lombok.Data;
 @Data
 public class LeveltestResponseList implements Serializable {
 
-	private List<LeveltestResponse> LeveltesResponses;
-	
+//	private List<LeveltestResponseHelper> leveltestResponseList;
+	private List<LeveltestResponse> leveltestResponseList;
+
 }

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="htt p://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
+<head>
+
+
+
+   <title>포인트충전</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->   
+   <link rel="icon" type="image/png" href="/Login_v18/images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+   <link rel="stylesheet" type="text/css" href="/Login_v18/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+   <link rel="stylesheet" type="text/css" href="/Login_v18/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+   <link rel="stylesheet" type="text/css" href="/Login_v18/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+   <link rel="stylesheet" type="text/css" href="/Login_v18/vendor/animate/animate.css">
+<!--===============================================================================================-->   
+   <link rel="stylesheet" type="text/css" href="/Login_v18/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+   <link rel="stylesheet" type="text/css" href="/Login_v18/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+   <link rel="stylesheet" type="text/css" href="/Login_v18/vendor/select2/select2.min.css">
+<!--===============================================================================================-->   
+   <link rel="stylesheet" type="text/css" href="/Login_v18/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+   <link rel="stylesheet" type="text/css" href="/Login_v18/css/util.css">
+   <link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+   
+   
+<!--===============================================================================================-->
+
+<style>
+.label-checkbox100 {
+
+font-size : 18px;
+
+}
+
+#customLabel {
+
+height:0px;
+margin-bottom : 40px;
+
+}
+
+#custom_span {
+font-size : 12px;
+border-bottom:none
+}
+
+#custom_span_after {
+font-size : 12px;
+border-bottom:none
+}
+
+body {
+	/* https://webisfree.com/2014-01-25/[css]-%ED%95%B4%EB%8B%B9-%EC%9A%94%EC%86%8C(%ED%83%9C%EA%B7%B8)-%ED%81%AC%EA%B8%B0-%ED%99%95%EB%8C%80-%EC%B6%95%EC%86%8C%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95-zoom */
+	zoom: 0.8;
+}
+
+form {
+	margin: 0 !important;
+}
+
+hr {
+	display: none !important;
+}
+
+#main, #footer {
+	width: 500px !important;
+	margin: 0 !important;
+} 
+
+.label-input100_label, .cash-amount, .join-form-btn {
+	zoom: 1.2;
+}
+
+.imp-dialog.pc.payment-kakaopay .imp-frame-kakaopay {
+    height: 600px !important;
+}
+
+</style>
+
+
+</head>
+		<th:block id="header" layout:fragment="header"></th:block>
+		<th:block id="menu" layout:fragment="menu"></th:block>
+		<footer id="footer" layout:fragment="footer"></footer>
+
+<body>
+   
+ <div id = "wrapper"> 
+<div layout:fragment = "main">
+<div class = "inner"> 
+
+
+   <div class="limiter">
+            
+      
+            <form class="login100-form validate-form" method="post" autocomplete = "off" style = "width:500px">
+            
+               <span th:if="${param.logout == null}"class="login100-form-title p-b-43">
+                  			포인트 충전
+         	      </span>
+         	      
+<!--          	<div class = "wrap-input100_label" style = "height:50px; ">
+					<span class="label-input100_label" style="width:auto; font-size : 25px; border-bottom:none;" th:text = "${memberpoint.member.name} +'님'"> </span>
+						</div>      -->
+					
+				<input type = "number" id  = "nowPoint" th:value = "${memberpoint.point}" style= "display:none">
+
+			 <div class = "wrap-input100_label" id = "customLabel">
+<!-- 					<span class="label-input100_label" id = "custom_span" style="width: auto;" th:text = "부족 포인트 : ' + (${memberpoint.point} + ${needPoint}) +' P'"> </span> -->
+					<span class="label-input100_label" id = "custom_span" style="width: auto;" th:text = "${needPoint} - ${memberpoint.point} > 0 ? '부족 포인트 : ' + (${needPoint} - ${memberpoint.point}) + 'P': '부족 포인트: 0 P'"> </span>
+				</div>   
+					
+			 <div class = "wrap-input100_label" id = "customLabel">
+					<span class="label-input100_label" id = "custom_span" style="width: auto;" th:text = "'보유포인트 : ' + ${memberpoint.point} +' P'"> </span>
+				</div>   
+				
+				 <div class = "wrap-input100_label" id = "customLabel" style = "margin-bottom:80px">
+					<span class="label-input100_label" id = "custom_span_after" style="width: auto;" th:text = "'충전 후 포인트 : ' + ${memberpoint.point} +' P'" > </span>
+				</div>    	      
+                        
+                  <div class="flex-sb-m w-full p-t-3 p-b-32">
+                      <div class="contact100-form-checkbox">
+                     <input type = "checkbox"  class="input-checkbox100" id = "10000" name = "charge" value = "10000" style = "display:none" onclick = "inputPoint(this)"> 
+                     <label class="label-checkbox100" for="10000">
+                        10,000 포인트
+                     </label>
+                  </div>
+                  
+                  <div class="cash-amount">
+                  10,000원
+                  </div>
+                  
+                  </div>
+                  
+                  
+                   <div class="flex-sb-m w-full p-t-3 p-b-32">
+                     <div class="contact100-form-checkbox">
+                     <input type = "checkbox"  class="input-checkbox100" id = "30000" name = "charge" value = "30000"  style = "display:none" onclick = "inputPoint(this)"> 
+                     <label class="label-checkbox100" for="30000">
+                        30,000 포인트
+                     </label>
+                  </div>
+                  
+                  <div class="cash-amount">
+                  30,000원
+                  </div>
+                  
+                  </div>
+                  
+                   <div class="flex-sb-m w-full p-t-3 p-b-32">
+                     <div class="contact100-form-checkbox">
+                     <input type = "checkbox"  class="input-checkbox100" id = "50000" name = "charge" value = "50000"  style = "display:none" onclick = "inputPoint(this)"> 
+                     <label class="label-checkbox100" for="50000">
+                        50,000 포인트
+                     </label>
+                  </div>
+                  
+                   <div class="cash-amount">
+                  50,000원
+                  </div>
+                  
+                  </div>
+                  
+                   <div class="flex-sb-m w-full p-t-3 p-b-32">
+                     <div class="contact100-form-checkbox">
+                     <input type = "checkbox"  class="input-checkbox100" id = "100000" name = "charge" value = "100000"  style = "display:none" onclick = "inputPoint(this)"> 
+                     <label class="label-checkbox100" for="100000">
+                        100,000 포인트
+                     </label>
+                  </div>
+                  
+                   <div class="cash-amount">
+                  100,000원
+                  </div>
+                  
+                  </div>
+                  
+                   <div class="flex-sb-m w-full p-t-3 p-b-32">
+                   <div class="contact100-form-checkbox">
+                     <input type = "checkbox"  class="input-checkbox100"  id = "direct" name = "charge" style = "display:none"  onclick = "inputPoint(this)"> 
+                     <label class="label-checkbox100" for="direct">
+                        	직접입력
+                     </label>
+                  </div>
+                  
+
+           
+
+					
+				 <div class="wrap-input100 validate-input" id = "manual" style = "width:150px; height:40px; margin:0; display:none">
+                  <input class="input100" type="text"  id = "manual_input" name="use" style = "padding:0 0 0 26px;" onkeyup = "manualInput()">
+                  <span class="focus-input100"></span>
+               	</div>
+                  </div>
+                  
+                       <span id = "spancheckms" th:if="${param.logout == null}"class="login100-form-title p-b-43" style = "width:100%;font-size:10px; display:none; padding-bottom:12px; color:red">
+							 결제하실 금액을 입력해주세요.
+               </span>
+                    
+
+<!--                <div class="container-login100-form-btn">
+                  <button type="button" class="login100-form-btn" onclick = "pay()">
+                     		충전하기
+                  </button>
+               </div> -->
+               
+               						<div class="wrap-input100 validate-input"
+							style="border: none; margin: auto; width: 400px">
+
+							<div class="join-form-btn"
+								style="display: inline-block; width: auto; height: auto; margin: auto;">
+								<button type="button" onclick="location.href='/index'">
+									돌아가기</button>
+							</div>
+							
+							<div class="join-form-btn"
+								style="display: inline-block; width: auto; height: auto; margin: auto;">
+								<button type="button" onclick = "pay()">
+									충전하기</button>
+							</div>
+						</div>
+               
+ 
+                 
+                 <input type = "text" id = "id" name = "id" th:value = "${memberpoint.member.id}" style = "display:none">
+         		 <input type = "number" id = "point" style = "display:none">
+               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+               
+            </form>
+     
+   </div> 
+
+   
+   
+<!--===============================================================================================-->
+   <script src="/Login_v18/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+   <script src="/Login_v18/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+   <script src="/Login_v18/vendor/bootstrap/js/popper.js"></script>
+   <script src="/Login_v18/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+   <script src="/Login_v18/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+   <script src="/Login_v18/vendor/daterangepicker/moment.min.js"></script>
+   <script src="/Login_v18/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+   <script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+   <script src="/Login_v18/js/main.js"></script>
+		
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+	<script>
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$(function() {
+	    $(document).ajaxSend(function(e, xhr, options) {
+	        xhr.setRequestHeader(header, token);
+	    });
+	});
+	
+	var checkBox = document.getElementsByClassName("input-checkbox100");
+	var inputedPoint = "";
+	var id = document.getElementById("id").value;
+	
+	
+	function inputPoint (obj) {
+		
+		for ( var i = 0; i < checkBox.length; i++) {
+				checkBox[i].checked = false;
+			
+			if (obj == checkBox[checkBox.length-1]) {
+		/* 		checkBox[i].checked = false; */
+				checkBox[checkBox.length-1].checked = true;
+				document.getElementById('custom_span_after').innerText = "충전 후 포인트 : " + (document.getElementById('nowPoint').value-0) + " P"
+				document.getElementById('manual').style.display = 'block';
+				document.getElementById('spancheckms').style.display = 'none';
+				
+				
+			} else if ( obj == checkBox[i] ) {
+				checkBox[i].checked = true;
+				inputedPoint = checkBox[i].value-0;
+				document.getElementById('custom_span_after').innerText = "충전 후 포인트 : " + ((document.getElementById('nowPoint').value-0) + inputedPoint) + " P";
+				document.getElementById('spancheckms').style.display = 'none';
+			}
+		}
+	}
+		
+	
+	
+	function manualInput() {	
+	
+			inputedPoint = document.getElementById("manual_input").value - 0;
+			document.getElementById('spancheckms').style.display = 'none';
+			document.getElementById('custom_span_after').innerText = "충전 후 포인트 : " + ((document.getElementById('nowPoint').value-0) + inputedPoint) + " P";
+	
+	}
+	
+
+	
+		
+	var IMP = window.IMP;
+		IMP.init("imp18113186");
+		var data = {};
+		var afterPoint = "";
+
+		function pay() {
+			
+			if( inputedPoint == 0 || null) {
+			/* 	alert("결제하실 금액을 입력해주세요. "); */
+				document.getElementById('spancheckms').style.display = 'block';
+				
+			}
+			
+			else {
+				IMP.request_pay({
+				pg : 'kakaopay', // version 1.1.0부터 지원.
+				pay_method : 'card',
+				merchant_uid : 'merchant_' + new Date().getTime(),
+				name : 'StudyRepublic 포인트 결제',
+				amount : inputedPoint,
+				id : id,
+//				buyer_email : '${member.email}',
+//				buyer_name : '${member.id}',
+//				buyer_tel : '',
+//				buyer_addr : '서울특별시 강남구 삼성동',
+//				buyer_postcode : '123-456',
+				
+				
+			}, function(rsp) {
+				if (rsp.success) {
+					
+					data.id = id;
+					data.plusPoint = inputedPoint;
+					
+					$.ajax({
+						type : 'POST',
+						data : data,
+						url : '/member/kakaopay',
+					
+					success:function(data) {
+/* 						alert(data); */
+						alert(data.chargingPoint + "원 충전이 완료되었습니다. "); 				
+					},
+					error:function(error) {
+						alert("error: " + error);
+					}
+					});
+					
+			
+					var msg = '결제가 완료되었습니다.';
+					msg += '고유ID : ' + rsp.imp_uid;
+					msg += '상점 거래ID : ' + rsp.merchant_uid;
+					msg += '결제 금액 : ' + rsp.paid_amount;
+					msg += '카드 승인번호 : ' + rsp.apply_num;
+					
+				} else {
+					var msg = '결제에 실패하였습니다.';
+					msg += '에러내용 : ' + rsp.error_msg;
+				}
+
+				alert(msg);
+// 				window.location.href = '/member/point/charge';
+				opener.parent.resetPointInfo();
+
+				window.close();
+			});
+		
+		}
+		}
+	</script>
+
+</div>
+</div>
+
+
+</body>
+</html>
