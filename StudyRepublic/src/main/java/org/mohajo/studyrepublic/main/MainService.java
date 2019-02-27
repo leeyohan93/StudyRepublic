@@ -21,7 +21,7 @@ public interface MainService {
 	public List<Member> getRecommendTutorMember();
 //	public List<Study> getPopularBasicStudy();
 	public List<PopularStudy> getPopularBasicStudy(String[] popularTag);
-	public void getRecommendNomalMember();
+	public List<Member> getRecommendNomalMember();
 	public List<Interest2CD> getPremiumPopularTag();
 	public List<Interest2CD> getBasicPopularTag();
 	
