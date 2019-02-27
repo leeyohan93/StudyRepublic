@@ -29,4 +29,10 @@ public class StudyMemberStatusCD implements Serializable {
 	private String codeValueKorean;
 
 	
+	public StudyMemberStatusCD(){
+		
+	}
+	public StudyMemberStatusCD(String studyMemberStatusCode){
+		this.studyMemberStatusCode = studyMemberStatusCode;
+	}
 }

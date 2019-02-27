@@ -185,6 +185,9 @@ background: white;
 				<input id="boardNotice" name="notice" type="checkbox" value="0">
 				<span class="boardTitleOpt">공지</span>
                 </span>
+                <span th:if="${boardType} eq 'inquireBoard'">
+				<input id="boardHide" name="hide" type="checkbox" value="0"><span>비공개</span>
+				</span>
 
 				<!--제목, 공지옵션, 비공개옵션 끝 -->
 				
@@ -322,6 +325,23 @@ $(document).ready(function(){
 
 
     });
+});
+
+//비공개 
+$("#boardHide").change(function(){
+	
+	if($("#boardHide").is(":checked")){ 	
+	
+		var c = $("#boardHide").val(1);
+		console.log(c.val());
+		
+
+	}else{
+		var d= $("#boardHide").val(0);  
+		console.log(d.val());
+		
+	};  
+	
 });
     
   

@@ -38,7 +38,8 @@ public class StudyFileshareboardReply/* extends StudyBoardReply*/{
 	private int studyFileshareboardReplyId;
 
 	@Column(name = "study_fileshareboard_id")
-	private StudyFileshareboard studyfileshareboardId;
+	private int studyfileshareboardId;
+//	private StudyFileshareboard studyfileshareboardId;
 	
 	@Column(name = "study_id", insertable=false, updatable=false)
 	private String studyId;

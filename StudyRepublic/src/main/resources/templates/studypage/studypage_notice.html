@@ -142,16 +142,18 @@
 	  		font-weight: bold;
 	  	}
   	</style>
-	</th:block> 
-		<div id="rightContent">
-			<table>
-				<tr>
-					<td class="rightTitleLeft">진행 날짜</td>
-					<td class="rightTitleMiddle">제목</td>
-					<td class="rightTitleRight">위치</td>
-				</tr>
-			</table>
-			<div th:each="fasn : ${findAllStudyNoticeboard}">
+ 	</th:block>  
+ 		<div id="rightContent"> 
+ 			<table> 
+ 				<tr> 
+ 					<td class="rightTitleLeft">진행 날짜</td> 
+ 					<td class="rightTitleMiddle">제목</td> 
+ 					<td class="rightTitleRight">위치</td> 
+ 				</tr> 
+< 			</table> 
+			
+			 <div th:with="result=${findAllStudyNoticeboard.list}">
+			<div th:each="fasn : ${result.content}">
 				<div class="rightContent rightAll" >
 					<div><input type="hidden" th:value="${fasn.number}" name="number">
 					</div>
@@ -161,13 +163,14 @@
 					><div class="rightRight rightTitle" th:text="${fasn.location}"></div>
 					<div class="collapse contentForm" th:id="'write'+${fasn.number}">
 						<input type="hidden" th:id="${fasn.number}">
-						<div class="contentDate" th:text="${#dates.dayOfWeekName(fasn.day)} + ' ' + ${#dates.format(fasn.startTime, 'HH:mm')}+'~'+${#dates.format(fasn.endTime, 'HH:mm')}">
+						<!-- <div class="contentDate" th:text="${#dates.dayOfWeekName(fasn.day)} + ' ' + ${#dates.format(fasn.startTime, 'HH:mm')}+'~'+${#dates.format(fasn.endTime, 'HH:mm')}"> -->
+						<div class="contentDate" th:text="${#dates.dayOfWeekName(fasn.day)} + ' ' + ${fasn.startTime}+'~'+${fasn.endTime}">
 						</div>
 						<div class="contentWriteDate">
 							<div class="" th:text="${#dates.format(fasn.date, 'yyyy/MM/dd')}"></div>
 							<div class="" th:text="${#dates.format(fasn.date, 'HH:mm:ss')}+' 작성'"></div>
 						</div>
-						<div class="content" th:text="${fasn.content}">
+						<div class="content" th:utext="${fasn.content}">
 						</div>
 						<div class="contentReplyForm"
 							><div class="contentReply" th:text="${fasn.studyNoticeboardReply}">
@@ -190,7 +193,40 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> 
+		
+<!-- 		페이징   -->
+
+
+			  		<nav>
+						<div class="pageForm">
+							<ul class="pagination">
+								<li class="page-item" th:if="${findAllStudyNoticeboard.prevPage}"><a
+									class="page-link" th:href="${findAllStudyNoticeboard.prevPage.pageNumber}+ 1">
+										〈&nbsp&nbsp이전 </a></li>
+								<li class="page-item" th:each="p:${findAllStudyNoticeboard.pageList}"
+									th:classappend="${p.pageNumber == findAllStudyNoticeboard.currentPageNum -1}?active: '' "><a
+									class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
+										+ 1]]</a></li>
+
+								<li class="page-item" th:if="${findAllStudyNoticeboard.nextPage}"><a
+									class="page-link" th:href="${findAllStudyNoticeboard.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
+								</li>
+							</ul>
+						</div>
+					</nav> 
+					
+					
+					<form id="f1" th:action="@{Noticeboard}" method="get">
+						<input type="hidden" name="page" th:value=${findAllStudyNoticeboard.currentPageNum}>
+						<input type="hidden" name="size"
+							th:value=${findAllStudyNoticeboard.currentPage.pageSize}>
+							<input type="hidden" id="pageStudyId" name="studyId"/>
+					</form> 
+
+<!-- 					페이징 끝  -->
+					
+					
 		<div id="writeButtonSpace">
 			<button type="button" class="btn btn-dark" id="writeButton">글쓰기</button>
 		</div>
@@ -256,8 +292,22 @@
 								});
 							});	//readyEnd
 							
+							
+							//페이징
+							var formObj = $("#f1");
+							$(".pagination a").click(function(e) {
+
+								e.preventDefault();
+								$('#pageStudyId').val(window.name); 
+					      
+								formObj.find('[name="page"]').val($(this).attr('href'));
+
+								formObj.submit();
+
+							});
+							
 		</script>
-		<!-- <script th:inline="javascript">	
+		<script th:inline="javascript">	
 			//스마트에디터 여기부터
 			$(document).ready(function(){
 			    //전역변수선언
@@ -307,8 +357,8 @@
 			
 			    });
 			});
-		</script> -->
+		</script>
 	</div>
-</body>
+</body> 
 
 </html>

@@ -141,6 +141,12 @@
 	  		padding: 1%;
 	  		font-weight: bolder;
 	  	}
+	  	.pageForm{
+	  	    text-align: center;
+	  	}
+	  	.pagination{
+	  		display: inline-block;
+	  	}
   	</style>
 	</th:block> 
 		<div id="rightContent">
@@ -223,6 +229,7 @@
 						<input type="hidden" name="page" th:value=${findQnaboardInfoByStudyId.currentPageNum}>
 						<input type="hidden" name="size"
 							th:value=${findQnaboardInfoByStudyId.currentPage.pageSize}>
+							<input type="hidden" id="pageStudyId" name="studyId"/>
 					</form>
 
 					<!--페이징 끝  -->
@@ -300,6 +307,7 @@
 							$(".pagination a").click(function(e) {
 
 								e.preventDefault();
+								$('#pageStudyId').val(window.name); 
 					      
 								formObj.find('[name="page"]').val($(this).attr('href'));
 
@@ -351,18 +359,18 @@
 							         success : function(data){
 							        	 console.log("성공");
 							             var a =''; 
-							             console.log(data);
-							              $.each(data, function(key, value){ 
+// 							             console.log(data);
+							            /*   $.each(data, function(key, value){ 
 							            	
 							                 a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-							                 a += '<div class="commentInfo'+value.studyQnaboardReplyId+'"><img class="commentProfile" src="/member_image/'+value.studyReplyMember.member.profileSaveName+'" > '+value.studyReplyMember.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
-							          				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3"); 
+							                  a += '<div class="commentInfo'+value.studyQnaboardReplyId+'"><img class="commentProfile" src="/member_image/'+value.studyReplyMember.member.profileSaveName+'" > '+value.studyReplyMember.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
+							          				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");  
 							                 a += '<a onclick="commentUpdate('+value.studyQnaboardReplyId+',\''+value.content+'\');"> 수정 </a>';
 							                 a += '<a onclick="commentDelete('+value.studyQnaboardReplyId+');"> 삭제 </a> </div>';
 							                 a += '<div class="commentContent'+value.studyQnaboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
 							                 a += '</div></div>';
- 							             $(".commentList").html(a);
-							             }); 
+ 							             $(".commentList").html(a); 
+							             });  */
 							           
 							         },
 							         error : function(data){

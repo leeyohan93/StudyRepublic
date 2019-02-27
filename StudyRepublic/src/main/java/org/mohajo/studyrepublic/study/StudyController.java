@@ -34,6 +34,7 @@ import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyFile;
 import org.mohajo.studyrepublic.domain.StudyHelper;
+import org.mohajo.studyrepublic.domain.StudyIdGenerator;
 import org.mohajo.studyrepublic.domain.StudyInterest;
 import org.mohajo.studyrepublic.domain.StudyLocation;
 import org.mohajo.studyrepublic.domain.StudyMember;
@@ -496,7 +497,8 @@ public class StudyController {
 			String typeCode = study.getTypeCode().getTypeCode();
 			String onoffCode = study.getOnoffCode().getOnoffCode();
 			
-			studyId = sr.getNewStudyId(typeCode, onoffCode);
+//			studyId = sr.getNewStudyId(typeCode, onoffCode);
+			studyId = generateStudyId(typeCode, "G", model);
 			
 			if(studyId == null) {
 				log.info("studyId is null");
@@ -507,6 +509,7 @@ public class StudyController {
 			}
 			
 			log.info("new studyId = " + studyId);
+			
 			study.setStudyId(studyId);
 //			study = new Study(studyId);
 			log.info("----------------[ studyId generated ]----------------");
@@ -1099,6 +1102,55 @@ public class StudyController {
 			sr.plusEnrollActual(studyId);
 			log.info("-------------------- study enrollActual updated --------------------");
 		}*/
+	}
+	
+	
+	/**
+	 *	studyId 생성 메소드 
+	 */
+	
+	public String generateStudyId(String typeCode, String onoffCode, Model model) {
+		
+		log.info("generateStudyId() called...");
+		
+		String result = "";
+		
+		// 1. input 검증
+		Boolean isValidInput = sr.validateInputCodes(typeCode, onoffCode);
+		
+		if(isValidInput = false) {
+			model.addAttribute("errorMsg", "비정상적인 코드를 입력했습니다.");
+			
+			return "/study/error";
+		}
+		
+		// 2. 값 검증
+		StudyIdGenerator sig = sr.getPrefixAndCounter(typeCode, onoffCode);
+		
+		// 해당 코드 조합으로 최초 생성되는 경우
+		if(sig == null) {
+			sig.setPrefix(typeCode + onoffCode);
+			sig.setCounter(1);
+		}
+		
+		// 코드 자리수를 초과하는 경우
+		if(sig.getCounter() > 99999) {
+			model.addAttribute("errorMsg", "스터디 개수가 한계 용량을 초과했습니다. 관리자에게 문의 바랍니다.");
+			
+			return "/study/error";
+		}
+		
+		String prefix = sig.getPrefix();
+		log.info("prefix = " + prefix);
+		
+		String counterStr = String.format("%05d", sig.getCounter());
+		log.info("counterStr = " + counterStr);
+		
+		result = prefix + counterStr;
+		log.info("result = " + result);
+
+		
+		return result;
 	}
 	
 	

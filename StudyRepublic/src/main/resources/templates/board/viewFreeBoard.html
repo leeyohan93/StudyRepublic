@@ -18,11 +18,6 @@
 <meta id="_csrf_header" name="_csrf_header"
 	th:content="${_csrf.headerName}" />
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	
 
 <style>
 #beforeAfter {
@@ -392,7 +387,7 @@ height: 90px !important;
 							  <input type="hidden" name = "reportTypeCD" value="free">
 						
 							   <input type="hidden" name = "id" th:value="${memberId}">
-							    <input type="hidden" name ="target" id="reportTarget" th:value="${freeBoard.member.id}">
+							    <input type="hidden" name ="target" id="reportTarget" th:value="${freeBoard.freeBoardId}">
 							<div>
 								<input class="reportOption" type="text" value="신고자" readonly>
 								<input class="reportContent" name="idNickname" type="text"
@@ -401,15 +396,14 @@ height: 90px !important;
 									<div>
 									 <input
 									class="reportOption" type="text" value="신고일" readonly>
-						<input class="reportContent" name="date" type="text"
-									th:value="${#dates.format(freeBoard.date,'yyyy-MM-dd HH:mm')}"
-									readonly> 
+						<input class="reportContent" name="date" type="text" id="reportDay"
+									value="" readonly> 
 									</div>
 									<div>
 									<input class="reportOption"
-									type="text" value="신고대상자" readonly> <input
+									type="text" value="신고 게시판" readonly> <input
 									class="reportContent" name="targetNickname" type="text"
-									th:value="${freeBoard.member.nickname}" readonly> 
+									th:value="${freeBoard.title}" readonly> 
 									</div>
 									<div>
 									 <input
@@ -499,12 +493,13 @@ height: 90px !important;
  var memberId = [[${memberId}]];
  var freeBoardWriter = [[${freeBoard.id}]];
  var commentWriterNickName =[[${session.nickname}]]
+ var reportDay = new Date().toLocaleString();
  
 
 
  $(document).ready(function(){
 	  
-	 console.log([[${memberId}]]);
+	 
 	 //ajax사용
 	 $(document).ajaxSend(function(e, xhr, options) {
          xhr.setRequestHeader(header, token);
@@ -666,7 +661,7 @@ height: 90px !important;
                  
                  console.log("socket: "+ socket)
       			if (socket) {
-      				// websocket에 보내기!! (reply,댓글작성자,게시글작성자,글번호)
+      				// websocket에 보내기!! (study,댓글작성자,게시글작성자,글번호)
       				var socketMsg = "study," + commentWriterNickName + "," + freeBoardWriter  + "," + freeBoardId + "," +memberId
       				console.log("socketMsg:" +  socketMsg)
       				socket.send(socketMsg);
@@ -785,9 +780,16 @@ height: 90px !important;
     $(".fileForm").toggle();
   });
  
+ 
+ //신고 클릭
+ $('#reportModal').on('show.bs.modal', function(e) {
+	$('#reportDay').val(reportDay);
+ });
+ 
  //신고하기
-  $('#reportRegister').click(function(){
-  var reportData = $("#reportForm").serialize(); 
+  $('#reportRegister').click(function(){  
+	  
+	  var reportData = $("#reportForm").serialize(); 
 	  console.log("reportData:" + reportData);
 	  
 	  if($('#reportTarget').val()==[[${memberId}]]){
@@ -812,6 +814,8 @@ height: 90px !important;
 			success : function(){
 				console.log("성공");
 				Swal.fire("신고 처리 되었습니다.","");
+				$('#reportWhyCD').val("");
+				$('#reportContent').val("");
 				$("#reportModal .close").click()
 			},
 				

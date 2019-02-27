@@ -128,7 +128,7 @@ public class Study implements Serializable {
 	@JoinColumn(name = "studyId", nullable = false)
 	private List<StudyInterest> studyInterest;			//분야
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany/*(cascade=CascadeType.ALL)*/
 	@JoinColumn(name = "studyId")
 	private List<Review> review;
 	

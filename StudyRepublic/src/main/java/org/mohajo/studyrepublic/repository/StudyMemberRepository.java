@@ -99,22 +99,40 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	@Query(value="select sm from StudyMember sm where sm.studyId = ?1")
 	List<StudyMember> selectByStudyId(String string);
 	//테스트 끝.
-	
-	@Query(value="select *\r\n" + 
-			"from study_member left join member using (id)\r\n" + 
-			"where (study_member_status_code = :code1 or study_member_status_code = :code2) and study_id = :studyId", nativeQuery=true)
-	List<StudyMember> findStudyMemberLEMEbyStudyIdANDStudyStatusCode(@Param(value="studyId") String studyId, @Param(value="code1") String code1, @Param(value="code2") String code2);
 
 	@Query(value="select *\r\n" + 
 			"from study_member left join member using (id)\r\n" + 
 			"where study_member_status_code = :code1 and study_id = :studyId", nativeQuery=true)
-	List<StudyMember> finStudyMemberWAbyStudyIdANDStudyStatusCode(@Param(value="studyId") String studyId, @Param(value="code1") String code1);
+	List<StudyMember> findStudyMemberWAbyStudyIdANDStudyStatusCode(@Param(value="studyId") String studyId, @Param(value="code1") String code1);
 	
-	@Query( value = "select  *from study_member sm left join study s using (study_id)where id=:id and (sm.study_member_status_code = 'ME'  or sm.study_member_status_code = 'LE')", nativeQuery = true)
+	@Query( value = "select * from study_member sm left join study s using (study_id)where id=:id and (sm.study_member_status_code = 'ME'  or sm.study_member_status_code = 'LE')", nativeQuery = true)
 	List <StudyMember> joinedstudymember(String id);
 	
 	@Query(value="select *\r\n" + 
 			"from study_member\r\n" + 
 			"where (study_member_status_code = :le or study_member_status_code=:me) and (study_id = :studyId and id=:id)", nativeQuery=true)
 	StudyMember findStudyMemberLEMEbyStudyIdAndId(String studyId, String id, String le, String me);
+	
+	/**
+	 * 관리하는 코드가 헷갈려서 아래부분은 제가 따로 관리합니다. by 신상용
+	 */
+	@Query(value="select *\r\n" + 
+			"from study_member left join member using (id)\r\n" + 
+			"where study_member_status_code = :status and (study_id = :studyId and nickname=:nickName)", nativeQuery=true)
+	//studyId 및 nickName, status를 이용해서. 해당 스터디에 해당 닉네임과 권한을 가지는 것이 있는지 확인 합니다.
+	StudyMember findStudyMemberbyStudyIdAndNickNameAndStudyMemberStatusCode(String studyId, String nickName, String status);
+	
+	
+	@Query(value="select *\r\n" + 
+			"from study_member left join member using (id)\r\n" + 
+			"where (study_member_status_code = :code1 or study_member_status_code = :code2) and study_id = :studyId", nativeQuery=true)
+	List<StudyMember> findStudyMemberLEMEbyStudyIdANDStudyStatusCode(@Param(value="studyId") String studyId, @Param(value="code1") String code1, @Param(value="code2") String code2);
+
+
+	@Query(value="select *\r\n" + 
+			"from study_member left join member using (id)\r\n" + 
+			"where (study_member_status_code = :code1) and study_id = :studyId", nativeQuery=true)
+	//studyId 및 statusCode를 이용해서 study에 속한 사람들을 출력함.
+	List<StudyMember> findStudyMemberbyStudyIdANDStudyStatusCode(@Param(value="studyId") String studyId, @Param(value="code1") String code1);
+
 }

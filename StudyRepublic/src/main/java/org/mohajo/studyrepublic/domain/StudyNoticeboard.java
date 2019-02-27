@@ -2,6 +2,8 @@ package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +22,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import lombok.Data;
 
@@ -42,13 +46,17 @@ public class StudyNoticeboard /*extends StudyBoard*/ implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int studyNoticeboardId;
 	
+	//@Temporal(TemporalType.TIME)
+	@DateTimeFormat(iso=ISO.TIME)
 	@Column(name = "starttime")
-	private Time startTime;
+	private String startTime;
 	
+	//@Temporal(TemporalType.TIME)
+	@DateTimeFormat(iso=ISO.TIME)
 	@Column(name = "endtime")
-	private Time endTime;
+	private String endTime;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(iso=ISO.DATE)
 	@Column
 	private Date day;
 	
@@ -87,6 +95,36 @@ public class StudyNoticeboard /*extends StudyBoard*/ implements Serializable{
 	@JoinColumn(name="study_noticeboard_id")
 	private List<StudyNoticeboardReply> studyNoticeboardReply;
 
+	/*public void setDay(String day) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		try {
+			this.day = sdf.parse(day);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void setStartTime(String startTime) {
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+		try {
+			this.startTime = (Time) sdf.parse(startTime);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void setEndTime(String endTime) {
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+		try {
+			this.endTime = (Time) sdf.parse(endTime);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}*/
 /**
  * 작성자: 이미연
  * 작성일: 2019-01-30
