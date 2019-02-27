@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> -->
 <link rel="icon" type="image/png"
-   href="/Login_v18/images/icons/favicon.ico" />
+ href="/Login_v18/images/icons/favicon.ico" />
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css"
    href="/Login_v18/vendor/bootstrap/css/bootstrap.min.css">
@@ -273,10 +273,10 @@
                             </div>
                         </div>
                      
-                        <div class="col-md-6">
-                           
+                        <div class="col-md-6" >
+                             
                             <h4 style="color: #ffa500;">MY ABOUT</h4>
-                         <h4 class="subheading userinfo">
+                         <h5 class="subheading userinfo" style="margin-top: 18%;">
                      	    ID:  <span th:text=${mbr.id} ></span>
                         <input type="hidden" id="memberid" name="memberid" th:value=${mbr.id}/>
                         <br> 
@@ -291,7 +291,7 @@
                         <br> 
                               E-Mail: <span th:text=${mbr.email} ></span>
                         <br> 
-                            	   연락처: <span th:text=${mbr.phonenumber} ></span></h4>
+                            	   연락처: <span th:text=${mbr.phonenumber} ></span></h5>
                        
                         </div>
             </div> <!-- th:each 닫히는 div 태그  -->   
@@ -303,7 +303,7 @@
                   <div class="col-md-6 studyinfo" style="height: 227px; border:solid;">
                     <h4 style="font-weight: 900;">일반스터디</h4><br>
                           <div th:each="smr : ${smr}">
-                           <div th:text="${smr.study.name}"></div>
+                           <h5 th:text="${smr.study.name}" style="font-weight: 900;"></h5>
                         </div>
                     
                   </div>  
