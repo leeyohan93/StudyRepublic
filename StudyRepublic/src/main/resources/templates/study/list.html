@@ -76,7 +76,7 @@ h2 {
 							</div>
 							<div class="content">
 								<div class="main">
-									<p th:text="${study.introduction}" style="margin-bottom: 10px; height: 40px;overflow: hidden;"></p>
+									<div th:utext="${study.introduction}" style="margin-bottom: 10px; height: 40px;overflow: hidden;"></div>
 									<p th:text="|일시 : ${study.startDate}~${study.endDate}|" style="margin-bottom: 3px;"></p>
 									<p th:utext="|시간 : 매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|" style="margin-bottom: 3px;"></p>
 									<p th:text="${study.onoffCode.codeValueKorean}!='온라인'?|지역 : ${study.studyLocation[0].interestLocation}|:''" style="margin-bottom: 3px;"></p>
