@@ -28,6 +28,7 @@ import org.mohajo.studyrepublic.repository.TutorCareerRepository;
 import org.mohajo.studyrepublic.repository.TutorInterestRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.mohajo.studyrepublic.repository.TutorUploadFileRepository;
+import org.mohajo.studyrepublic.tutor.TutorController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -70,6 +71,8 @@ public class AdminTutorController {
 	TutorRepository tutorRepository;
 	@Autowired
 	MemberRolesRepository memberrolerepository;
+	@Autowired
+	TutorController tutorcontroller;
 	
 	
 	
@@ -149,7 +152,10 @@ public class AdminTutorController {
 			Tutor tutor = tutorRepository.findByTutor(receiveId);
 			tutorRepository.deleteById(tutor.getTutorNumber());
 			
-			tutorRepository.save(tutor);
+			tutorcontroller.changeGrade("N",receiveId);
+			
+			System.out.println("튜터: " + tutor);
+			System.out.println("튜터넘버: " + tutor.getTutorNumber());
 			
 		}
 		adminMemberService.changeGrade(selectedId,"N");

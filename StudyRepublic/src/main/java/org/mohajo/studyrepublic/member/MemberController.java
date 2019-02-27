@@ -282,44 +282,45 @@ public class MemberController {
 		         
 
 		   		member = memberrepository.findById(member.getId()).get();
-		   
-		   	     session.setAttribute("userid", member.getId());
-
-		   		 session.setAttribute("nickname", member.getNickname());
-		         session.setAttribute("memberimg", member.getProfileSaveName());
-		         
-//		         System.out.println("전 이미지: " + member.getProfileSaveName());
-		       
-		         
-		         MemberPoint memberpoint = memberpointrepository.inqueryPoint(member.getId());		         
-		         session.setAttribute("memberpoint", memberpoint.getPoint());
-//		         System.out.println("보유포인트: " + memberpoint.getPoint());
-		         
-		         
-//		         	System.out.println("멤버 객체 ID 조회 : " + member.getId());
-					List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(member.getId());		
-/*					System.out.println("멤버테스트: " + member);*/
-//					System.out.println("조이닝스터디테스트 : " + joiningStudy);
-					HashMap <String, String> studyNameAndStudyIdMap = new HashMap<>();
-					HashMap <String, String> studyIdAndStatusKoreanMap = new HashMap<>();
-					
-					
-					for(StudyMember studyMember : joiningStudy) {
-				         Study studyDomain = studyMember.getStudy();
-				         studyNameAndStudyIdMap.put(studyDomain.getName(), studyDomain.getStudyId());
-				         studyIdAndStatusKoreanMap.put(studyDomain.getStudyId(), studyMember.getStudyMemberStatusCode().getCodeValueKorean());
+		  
+		   			
+		   			
+			   	     session.setAttribute("userid", member.getId());
+			   		 session.setAttribute("nickname", member.getNickname());
+			         session.setAttribute("memberimg", member.getProfileSaveName());
+			         
+//			         System.out.println("전 이미지: " + member.getProfileSaveName());
+			       
+			         
+			         MemberPoint memberpoint = memberpointrepository.inqueryPoint(member.getId());		         
+			         session.setAttribute("memberpoint", memberpoint.getPoint());
+//			         System.out.println("보유포인트: " + memberpoint.getPoint());
+			         
+			         
+//			         	System.out.println("멤버 객체 ID 조회 : " + member.getId());
+						List <StudyMember> joiningStudy = studymemberrepository.joinedstudymember(member.getId());		
+	/*					System.out.println("멤버테스트: " + member);*/
+//						System.out.println("조이닝스터디테스트 : " + joiningStudy);
+						HashMap <String, String> studyNameAndStudyIdMap = new HashMap<>();
+						HashMap <String, String> studyIdAndStatusKoreanMap = new HashMap<>();
 						
-					}
-					
-//					System.out.println("스터디 Map: "  + studyNameAndStudyIdMap/*joiningStudy*/.toString());
-//				    System.out.println("스터디별 권한: " + studyIdAndStatusKoreanMap.toString());
-					
-//					System.out.println("session아 제대로 찍히니? : " + session);
-//					System.out.println("TEST1111111111111111111111111");
+						
+						for(StudyMember studyMember : joiningStudy) {
+					         Study studyDomain = studyMember.getStudy();
+					         studyNameAndStudyIdMap.put(studyDomain.getName(), studyDomain.getStudyId());
+					         studyIdAndStatusKoreanMap.put(studyDomain.getStudyId(), studyMember.getStudyMemberStatusCode().getCodeValueKorean());
 							
-					session.setAttribute("studyNameAndStudyIdMap", studyNameAndStudyIdMap);
-					session.setAttribute("studyIdAndStatusKoreanMap", studyIdAndStatusKoreanMap);
-		         
+						}
+						
+//						System.out.println("스터디 Map: "  + studyNameAndStudyIdMap/*joiningStudy*/.toString());
+//					    System.out.println("스터디별 권한: " + studyIdAndStatusKoreanMap.toString());
+						
+//						System.out.println("session아 제대로 찍히니? : " + session);
+//						System.out.println("TEST1111111111111111111111111");
+								
+						session.setAttribute("studyNameAndStudyIdMap", studyNameAndStudyIdMap);
+						session.setAttribute("studyIdAndStatusKoreanMap", studyIdAndStatusKoreanMap);
+			         
 		   }
 	
 	

@@ -53,6 +53,10 @@ public class UserDetatilsServiceImpl implements UserDetailsService {
 		Member member = mr.findById(username).get();       
 		socketId = member.getId();
 		
+	
+		
+		System.out.println();
+		
 		System.out.println("회원상태: " + status);
 		
 		if(status.equals("P")) {
