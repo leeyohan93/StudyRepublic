@@ -206,7 +206,7 @@ public class StudyPageController {
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
 		log.info("id : " + id + " / " + "studyId : " + studyId);
 		///페이징 갯수
-		pageDTO.setSize(10);
+		pageDTO.setSize(1);
 		log.info("====");
 		
 		Pageable page = pageDTO.makePageable(0, "studyId");
@@ -218,7 +218,6 @@ public class StudyPageController {
 
 
 	@RequestMapping("/Qnaboard")
-
 	public String studyQnaboard(Model model,PageDTO pageDTO,String studyId) {
 		/*String studyId = "BB00001";
 		String id = "aaa123";*/

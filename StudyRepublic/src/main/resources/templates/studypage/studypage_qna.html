@@ -229,6 +229,7 @@
 						<input type="hidden" name="page" th:value=${findQnaboardInfoByStudyId.currentPageNum}>
 						<input type="hidden" name="size"
 							th:value=${findQnaboardInfoByStudyId.currentPage.pageSize}>
+							<input type="hidden" id="pageStudyId" name="studyId"/>
 					</form>
 
 					<!--페이징 끝  -->
@@ -306,6 +307,7 @@
 							$(".pagination a").click(function(e) {
 
 								e.preventDefault();
+								$('#pageStudyId').val(window.name); 
 					      
 								formObj.find('[name="page"]').val($(this).attr('href'));
 
