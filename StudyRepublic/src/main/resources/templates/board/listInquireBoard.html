@@ -23,6 +23,13 @@
 .boardName {
 	margin: 20px !important;
 }
+.boardImgProfile{
+	width: 30px;
+	height: 30px;
+	border-radius: 100%;
+	margin : 0px 7px 5px 0px;
+}
+
 
 h3 {
 	
@@ -49,8 +56,8 @@ table {
 
 td {
 	text-overflow: ellipsis;
-	overflow: hidden;
 	white-space: nowrap;
+	padding-top: 22px !important;
 }
 
 #wrtieCountOption {
@@ -88,6 +95,8 @@ td {
 .boardWriteBtn {
 	text-align: right;
 }
+
+
 
 #boardSearchType, #boardSearchPeriod {
 	width: 150px;
@@ -192,7 +201,13 @@ span.listReplyCount {
 	margin: 0px 5px 2.5px 0px;
 }
 .todayWrite{
-  color: rgb(66, 161, 226);
+  
+     background-color: rgb(66, 161, 226);
+    color: white;
+    border-radius: 100%;
+    font-size: 5px;
+    padding: 2px 5px;
+    margin: 0px 0px 0px 4px;
 }
 </style>
 
@@ -233,9 +248,9 @@ span.listReplyCount {
 									<th class="">번호</th>
 									<th class="boardTtile">제목</th>
 									<th class="">작성자</th>
-									<th class="boardDate">작성일</th>
 									<th class="">조회수</th>
 									<th class="">추천</th>
+									<th class="boardDate">작성일</th>
 								</tr>
 							</thead>
 
@@ -243,9 +258,9 @@ span.listReplyCount {
 								<tr th:each="board:${result.content}">
 								
 									<td id="listBoardNotice">[[${board.notice}]]</td>
+									<td class="" id="listBoardId">[[${board.inquireBoardId}]]</td>
 									<td class="listBoardHide" th:name=|${board.hide}|>[[${board.hide}]]</td>
 									<td class="listBoardId" th:name=|${board.id}|>[[${board.id}]]</td>
-									<td class="" id="listBoardId">[[${board.inquireBoardId}]]</td>
 									
                                      
 									<td class="text-left boardTtile"><a
@@ -255,11 +270,11 @@ span.listReplyCount {
 											<span class="listDateConfirm"></span>
 											</a>
 									</td>
-									<td class="">[[${board.member.nickname}]]</td>
-									<td class="listBoardDate" th:name=|${board.date}|>[[${#dates.format(board.date,'yyyy-MM-dd
-										HH:mm')}]]</td>
+									<td class=""><img class="boardImgProfile" th:src="@{'/member_image/'+${board.member.profileSaveName}}" />[[${board.member.nickname}]]</td>
 									<td class="">[[${board.hit}]]</td>
 									<td class="">[[${board.likeCount}]]</td>
+									<td class="listBoardDate" th:name=|${board.date}|>[[${#dates.format(board.date,'MM-dd
+										HH:mm')}]]</td>
 
 								</tr>
 
@@ -382,7 +397,7 @@ span.listReplyCount {
     		
     		 if(noticeNumber == 1){
     			 $(this).find("td:nth-child(2)").text("공지");
-    			 $(this).find("td:nth-child(2)").css('color','red');
+    			 $(this).find("td:nth-child(2)").css('color','red').css('font-weight', 'bold');
 			 
     			  			 
     		 }
@@ -454,7 +469,7 @@ span.listReplyCount {
     		 
     		 if(dateFormated < listBoardDateFormate.eq(i).attr("name")){
     		 console.log(listBoardDateFormate.eq(i).attr("name"));
-    		 $('.listDateConfirm').eq(i).append('<span class="todayWrite">'+"New"+'</span>');
+    		 $('.listDateConfirm').eq(i).append('<span class="todayWrite">'+"N"+'</span>');
     		 };
     	 };
     	 };
