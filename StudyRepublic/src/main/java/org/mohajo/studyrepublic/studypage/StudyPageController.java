@@ -303,7 +303,12 @@ public class StudyPageController {
 		model.addAttribute("boardName", board);
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
 		model.addAttribute("memberid", id);
-		return "studypage/studypage_write";
+		if(board=="Noticeboard") {
+			return "studypage/studypage_write";
+		}else {
+			//해당 부분 필히 수정해야 함. 
+			return "studypage/studypage_write";
+		}
 	}
 	
 	@RequestMapping(value="/Register", method= RequestMethod.POST)
