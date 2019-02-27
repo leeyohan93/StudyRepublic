@@ -1,4 +1,3 @@
-
 package org.mohajo.studyrepublic.admin;
 
 import java.util.List;
@@ -98,7 +97,7 @@ public class AdminMemberController {
 	public String changeGrade(Model model,String changeGrade, String[] selectedId,HttpServletRequest request) {
 		 	
 		for(String receiveId : selectedId) {
-	 	
+	 	System.out.println("receiveId : " + receiveId);
 	// 권한테이블에 등급추가.	
 		MemberRoles memberroles = new MemberRoles();
 		memberroles.setRoleName(changeGrade);				

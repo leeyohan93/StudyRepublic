@@ -139,11 +139,9 @@ public class AdminTutorController {
 			
 			System.out.println("튜터: " + tutor);
 			System.out.println("튜터넘버: " + tutor.getTutorNumber());
-			
 		}
 		adminMemberService.changeGrade(selectedId,"N");
 		return "redirect:/adminPage/tutor/list";
-//		return "redirect:"+request.getHeader("Referer");
 	}
 	
 	@RequestMapping("/signup")

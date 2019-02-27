@@ -11,6 +11,83 @@
 .dropdown-toggle::after {
 	border: none !important;
 }
+
+
+/* 신고모달 css */
+.reportOption{
+ text-align: center;
+ width: 40%;
+ float: left;
+ font-weight: bold;
+}
+#reportBody{
+ border: 1px solid #ccc;
+ padding: 5px;
+}
+.reportContent{
+text-align: center;
+ width: 59.5%;
+ float: right;
+}
+#reportClose{
+    padding: 9px;
+    height: 40px;
+    margin: 0px;
+        width: 36px;
+}
+#reprotContentOption{
+    height: 93px;
+}
+#reportHeader{
+padding: 1.5rem 40px 1rem;
+font-weight: bold;
+}
+#reportForm{
+margin: 0px;
+}
+#reportForm input{
+ border: 0.5px solid;
+ border-radius: 3px;
+ margin: 0.6px;
+}
+#reportForm select{
+    border: 1px solid;
+    border-radius: 3px;
+    height: 50px;
+        padding-left: 40px;
+}
+#reportForm textarea{
+height: 90px !important;
+    border: 1px solid;
+    padding: 10px;
+    margin-top: 2px;
+    border-radius: 3px;
+    text-align: left;
+}
+#reportCancel,#reportRegister{
+ background-color: white;
+	color: rgb(66, 161, 226) !important;
+	text-align: center;
+	display: inline-block;
+	margin: 0px;
+	cursor: pointer;
+	padding: 9px 2px 2px 2px;
+	width: 100px;
+	height: 50px;
+	border: 1px solid ;
+	border-radius: 3px;
+	margin: 5px;
+	font-size: 19px;
+
+}
+.messageDropdown{
+    border-radius: 8px;
+}
+.messageImg{
+    width: 30px;
+    padding-right: 10px;
+}
+>>>>>>> wonsick
 </style>
 </head>
 <body>
@@ -439,10 +516,10 @@
 								<div class="list-group"	th:each="member : ${recommendTutorMember}">
 										<div class="dropdown">
          								<a class="list-group-item" data-toggle="dropdown" th:text="${member.nickname}"></a>
-          								<div class="dropdown-menu">
-								        <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${member.id}" >쪽지쓰기</a>
-								        <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${member.id}" >유저정보</a>
-								        <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${member.id}" >신고하기</a>
+          								<div class="dropdown-menu messageDropdown">
+								        <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${member.id}" ><img class="messageImg" src="/board/img/baseline_unsubscribe_black_18dp.png">쪽지쓰기</a>
+								        <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${member.id}" ><img class="messageImg" src="/board/img/baseline_account_box_black_18dp.png">유저정보</a>
+								        <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${member.id}" ><img class="messageImg" src="/board/img/baseline_message_black_18dp.png">신고하기</a>
 								        </div>
     								</div>	
 

@@ -590,7 +590,7 @@ public class TutorController implements Serializable {
 	          member.setRoles(roles);
 	          
 	          
-	          Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>();    
+/*	          Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>();    
 	          authoritySet.add(new SimpleGrantedAuthority(ROLE_PREFIX + authRole ));      
 	          Authentication newAuth = new UsernamePasswordAuthenticationToken(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), "", authoritySet);
 	       
@@ -598,10 +598,15 @@ public class TutorController implements Serializable {
 //	          auth = SecurityContextHolder.getContext().getAuthentication();
 	          System.out.println("권한체크: " + newAuth.getAuthorities());
 	          SecurityContext securityContext = SecurityContextHolder.getContext(); 
-	          securityContext.setAuthentication(newAuth);
+	          securityContext.setAuthentication(newAuth);*/
 	    /*      auth.setAuthenticated(true);*/
 
 	       }
 	
 
 }
+
+	
+
+
+

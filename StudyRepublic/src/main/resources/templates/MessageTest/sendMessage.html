@@ -26,6 +26,25 @@
     margin-left: 70%;
 }
 
+.pagination {
+	justify-content: center;
+	margin: 20px;
+}
+
+.pagination li {
+	padding: 0px;
+}
+
+.page-link {
+	color: black !important;
+}
+
+.page-item.active .page-link {
+	background-color: rgb(179,220,248) !important;
+	border-color: rgb(179,220,248) !important;
+	color: white !important;
+}
+
 
 
 </style>	
@@ -191,19 +210,29 @@
 				  
 			
 
-
-
 	
-	<nav>
-		<div>
-			<ul class="pagination">
-				<li class="page-item" th:if="${sendList.prevPage}"><a th:href="${sendList.prevPage.pageNumber}+ 1">  &nbsp&nbsp이전 </a></li>
-				<li class="page-item" th:each="page :${sendList.pageList}" th:classappend="${page.pageNumber == sendList.currentPageNum -1}?active: ''"><a th:href="${page.pageNumber} +1" > [[${page.pageNumber} + 1]]</a></li>
-				<li class="page-item" th:if="${sendList.nextPage}"><a th:href="${sendList.nextPage.pageNumber}+ 1">&nbsp&nbsp다음</a></li>	
-				
-			</ul>
-		</div>
-	</nav>
+				<!-- 페이징   -->
+
+
+					<nav>
+						<div class="pageForm">
+							<ul class="pagination">
+								<li class="page-item" th:if="${sendList.prevPage}"><a
+									class="page-link" th:href="${sendList.prevPage.pageNumber}+ 1">
+										〈&nbsp&nbsp이전 </a></li>
+								<li class="page-item" th:each="p:${sendList.pageList}"
+									th:classappend="${p.pageNumber == sendList.currentPageNum -1}?active: '' "><a
+									class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
+										+ 1]]</a></li>
+
+								<li class="page-item" th:if="${sendList.nextPage}"><a
+									class="page-link" th:href="${sendList.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!--페이징 끝  -->
 
 
 			<form id="pageForm" th:action="@{sendMessage}" method="get">

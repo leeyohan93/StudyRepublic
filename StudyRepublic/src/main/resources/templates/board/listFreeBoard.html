@@ -57,6 +57,7 @@ table {
 td {
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	padding-top: 22px !important;
 }
 
 #wrtieCountOption {
@@ -88,6 +89,13 @@ td {
 	white-space:nowrap;
 
 
+}
+
+.boardImgProfile{
+	width: 30px;
+	height: 30px;
+	border-radius: 100%;
+	margin : 0px 7px 5px 0px;
 }
 
 .boardTable a {
@@ -204,7 +212,13 @@ span.listReplyCount {
 	margin: 0px 5px 2.5px 0px;
 }
 .todayWrite{
-  color: rgb(66, 161, 226);
+  
+     background-color: rgb(66, 161, 226);
+    color: white;
+    border-radius: 100%;
+    font-size: 5px;
+    padding: 2px 5px;
+    margin: 0px 0px 0px 4px;
 }
 
 .dropdown-toggle::after {
@@ -283,6 +297,14 @@ height: 90px !important;
     border: 1px solid #ccc;
     margin-left: 10px;
 }
+
+.messageDropdown{
+    border-radius: 8px;
+}
+.messageImg{
+    width: 30px;
+    padding-right: 10px;
+}
 </style>
 
 </head>
@@ -324,9 +346,9 @@ height: 90px !important;
 									<th class="">번호</th>
 									<th class="boardTtile">제목</th>
 									<th class="">작성자</th>
-									<th class="boardDate">작성일</th>
 									<th class="">조회수</th>
 									<th class="">추천</th>
+									<th class="boardDate">작성일</th>
 								</tr>
 							</thead>
 
@@ -348,19 +370,19 @@ height: 90px !important;
 									
 									<!-- th:data-receive-id="${fbr.member.id}" >쪽지쓰기 이 부분이 그 유저정보에 값넣어주는역할을함 그 부분을 알맞게 변경해야함 receive-id 스크립트에서 사용을위해지정 -->
  									<td> <div class="dropdown">
-         <a class="dropdown-toggle" data-toggle="dropdown" th:text="${board.member.nickname}"></a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${board.id}" >쪽지쓰기</a>
-            <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${board.id}" >유저정보</a>
-            <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${board.id}" >신고하기</a>
-          </div>
-    </div></td>
+								         <img class="boardImgProfile" th:src="@{'/member_image/'+${board.member.profileSaveName}}" /><a class="dropdown-toggle" data-toggle="dropdown" th:text="${board.member.nickname}"></a>
+								          <div class="dropdown-menu">
+								            <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${board.id}" ><img class="messageImg" src="/board/img/baseline_unsubscribe_black_18dp.png">쪽지쓰기</a>
+								            <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${board.id}" ><img class="messageImg" src="/board/img/baseline_account_box_black_18dp.png">유저정보</a>
+								            <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${board.id}" ><img class="messageImg" src="/board/img/baseline_message_black_18dp.png">신고하기</a>
+								          </div>
+								    </div></td>
     
 									
-									<td class="listBoardDate" th:name=|${board.date}|>[[${#dates.format(board.date,'yyyy-MM-dd
-										HH:mm')}]]</td>
 									<td class="">[[${board.hit}]]</td>
 									<td class="">[[${board.likeCount}]]</td>
+									<td class="listBoardDate" th:name=|${board.date}|>[[${#dates.format(board.date,'MM-dd
+										HH:mm')}]]</td>
 
 								</tr>
 
@@ -656,7 +678,7 @@ height: 90px !important;
     		
     		 if(noticeNumber == 1){
     			 $(this).find("td:nth-child(2)").text("공지");
-    			 $(this).find("td:nth-child(2)").css('color','red');
+    			 $(this).find("td:nth-child(2)").css('color','red').css('font-weight', 'bold');
 			 
     			  			 
     		 }
@@ -715,7 +737,7 @@ height: 90px !important;
     		 
     		 if(dateFormated < listBoardDateFormate.eq(i).attr("name")){
     		 console.log(listBoardDateFormate.eq(i).attr("name"));
-    		 $('.listDateConfirm').eq(i).append('<span class="todayWrite">'+"New"+'</span>');
+    		 $('.listDateConfirm').eq(i).append('<span class="todayWrite">'+"N"+'</span>');
     		 };
     	 };
     	 };

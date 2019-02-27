@@ -26,62 +26,49 @@
    font-size: small;
    background-color: #f7f7f7;
 }
-
 .border-top {
    padding: 10px;
 }
-
 .userinfo {
    
 }
-
 .modifybtn {
    margin-left: 79%;
 }
-
 .studyinfo {
    width: 100%;
    height: 200px;
 }
-
 .placeholders {
    padding-bottom: 3rem;
    height: 300px;
    margin-bottom: 3em;
 }
-
 .profileinfo {
    margin-left: 5%;
    margin-top: 2%;
 }
-
 .profile {
    margin: 3%;
 }
-
 .memberinterest {
    display: inline-block;
 }
-
 /* 관심분야 */
 #ppinterest2cd, #ddinterest2cd, #wwinterest2cd, #nninterest2cd {
    display: none;
 }
-
 .wrap-input100_head, .select-input100, .select-input100_2, .shsel {
    padding: unset;
    margin-right: 1.5rem !important;
 }
-
 .w3-modal {
    width: 100%;
    height: 100%;
 }
-
 .w3-modal-content {
    background-color: transparent;
 }
-
  
     #img_profile{
         border-radius: 100%;
@@ -91,9 +78,6 @@
           margin-top: 13%;
    
    }
-
-
-
    .sidebar{
    
       position:sticky;
@@ -106,7 +90,6 @@
    }
    
     .border-top{
-
        padding: 10px;
     }
     
@@ -152,7 +135,6 @@
    .profile{
       margin: 3%;
    }
-
    
      .w3-modal {
    
@@ -546,11 +528,9 @@
             <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
             <script type="text/javascript">
                function addInterestLocation_join() {
-
                   new daum.Postcode(
                         {
                            oncomplete : function(data) {
-
                               var roadAddr = data.roadAddress; // 도로명 주소 변수
                               var jibunAddress = data.jibunAddress;
                               var road = data.roadname;
@@ -558,35 +538,28 @@
                               var sigungu = data.sigungu;
                               var dong = data.bname;
                               var upmyeonli = data.bname1;
-
                               var dongaddress = sido + "" + sigungu
                                     + "" + dong + "" + upmyeonli;
                               var doroaddress = sido + sigungu + road;
-
                               var extraRoadAddr = ''; // 참고 항목 변수
-
                               if (data.bname !== ''
                                     && /[동|로|가]$/g.test(data.bname)) {
                                  extraRoadAddr += data.bname;
                               }
-
                               if (data.buildingName !== ''
                                     && data.apartment === 'Y') {
                                  extraRoadAddr += (extraRoadAddr !== '' ? ', '
                                        + data.buildingName
                                        : data.buildingName);
                               }
-
                               var guideTextBox = document
                                     .getElementById("guide");
-
                               if (data.autoRoadAddress) {
                                  var expRoadAddr = data.autoRoadAddress
                                        + extraRoadAddr;
                                  guideTextBox.innerHTML = '(예상 도로명 주소 : '
                                        + expRoadAddr + ')';
                                  guideTextBox.style.display = 'block';
-
                               } else {
                                  guideTextBox.innerHTML = '';
                                  guideTextBox.style.display = 'none';
@@ -603,49 +576,34 @@
                                        + "' value = '삭제' onclick = 'deleteLocation_join("
                                        + count + ")'>X</button>" */
                                  $('#memberIntLoc').append(locValue);
-
                /*                   document.getElementById("loc").style.height = "auto"; */
-
                                  /*                        var locText = "<div id = 'selloc' ><ul><li>" +dongaddress+ "</li></ul></div>"
                                   $('#loc').append(locText); */
-
                                  document
                                        .getElementById("interestlocation"
                                              + count).value = dongaddress;
-
                                  count++;
-
                               }
-
                            }
                         }).open();
                }
-
                function deleteLocation_join(num) {
                   var standard = num;
                   $('#interestlocation' + standard).remove();
                   $('#del' + standard).remove();
-
                   if (document.getElementsByClassName("memberinterest").length == 0) {
                      document.getElementById("loc").style.height = "50px";
                   }
-
                }
-
                /* 관심분야 스크립트*/
-
                var Allselect_Box = document
                      .getElementsByClassName("select-input100_2");
-
                var interestArr = [ "데이터베이스", "네트워크보안", "응용프로그래밍", "웹프로그래밍" ];
                var count = 0;
-
                var ssinterest1 = "";
                var ppinterest2cd = document
                      .getElementById("ppinterest2cd")
                var checkNum = 0;
-
-
                
                function iinterest1(obj) {
                   document.getElementById('2int').style.display = 'inline-block';
@@ -660,7 +618,6 @@
                   
                   
                }
-
                var iinterest2List = new Array();
                var sselectedinterest2 = "";
                var aaddInterest2List;
@@ -677,16 +634,13 @@
                   document.getElementById("duplicationmsg").innerText = "";
                   
                   for( var i = 0; i < dupTest.length; i++) {
-
                      inputInterestList += dupTest[i].value;
-
                   }
                   
                   
                   
                   var target = document.getElementById("int2");
                   uniqueinterest2List = iinterest2List;
-
                   if (~inputInterestList
                         .indexOf(obj.options[obj.selectedIndex].text)) {
                             document.getElementById("duplicationmsg").innerText = "이미 선택한 분야 입니다."; 
@@ -694,8 +648,6 @@
                      iinterest2List
                            .push(obj.options[obj.selectedIndex].text);
                      sselectedinterest2 += iinterest2List[iinterest2List.length - 1];
-
-
                            aaddinterestListValue = "<div id = 'memberInterestList' style = 'float:left; width:auto'>" +
                            "<input type='text' id='isel" + count + "' name='minterest' style='display: none;'>   " +                               
                            "<span id = 'iselText'" + count + "class='yshspan' style= 'padding:0 0 0 26px'> > "+ iinterest2List[iinterest2List.length - 1] +"</span>" + 
@@ -703,26 +655,20 @@
                            
                            $('#int2').append(aaddinterestListValue);
                            document.getElementById('isel' + count).value = obj.options[obj.selectedIndex].value;
-
                      document.getElementById("duplicationmsg").innerText = "";
-
                      interestInput = document.getElementById('isel'
                            + count);
                      interestInput.style.display = 'none';
                      interestDelete = document.getElementById('idel'
                            + count);
-
-
                      count++;
                   }
                   inputInterestList += obj.options[obj.selectedIndex].text
                }
-
                function deleteInterest2(obj, num) {
                    inputInterestList = inputInterestList.replace(iinterest2List[num], ""); // 중복금지차원  
                         /* alert(num); */
                   $(obj).parent().remove();
-
                }
                
                function deleteLocation2(obj) {
