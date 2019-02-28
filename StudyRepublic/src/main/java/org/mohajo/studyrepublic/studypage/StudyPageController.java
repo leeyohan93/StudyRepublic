@@ -200,8 +200,6 @@ public class StudyPageController {
 
 	@RequestMapping("/Noticeboard")
 	public String studyNoticeboard(Model model, @Param(value="studyId") String studyId) {
-		/*studyId = "BB00001";
-		String id = "aaa123";*/
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
 		log.info("id : " + id + " / " + "studyId : " + studyId);
 
@@ -303,10 +301,12 @@ public class StudyPageController {
 		model.addAttribute("boardName", board);
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
 		model.addAttribute("memberid", id);
-		if(board=="Noticeboard") {
-			return "studypage/studypage_write";
+		if(board.equals("Noticeboard")) {
+			log.info("Noticeboard로 왔음");
+			return "studypage/studypage_noticeboardwrite";
 		}else {
-			//해당 부분 필히 수정해야 함. 
+			//해당 부분 필히 수정해야 함.
+			log.info("기타 Board로 왔음");
 			return "studypage/studypage_write";
 		}
 	}
@@ -771,6 +771,73 @@ public class StudyPageController {
 			log.info("리스트에 값이 추가 됨.");
 		}
 		return sqlResultList;
+	}
+	
+	@RequestMapping(value="/WriterDelete")
+	public String studypageWriterDelete(String studyId, String boardName, int number) {
+		log.info("WriterDelete:" +  studyId + "/" + boardName + "/" + number);
+		
+		//스터디에 속해있고,스터디 내에서 권한이 x라면 수정할 수 있어야 한다.
+		
+		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		switch(boardName) {
+			case "Noticeboard":
+				try {
+					StudyNoticeboard studyNoticeboard = studyNoticeboardRepository.findNoticeboardByStudyIdAndNumberAndStatus(studyId, number, userId, "ME", "LE", 0);
+					if(studyNoticeboard==null) {
+						log.info("WriterDelete : StudyNoticeboard의 내용이 NULL임");
+						return "studypage/error";
+					}else {
+						log.info("WriterDelete : 삭제 처리 완료");
+						studyNoticeboard.setStatus(1);
+						studyNoticeboardRepository.save(studyNoticeboard);
+						return "redirect:/StudyPage/Noticeboard?studyId="+studyId;
+					}
+				}catch(Exception e) {
+					log.info("WriterDelete : StudyNoticeboard의 내용을 가져오는 도중 예외 발생");
+					return "studypage/error";
+				}
+			case  "Qnaboard":
+				try {
+					StudyQnaboard studyQnaboard = studyQnaboardRepository.findQnaboardByStudyIdAndNumberAndStatus(studyId, number, userId, "ME", "LE", 0);
+					if(studyQnaboard==null) {
+						log.info("WriterDelete : StudyNoticeboard의 내용이 NULL임");
+						return "studypage/error";
+					}else {
+						log.info("WriterDelete : 삭제 처리 완료");
+						studyQnaboard.setStatus(1);
+						studyQnaboardRepository.save(studyQnaboard);
+						return "redirect:/StudyPage/Qnaboard?studyId="+studyId;
+					}
+				}catch(Exception e) {
+					log.info("WriterDelete : StudyNoticeboard의 내용을 가져오는 도중 예외 발생");
+					return "studypage/error";
+				}
+			case "Fileshareboard":
+				try {
+					StudyFileshareboard studyFileShareboard = studyFileshareboardRepository.findFileshareboardByStudyIdAndNumberAndStatus(studyId, number, userId, "ME", "LE", 0);
+					if(studyFileShareboard==null) {
+						log.info("WriterDelete : StudyNoticeboard의 내용이 NULL임");
+						return "studypage/error";
+					}else {
+						log.info("WriterDelete : 삭제 처리 완료");
+						studyFileShareboard.setStatus(1);
+						studyFileshareboardRepository.save(studyFileShareboard);
+						return "redirect:/StudyPage/Fileshareboard?studyId"+studyId;
+					}
+				}catch(Exception e) {
+					log.info("WriterDelete : StudyNoticeboard의 내용을 가져오는 도중 예외 발생");
+					return "studypage/error";
+				}
+		}
+		return null;
+	}
+	
+	@RequestMapping(value="/WriterModify")
+	public String studypageWriterModify(String studyId, String boardName, String number) {
+		
+		return null;
 	}
 	
 	@RequestMapping(value="/PhotoUpload")

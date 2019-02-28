@@ -32,4 +32,12 @@ public interface StudyNoticeboardRepository extends JpaRepository<StudyNoticeboa
 			"where study_noticeboard.study_id=:studyId and number=:number\r\n" + 
 			"order by replygroup asc, replystep asc", nativeQuery=true)
 	StudyNoticeboard findNoticeboardByStudyIdANDNumber(@Param(value="studyId") String studyId, @Param(value="number") int number);
+	
+	@Query(value="select *\r\n" + 
+			"from study_noticeboard left join study_member using (study_id, id)\r\n" + 
+			"where study_id=:studyId and number=:number and id=:userId and (study_member_status_code = :power1 or study_member_status_code= :power2)"
+			+ "and status = :status", nativeQuery=true)
+	StudyNoticeboard findNoticeboardByStudyIdAndNumberAndStatus(@Param(value="studyId") String studyId, @Param(value="number") int number,
+			@Param(value="userId") String userId, @Param(value="power1") String power1, @Param(value="power2") String power2,
+			@Param(value="status") int status);
 }

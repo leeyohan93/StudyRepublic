@@ -184,18 +184,23 @@
 							  <div class="commentList"></div>
 							</div>
 							<div class="contentReplyWriteForm"
-								><div class="userProfile">프</div
+								><div class="userProfile"></div
 								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" th:name=|content${fasq.studyQnaboardId}| cols="30" rows="3" maxlength="255"></textarea></div
 								><button type="button" class="btn btn-dark replyButton" th:value="${fasq.studyQnaboardId}">댓글 작성</button
 							></div
 						></div>
 						<!--댓글 끝  -->
 						<div class="contentModifyAndDelete">
+							<form th:id="contentModifyAndDeleteId + ${fasq.number}">
+								<input type="hidden" th:id="number+${fasq.number}"  name="number" th:value="${fasq.number}"/>
+								<input type="hidden" th:id="studyId+${fasq.number}" name="studyId"/>
+								<input type="hidden" th:id="boardName+${fasq.number}" name="boardName"/>
+							</form>
 							<div class="contentModify">
-								<button type="button" class="btn btn-dark modifyButton">수정</button>
+								<button type="button" class="btn btn-dark modifyButton" th:value="${fasq.number}">수정</button>
 							</div>
 							<div class="contentDelete">
-								<button type="button" class="btn btn-dark deleteButton">삭제</button>
+								<button type="button" class="btn btn-dark deleteButton" th:value="${fasq.number}">삭제</button>
 							</div>
 						</div>
 					</div>
@@ -296,7 +301,26 @@
 												}); */
 								$("#writeButton").on("click", function(){
 									//tip! : 버튼에 href 링크 넣기
-									$(location).attr('href',  '/StudyPage/Write?board=Noticeboard');
+									$(location).attr('href',  '/StudyPage/Write?board=Qnaboard');
+								});
+								$(".deleteButton").on("click", function(){
+									$("#studyId"+this.value).val(window.name);
+									console.log($("#studyId" + this.value)[0].value);
+									$("#boardName" + this.value).val("Qnaboard");
+									console.log($("#boardName" + this.value)[0].value);
+									$("#contentModifyAndDeleteId" + this.value)[0].action = "/StudyPage/WriterDelete";
+									console.log($("#contentModifyAndDeleteId" + this.value)[0].action);
+									$("#contentModifyAndDeleteId" + this.value)[0].submit();
+								});
+								
+								$(".modifyButton").on("click", function(){
+									$("#studyId"+this.value).val(window.name);
+									console.log($("#studyId"+this.value)[0].value);
+									$("#boardName" + this.value).val("Qnaboard");
+									console.log($("#boardName"+this.value)[0].value);
+									$("#contentModifyAndDeleteId" + this.value).action = "StudyPage/WriterModify";
+									console.log($("#contentModifyAndDeleteId" + this.value)[0].action);
+									//$("#contentModifyAndDeleteId" + this.value).submit();
 								});
 							});	//readyEnd
 							
