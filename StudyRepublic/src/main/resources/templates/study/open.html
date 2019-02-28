@@ -13,7 +13,6 @@
     <!-- 설명:  jQuery UI 의 sortable - portlets 예제를 기반으로 수정 / 발전시킨 코드 -->
     <title>스터디 오픈</title>
 </head>
-
 <th:block layout:fragment="customCss">
    
     <!-- Font Awesome -->
@@ -26,6 +25,7 @@
 
 	<!-- 성호님 -->
 	<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+	
     
     <!-- Sortable (for leveltest) -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -574,7 +574,8 @@
 
         #leveltestArea .question-answer {
             font-size: 0.9em;
-            margin-left: 1em;
+            margin-left: 2em;
+            margin-bottom: 2em;
         }
 
         #leveltestArea .question-choice~.question-answer {
@@ -598,23 +599,36 @@
         #leveltestArea #leveltest-delete {
              color: black;
              display: inline-block;
-            width: 5rem;
+            width: 194px !important;
+            height: 49px !important;
+/*             background-color: rgb(162, 162, 162); */
+            top: -5px !important;
+		   text-align: center;
+		   line-height: 50px;
+		   font-weight: 900;
+		   letter-spacing: 8px;
+   		    margin-left: 163px;
+		    right: 0%;
+/* 		    border: 1.5px solid #696b6d; */
+		    padding-left: 15px;
+		        font-size: 12px;
+    		line-height: 2.5em;
         }
         
-        #leveltestArea #leveltest-delete-btn:after {
-        	content: "\f1f8";
-    	   	font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            font-size: 1.5rem;
-            vertical-align: middle;
-            text-align: center;
-            margin-left: 5px;
-/*             transition: all .2s ease-in-out; */
-            transition: font-size .4s ease-in-out;
+/*         #leveltestArea #leveltest-delete:after { */
+/*         	content: "\f1f8"; */
+/*     	   	font-family: "Font Awesome 5 Free"; */
+/*             font-weight: 900; */
+/*             font-size: 1.5rem; */
+/*             vertical-align: middle; */
+/*             text-align: center; */
+/*             margin-left: 5px; */
+/* /*             transition: all .2s ease-in-out; */ */
+/*             transition: font-size .4s ease-in-out; */
             
-        }
+/*         } */
         
-         #leveltestArea #leveltest-delete-btn:hover:after {
+         #leveltestArea #leveltest-delete:hover:after {
 /*         	transform: scale(4); */
 /* 			font-size: 50px; */
         	
@@ -698,7 +712,319 @@
 		  100% { transform: translate(0.5px, -1.5px) rotate(-1deg); }
 		}
 		
+		#introduction-section {
+		    margin: 0 2rem !important;
 		
+		}
+		#introduction-section h5 {
+		    margin-top: 2rem;
+		}
+		
+		#introduction-section .col-md-auto {
+		        padding-right: 5px !important;
+
+		
+		}
+		
+		        /********************************** leveltest - CSS 시작 **********************************/
+        #leveltestArea .leveltest-container {
+            width: 100%;
+            float: left;
+			/* padding-bottom: 100px; */
+            /* 참고:  https://stackoverflow.com/a/34471088 */
+            /* 문제:  .leveltest-toggle 을 더블클릭하면 컨테이너 내부의 텍스트가 셀렉트 되는 문제 발생 */
+            /* 해결:  아래의 스타일을 추가함. (본문 4줄에 해당하는 내용) */
+            /* 한계:  텍스트를 셀렉트 해야 할 경우에도 선택되지 않는 경우를 고려해보았으나, 어차피 sortable 적용으로 인해 선택이 불가하며 레벨테스트 취지에도 맞지 않으므로 아래처럼 적용하기로 함. */
+            /* 추가:  $(".leveltest-container").on('dbclick', function(e) { e.preventDefault(); return false; }); 처럼 script 단에서 처리하는 방법도 있음. */
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            display: block;
+            margin-top: 2em;
+            border: solid 1px silver;
+            padding: 0.5em;
+            min-height: 400px;
+             background-image: url("/images/background/background_ios12.jpeg");
+/*             background-image: url("/resources/static/images/bgimg/background-gradient-skypink.jpg"); */
+/* 			background-color: skyblue; */
+
+            background-size: cover;
+/*    			background-position-y: -230px; */
+        }
+
+        #leveltestArea .leveltest {
+            margin: 0 0 0.5em 0;
+            padding: 0.3em;
+/*             border: 1px solid #c5c5c5; */
+           	border-radius: 11.5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: unset !important;
+            opacity: 0.86;
+/*             background: transparent\9;   */
+/*     		background:rgba(0,0,0,0.4);   */
+            
+        }
+
+        #leveltestArea .leveltest-placeholder {
+/*             border: 1px dotted black; */
+            margin: 0 0 1em 0;
+            height: 50px;
+            
+        }
+
+/*         #leveltestArea input:not(#leveltest-rewrite-btn), #leveltestArea select { */
+/* 		    background-color: #e6e4de !important; */
+/* 		    border: none !important; */
+/* 		    display: inline-block; */
+/* 		    height: auto; */
+/*     		border-radius: 5px; */
+/*  		    padding: 0.6em 1em; */
+/*          } */
+        
+        #leveltestArea input:focus {
+            background-color: transparent;
+            border: dotted 1px;
+            display: inline-block;
+            height: auto;
+        }
+		
+        #leveltestArea input.question-content {
+            vertical-align: middle;
+            font-weight: 350 !important;
+        }
+
+        #leveltestArea input.question-edit {
+            width: 84%;
+            font-size: 0.95rem;
+        }
+
+/*         #leveltestArea input.question-choice-group { */
+		#leveltestArea .question-choice-group {
+            margin-bottom: 0.3rem !important;
+        }
+
+        #leveltestArea input.question-choice-option {
+            width: 80%;
+            height: 1.6em;
+            font-size: 0.85rem;
+        }
+
+        #leveltestArea .question {
+            padding: 0.5em 0.9em;
+		    margin-bottom: 0.9em;
+            position: relative;
+/*             border: 1px solid #dddddd; */
+/*             background: #e9e9e9; */
+			border: none;
+			background: rgba(255, 255, 255, 0.65);
+			opacity: 0.9;
+            color: #333333;
+            font-weight: bold;
+        	border-top-left-radius: 11.5px; 
+			border-top-right-radius: 11.5px;
+        }
+
+        #leveltestArea .question-numbering {
+            display: inline-block;
+            vertical-align: top;
+            height: 100%;
+            border: none;
+            width: 1.3em;
+            font-weight: bolder;
+            font-size: 1.3rem;
+        }
+
+        #leveltestArea .question-content {
+            display: inline-block;
+            line-height: 2em;
+            width: 80%;
+            margin-right: 20px;
+            padding-block-end: 1px;
+            padding-block-start: 1px;
+            padding-bottom: 1px;
+            padding-top: 1px;
+            font-weight: 350 !important;
+        }
+
+        #leveltestArea .question-edit {
+            font-family:"Muli, Arial, sans-serif";
+            font-size: 14px;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        #leveltestArea .leveltest-toggle {
+            position: absolute;
+            top: 1.5rem;
+    		right: 0.5rem;
+            transform: translateY(-60%);
+        }
+
+		#leveltestArea .icon::before {
+			font-size: 0.8rem !important;
+			color: #495057 !important;
+			font-weight: lighter !important;
+			
+		}
+		
+        #leveltestArea .icon-minus::before {
+/*             content: "\f068"; */
+/*             font-family: "Font Awesome 5 Free"; */
+/*             font-weight: 600; */
+/*             color: black; */
+            width: 100%;
+            padding: 0.2em 0.3em;
+            
+            content: "간략히 보기"; 
+        }
+
+        #leveltestArea .icon-plus::before {
+/*             content: "\f067"; */
+/*             font-family: "Font Awesome 5 Free"; */
+/*             font-weight: 600; */
+/*             color: black; */
+            width: 100%;
+            padding: 0.2em 0.3em;
+            
+/* 			font-size: 2rem !important; */
+/* 			color: #0082ff; */
+/* 			content: "+"; */
+			content: "더 보기";
+						
+        }
+
+        #leveltestArea .question-choice {
+/*             padding: 0.4em; */
+        }
+        #leveltestArea .question-choice-group {
+        	padding-left: 2rem;
+        }
+
+        #leveltestArea .choice-numbering {
+            margin-right: 0.5rem;
+            margin-left: 1rem;
+            font-weight: 640;
+		    font-size: 1.1em;
+        }
+
+        #leveltestArea .choice-numbering:after {
+            content: ")";
+        }
+
+        #leveltestArea .icon-remove {
+            display: none;
+        }
+
+        #leveltestArea .icon-remove:hover {
+            cursor: pointer;
+        }
+
+        #leveltestArea .icon-remove:after {
+            content: "\F00D";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 600;
+            color: black;
+            font-size: 0.8rem;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        #leveltestArea .question-choice-placeholder {
+            border-radius: 10px;
+            background-color: rgb(35,154,235);
+            margin-left: 5rem !important;
+            padding: 0.2rem 0.7rem;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 0.7em;
+            font-weight: bold;
+            color: white;
+        }
+
+        #leveltestArea .question-answer {
+            font-size: 0.9em;
+            margin-left: 3em;
+/*             margin-bottom: 1.6em; */
+/* 		    padding-bottom: 1.08rem; */
+            
+        }
+
+        #leveltestArea .question-choice~.question-answer {
+            margin-left: 83%;
+        }
+
+        #leveltestArea input.question-answer-input {
+            width: 80%;
+            margin-left: 0.25em;
+        }
+        
+        #leveltestArea select {
+            width: 4rem;
+            margin-left: 10px;
+            background-position: calc(100% - 0.5rem) center !important;
+            
+        }
+
+        #leveltestArea .inline-block {
+            display: inline-block;
+        }
+		
+		#leveltestArea .leveltest-btn-container {
+			margin: 0 16%;
+			
+		}
+		
+		#leveltestArea .join-form-btn {
+		    margin: 0 1rem !important;
+		}
+		
+/* 		#leveltestArea .leveltest-footer { */
+/* 		    font-size: 0.9em; */
+/* 		    color: #343a40; */
+/* 		    text-align: center; */
+/* 		    padding-bottom: 0.5em; */
+/* 		    letter-spacing: 1em; */
+/* 		} */
+
+	.leveltest-maker-container button {
+		border: 1.5px solid rgb(162, 162, 162);
+	
+	}
+	
+	.leveltest-maker {
+		margin-right: 1rem; 
+	}
+
+	.question-edit {
+	        font-family:"Muli, Arial, sans-serif" !important;
+            font-size: 14px !important;
+            color: #333333 !important;
+            font-weight: bold !important;
+       }
+       
+       .question-edit, .question-answer-input, .question-answer-input:focus, .question-choice-option {
+       		            width: 80%;
+	            margin-left: 0.25em;
+/* 	            background-color: #e6e4de !important; */
+	    border: none !important;
+	    display: inline-block;
+	    height: auto;
+	    border-radius: 5px !important;
+	    padding: 0.6em 1em;
+	    border: 1px solid silver !important;
+	    he
+	    
+       }
+       
+       .question-edit:focus, .question-answer-input:focus, .question-choice-option:focus {
+       		        border: 1px solid #6675df !important;
+
+       			
+       }  
+
+        /********************************** leveltest - CSS 끝 **********************************/
 				
     </style>
  
@@ -776,6 +1102,10 @@
 						<input type="hidden" name="id" th:value="${loggedInUser.id}">
 					
 			           <section class="tab-pane basicInfo-container ghost" id="basicInfo-section">
+          		
+							<div class="info-text">
+								<h5>스터디의 기본 정보를 입력해주세요!</h5>
+							</div>
 			           		
 			           		<div id="basicInfoArea">
 					            <div class="row input input-field-type">
@@ -1065,7 +1395,7 @@
 			                    <button class="leveltest-maker short-answer-leveltest-maker">주관식
 			                        문제 블록</button>
 			                     <div id="leveltest-delete">
-			                     	<span id="leveltest-delete-btn">삭제</span>
+			                     	여기로 드롭하면 삭제 됩니다
 			                     </div>
 			                </div>
 			
@@ -1243,8 +1573,9 @@
 	            });
 	            
 	            $("#leveltest-delete").sortable({
-	            	cancel: "#leveltest-delete-btn"
-	        		, receive: function( event, ui ) {
+// 	            	cancel: "#leveltest-delete-btn"
+// 	        		,
+	        		receive: function( event, ui ) {
 						console.log("received");
 						console.log(event.target); //받는 애
 						console.log($(this));
@@ -1381,11 +1712,11 @@
 	
 	                if ($(this).hasClass("multiple-choice-leveltest-maker")) {
 	                    $newQuestion = $("<div class='leveltest'><div class='question'><input type='hidden' name='leveltestTypeCode.leveltestTypeCode' value='MC'><input class='numbering question-numbering' name='questionNumber' readonly value='" +
-	                        nextNumber + "'>&nbsp;<span class='question-content'>+ 를 클릭해서 객관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-choice' style='display:none'><input type='hidden' name='choice' value=''><div class='question-choice-group'><span class='numbering choice-numbering'>1</span>&nbsp;<input class='question-choice-option' type='text' value='Lorem'/></div><div class='question-choice-group'><span class='numbering choice-numbering'>2</span>&nbsp;<input class='question-choice-option' type='text' value='ipsum'/></div><div class='question-choice-placeholder'>보기를 추가하려면 클릭하세요!</div></div><div class='question-answer' style='display:none'>정답: <select name='correctAnswer'><option>1</option><option>2</option></select></div></div>");
+	                        nextNumber + "'>&nbsp;<span class='question-content'>+ 를 클릭해서 객관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-choice' style='display:none'><input type='hidden' name='choice' value=''><div class='question-choice-group'><span class='numbering choice-numbering'>1</span>&nbsp;<input class='question-choice-option' type='text' placeholder='보기를 수정하세요'/></div><div class='question-choice-group'><span class='numbering choice-numbering'>2</span>&nbsp;<input class='question-choice-option' type='text'  placeholder='보기를 수정하세요'/></div><div class='question-choice-placeholder'>보기를 추가하려면 클릭하세요!</div></div><div class='question-answer' style='display:none'>정답: <select name='correctAnswer'><option>1</option><option>2</option></select></div></div>");
 	
 	                } else {
 	                    $newQuestion = $("<div class='leveltest'><div class='question'><input type='hidden' name='leveltestTypeCode.leveltestTypeCode' value='SA'><input class='numbering question-numbering' name='questionNumber' readonly value='" +
-	                        nextNumber + "'>&nbsp;<span class='question-content'>+ 를 클릭해서 주관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-answer' style='display:none'>정답: <input name='correctAnswer' class='question-answer-input' type='text' value='nulla'></div></div>");
+	                        nextNumber + "'>&nbsp;<span class='question-content'>+ 를 클릭해서 주관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-answer' style='display:none'>정답: <input name='correctAnswer' class='question-answer-input' type='text' placeholder='답안을 작성하세요'></div></div>");
 	
 	                }
 	                $('.leveltest-container').append($newQuestion);
