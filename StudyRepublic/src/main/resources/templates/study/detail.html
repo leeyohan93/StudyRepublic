@@ -20,11 +20,11 @@ layout:decorate="~{/layout/mainLayout}">
    
    <style type="text/css">
       
-      #header {
-      	height: 201.594px !important;
-      	 padding-top: 32px !important;
+/*       #header { */
+/*       	height: 201.594px !important; */
+/*       	 padding-top: 32px !important; */
       	
-      }
+/*       } */
       
       .studyDetail {
          /* box-shadow: X오프셋 Y오프셋 블러반경 퍼짐반경 색상; */
@@ -351,6 +351,8 @@ layout:decorate="~{/layout/mainLayout}">
                                  <div class="course_intro_title sub_title">스터디 소개</div>
             
                                  <div class="course_intro_content intro-content">
+                                 	<img alt="스터디 소개 이미지" th:if="${studyFile}" th:src="@{${studyFile.studyfileParturl}}" style="width: 100%;">
+                                 
                                     <p th:utext="${study.introduction}"></p>
                                  </div>
             

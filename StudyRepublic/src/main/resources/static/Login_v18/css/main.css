@@ -5,17 +5,18 @@
 
 [ RESTYLE TAG ]*/
 
-* {
-	margin: 0px; 
-	padding: 0px; 
-	box-sizing: border-box;
-}
+/* * { */
+/* 	margin: 0px;  */
+/* 	padding: 0px;  */
+/* 	box-sizing: border-box; */
+/* } */
 
-body, html {
-	height: 100%;
-}
+/* body, html { */
+/* 	height: 100%; */
+/* } */
 
-/*---------------------------------------------*/
+
+/*--------------------------------------------- */
 a {
 	font-size: 14px;
 	line-height: 1.7;
@@ -38,7 +39,7 @@ a:hover {
 
 
 
-/*---------------------------------------------*/
+/*--------------------------------------------- */
 h1,h2,h3,h4,h5,h6 {
 	margin: 0px;
 }
@@ -50,13 +51,13 @@ p {
 	margin: 0px;
 }
 
-ul, li {
+#main ul, #main li {
 	margin: 0px;
 	list-style-type: none;
 }
 
 
-/*---------------------------------------------*/
+/* --------------------------------------------- */
 input {
 	outline: none;
 	border: none;
@@ -93,7 +94,7 @@ textarea:-ms-input-placeholder { color: #999999;}
 
 
 
-/*---------------------------------------------*/
+/*--------------------------------------------- */
 button {
 	outline: none !important;
 	border: none;
@@ -772,9 +773,8 @@ input.radio100 {
 }
 
 
-
 /*==================================================================
-[ Social ]*/
+[ Social ] */
 .login100-form-social-item {
   width: 36px;
   height: 36px;
@@ -828,7 +828,7 @@ select[class='shsel']:valid {
     font-size:14px;
     border:1px solid #ccc;
     background-color:#f7f7f7;
-    appearance:none; /* 기본 스타일 없애기 */
+    appearance:none; 기본 스타일 없애기
     -webkit-appearance:none;
     -moz-appearance:none;
     background-image:none;
@@ -854,7 +854,7 @@ select[class='point']:valid {
 
 
 select::-ms-expand {
-   display: none;            /* 화살표 없애기 for IE10, 11*/
+   display: none;            화살표 없애기 for IE10, 11
 }
 
 select option {
@@ -867,13 +867,13 @@ select option {
     select option:focus,
     select option:active {
 /*      background: rgb(179,220,248); */
-        background-color: rgb(179,220,248); /* for IE */
+        background-color: rgb(179,220,248); for IE
         color: white;
     }
 
     select option:checked {
         background: linear-gradient(#d6d6d6, #d6d6d6);
-        background-color: #d6d6d6 !important; /* for IE */
+        background-color: #d6d6d6 !important; for IE
         color: #000000 !important;
     }
     
@@ -881,7 +881,7 @@ select option {
 
 
 
-body {
+#main body {
   margin: 10px;
   font-size: 14px;
 }
@@ -903,7 +903,6 @@ body {
   for IE 11
   display: none;
 }
-
 
 
 
