@@ -22,6 +22,13 @@
 	.dropdown-toggle::after {
    border: none !important;
 }
+.messageDropdown{
+    border-radius: 8px;
+}
+.messageImg{
+    width: 30px;
+    padding-right: 10px;
+}
 
 .messageSelect{
     width: 100px;
@@ -184,9 +191,9 @@ height: 90px !important;
 		<td> <div class="dropdown">
 		   <a class="dropdown-toggle" data-toggle="dropdown" th:text="${receive.sendId}"></a>
 		    <div class="dropdown-menu">
-		      <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${receive.sendId}" >쪽지쓰기</a>
-		      <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${receive.sendId}" >유저정보</a>
-	 		  <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${receive.sendId}" >신고하기</a>
+		      <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${receive.sendId}" ><img class="messageImg" src="/board/img/baseline_unsubscribe_black_18dp.png">쪽지쓰기</a>
+		      <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${receive.sendId}" ><img class="messageImg" src="/board/img/baseline_account_box_black_18dp.png">유저정보</a>
+	 		  <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${receive.sendId}" ><img class="messageImg" src="/board/img/baseline_message_black_18dp.png">신고하기</a>
 	    	</div>
 	 </div></td>
 		<td><a th:href="@{'/message/viewReceivemessage/'(messageReceiveId=${receive.messageReceiveId})}" th:text="${receive.messageContent}" ></a></td>
