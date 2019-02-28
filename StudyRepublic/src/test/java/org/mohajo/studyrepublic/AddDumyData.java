@@ -6,24 +6,27 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mohajo.studyrepublic.domain.CareerCD;
+import org.mohajo.studyrepublic.domain.EducationCD;
+import org.mohajo.studyrepublic.domain.GradeCD;
+import org.mohajo.studyrepublic.domain.Interest1CD;
+import org.mohajo.studyrepublic.domain.Interest2CD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberPoint;
 import org.mohajo.studyrepublic.domain.MemberRoles;
+import org.mohajo.studyrepublic.domain.Tutor;
+import org.mohajo.studyrepublic.domain.TutorCareer;
+import org.mohajo.studyrepublic.domain.TutorInterest;
 import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.MemberRolesRepository;
+import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,10 +40,16 @@ public class AddDumyData {
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
 	@Autowired
-	MemberRepository memberrepository;
+	private MemberRepository memberrepository;
 	
 	@Autowired
 	private MemberPointRepository memberpointrepository;
+	
+	@Autowired
+	private TutorRepository tutorrepository;
+	
+	@Autowired
+	private MemberRolesRepository memberrolerepository;
 	
 	private static final String ROLE_PREFIX = "ROLE_";
 	
@@ -79,7 +88,7 @@ public class AddDumyData {
     }
 
 	
-	@Test
+/*	@Test
 	public void addInsertMember() throws ParseException {
 		
 		for(int i = 501; i <= 520; i++) {	// 501번부터 이용가능
@@ -123,10 +132,10 @@ public class AddDumyData {
 			Date date = dt1.parse(sdate);
 			member.setRegistrationDate(date);
 			
-		/*	member.setGradeCD(new GradeCD("N"));
-			member.setMemberStatusCD(new MemberStatusCD("N"));*/
+			member.setGradeCD(new GradeCD("N"));
+			member.setMemberStatusCD(new MemberStatusCD("N"));
 			
-/*			InterestLocation intloc = new InterestLocation();
+			InterestLocation intloc = new InterestLocation();
 			intloc.setInterestLocation("서울강남구역삼동");
 			member.setInterestlocation(Arrays.asList((intloc)));
 			
@@ -139,7 +148,7 @@ public class AddDumyData {
 			int1.setInterest1Code("D");
 			int2.setInterest1cd(int1);
 			memint.setInterest2cd(int2);
-			member.setMemberInterest(Arrays.asList((memint)));*/
+			member.setMemberInterest(Arrays.asList((memint)));
 			
 
 			memberrepository.save(member);
@@ -154,11 +163,71 @@ public class AddDumyData {
 						
 			
 		} 
+				
+	}
+	*/
+	public String suffleEducationList() {	
+		List<String> randomEducation = Arrays.asList("A","B","D","E","M");
+		Collections.shuffle(randomEducation);
+		return randomEducation.get(0);
+	}
+	
+	
+	
+	@Test
+	public void addInsertTutor() {
 		
 		
 		
-		
+		for ( int i = 1; i <= 50; i++ ) {
+			
+			Tutor tutor = new Tutor();
+			Member member = memberrepository.findById("mohajo"+i).get();
+			tutor.setMember(member);
+			tutor.setIntroduction("안녕하세요. " + member.getName() + " 이라고 합니다.");
+			
+			EducationCD educd = new EducationCD();
+			educd.setEducationCode(suffleEducationList());
+			
+			tutor.setEducationCD(educd);
+			
+			
+			//
+			
+//			MemberInterest memint = new MemberInterest();
+			TutorInterest tutint = new TutorInterest();
+			Interest2CD int2 = new Interest2CD();
+			int2.setCodeValueKorean("오라클");
+			int2.setInterest2Code("D02");
+			Interest1CD int1 = new Interest1CD();
+			int1.setCodeValueKorean("데이터베이스");
+			int1.setInterest1Code("D");
+			int2.setInterest1cd(int1);
+			tutint.setInterest2CD(int2);
+			tutor.setTutorinterest(Arrays.asList((tutint)));
+			
+			TutorCareer  tutorcareer = new TutorCareer();
+			CareerCD careerCD = new CareerCD();
+			careerCD.setCareerCode("DA");
+			tutorcareer.setCareerCD(careerCD);
+			tutor.setTutorcareer(Arrays.asList((tutorcareer)));
+			
+			//
+			tutorrepository.save(tutor);
+					
+			List<MemberRoles> roles = memberrolerepository.findByRole(member.getId());
+			MemberRoles memberroles = new MemberRoles();
+			memberroles.setRoleName("W");
+			roles.add(memberroles);
+			member.setGradeCD(new GradeCD("W"));
+			member.setRoles(roles);
+			
+			memberrepository.save(member);
+			
+			
+		}
 		
 	}
+	
 	
 }

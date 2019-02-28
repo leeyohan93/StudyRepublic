@@ -134,7 +134,7 @@ public class AdminMemberController {
 		tutor.setMember(member);
 		tutorRepository.save(tutor);
 		}
-		tutorcontroller.changeGrade("T", receiveId);
+//		tutorcontroller.changeGrade("T", receiveId);
 		break;
 	
 	case "W":
@@ -148,7 +148,7 @@ public class AdminMemberController {
 			tutor.setMember(member);
 			tutorRepository.save(tutor);
 		}
-		tutorcontroller.changeGrade("W", receiveId);
+//		tutorcontroller.changeGrade("W", receiveId);
 		break;
 		
 	
@@ -163,7 +163,7 @@ public class AdminMemberController {
 		else if(member.getGradeCD().getGradeCode().equals("W")) {
 			memberRoleRepository.deleteTutorWait(receiveId);
 		}
-		tutorcontroller.changeGrade("N", receiveId);
+//		tutorcontroller.changeGrade("N", receiveId);
 		break;
 		
 	default:

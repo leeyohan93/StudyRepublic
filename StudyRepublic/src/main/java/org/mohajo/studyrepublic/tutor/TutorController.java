@@ -176,7 +176,8 @@ public class TutorController implements Serializable {
 		member.setGradeCD(new GradeCD("W"));
 		member.setRoles(roles);
 		
-		
+		memberrolesrepository.deleteNormal(member.getId());
+				
 		Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>(); 
 		
 		
@@ -220,17 +221,21 @@ public class TutorController implements Serializable {
 		
 		//
 	
-		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
+		/*		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		
 		Resource resource = defaultresourceloader
 				.getResource("file:src\\main\\resources\\static\\tutorFileUpload\\" + member.getId());
-		
+		Resource resource = defaultresourceloader
+			.getResource("tutorFileUpload\\" + member.getId());
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
-		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
+		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());  */
 		
-		String uploadRootPath = resource.getFile().getAbsolutePath();
-
-		File file = new File(uploadRootPath);
+//		String uploadRootPath = resource.getFile().getAbsolutePath();
+		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload\\" + member.getId());
+		
+		 System.out.println(uploadRootPath);
+		 
+		 File file = new File(uploadRootPath);
 //		File file = new File(tutorFileFullUrl);
 
 		

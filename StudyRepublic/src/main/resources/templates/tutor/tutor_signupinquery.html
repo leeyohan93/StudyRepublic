@@ -275,7 +275,8 @@ padding: 2em 1.2em;
 						<!-- <span th:text = "${tf.tutorfileOriginname}" ></span> -->
 						<input id = "fileUrl" name = "tutorFileFullUrl" type = "text" th:value = "${tf.tutorFileFullUrl}" style = "display:none">
 						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-						<a th:href = "${tf.tutorfilePartUrl}" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a>
+						<!-- <a th:href = "${tf.tutorfilePartUrl}" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a> -->
+						<a th:href = "@{'/tutor_fileUpload/'+${session.userid} +'/'${tf.tutorfileSavename}'/'" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a>
 						<a th:href = "@{'/tutor/file'(tutorFileFullUrl=${tf.tutorFileFullUrl})}" style = "color:blue">다운로드</a> 
 						</div>
 	<!-- 					<a th:href = "@{'/tutor/file/delete'(tutorFileFullUrl=${tf.tutorFileFullUrl})}">X(삭제)</a>  -->
