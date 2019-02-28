@@ -294,7 +294,8 @@ public class StudyController {
 		
 		model.addAttribute("studyActivity", studyActivity);
 
-		return "/study/detail";
+//		return "/study/detail";
+		return "/study/detail2";
 	}
 	
 	/**
@@ -322,7 +323,9 @@ public class StudyController {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 
 		if(auth.getName() == "anonymousUser") {
+//			return "redirect:/study/pleaseLogin/?pathname=" + pathname;
 			return "redirect:/study/pleaseLogin/?pathname=" + pathname;
+
 		}
 		
 		String id = auth.getName();
@@ -1171,6 +1174,10 @@ public class StudyController {
 		// 참고:  https://best421.tistory.com/53
 		// 오류:  org.thymeleaf.exceptions.TemplateInputException: Error resolving template [/study/detail/BO00002], template might not exist or might not be accessible by any of the configured Template Resolvers
 		// 원본:  return pathname;
+		if(pathname.contains("/img")) {
+			return "/index";
+		}
+		
 		return "redirect:" + pathname;
 	}
 

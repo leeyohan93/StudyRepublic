@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/mainLayout}">
+<head>
+<title>Study Detail View</title>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<!-- <meta property="og:title" content="제목"> -->
+<!-- <meta property="og:description" content="설명"> -->
+<!-- <meta property="og:image" content="대표 이미지"> -->
+<!-- <meta name="twitter:card" content="트위터 카드 타입" /> -->
+<!-- <meta property="og:url" content="현재 페이지 링크"> -->
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header"
+   th:content="${_csrf.headerName}" />
+   
+<th:block layout:fragment="customCss">
+
+   
+   <style type="text/css">
+      
+      .studyDetail {
+         /* box-shadow: X오프셋 Y오프셋 블러반경 퍼짐반경 색상; */
+   /*       box-shadow: 0.3em 0.3em 10px 3px silver; */
+         box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important;
+         border:   0.5px solid rgba(0,0,0,0.12);
+         background-color: white;
+         width: 100%;
+         margin: 1em auto;
+         padding: 2em 2em;
+         position:relative;
+         min-width: inherit;
+      }
+      .basic-info {
+         position: relative;
+   
+      }
+      .column-name {
+         font: 1.1em bolder !important;
+      }
+      .essential-info-1 {
+         margin: 2em 2em;
+      }
+      .essential-info-2 {
+         margin: 1em 2.5em;
+      }
+      .box-info {
+         display: inline-block;
+         top: 8px;
+         right: 16px;
+         float: right;
+         width: 100px;
+         background-color: lightgray;
+         font: bold 20px;
+         vertical-align: 50%;
+         position: absolute;
+         text-align: center;
+         padding: 0 0;
+         
+      }
+      .enroll-count {
+         font: bold x-large;
+      }
+/*       .level { */
+/*          background-color: silver; */
+/*          font: white; */
+/*          padding: 0.3em 0; */
+/*       } */
+      .row {
+         margin: 0.5em 1em;
+      }
+      .tag {
+         border-radius: 1em;
+         background-color: lightblue;
+         font: white bold;
+         width: translateX(120%);
+         padding: 0 0.8em;
+         margin: 0.2em;
+      }
+      .intro {
+         width: calc(100%-100px);
+         margin: 1.5em 3em 2em;
+         
+      }
+      .intro-content {
+         width: calc(100%-100px);
+         border: solid 1px #ddd;
+         padding: 1em;
+   /*       margin: 0 3em 2em; */
+         display: block;
+      }
+      .additional-info {
+         width: calc(100%-100px);
+   /*       display: block; */
+   /*       padding: 1em; */
+         margin: 0 3em 2em;
+      }
+      /* .tab-head:after{content:"";display:table;clear:both;*zoom:1} */
+      /* .tab-head .tab-item:disabled{cursor:default;color:#888} */
+      /* .tab-head.one-tab .tab-item{width:100%;margin:0 -1px} */
+      /* .tab-content{display:none;padding-top:30px} */
+      /* .tab-content.on{display:block} */
+      
+      .tab-head0 {
+          margin: 0.2em 0 0;
+   /*       display: block; */
+         display: inline-flex;
+         width: 100%;
+         position: relative;
+   /*       top: 0.5px; */
+      }
+      /* .tab-head .tab-item{} */
+      .tab-title {
+         box-sizing:border-box;
+         background-color:#fafafa;
+         border:1px solid #ddd;
+         float:left;
+         margin-left:-1px;
+         margin-bottom:-1px;
+         text-align:center;
+         padding: 0.3em 0;
+         
+          display: inline-block;
+         height: auto;
+         width: 20%;
+         cursor: pointer;
+      }
+      /* .tab-head .tab-item:after{content:"";display:table;clear:both;*zoom:1} */
+      /* .tab-head .tab-item.tab-active{background-color:#fff;border-bottom:1px solid #fff;opacity:1} */
+      .tab-title.tab-active {
+         background-color: white;
+         border-bottom:1px solid #fff;
+         opacity:1;
+      }
+      .tab-content {
+         display: block;
+         border: solid 1px #ddd;
+         width: 100%;
+         padding: 1em;
+      }
+      .sticky {
+         position: -webkit-sticky;
+         position: sticky;
+         bottom: 10%;
+         padding: 5px;
+         font: 0.9em white;
+         text-align: center;
+         margin: 0 auto 2em;
+         left: 50%;
+          transform: translateX(-50%);
+         
+      }
+      .invisible {
+         display: none;
+         position: absolute;
+      }
+      .disable {
+         color: silver;
+         cursor: not-allowed;
+      }
+      
+      .btn-join-study {
+      	z-index: 1000000;
+      }
+      
+      /**
+      *   Star Ratings With JavaScript & Font Awesome, BY Traversy Media (https://www.youtube.com/watch?v=u3rylF3y3og)
+      */
+      .stars-outer {
+        position: relative;
+        display: inline-block;
+      }
+      
+      .stars-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 0;
+      }
+      
+      .stars-outer::before {
+        content: "\f005 \f005 \f005 \f005 \f005";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        color: #ccc;
+      }
+      
+      .stars-inner::before {
+        content: "\f005 \f005 \f005 \f005 \f005";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        color: #f8ce0b;
+      }
+   </style>
+   
+   <!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous"> -->
+   <!-- <link rel="stylesheet" th:href="@{/assets/css/shards-demo.min.css}"> -->
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+   
+   <!-- From course.html -->
+<!--    <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css"> -->
+<!--    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+<!--    <link href="/unicat/plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css"> -->
+<!--    <link rel="stylesheet" type="text/css" href="/unicat/plugins/OwlCarousel2-2.2.1/owl.carousel.css"> -->
+<!--    <link rel="stylesheet" type="text/css" href="/unicat/plugins/OwlCarousel2-2.2.1/owl.theme.default.css"> -->
+<!--    <link rel="stylesheet" type="text/css" href="/unicat/plugins/OwlCarousel2-2.2.1/animate.css"> -->
+   <link rel="stylesheet" type="text/css" href="/unicat/styles/course.css">
+<!--    <link rel="stylesheet" type="text/css" href="/unicat/styles/course_responsive.css"> -->
+
+</th:block>
+
+</head>
+<body>
+
+   <div layout:fragment="main">
+   
+      <div class="inner">
+      
+      <!-- <img src="/images/diamond.png" alt="Shard" class="shard"> -->
+         <h3>스터디 상세</h3>
+         
+         
+         <section class="studyDetail study_detail_container">
+         
+            <!-- 공유하기 -->
+            <div class="row share-via-sns">
+            </div>
+
+         
+<!--             <div class="super_container"> -->
+   
+            
+               <!-- Course -->
+            
+<!--                <div class="course"> -->
+<!--                   <div class="container"> -->
+<!--                      <div class="row"> -->
+            
+                        <!-- Course -->
+<!--                         <div class="study_detail_container"> -->
+            
+                           <!-- Course Image -->
+                           <div class="course_image">
+                              <img src="/unicat/images/home_slider_1.jpg" alt="">
+                              <div class="studyType" th:text="${study.typeCode.codeValueKorean}">type</div>
+                              <div class="studyOnoff" th:text="${study.onoffCode.codeValueKorean}">onoff</div>
+                              <div class="studyStatus">
+                                 <div class="studyStatus-icon"></div>
+                                 <div class="studyStatus-text" id="study-status" th:value="${study.studyStatusCode.studyStatusCode}" th:text="${study.studyStatusCode.codeValueKorean}">상태</div>
+                              </div>
+                              <div class="course_title" th:text="${study.name}">스터디명</div>
+                           </div>
+                           
+            
+                           <div class="course_container">
+            
+            
+                              <!-- Course Info 1 -->
+                              <div class="course_essential course-section">
+                                 <div class="course_essential_title sub_title">기본정보</div>
+            
+                                 <div class="course_essential_content">
+            
+                                    <div class="course_essential_inner">
+                                       <div class="course_essential_inner_title">
+                                          기간
+                                       </div>
+                                       <div class="course_essential_inner_content">
+                                          <span th:text="|${study.startDate}~${study.endDate}|">period</span>
+                                          (총 <span th:text="${study.studyCount}">n</span>회)
+                                       </div>
+                                    </div>
+            
+                                    <div class="course_essential_inner">
+                                       <div class="course_essential_inner_title">
+                                          일시
+                                       </div>
+                                       <div class="course_essential_inner_content">
+                                          <span th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</span>
+                                          (<span th:text="${#dates.format(study.timeDiff, 'H')}">n</span>시간)
+                                       </div>
+                                    </div>
+            
+                                    <div class="course_essential_inner" th:if="${study.onoffCode} != 'O'">
+                                       <div class="course_essential_inner_title">
+                                          지역
+                                       </div>
+                                       <div class="course_essential_inner_content">
+                                          <th:block th:each="location : ${study.studyLocation}"><i class="tag" th:text="${location.interestLocation}">location</i>&nbsp;</th:block>
+                                       </div>
+                                    </div>
+            
+                                    <div class="course_essential_inner">
+                                       <div class="course_essential_inner_title">
+                                          분야
+                                       </div>
+                                       <div class="course_essential_inner_content">
+                                          <th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block>
+                                       </div>
+                                    </div>
+            
+                                    <div class="course_essential_inner" th:if="${study.typeCode} == 'P'">
+                                       <div class="course_essential_inner_title">
+                                          가격
+                                       </div>
+                                       <div class="course_essential_inner_content course_price">
+                                          <th:block th:text="${study.price.price}">price</th:block>
+                                       </div>
+                                    </div>
+            
+                                 </div>
+            
+                              </div>
+            
+            
+                              <!-- Course Info 2 -->
+                              <div class="course_info course-section d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+            
+                                 <!-- Course Info Item -->
+                                 <div class="course_info_item">
+                                    <div class="course_info_title">정원</div>
+                                    <div class="course_info_text enroll-count" th:text="|${study.enrollActual}/${study.enrollCapacity}|">enrollCount</div>
+                                 </div>
+            
+                                 <!-- Course Info Item -->
+                                 <div class="course_info_item">
+                                    <div class="course_info_title">레벨테스트</div>
+                                    <div class="course_info_text" th:text="${study.hasLeveltest==1?'있음':'없음'}">hasLeveltest</div>
+                                 </div>
+            
+                                 <!-- Course Info Item -->
+                                 <div class="course_info_item">
+                                    <div class="course_info_title level">난이도</div>
+                                    <div class="course_info_text" th:text="${study.levelCode.codeValueKorean}">level</div>
+                                 </div>
+            
+                              </div>
+            
+            
+                              <!-- Introduction -->
+                              <div class="course_intro course-section">
+                                 <div class="course_intro_title sub_title">스터디 소개</div>
+            
+                                 <div class="course_intro_content intro-content">
+                                    <p th:utext="${study.introduction}"></p>
+                                 </div>
+            
+                              </div>
+            
+            
+                              <!-- Course Tabs -->
+                              <div class="course_tabs_container course-section">
+                                 <div class="tabs d-flex flex-row align-items-center justify-content-start">
+                                    <!-- <div class="tab active">description</div> -->
+                                    <div class="tab tab-title active" id="tab-title-leaderInfo">리더 정보</div>
+                                    <div class="tab tab-title disable" id="tab-title-review">강의 후기</div>
+                                 </div>
+                                 <div class="tab_panels">
+            
+                                    <div class="tab_panel_wrapper">
+                                    
+                                       <!-- Curriculum -->
+                                       <div class="tab-content leader-info tab_panel tab_panel_2 active" id="tab-content-leaderInfo" th:with="leaderInfo = ${tutorInfo}? ${tutorInfo.member} : ${leaderInfo}">
+                                          
+                                          <div class="profile-container">
+                                             <div class="profile-image-container">
+                                                   <!-- <img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%;"> -->
+                                                <img th:alt="|${leaderInfo.nickname}님의 프로필 사진|" th:src="@{'/member_image/' + ${leaderInfo.profileSaveName}}">
+                                                <span th:text="${leaderInfo.nickname}">리더 닉네임</span>
+                                             </div>
+                                          </div>
+                                          <div class="member-interest-container">
+                                             <h5>관심분야</h5>
+                                             <div th:text="${#lists.isEmpty(leaderInfo.memberInterest)}? 없음">
+                                                <th:block th:each="interest : ${leaderInfo.memberInterest}">
+                                                   <i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;
+                                                </th:block>
+                                             </div>
+                                          </div>
+                                          <div class="study-activity">
+                                             <h5>최근 활동</h5>
+                                             <table>
+                                                <tr>
+                                                   <th>스터디명</th>
+                                                   <th>기간</th>
+                                                   <th>평점</th>
+                                                </tr>
+                                                <tr th:each="tempStudyActivity : ${studyActivity}">
+                                                   <th:block th:with="tempStudy = ${tempStudyActivity.study}" th:if="${tempStudyActivityStat.index} < 5">
+                                                      <td><a th:href="@{'/study/detail/' + ${tempStudy.studyId}}" th:text="${tempStudy.name}">studyName</a>&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorean}">status</i></td>
+                                                      <td th:text="|${tempStudy.startDate}~${tempStudy.endDate}|">period</td>
+                                                      <td th:if="${tempStudy.averageScore}==-1">-</td>
+                                                      <td th:unless="${tempStudy.averageScore}==-1" class="score-container">
+                                                         <div class="stars-outer"><div class="stars-inner">별</div></div>
+                                                         <span class="stars-score" th:text="${tempStudy.averageScore}!=-1? ${tempStudy.averageScore} : '-'">avgScore</span>
+                                                      </td>
+                                                   </th:block>
+                                                </tr>
+                                             </table>
+                                          </div>
+                                          
+                                       </div>
+            
+                                       <!-- Reviews -->
+                                       <div class="tab-content tab_panel tab_panel_3 review active" id="tab-content-review">
+                                       <!-- <div class="tab_panel tab_panel_3 review invisible" id="tab-content-review"> -->
+                                          <!-- <div class="tab_panel_title" th:text="${#lists.isEmpty(study.review)}? '작성 된 후기가 없습니다.' ">후기 리스트</div> -->
+                                          
+                                          <!-- Comments -->
+                                          <div class="comments_container" >
+                                          
+                                          	 <p th:text="${#lists.isEmpty(study.review)}? '작성 된 후기가 없습니다.' "> </p>
+                                          
+                                             <th:block th:if="${not #lists.isEmpty(study.review)}">
+                                                총 <span class="review-counter" ></span>건
+                                                <hr/>
+            
+                                             <ul class="comments_list">
+                                                <li th:each="review : ${study.review}" th:with="reviewer = ${review.member}">
+                                                   <div class="comment_item d-flex flex-row align-items-start jutify-content-start">
+                                                      <div class="comment_image"><div><img th:src="@{'/member_image/' + ${reviewer.profileSaveName}}" alt="리뷰어 프로필 사진"></div></div>
+                                                      <div class="comment_content">
+                                                         <div class="comment_title_container d-flex flex-row align-items-center justify-content-start">
+                                                            <div class="comment_author" th:text="${reviewer.nickname}">Milley Cyrus</div>
+                                                            <div class="comment_rating">
+                                                               <div class="score-container">
+                                                                  <div class="stars-outer"><div class="stars-inner">별</div></div>
+                                                                  <span class="stars-score" th:text="${review.score}">score</span>
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                         <div class="comment_text">
+                                                            <p th:text="${review.content}">후기 내용</p>
+                                                         </div>
+                                                         <!-- <div class="comment_extras d-flex flex-row align-items-center justify-content-start">
+                                                            <div class="comment_extra comment_likes"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i><span>15</span></a></div>
+                                                            <div class="comment_extra comment_reply"><a href="#"><i class="fa fa-reply" aria-hidden="true"></i><span>Reply</span></a></div>
+                                                         </div> -->
+                                                      </div>
+                                                   </div>
+                                                </li>
+                                             </ul>
+            
+                                             </th:block>
+            
+                                          </div>
+            
+                                       </div>
+            
+                                    </div>
+            
+                                 </div>
+                              </div>
+                           </div>
+<!--                         </div> -->
+            
+<!--                      </div> -->
+<!--                   </div> -->
+<!--                </div> -->
+            
+<!--             </div> -->
+
+            <!-- 스터디 가입 신청 버튼 -->
+            <th:block th:with="studyStatusCode = ${study.studyStatusCode.studyStatusCode}">
+               <th:block th:unless="${studyStatusCode.equals('C')} OR ${studyStatusCode.equals('D')}">
+                  <input type="hidden" class="studyId-container" th:value="${study.studyId}">
+                  <button sec:authorize="isAnonymous()" class="sticky btn-join-study" data-user-type="anonymous" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
+                  <button sec:authorize="isAuthenticated()" class="sticky btn-join-study" data-user-type="authenticated" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
+               </th:block>
+            </th:block>
+         
+         </section>
+         
+         
+         <input type="hidden" id="loggedInUserId" th:value="${loggedInUserId}">
+      </div>
+   </div>
+
+   <th:block layout:fragment="customScript">
+   
+   <script>
+      
+      <!-- Spring Security ~ Ajax 관련 추가 코드 BY 성호님 -->
+      var token = $("meta[name='_csrf']").attr("content");
+      var header = $("meta[name='_csrf_header']").attr("content");
+      $(function() {
+         $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+         });
+      });
+      
+      $(document).ready(function() {
+         
+         makeTabWorks();
+         activateReviewTab();
+         prejoinCheck();
+         getRatingStars();
+
+      });
+
+      //   1. 탭 메뉴 구현
+      function makeTabWorks() {
+
+         // 아래는 왜 한 번만 실행되지?
+         /* $('.tab-title:not(.tab-active)').on('click', function() {
+            $('.tab-active').removeClass("tab-active");
+            $(this).addClass("tab-active");
+         }); */
+         $('.tab-title').on('click', function() {
+            if (!$(this).hasClass(".active") && !$(this).hasClass("disable")) {
+               
+               //tab-title
+               $('.tab-title').removeClass("active");
+               $(this).addClass("active");
+
+               //tab-content
+               $('.tab-content').addClass("invisible");
+               var targetTabContent = $('#tab-content-' + $(this)[0].id.split("-")[2])[0];
+               targetTabContent.classList.remove("invisible");
+            }
+         });
+      }
+
+      //   2. 리뷰 탭 활성화: 완료 스터디 대상
+      function activateReviewTab() {
+         
+         // 완료된 스터디이면, 리뷰 탭의 disable 클래스를 제거한다.
+         if ($('#study-status').attr('value') == "C") {
+            console.log("완료 스터디임");
+            $('#tab-title-review').removeClass('disable');
+            $('#tab-title-review').trigger('click');
+            var reviewCount = $('.review-unit').length;
+            $('.review-counter').text(reviewCount);
+         }
+      }
+
+      //   3. 스터디 가입 제한
+      function prejoinCheck() {
+         $('.btn-join-study').on('click', function(e) {
+            // 모집 마감된 스터디는 버튼을 비활성화 한다.
+            if ($('.btn-join-study').hasClass('disable')) {
+               e.preventDefault();
+               return;
+            }
+
+            // 1) 비로그인 유저의 경우 --> 로그인 페이지
+            // *** 로그인 여부 판별하는 방법 확인하기
+            var joinBtn = $('.btn-join-study')[0];
+            
+            var pathname = window.location.pathname;
+//             var studyId = pathname.replace('/study/detail/', '');
+            var studyId = $(this).prev('.studyId-container').val();
+            var originUrl = window.location.origin;
+            var location = "";
+            var userId = document.getElementById('loggedInUserId').value;
+
+            if (joinBtn.dataset.userType == "anonymous") {
+               alert("로그인 후 신청할 수 있어요!");
+               location = "/study/pleaseLogin/?pathname=" + pathname;
+               window.location.href = originUrl + location;
+//                location = "/login";
+//                window.location.replace = originUrl + location;               
+               // 로그인 후 스터디 가입 페이지로 이동하도록 처리할 것! ******** --> SecurityConfig.java 에서 처리 완료
+               // ==> 스터디 상세 페이지로 다시 이동해야 신청 권한 검증이 가능함. 처리 필요. 
+
+            } else if (joinBtn.dataset.userType == "authenticated") {
+               // 3) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우 --> 메시지   ==> 예기치 못한 Ajax...
+               $.ajax({
+                  type : "GET",
+                  contentType : "application/json",
+                  url : "/study/prejoin",
+                  data : {
+                     "studyId" : studyId,
+                     "userId" : userId
+                  },
+                  /* dataType : 'json', */
+                  cache : false,
+                  timeout : 600000,
+                  success : function(data) {
+                     console.log("Success: " + data);
+                     
+                     if (!data) {
+                        var answer = confirm("이 스터디에 가입하시겠어요?");
+                        if(answer) {
+                           location = "/study/join/" + studyId/*  + "?id=" + userId */;
+                           window.location.href = originUrl + location;
+                        } else {
+                           return;
+                        }
+                     }
+                     /* var jsonData = JSON.parse(data);
+                     var studyMemberStatusCode = jsonData.studyMemberStatusCode.studyMemberStatusCode; */
+                     var studyMemberStatusCode = data.studyMemberStatusCode.studyMemberStatusCode;
+                     console.log("studyMemberStatusCode = " + studyMemberStatusCode);
+
+                     switch (studyMemberStatusCode) {
+                        case "WA":
+                           alert("승인 대기중인 스터디입니다.");
+                           return;
+                        case "ME":
+                        case "LE":
+                           alert("이미 가입된 스터디입니다.");
+                           return;
+                        case "EX":
+                        case "DE":
+                           alert("가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.");
+                           return;
+                     }
+                  },
+                  error : function(e) {
+                     console.log("Error: " + e);
+                     return false;
+                  }
+               });
+            }
+         });
+      }
+      
+      //   4. 별점 표시
+      function getRatingStars() {
+         var s = $(".stars-score");
+         var score;
+         var scoreTotal = 5;
+         var width;
+         
+         for(let i=0; i < s.length; i++) {
+            score = s[i].textContent;
+            
+            if(score != "-") {
+               width = Math.round( (score/scoreTotal * 100) /10 ) * 10 + "%";
+               console.log(width);
+               s[i].previousElementSibling.children[0].style.width = width;
+            }         
+         }
+      }
+      
+   </script>
+   
+<!--    <script src="js/jquery-3.2.1.min.js"></script> -->
+<!--    <script src="styles/bootstrap4/bootstrap.min.js"></script> -->
+
+<!--    <script src="/unicat/styles/bootstrap4/popper.js"></script> -->
+<!--    <script src="/unicat/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script> -->
+<!--    <script src="/unicat/plugins/easing/easing.js"></script> -->
+<!--    <script src="/unicat/plugins/parallax-js-master/parallax.min.js"></script> -->
+<!--    <script src="/unicat/plugins/colorbox/jquery.colorbox-min.js"></script> -->
+<!--    <script src="/unicat/js/course.js"></script> -->
+   
+   </th:block>
+</body>
+</html>
