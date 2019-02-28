@@ -47,7 +47,7 @@ public class ActivityInfoController {
 	private ReviewRepository reviewRepository;
 	
 	
-	@RequestMapping("/allboard")
+	@RequestMapping("/activity/allboard")
 	public String freeboard(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -66,7 +66,7 @@ public class ActivityInfoController {
 	}
 	
 	
-	@RequestMapping("/basicstudylist")
+	@RequestMapping("/activity/basicstudylist")
 	public String basicStudyList(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -92,7 +92,7 @@ public class ActivityInfoController {
 		return "mypage/basicStudy_list";
 	}
 	
-	@RequestMapping("/premiumstudylist")
+	@RequestMapping("/activity/premiumstudylist")
 	public String premiumStudyList(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();

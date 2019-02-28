@@ -578,6 +578,35 @@ public class TutorController implements Serializable {
 		      model.addAttribute("failedFiles", failedFiles);
 		      return "uploadResult";
 		   }
+	   
+	      public void changeGrade(String authRole ,String id) {
+
+	          Member member = memberrepository.findById(id).get();
+	          List<MemberRoles> roles = memberrolesrepository.findByRole(id);
+	          MemberRoles memberroles = new MemberRoles();
+	          memberroles.setRoleName(authRole);
+	          roles.add(memberroles);
+	          member.setGradeCD(new GradeCD(authRole));
+	          member.setRoles(roles);
+	          
+	          
+/*	          Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>();    
+	          authoritySet.add(new SimpleGrantedAuthority(ROLE_PREFIX + authRole ));      
+	          Authentication newAuth = new UsernamePasswordAuthenticationToken(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), "", authoritySet);
+	       
+	          System.out.println("roles" + roles);
+//	          auth = SecurityContextHolder.getContext().getAuthentication();
+	          System.out.println("권한체크: " + newAuth.getAuthorities());
+	          SecurityContext securityContext = SecurityContextHolder.getContext(); 
+	          securityContext.setAuthentication(newAuth);*/
+	    /*      auth.setAuthenticated(true);*/
+
+	       }
 	
 
 }
+
+	
+
+
+

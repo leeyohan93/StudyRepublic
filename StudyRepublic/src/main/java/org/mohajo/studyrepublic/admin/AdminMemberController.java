@@ -13,6 +13,7 @@ import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.MemberRolesRepository;
 import org.mohajo.studyrepublic.repository.SendMessageRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
+import org.mohajo.studyrepublic.tutor.TutorController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +45,8 @@ public class AdminMemberController {
 	MemberRolesRepository memberRoleRepository;
 	@Autowired
 	TutorRepository tutorRepository;
+	@Autowired
+	TutorController tutorcontroller;
 	
 	
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
@@ -68,7 +71,6 @@ public class AdminMemberController {
 		return "redirect:"+request.getHeader("Referer");
 
 	}
-	
 	@RequestMapping(value = "/message")
 	public String message(Model model,String[] selectedId,String sendId,String messageContent,HttpServletRequest request) {
 		for(String receiveId : selectedId) {
@@ -95,7 +97,7 @@ public class AdminMemberController {
 	public String changeGrade(Model model,String changeGrade, String[] selectedId,HttpServletRequest request) {
 		 	
 		for(String receiveId : selectedId) {
-	 	
+	 	System.out.println("receiveId : " + receiveId);
 	// 권한테이블에 등급추가.	
 		MemberRoles memberroles = new MemberRoles();
 		memberroles.setRoleName(changeGrade);				
@@ -117,6 +119,7 @@ public class AdminMemberController {
 	// T나 W로 권한 변경 시 default 값으로 tutor 테이블에 데이터를 생성한다. 	
 	
 	case "T":
+		
 		if(member.getGradeCD().getGradeCode().equals("W")) {
 		// 권한테이블에 W권한 삭제.	
 		memberRoleRepository.deleteTutorWait(receiveId);	
@@ -131,6 +134,7 @@ public class AdminMemberController {
 		tutor.setMember(member);
 		tutorRepository.save(tutor);
 		}
+		tutorcontroller.changeGrade("T", receiveId);
 		break;
 	
 	case "W":
@@ -144,6 +148,7 @@ public class AdminMemberController {
 			tutor.setMember(member);
 			tutorRepository.save(tutor);
 		}
+		tutorcontroller.changeGrade("W", receiveId);
 		break;
 		
 	
@@ -158,6 +163,7 @@ public class AdminMemberController {
 		else if(member.getGradeCD().getGradeCode().equals("W")) {
 			memberRoleRepository.deleteTutorWait(receiveId);
 		}
+		tutorcontroller.changeGrade("N", receiveId);
 		break;
 		
 	default:
@@ -227,3 +233,5 @@ public class AdminMemberController {
 		return adminMemberService.exiteMember(selectedId);
 	}
 */}
+
+

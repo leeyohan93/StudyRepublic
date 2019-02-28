@@ -12,12 +12,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
 import org.mohajo.studyrepublic.domain.ReceiveMessage;
+import org.mohajo.studyrepublic.domain.Report;
+import org.mohajo.studyrepublic.domain.ReportTypeCD;
+import org.mohajo.studyrepublic.domain.ReportWhyCD;
 import org.mohajo.studyrepublic.domain.SendMessage;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.ReceiveMessageRepository;
+import org.mohajo.studyrepublic.repository.ReportRepository;
 import org.mohajo.studyrepublic.repository.SendMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,8 +34,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.java.Log;
 
@@ -44,26 +51,13 @@ public class MessageController {
 	private SendMessageRepository sendmessagerepository;
 	@Autowired
 	private ReceiveMessageRepository receivemessagerepository;
+	@Autowired
+	MemberRepository memberRepository;
+	@Autowired
+	ReportRepository reportRepository;
 	
-	/*받은쪽지함
-	@RequestMapping("/receiveMessage")
-	public String receivemessagelist(Model model) {
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
-		
-		List<ReceiveMessage> list = receivemessagerepository.findreceiveById(id);
-		
-		
-		model.addAttribute("receivemessagerepository", list);
-		
-
-			
-		
-		return"MessageTest/receiveMessage";
-	}	*/
-	
-	/*페이징가능한 받은쪽지함 */
-	@RequestMapping("/receiveMessage")
+	/*페이징가능한 받은쪽지함 쪽지함 버튼클릭시 이동하는 쪽지함메인 */
+	@RequestMapping("/message/receiveMessage")
 	public String receivemessagelist(Model model, PageDTO pageDTO) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -82,7 +76,7 @@ public class MessageController {
 	}	
 	
 	/*페이징가능한 보낸쪽지함 */
-	@RequestMapping("/sendMessage")
+	@RequestMapping("/message/sendMessage")
 	public String snedmessagelist(Model model, PageDTO pageDTO) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -94,13 +88,13 @@ public class MessageController {
 		
 		model.addAttribute("sendList",new PageMaker<>(list));
 		
+		return "MessageTest/sendMessage";
+	}	
 
 			
 		
-		return "MessageTest/sendMessage";
-	}	
 	
-	@RequestMapping("/receiveMessageSelect")
+	@RequestMapping("/message/receiveMessageSelect")
 	public String receiveMessageSelect( String listCount, PageDTO pageDTO, Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -122,7 +116,7 @@ public class MessageController {
 		
 	}
 	
-	@RequestMapping("/sendMessageSelect")
+	@RequestMapping("/message/sendMessageSelect")
 	public String sendMessageSelect( String listCount, PageDTO pageDTO, Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -146,27 +140,16 @@ public class MessageController {
 		
 		
 	
-/*	보낸쪽지함
-	@RequestMapping("/sendMessage")
-	public String sendmessagelist(Model model) {
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
+
 	
-		List<SendMessage> sendMessageList = sendmessagerepository.findSendById(id);
-		model.addAttribute("sendmessagerepository",sendMessageList);
-		
-		System.out.println("sendmessagerepository");
-		return "MessageTest/sendMessage";
-	}*/
-	
-	@RequestMapping("/messageWrite")
+	@RequestMapping("/message/messageWrite")
 	public String messagewrite(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
 		
 		return "MessageTest/message_write";
 	}
-	@RequestMapping("/messageWriteResult")
+	@RequestMapping("/message/messageWriteResult")
 	public String messageResult(Model model,@RequestParam("receiveId")String receiveId,@RequestParam("messageContent")String messageContent) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -178,10 +161,10 @@ public class MessageController {
 		
 		sendmessagerepository.save(sendmessage);
 		
-		return "redirect:/sendMessage";
+		return "redirect:/message/sendMessage";
 	}
 	
-	@RequestMapping("/remessageWrite")
+	@RequestMapping("/message/remessageWrite")
 	public String remessagewrite(Model model, @RequestParam String sendId) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -211,7 +194,7 @@ public class MessageController {
 	
 	
 	
-	@RequestMapping("/viewSendmessage")
+	@RequestMapping("/message/viewSendmessage")
 	public String sendMessageView(Model model, @RequestParam("messageSendId") int messageSendId) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -224,28 +207,29 @@ public class MessageController {
 		
 	}
 	
-	@RequestMapping("/viewReceivemessage")
+	@RequestMapping("/message/viewReceivemessage")
 	public String receiveMessageView(Model model, @RequestParam("messageReceiveId") int messageReceiveId) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		
-		List<ReceiveMessage> viewReceiveMessage = receivemessagerepository.findByMessageReceiveId(messageReceiveId,id);
+		Member member = memberRepository.findById(id).get();
+	    model.addAttribute("member",member);
+
+
+	    ReceiveMessage viewReceiveMessage = receivemessagerepository.findById(messageReceiveId).get();
+	    System.out.println(viewReceiveMessage.toString());
 		model.addAttribute("viewReceiveMessage", viewReceiveMessage);
+		
+//		List<ReceiveMessage> viewReceiveMessage = receivemessagerepository.findByMessageReceiveId(messageReceiveId,id);
+//		model.addAttribute("viewReceiveMessage", viewReceiveMessage);
 		
 		return "MessageTest/viewreceiveMessage";
 		
 	}
-		
-		
-		
-		
-		
-		
-		
+	
 	
 	
 	/*보낸 쪽지 삭제 상태값 변환*/
-	@RequestMapping("/messageDelete")
+	@RequestMapping("/message/messageDelete")
 	public String messagedelete(int messageSendId) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -258,11 +242,11 @@ public class MessageController {
 		
 
 	
-		return "redirect:receiveMessage";
+		return "redirect:/message/sendMessage";
 		
 	}
 	/*받은 쪽지 삭제 상태값 변환*/
-	@RequestMapping("/receivemessageDelete")
+	@RequestMapping("/message/receivemessageDelete")
 	public String receivemessagedelete(int messageReceiveId) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -275,23 +259,13 @@ public class MessageController {
 		
 		
 	    
-		return "redirect:receiveMessage";
+		return "redirect:/message/receiveMessage";
 		
 		
 	}
-	/*
-	@RequestMapping("/receiveMessage")
-	public String receivemessagelist(Model model,Pageable pageable) {
-		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
-		String id = auth.getName();
-		
-		model.addAttribute("list", receivemessagerepository.findreceiveById(id,pageable));
-		
-		return"MessageTest/receiveMessage";
-	}	
-	*/
+
 	
-	@RequestMapping("/receiveCheckdelete")
+	@RequestMapping("/message/receiveCheckdelete")
 	public String receiveAllDelete(@RequestParam int[] RowCheck) {
 		System.out.println(RowCheck);
 	
@@ -305,10 +279,10 @@ public class MessageController {
 			}
 		}
 		
-		return "redirect:receiveMessage";
+		return "redirect:/message/receiveMessage";
 	}
 	
-	@RequestMapping("/sendCheckdelete")
+	@RequestMapping("/message/sendCheckdelete")
 	public String sendAllDelete(@RequestParam int[] RowCheck) {
 		System.out.println(RowCheck);
 		
@@ -323,7 +297,7 @@ public class MessageController {
 		}
 		
 		
-		return "redirect:sendMessage";
+		return "redirect:/message/sendMessage";
 		
 	}
 	
@@ -358,7 +332,28 @@ public class MessageController {
 		    return "redirect:"+ referer;
 	}
 
-		
+	//신고하기
+		@PostMapping("/reportMessage")
+		@ResponseBody
+		public int boardReport(Model model, String id,String target,String reportTypeCD,int reportWhyCD,String content) {
+	   
+	  
+	     
+	     
+	     Report report = new Report();
+	     report.setId(id);
+	     report.setTarget(target);
+
+	     report.setReportTypeCD(new ReportTypeCD(reportTypeCD));
+	     report.setReportWhyCD(new ReportWhyCD(reportWhyCD));
+	     report.setContent(content);
+	     
+	     reportRepository.save(report);
+	     
+		      
+			return 1;
+	      
+		}
 		
 		
 }

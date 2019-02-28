@@ -23,6 +23,13 @@
 .boardName {
 	margin: 20px !important;
 }
+.boardImgProfile{
+	width: 30px;
+	height: 30px;
+	border-radius: 100%;
+	margin : 0px 7px 5px 0px;
+}
+
 
 h3 {
 	
@@ -49,8 +56,8 @@ table {
 
 td {
 	text-overflow: ellipsis;
-	overflow: hidden;
 	white-space: nowrap;
+	padding-top: 22px !important;
 }
 
 #wrtieCountOption {
@@ -88,6 +95,8 @@ td {
 .boardWriteBtn {
 	text-align: right;
 }
+
+
 
 #boardSearchType, #boardSearchPeriod {
 	width: 150px;
@@ -133,7 +142,7 @@ span.listReplyCount {
 	padding-left: 10px;
 }
 
-#listBoardNotice, .listBoardFileExist {
+#listBoardNotice, .listBoardFileExist, .listBoardHide, .listBoardId{
 	display: none;
 }
 
@@ -151,8 +160,8 @@ span.listReplyCount {
 }
 
 .page-item.active .page-link {
-	background-color: rgb(66, 161, 226) !important;
-	border-color: rgb(66, 161, 226) !important;
+	background-color: rgb(179,220,248) !important;
+	border-color: rgb(179,220,248) !important;
 	color: white !important;
 }
 
@@ -183,7 +192,7 @@ span.listReplyCount {
 	width: 15%;
 }
 
-#fileImage {
+#fileImage,#hideImage {
 	width: 15px;
 }
 
@@ -192,7 +201,13 @@ span.listReplyCount {
 	margin: 0px 5px 2.5px 0px;
 }
 .todayWrite{
-  color: rgb(66, 161, 226);
+  
+     background-color: rgb(66, 161, 226);
+    color: white;
+    border-radius: 100%;
+    font-size: 5px;
+    padding: 2px 5px;
+    margin: 0px 0px 0px 4px;
 }
 </style>
 
@@ -203,18 +218,16 @@ span.listReplyCount {
 	<div class="wrapper">
 		<div id="main" layout:fragment="main">
 			<div class="inner">
-
+   					
 				<!--게시판 타이틀  -->
 				<div class="boardName">
-					<h3>
-						<strong th:text="${boardName}"></strong>
-					</h3>
+						<h3 th:text="${boardName}"></h3 >
+						<hr>
 				</div>
 				<!--게시판 타이틀 끝  -->
 
 				<!--공지 숨기기, 한페이지 갯수  -->
 				<div class="boardNotice">
-					
 						<select id="listOption"
 						name="listOption" style="text-align: center" class="text-center">
 						<option value="15" th:selected="${pageDTO.size} == '15'">15개씩</option>
@@ -235,9 +248,9 @@ span.listReplyCount {
 									<th class="">번호</th>
 									<th class="boardTtile">제목</th>
 									<th class="">작성자</th>
-									<th class="boardDate">작성일</th>
 									<th class="">조회수</th>
 									<th class="">추천</th>
+									<th class="boardDate">작성일</th>
 								</tr>
 							</thead>
 
@@ -246,8 +259,9 @@ span.listReplyCount {
 								
 									<td id="listBoardNotice">[[${board.notice}]]</td>
 									<td class="" id="listBoardId">[[${board.inquireBoardId}]]</td>
+									<td class="listBoardHide" th:name=|${board.hide}|>[[${board.hide}]]</td>
+									<td class="listBoardId" th:name=|${board.id}|>[[${board.id}]]</td>
 									
-                                  
                                      
 									<td class="text-left boardTtile"><a
 										th:href='${board.inquireBoardId}' class="boardLink">[[${board.title}]]</a>
@@ -256,11 +270,11 @@ span.listReplyCount {
 											<span class="listDateConfirm"></span>
 											</a>
 									</td>
-									<td class="">[[${board.member.nickname}]]</td>
-									<td class="listBoardDate" th:name=|${board.date}|>[[${#dates.format(board.date,'yyyy-MM-dd
-										HH:mm')}]]</td>
+									<td class=""><img class="boardImgProfile" th:src="@{'/member_image/'+${board.member.profileSaveName}}" />[[${board.member.nickname}]]</td>
 									<td class="">[[${board.hit}]]</td>
 									<td class="">[[${board.likeCount}]]</td>
+									<td class="listBoardDate" th:name=|${board.date}|>[[${#dates.format(board.date,'MM-dd
+										HH:mm')}]]</td>
 
 								</tr>
 
@@ -364,12 +378,17 @@ span.listReplyCount {
 
      $(document).ready(function() {
 
+    	 var memberId = [[${memberId}]]
+			console.log(memberId);
+    	 
     	 //댓글 존재할때만 리스트에 출력
     	 replyListOutput();
     	//파일업로드한 게시글은 리스트에 아이콘추가
 //     	 listFileExist();
     	//오늘게시글 new표시 
     	todayWrite();
+    	//비공개아이콘
+    	hideImg();
     	
     	//공지 띄우기
     	 $('.boardTableBody tr').each(function() {
@@ -378,7 +397,7 @@ span.listReplyCount {
     		
     		 if(noticeNumber == 1){
     			 $(this).find("td:nth-child(2)").text("공지");
-    			 $(this).find("td:nth-child(2)").css('color','red');
+    			 $(this).find("td:nth-child(2)").css('color','red').css('font-weight', 'bold');
 			 
     			  			 
     		 }
@@ -406,6 +425,19 @@ span.listReplyCount {
     	 }
     	 }; */
     	 
+    	 //비공개 이미지추가
+    	 function hideImg(){
+    		 var listBoardHideLength = $('.listBoardHide').length;
+    		 console.log(listBoardHideLength);
+    		 
+    		 for(var i = 0;i<listBoardHideLength;i++){
+    			 console.log($('.listBoardHide').eq(i).attr("name"));
+    			 if($('.listBoardHide').eq(i).attr("name") == 1){
+    				 console.log("이미지첨부");
+    				 $('.listReplyCount').eq(i).append('<img id="hideImage" src="/board/img/baseline_https_black_18dp.png">');
+    			 };
+    		 };
+    	 };
     	
     	 
     	 //댓글 존재할때만 리스트에 출력
@@ -415,8 +447,8 @@ span.listReplyCount {
     	 for(var i =0 ;i< listReplyCountLength;i++){
     		 if($('.listReplyCount').eq(i).attr("name") > 0){
     			 $('.listReplyCount').eq(i).append('<span>'+'['+$('.listReplyCount').eq(i).attr("name")+']'+'</span>'); 			 
-    		 }
-    	 }
+    		 };
+    	 };
     	 };
     	 
     	 //오늘게시글 new표시
@@ -437,7 +469,7 @@ span.listReplyCount {
     		 
     		 if(dateFormated < listBoardDateFormate.eq(i).attr("name")){
     		 console.log(listBoardDateFormate.eq(i).attr("name"));
-    		 $('.listDateConfirm').eq(i).append('<span class="todayWrite">'+"New"+'</span>');
+    		 $('.listDateConfirm').eq(i).append('<span class="todayWrite">'+"N"+'</span>');
     		 };
     	 };
     	 };
@@ -467,12 +499,32 @@ span.listReplyCount {
 			
 			e.preventDefault();
 			
-			var boardNo = $(this).attr("href");
+			var listBoardIdlength = $('.listBoardId').length
+			var memberId = [[${memberId}]]
+			console.log(memberId);
+			console.log(listBoardIdlength);
+			for(var i = 0; i< listBoardIdlength; i++){
+				 console.log($('.listBoardId').eq(i).attr("name"));
+ 				 if($('.listBoardId').eq(i).attr("name")==memberId || memberId =="admin123"){
+ 					var boardNo = $(this).attr("href");
+ 					
+ 					formObj.attr("action",[[@{'/board/viewBoard'}]]);
+ 					formObj.append("<input type='hidden' name='inquireBoardId' value='"+ boardNo + "'>");
+ 					
+ 					formObj.submit();
+ 					 
+ 				 }else{
+ 					Swal.fire("비공개 게시글 입니다.","");
+ 				 }
+				
+			}
+			
+			/* var boardNo = $(this).attr("href");
 			
 			formObj.attr("action",[[@{'/board/viewBoard'}]]);
 			formObj.append("<input type='hidden' name='inquireBoardId' value='"+ boardNo + "'>");
 			
-			formObj.submit();
+			formObj.submit(); */
 		});
 		
 		

@@ -25,6 +25,9 @@ public class ReportWhyCD {
 	/**
 	 * @param reportWhyCode
 	 */
+	public ReportWhyCD() {
+		
+	}
 	public ReportWhyCD(int reportWhyCode) {
 		super();
 		this.reportWhyCode = reportWhyCode;

@@ -1,19 +1,9 @@
-/**
- * 
- */
 package org.mohajo.studyrepublic.admin;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.mohajo.studyrepublic.domain.GradeCD;
 import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.domain.SendMessage;
@@ -28,19 +18,13 @@ import org.mohajo.studyrepublic.repository.TutorCareerRepository;
 import org.mohajo.studyrepublic.repository.TutorInterestRepository;
 import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.mohajo.studyrepublic.repository.TutorUploadFileRepository;
+import org.mohajo.studyrepublic.tutor.TutorController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 
@@ -70,6 +54,8 @@ public class AdminTutorController {
 	TutorRepository tutorRepository;
 	@Autowired
 	MemberRolesRepository memberrolerepository;
+	@Autowired
+	TutorController tutorcontroller;
 	
 	
 	
@@ -149,12 +135,13 @@ public class AdminTutorController {
 			Tutor tutor = tutorRepository.findByTutor(receiveId);
 			tutorRepository.deleteById(tutor.getTutorNumber());
 			
-			tutorRepository.save(tutor);
+			tutorcontroller.changeGrade("N",receiveId);
 			
+			System.out.println("튜터: " + tutor);
+			System.out.println("튜터넘버: " + tutor.getTutorNumber());
 		}
 		adminMemberService.changeGrade(selectedId,"N");
 		return "redirect:/adminPage/tutor/list";
-//		return "redirect:"+request.getHeader("Referer");
 	}
 	
 	@RequestMapping("/signup")

@@ -1,19 +1,11 @@
 package org.mohajo.studyrepublic.security;
 
-import java.util.HashMap;
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.mohajo.studyrepublic.domain.Member;
-import org.mohajo.studyrepublic.domain.Study;
-import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.member.MemberController;
 import org.mohajo.studyrepublic.repository.MemberRepository;
-import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

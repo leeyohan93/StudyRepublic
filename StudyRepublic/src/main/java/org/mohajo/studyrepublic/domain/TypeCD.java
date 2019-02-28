@@ -23,9 +23,6 @@ import lombok.Data;
 @Component
 public class TypeCD implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -36,5 +33,14 @@ public class TypeCD implements Serializable {
 	
 	@Column(nullable = false)
 	private String codeValueKorean;
+
+	public TypeCD() {
+		super();
+	}
+	
+	public TypeCD(String typeCode) {
+		super();
+		this.typeCode = typeCode;
+	}
 	
 }

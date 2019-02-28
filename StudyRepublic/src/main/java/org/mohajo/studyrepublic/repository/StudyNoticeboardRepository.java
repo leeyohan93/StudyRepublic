@@ -2,12 +2,17 @@ package org.mohajo.studyrepublic.repository;
 
 import java.util.List;
 
+import org.mohajo.studyrepublic.domain.QStudyNoticeboard;
+import org.mohajo.studyrepublic.domain.QStudyQnaboard;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 
 public interface StudyNoticeboardRepository extends JpaRepository<StudyNoticeboard, Integer>, QuerydslPredicateExecutor<StudyNoticeboard>{
 
@@ -20,6 +25,16 @@ public interface StudyNoticeboardRepository extends JpaRepository<StudyNoticeboa
 //	@Query(value = "select sn from StudyNoticeboard as sn where sn.studyId=:studyId and sn.number=:noticeboardNumber")
 /*	@Query(value = "select sn from StudyNoticeboard as sn where sn.studyId=:rbc.studyId and sn.number=:rbc.number")
 	StudyNoticeboard findByNoticeboardNumberAndStudyId(StudyNoticeboard rbc); 이거 안됨*/
+	public default Predicate makePredicate(String studyId) {
+		BooleanBuilder builder = new BooleanBuilder();
+
+		QStudyNoticeboard studynoticeboard = QStudyNoticeboard.studyNoticeboard;
+
+		builder.and(studynoticeboard.studyId.like(studyId));
+
+		return builder; 
+	}
+
 	@Query(value = "select *\r\n" + 
 			"from study_noticeboard\r\n" + 
 			"where study_id = :studyId and status = 0\r\n" + 

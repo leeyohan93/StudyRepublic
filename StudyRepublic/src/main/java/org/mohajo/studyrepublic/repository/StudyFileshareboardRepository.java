@@ -1,5 +1,7 @@
 package org.mohajo.studyrepublic.repository;
 
+import org.mohajo.studyrepublic.domain.QStudyFileshareboard;
+import org.mohajo.studyrepublic.domain.QStudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,7 +9,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
+
 public interface StudyFileshareboardRepository extends JpaRepository<StudyFileshareboard, Integer>, QuerydslPredicateExecutor<StudyFileshareboard>{
+	
+	public default Predicate makePredicate(String studyId) {
+		
+		BooleanBuilder builder = new BooleanBuilder();
+		QStudyFileshareboard studyfileshareboard = QStudyFileshareboard.studyFileshareboard;
+		builder.and(studyfileshareboard.studyId.like(studyId));
+
+		return builder; 
+	}
 
 	@Query(value="select *\r\n" + 
 			"from study_qnaboard left join study_member using (study_id, id)\r\n" + 

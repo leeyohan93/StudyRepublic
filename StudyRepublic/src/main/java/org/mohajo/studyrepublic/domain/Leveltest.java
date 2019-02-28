@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,6 +26,7 @@ public class Leveltest implements Serializable {
 	private LeveltestId leveltestId;*/
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int leveltestId;
 	
 	@Column/*(insertable=false, updatable=false)*/
@@ -33,16 +36,16 @@ public class Leveltest implements Serializable {
 	private String studyId;
 	
 	@ManyToOne
-	@JoinColumn(name = "LEVELTEST_TYPE_CODE", nullable = false)
+	@JoinColumn(name = "LEVELTEST_TYPE_CODE"/*, nullable = false*/)
 	private LeveltestTypeCD leveltestTypeCode;
 	
-	@Column(nullable = false)
+	@Column/*(nullable = false)*/
 	private String content;
 	
 	@Column
 	private String choice;
 	
-	@Column(nullable = false)
+	@Column/*(nullable = false)*/
 	private String correctAnswer;
 	
 }

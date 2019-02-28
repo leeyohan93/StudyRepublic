@@ -24,6 +24,7 @@ layout:decorate="~{/layout/mainLayout}">
 /* 		box-shadow: 0.3em 0.3em 10px 3px silver; */
 		box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important;
 		border:	0.5px solid rgba(0,0,0,0.12);
+		background-color: white;
 		width: 100%;
 		margin: 1em auto;
 		padding: 2em 2em;
@@ -227,7 +228,7 @@ layout:decorate="~{/layout/mainLayout}">
 						<div class="col-md-10 column-value"><th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block></div>
 						<th:block th:if="${study.price}">
 							<div class="col-md-2 column-name">가격</div>
-							<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">studyPrice</th:block></div>
+							<div class="col-md-10 column-value"><th:block th:text="${study.price.price}">price</th:block></div>
 						</th:block>
 					</div>
 					<div class="box-info">
@@ -260,7 +261,8 @@ layout:decorate="~{/layout/mainLayout}">
 					</div>
 					
 					<!-- 1) 리더 정보 -->
-					<div class="tab-content leader-info" id="tab-content-leaderInfo" th:if="${tutorInfo}" th:with="leaderInfo = ${tutorInfo.member}">
+<!-- 					<div class="tab-content leader-info" id="tab-content-leaderInfo" th:if="${tutorInfo}" th:with="leaderInfo = ${tutorInfo.member}" th:classappend="${tutorInfo}? tutor-grade-leader"> -->
+					<div class="tab-content leader-info" id="tab-content-leaderInfo" th:with="leaderInfo = ${tutorInfo}? ${tutorInfo.member} : ${leaderInfo}">
 						<div class="profile-container">
 							<div class="profile-image-container">
 								<img th:alt="|${leaderInfo.nickname}님의 프로필 사진|" th:src="${leaderInfo.profileSaveName}? @{'/static/images/' + ${leaderInfo.id} + '/' + ${leaderInfo.profileSaveName}} : @{/static/images/defaultProfile.jpg}">
@@ -301,7 +303,8 @@ layout:decorate="~{/layout/mainLayout}">
 					<div class="tab-content review invisible" id="tab-content-review">
 						<p th:text="${#lists.isEmpty(study.review)}? '작성 된 후기가 없습니다.' ">후기 리스트</p>
 						<th:block th:if="${not #lists.isEmpty(study.review)}">
-							<span class="review-counter" ></span>
+							총 <span class="review-counter" ></span>건
+							<hr/>
 							
 							<div class="review-unit" th:each="review : ${study.review}" th:with="reviewer = ${review.studyMember.member}">
 								<span class="review-index" th:classappend="${reviewStat.index}" th:text="${reviewStat.index}+1"></span>
@@ -312,6 +315,7 @@ layout:decorate="~{/layout/mainLayout}">
 									<span class="stars-score" th:text="${review.score}">score</span>
 								</div>
 								<p th:text="${review.content}"></p>
+								<hr/>
 							</div>
 							
 						</th:block>
@@ -321,6 +325,7 @@ layout:decorate="~{/layout/mainLayout}">
 				<!-- 스터디 가입 신청 버튼 -->
 				<th:block th:with="studyStatusCode = ${study.studyStatusCode.studyStatusCode}">
 					<th:block th:unless="${studyStatusCode.equals('C')} OR ${studyStatusCode.equals('D')}">
+						<input type="hidden" class="studyId-container" th:value="${study.studyId}">
 						<button sec:authorize="isAnonymous()" class="sticky btn-join-study" data-user-type="anonymous" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
 						<button sec:authorize="isAuthenticated()" class="sticky btn-join-study" data-user-type="authenticated" th:text="${studyStatusCode} == 'F'? '모집이 마감되었어요!':'스터디 가입 신청'" th:classappend="${studyStatusCode} == 'F'? 'disable'">스터디 가입 신청</button>
 					</th:block>
@@ -380,6 +385,9 @@ layout:decorate="~{/layout/mainLayout}">
 			// 완료된 스터디이면, 리뷰 탭의 disable 클래스를 제거한다.
 			if ($('#study-status').attr('value') == "C") {
 				$('#tab-title-review').removeClass('disable');
+				$('#tab-title-review').trigger('click');
+				var reviewCount = $('.review-unit').length;
+				$('.review-counter').text(reviewCount);
 			}
 		}
 
@@ -396,18 +404,21 @@ layout:decorate="~{/layout/mainLayout}">
 				// *** 로그인 여부 판별하는 방법 확인하기
 				var joinBtn = $('.btn-join-study')[0];
 				
-				var pathName = window.location.pathname;
-				var studyId = pathName.replace('/study/detail/', '');
+				var pathname = window.location.pathname;
+// 				var studyId = pathname.replace('/study/detail/', '');
+				var studyId = $(this).prev('.studyId-container').val();
 				var originUrl = window.location.origin;
 				var location = "";
 				var userId = document.getElementById('loggedInUserId').value;
 
 				if (joinBtn.dataset.userType == "anonymous") {
 					alert("로그인 후 신청할 수 있어요!");
-					location = "/login";
-					window.location.replace = originUrl + location;
-					return;
-					// 로그인 후 스터디 가입 페이지 또는 상세 페이지로 이동하도록 처리할 것! ********
+					location = "/study/pleaseLogin/?pathname=" + pathname;
+					window.location.href = originUrl + location;
+// 					location = "/login";
+// 					window.location.replace = originUrl + location;					
+					// 로그인 후 스터디 가입 페이지로 이동하도록 처리할 것! ******** --> SecurityConfig.java 에서 처리 완료
+					// ==> 스터디 상세 페이지로 다시 이동해야 신청 권한 검증이 가능함. 처리 필요. 
 
 				} else if (joinBtn.dataset.userType == "authenticated") {
 					// 3) 이미 가입된 스터디, 거절/탈퇴한 스터디, 가입 승인 대기중인 스터디인 경우 --> 메시지	==> 예기치 못한 Ajax...
@@ -426,8 +437,13 @@ layout:decorate="~{/layout/mainLayout}">
 							console.log("Success: " + data);
 							
 							if (!data) {
-								location = "/study/join/" + studyId;
-								window.location.href = originUrl + location;
+								var answer = confirm("이 스터디에 가입하시겠어요?");
+								if(answer) {
+									location = "/study/join/" + studyId/*  + "?id=" + userId */;
+									window.location.href = originUrl + location;
+								} else {
+									return;
+								}
 							}
 							/* var jsonData = JSON.parse(data);
 							var studyMemberStatusCode = jsonData.studyMemberStatusCode.studyMemberStatusCode; */
@@ -457,6 +473,7 @@ layout:decorate="~{/layout/mainLayout}">
 			});
 		}
 		
+		//	4. 별점 표시
 		function getRatingStars() {
 			var s = $(".stars-score");
 			var score;

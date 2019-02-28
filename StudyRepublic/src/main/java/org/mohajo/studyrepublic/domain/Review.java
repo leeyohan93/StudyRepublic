@@ -2,16 +2,13 @@ package org.mohajo.studyrepublic.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -32,13 +29,18 @@ public class Review implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int reviewNumber;
 	
+//	@NotFound(action=NotFoundAction.IGNORE)
+//	@OneToOne
+//	@JoinColumns({
+//		@JoinColumn(name = "studyId", referencedColumnName = "studyId", updatable=false, insertable=false),
+//		@JoinColumn(name = "id", referencedColumnName = "id", updatable=false, insertable=false)
+//	})
+//	private StudyMember studyMember;
+	
 	@NotFound(action=NotFoundAction.IGNORE)
-	@OneToOne
-	@JoinColumns({
-		@JoinColumn(name = "studyId", referencedColumnName = "studyId", updatable=false, insertable=false),
-		@JoinColumn(name = "id", referencedColumnName = "id", updatable=false, insertable=false)
-	})
-	private StudyMember studyMember;
+	@ManyToOne
+	@JoinColumn(name="id", updatable=false, insertable=false)
+	private Member member;	
 
 	private String studyId;
 	private String id;

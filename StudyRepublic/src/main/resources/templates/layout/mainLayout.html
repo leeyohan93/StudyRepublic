@@ -15,8 +15,6 @@
    type="text/css">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" layout:fragment="bootCss">
 
-
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <div layout:fragment="customCss"></div>
 <div layout:fragment="bootJs">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -391,7 +389,9 @@ a {
 	<script th:src="@{/searchInterest.js}"></script>
 	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 	<script th:src="@{/map.js}"></script>
-	<script th:src="@{/assets/js/jquery.min.js}"></script>
+	<th:block layout:fragment="jquery">
+		<script th:src="@{/assets/js/jquery.min.js}"></script>
+	</th:block>
 	<script th:src="@{/assets/js/browser.min.js}"></script>
 	<script th:src="@{/assets/js/breakpoints.min.js}"></script>
 	<script th:src="@{/assets/js/util.js}"></script>
@@ -411,7 +411,7 @@ a {
 			$('#joinStudy').on('change', function joinStudy() {		//스터디페이지이동..js
 				
 				//studyText에 있는 studyName이 obj(현재는 셀렉트 박스)의 value 값과 같을 때, joinStudyListValue에 해당되는 joingStudyId 리스트의 StudyId 값을 배치한다.
-
+				
 				if(this.selectedIndex!=0){
 					var selectStudyName = this.options[this.selectedIndex].value;
 					console.log(selectStudyName);
@@ -480,18 +480,19 @@ a {
 	//웹소켓 설정
 	var socket = null;
 	$(document).ready(function(){
-		connectWS();
 		
+		connectWS();
 
 	});
 	
-	function connectWS() {
-	    console.log("소켓연결")
+	
+	 function connectWS() {
+	   
 	   var ws = new SockJS("/StudyEcho"); 
 	    socket = ws;
 	    
 	    ws.onopen = function () {
-	        console.log('소켓연결 open');
+	        
 	    };
 
 	    ws.onmessage = function (event) {
@@ -521,23 +522,16 @@ a {
 	    };
 
 	    ws.onclose = function (event) { 
-	        console.log('소켓닫음');
+	       
 	        
 	    };
 	    ws.onerror = function (err) { console.log('Error:', err); };
-	}
+	} 
 	
 	
-
-
-
 	
 	</script>
-	
-	
 
 	
-	
-
 </body>
 </html>

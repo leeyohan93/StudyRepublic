@@ -32,9 +32,9 @@
 				<ul class="nav nav-pills flex-column">
 				
 					<li class="nav-item">
-						<a class="nav-link" href="/messageWrite">쪽지쓰기</a>
-						<a class="nav-link" href="/receiveMessage">받은쪽지함</a>
-						<a class="nav-link" href="/sendMessage">보낸쪽지함</a>
+						<a class="nav-link" href="/message/messageWrite">쪽지쓰기</a>
+						<a class="nav-link" href="/message/receiveMessage">받은쪽지함</a>
+						<a class="nav-link" href="/message/sendMessage">보낸쪽지함</a>
 					
 					</li>   	
 				</ul>
@@ -51,15 +51,15 @@
                      
                       
                         <label>내용</label>
-                 
-						<a class="btn btn-info"  style="margin-left: 52%;">신고</a>
-						<a class="btn btn-info" th:href="@{'/messageDelete'(messageSendId=${viewsend.messageSendId})}">삭제</a>
+						<a class="btn btn-info" th:href="@{'/message/messageDelete'(messageSendId=${viewsend.messageSendId})}"  style="margin-left: 61%;">삭제</a>
                         <div  class="border" th:text="${viewsend.messageContent}" style="width: 600px; height: 200px;"></div><br>
                       
 						
-						<a class="btn btn-info" th:href="@{'/sendMessage'}" style="margin-left:65%;">확인</a>
+						<a class="btn btn-info" th:href="@{'/message/sendMessage'}" style="margin-left:65%;">확인</a>
 		</div>
       
+                 
+				
 	
 
 

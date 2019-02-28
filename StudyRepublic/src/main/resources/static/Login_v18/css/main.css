@@ -828,7 +828,7 @@ select[class='shsel']:valid {
     font-size:14px;
     border:1px solid #ccc;
     background-color:#f7f7f7;
-    appearance:none; /* 湲곕낯 �뒪���씪 �뾾�븷湲� */
+    appearance:none; /* 기본 스타일 없애기 */
     -webkit-appearance:none;
     -moz-appearance:none;
     background-image:none;
@@ -854,7 +854,7 @@ select[class='point']:valid {
 
 
 select::-ms-expand {
-   display: none;            /* �솕�궡�몴 �뾾�븷湲� for IE10, 11*/
+   display: none;            /* 화살표 없애기 for IE10, 11*/
 }
 
 select option {
@@ -1016,7 +1016,7 @@ padding:5px;
 }
 
 .filebox label { display: inline-block; padding: .5em .75em; color: #999; font-size: inherit; line-height: normal; vertical-align: middle; background-color: #fdfdfd; cursor: pointer; border: 1px solid #ebebeb; border-bottom-color: #e2e2e2; border-radius: .25em; } 
-.filebox input[type="file"] { /* �뙆�씪 �븘�뱶 �닲湲곌린 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
+.filebox input[type="file"] { /* 파일 필드 숨기기 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
 
 
 .wrap-input100_label {

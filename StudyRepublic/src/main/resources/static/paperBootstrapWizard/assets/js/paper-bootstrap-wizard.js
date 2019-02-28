@@ -23,8 +23,8 @@ transparent = true;
             /*  Activate the tooltips      */
             $('[rel="tooltip"]').tooltip();
 
-//            // Code for the Validator
-//            var $validator = $('.wizard-card form').validate({
+            // Code for the Validator
+            var $validator = $('.wizard-card form').validate({
 //        		  rules: {
 //        		    firstname: {
 //        		      required: true,
@@ -38,7 +38,7 @@ transparent = true;
 //        		      required: true
 //        		    }
 //                },
-//        	});
+        	});
 
             // Wizard Initialization
           	$('.wizard-card').bootstrapWizard({
@@ -79,7 +79,10 @@ transparent = true;
                 onTabShow: function(tab, navigation, index) {
                     var $total = navigation.find('li').length;
                     var $current = index+1;
-
+                    
+                    console.log('tab = ' + $(tab));
+                    console.log('navigation = ' + $(navigation));
+                    
                     var $wizard = navigation.closest('.wizard-card');
 
                     // If it's the last tab then hide the last button and show the finish instead
@@ -98,7 +101,7 @@ transparent = true;
                     $wizard.find($('.progress-bar')).css({width: move_distance + '%'});
                     //e.relatedTarget // previous tab
 
-                    $wizard.find($('.wizard-card .nav-pills li.active a .icon-circle')).addClass('checked');
+                    $wizard.find($('.wizard-card .nav-pills li.active .icon-circle')).addClass('checked');
 
                 }
 	        });

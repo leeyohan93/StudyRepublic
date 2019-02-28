@@ -87,7 +87,7 @@
         border-radius: 100%;
         width: 50%;
          height: 120px;
-       margin-left: 21%;
+       margin-left:3%;
           margin-top: 13%;
    
    }
@@ -185,7 +185,7 @@
                     쪽지페이지         
                </li>
                <li class="nav-item">   
-                  <a  class="nav-link" href="receiveMessage">쪽지함</a> 
+                  <a  class="nav-link" href="/message/receiveMessage">쪽지함</a> 
                      </li> 
             </ul>   
               <ul class="nav nav-pills flex-column">       
@@ -193,7 +193,7 @@
                     활동정보페이지              
                </li> 
                <li class="nav-item">  
-                       <a  class="nav-link" href="activityinfo">활동정보</a>
+                       <a  class="nav-link" href="/activity/activityinfo">활동정보</a>
                </li> 
             </ul>   
             
@@ -244,21 +244,21 @@
                              
                             <h4 style="color: #ffa500;">MY ABOUT</h4>
                          <h5 class="subheading userinfo" style="margin-top: 18%;">
-                            ID:  <span th:text=${mbr.id} ></span>
+                     	    ID:  <span th:text=${mbr.id} ></span>
                         <input type="hidden" id="memberid" name="memberid" th:value=${mbr.id}/>
                         <br> 
-                                 이름: <span th:text=${mbr.name} ></span>
+                              	이름: <span th:text=${mbr.name} ></span>
                         <br> 
                          
-                                 닉네임: <span th:text=${mbr.nickname} ></span>
+                             	 닉네임: <span th:text=${mbr.nickname} ></span>
                         <br> 
-                                    성별: <span th:text=${mbr.gender} ></span>
+                           		   성별: <span th:text=${mbr.gender} ></span>
                         <br> 
-                                 생년월일: <span th:text=${mbr.birth} ></span>
+                            	  생년월일: <span th:text=${mbr.birth} ></span>
                         <br> 
                               E-Mail: <span th:text=${mbr.email} ></span>
                         <br> 
-                                  연락처: <span th:text=${mbr.phonenumber} ></span></h5>
+                            	   연락처: <span th:text=${mbr.phonenumber} ></span></h5>
                        
                         </div>
             </div> <!-- th:each 닫히는 div 태그  -->   
@@ -271,6 +271,7 @@
                     <h4 style="font-weight: 900;">일반스터디</h4><br>
                           <div th:each="smr : ${smr}">
                            <h5 th:text="${smr.study.name}" style="font-weight: 900;"></h5>
+                           <span th:text="|${smr.study.startDate}~${smr.study.endDate}|"></span>
                         </div>
                     
                   </div>  
@@ -278,6 +279,7 @@
                      <h4 style="font-weight: 900;">프리미엄스터디</h4><br>
                         <div th:each="smr2 : ${smr2}" >
                            <h5  th:text="${smr2.study.name}" style="font-weight: 900;" ></h5>
+                            <span th:text="|${smr2.study.startDate}~${smr2.study.endDate}|"></span>
                         </div>
                   </div>
                      
@@ -756,4 +758,5 @@
    </div>
    </div>
 </body>
+
 </html>

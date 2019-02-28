@@ -12,7 +12,9 @@ layout:decorate="~{/layout/mainLayout}">
 
 	<div layout:fragment="main">
 		<div class="inner">
-테스트
+			<p th:text="${errorMsg}">에러메시지</p>
+			
+			<a href="/index">홈으로 가기</a>
 		</div>
 	</div>
 

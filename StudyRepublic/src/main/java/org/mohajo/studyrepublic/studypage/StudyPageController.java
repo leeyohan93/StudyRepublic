@@ -199,25 +199,30 @@ public class StudyPageController {
 	}
 
 	@RequestMapping("/Noticeboard")
-	public String studyNoticeboard(Model model, @Param(value="studyId") String studyId) {
+	public String studyNoticeboard(Model model, @Param(value="studyId") String studyId,PageDTO pageDTO) {
+		
+	/*	studyId = "BB00001";
+		String id = "aaa123";*/
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
 		log.info("id : " + id + " / " + "studyId : " + studyId);
-
-		model.addAttribute("findAllStudyNoticeboard", studyNoticeboardRepository.findNoticeboardListByStudyId(studyId));
+		///페이징 갯수
+		pageDTO.setSize(1);
+		log.info("====");
+		
+		Pageable page = pageDTO.makePageable(0, "studyId");
+		Page<StudyNoticeboard> list = studyNoticeboardRepository.findAll(studyNoticeboardRepository.makePredicate(studyId), page);
+		model.addAttribute("findAllStudyNoticeboard",new PageMaker<>(list));
+//		model.addAttribute("findAllStudyNoticeboard", studyNoticeboardRepository.findNoticeboardListByStudyId(studyId));
 		return "studypage/studypage_notice";
 	}
 
+
 	@RequestMapping("/Qnaboard")
-	public String studyQnaboard(Model model,PageDTO pageDTO) {
-		String studyId = "BB00001";
-		String id = "aaa123";
-
-/*	public String studyQnaboard(Model model, String studyId) {
-		String studyId = "BB00001";
-		String id = "aaa123";
+	public String studyQnaboard(Model model,PageDTO pageDTO,String studyId) {
+		/*String studyId = "BB00001";
+		String id = "aaa123";*/
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
-		log.info("id : " + id + " / " + "studyId : " + studyId);*/
-
+		log.info("id : " + id + " / " + "studyId : " + studyId);
 		//페이징 갯수
 		pageDTO.setSize(10);
 		
@@ -232,15 +237,20 @@ public class StudyPageController {
 	}
 
 	@RequestMapping("/Fileshareboard")
-	public String studyFileshareboard(Model model, String studyId) {
+	public String studyFileshareboard(Model model,PageDTO pageDTO,String studyId) {
 		/*String studyId = "BB00001";
 		String id = "aaa123";*/
-		
-		String id = SecurityContextHolder.getContext().getAuthentication().getName();
-		log.info("id : " + id + " / " + "studyId : " + studyId);
+	   String id = SecurityContextHolder.getContext().getAuthentication().getName();
+	   log.info("id : " + id + " / " + "studyId : " + studyId);
 
-		model.addAttribute("findAllStudyFileshareboard",
-				predicate.studyFileshareResultPredicate(studyId, 10, studyFileshareboardRepository));
+		pageDTO.setSize(10);
+		
+		Pageable page = pageDTO.makePageable(0, "studyId");
+		Page<StudyFileshareboard> list = studyFileshareboardRepository.findAll(studyFileshareboardRepository.makePredicate(studyId), page);
+		
+		model.addAttribute("findAllStudyFileshareboard",new PageMaker<>(list));
+//		model.addAttribute("findAllStudyFileshareboard",
+//				predicate.studyFileshareResultPredicate(studyId, 10, studyFileshareboardRepository));
 		return "studypage/studypage_fileshare";
 	}
 	
@@ -982,7 +992,7 @@ public class StudyPageController {
 			return studyQnaboardReplyRepository.save(studyQnaboardReply);
 
 		}
-		
+		//댓글리스트
 		@GetMapping("/qnaBoardReplyList")
 		@ResponseBody
 		public List<StudyQnaboardReply> qnaBoardReplyList(int studyQnaBoardId) {
@@ -998,7 +1008,7 @@ public class StudyPageController {
 			
 			
 		}
-		
+		//댓글삭제
 		@PostMapping("/qnaBoardReplyDelete/{studyQnaboardReplyId}")
 		@ResponseBody
 		public int qnaBoardReplyDelete(@PathVariable int studyQnaboardReplyId) {
