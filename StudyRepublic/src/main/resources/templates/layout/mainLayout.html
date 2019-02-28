@@ -335,6 +335,7 @@ a {
 		</nav>
 		<!-- Search End -->
 		<hr style="border-top: solid #21252930; margin-bottom: 0;border-top-width: 1px;">
+	
 		<!-- Main -->
 		<div id="main" layout:fragment="main">
 			<div class="inner"></div>
@@ -476,7 +477,6 @@ a {
 		
 	} */
 	
-
 	//웹소켓 설정
 	var socket = null;
 	$(document).ready(function(){
@@ -490,9 +490,10 @@ a {
 	   
 	   var ws = new SockJS("/StudyEcho"); 
 	    socket = ws;
+	    console.log("소켓생성");
 	    
 	    ws.onopen = function () {
-	        
+	      console.log("소켓연결");  
 	    };
 
 	    ws.onmessage = function (event) {
@@ -523,12 +524,10 @@ a {
 
 	    ws.onclose = function (event) { 
 	       
-	        
+	    	console.log("소켓닫힘");
 	    };
 	    ws.onerror = function (err) { console.log('Error:', err); };
 	} 
-	
-	
 	
 	</script>
 

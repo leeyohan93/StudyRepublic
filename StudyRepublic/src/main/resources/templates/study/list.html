@@ -266,6 +266,14 @@ h2 {
 								if (!data) {
 									var answer = confirm("이 스터디에 가입하시겠어요?");
 									if(answer) {
+										
+										console.log("socket: "+ socket)
+						      			if (socket) {
+						      				// websocket에 보내기 (study,댓글작성자,게시글작성자,글번호)
+						      				var socketMsg = "study," + userId + "," + freeBoardWriter  + "," + studyId
+						      				console.log("socketMsg:" +  socketMsg)
+						      				socket.send(socketMsg);
+						      			}
 										location = "/study/join/" + studyId/*  + "?id=" + userId */;
 										window.location.href = originUrl + location;
 									} else {

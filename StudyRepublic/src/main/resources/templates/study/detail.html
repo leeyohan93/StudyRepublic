@@ -352,6 +352,8 @@ layout:decorate="~{/layout/mainLayout}">
 			activateReviewTab();
 			prejoinCheck();
 			getRatingStars();
+			var leaderId = $('#leaderId').val();
+			console.log(leaderId);
 			
 		});
 
@@ -410,7 +412,7 @@ layout:decorate="~{/layout/mainLayout}">
 				var originUrl = window.location.origin;
 				var location = "";
 				var userId = document.getElementById('loggedInUserId').value;
-
+				
 				if (joinBtn.dataset.userType == "anonymous") {
 					alert("로그인 후 신청할 수 있어요!");
 					location = "/study/pleaseLogin/?pathname=" + pathname;
@@ -439,9 +441,11 @@ layout:decorate="~{/layout/mainLayout}">
 							if (!data) {
 								var answer = confirm("이 스터디에 가입하시겠어요?");
 								if(answer) {
+									
 									location = "/study/join/" + studyId/*  + "?id=" + userId */;
 									window.location.href = originUrl + location;
 								} else {
+									
 									return;
 								}
 							}
