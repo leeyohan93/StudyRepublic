@@ -164,8 +164,13 @@
 		  <div>
 			<input id ="boardTitle" name ="title" type="text" placeholder="제목을 입력해주세요.">
 		  </div
-		  	><div><input type="file" name="file" multiple="multiple">
-		  	</div>
+		  	>
+		  <div class="utilDiv">
+		  	<input type="date" id="startDate" name="day"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="time" id="startTime" name="startTime"/>부터<input type="time" id="endTime" name="endTime"/>까지<br>
+		  </div>
+		  <div class="utilDiv">
+		  	<input type="file" name="file" multiple="multiple">
+		  </div>
 		  <!-- 받는 컨트롤러에서 넣는것을 각각 해줘야 한다. 배열로해서  -->
 		  <!-- 스마트 에디터 적용 글내용 -->
 		  <div id = "editor">
@@ -235,7 +240,7 @@
 	       	var ss = $("#studyNameId").val(studyId);
 	       	console.log($("#studyNameId").val());
 	        console.log(ss);
-	        $("#boardWriteForm").submit();
+	       	$("#boardWriteForm").submit();
 	    });
 	});
 	

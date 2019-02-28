@@ -12,6 +12,12 @@
     <div id="right" layout:fragment="right">
     	<th:block layout:fragment="customCSS">
 			<style>
+				.modal-backdrop{
+               position: inherit !important;
+               }
+               .modal-content{
+               position: fixed;
+               }
 				div#checkLeft{
 					display: inline-block;
 				}
@@ -227,26 +233,6 @@
 							          <h4 class="modal-title" id="testResult" >레벨 테스트 결과</h4>
 							          <button type="button" class="close" data-dismiss="modal">×</button>
 							        </div>
-							        <!-- <div class="modal-body">
-							        	<div id="testResultTitle">
-							        		<span id="checkArea"></span>
-							        		<span id="numberArea">No</span>
-							        		<span id="typeArea">구분</span>
-							        		<span id="exampleArea">문항</span>
-							        		<span id="correctArea">정답</span>
-							        		<span id="differentArea">제출한답</sapn>
-							        		<span id="resultArea">결과</span>
-							        	</div>
-							        	<div class="testResultBody">
-							        		<span class="checkArea"><input type="checkBox" value=""/></span>
-							        		<span class="numberArea"></span>
-							        		<span class="typeArea"></span>
-							        		<span class="exampleArea"></span>
-							        		<span class="correctArea"></span>
-							        		<span class="differentArea"></sapn>
-							        		<span class="resultArea"></span>
-							        	</div>
-							        </div> -->
 							        <div class="modal-body">
 							        	<input type="hidden" id="nickNamehidden">
 							        	<table id="testResultTable">
