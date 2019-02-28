@@ -104,7 +104,7 @@ public interface InquireBoardRepository extends JpaRepository<InquireBoard, Inte
 	InquireBoard findByinquireBoardId(@Param("be") int beforeInquireBoard);
 
 
-	@Query(value = "select * from member m join inquireboard i on m.id=i.id where m.id=:id",nativeQuery=true)
+	@Query(value = "select * from member m join inquireboard i on m.id=i.id where m.id=:id and i.commentstep = 0",nativeQuery=true)
 	List<InquireBoard>findInquireBoardById(String id);
 	
 	//이전글

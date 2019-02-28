@@ -114,9 +114,9 @@ height: 90px !important;
 				<ul class="nav nav-pills flex-column">
 				
 					<li class="nav-item">
-						<a class="nav-link" href="/messageWrite">쪽지쓰기</a>
-						<a class="nav-link" href="/receiveMessage">받은쪽지함</a>
-						<a class="nav-link" href="/sendMessage">보낸쪽지함</a>
+						<a class="nav-link" href="/message/messageWrite">쪽지쓰기</a>
+						<a class="nav-link" href="/message/receiveMessage">받은쪽지함</a>
+						<a class="nav-link" href="/message/sendMessage">보낸쪽지함</a>
 					
 					</li>   	
 				</ul>
@@ -132,14 +132,16 @@ height: 90px !important;
                  
                      
                      
+
                         <label>내용</label>
-                        <a class="btn btn-info" style="margin-left: 46%;" th:href="@{'/remessageWrite'(sendId=${viewReceiveMessage.sendId})}">답장</a>
+                        <a class="btn btn-info" style="margin-left: 46%;" th:href="@{'/message/remessageWrite'(sendId=${viewReceiveMessage.sendId})}">답장</a>
 						<a class="btn btn-info" data-toggle="modal" data-target="#reportModal">신고</a>
-						<a class="btn btn-info" th:href="@{'/receivemessageDelete'(messageReceiveId=${viewReceiveMessage.messageReceiveId})}">삭제</a>
+						<a class="btn btn-info" th:href="@{'/message/receivemessageDelete'(messageReceiveId=${viewReceiveMessage.messageReceiveId})}">삭제</a>
                         <div  class="border" th:text="${viewReceiveMessage.messageContent}" style="width: 600px; height: 200px;"></div><br>
+
                       
 						
-						<a class="btn btn-info" th:href="@{'/receiveMessage'}" style="margin-left:65%;">확인</a>
+						<a class="btn btn-info" th:href="@{'/message/receiveMessage'}" style="margin-left:65%;">확인</a>
 		</div>
       
 	   
