@@ -18,6 +18,11 @@
 				        }).ajaxStop(function(){
 				            $('#loading-bar').hide();   
 				            $('.modal').modal('hide');
+				            Swal.fire(
+				            		  'Success!',
+				            		  '변경사항이 성공적으로 적용되었습니다.',
+				            		  'success'
+				            		)
 				        });
 					});
 					
@@ -26,7 +31,11 @@
 						selectedObject = document.getElementsByClassName("selected");
 						inputCommand = "";
 						if (selectedObject.length === 0) {
-							alert("선택대상을 지정해주세요.");
+							Swal.fire({
+								  type: 'error',
+								  title: 'Error!',
+								  text: '회원을 먼저 선택하여 주세요.',
+							})
 							this.event.stopPropagation();
 						}
 						else {

@@ -25,6 +25,16 @@ public interface StudyNoticeboardRepository extends JpaRepository<StudyNoticeboa
 //	@Query(value = "select sn from StudyNoticeboard as sn where sn.studyId=:studyId and sn.number=:noticeboardNumber")
 /*	@Query(value = "select sn from StudyNoticeboard as sn where sn.studyId=:rbc.studyId and sn.number=:rbc.number")
 	StudyNoticeboard findByNoticeboardNumberAndStudyId(StudyNoticeboard rbc); 이거 안됨*/
+	public default Predicate makePredicate(String studyId) {
+		BooleanBuilder builder = new BooleanBuilder();
+
+		QStudyNoticeboard studynoticeboard = QStudyNoticeboard.studyNoticeboard;
+
+		builder.and(studynoticeboard.studyId.like(studyId));
+
+		return builder; 
+	}
+
 	@Query(value = "select *\r\n" + 
 			"from study_noticeboard\r\n" + 
 			"where study_id = :studyId and status = 0\r\n" + 
@@ -38,14 +48,11 @@ public interface StudyNoticeboardRepository extends JpaRepository<StudyNoticeboa
 			"order by replygroup asc, replystep asc", nativeQuery=true)
 	StudyNoticeboard findNoticeboardByStudyIdANDNumber(@Param(value="studyId") String studyId, @Param(value="number") int number);
 	
-
-	public default Predicate makePredicate(String studyId) {
-		BooleanBuilder builder = new BooleanBuilder();
-
-		QStudyNoticeboard studynoticeboard = QStudyNoticeboard.studyNoticeboard;
-
-		builder.and(studynoticeboard.studyId.like(studyId));
-
-		return builder; 
-	}
+	@Query(value="select *\r\n" + 
+			"from study_noticeboard left join study_member using (study_id, id)\r\n" + 
+			"where study_id=:studyId and number=:number and id=:userId and (study_member_status_code = :power1 or study_member_status_code= :power2)"
+			+ "and status = :status", nativeQuery=true)
+	StudyNoticeboard findNoticeboardByStudyIdAndNumberAndStatus(@Param(value="studyId") String studyId, @Param(value="number") int number,
+			@Param(value="userId") String userId, @Param(value="power1") String power1, @Param(value="power2") String power2,
+			@Param(value="status") int status);
 }

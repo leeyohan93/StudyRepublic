@@ -25,7 +25,11 @@ function selected() {
 	selectedObject = document.getElementsByClassName("selected");
 	inputCommand = "";
 	if (selectedObject.length === 0) {
-		alert("선택대상을 지정해주세요.");
+		Swal.fire({
+			  type: 'error',
+			  title: 'Error!',
+			  text: '회원을 먼저 선택하여 주세요.',
+		})
 		this.event.stopPropagation();
 	}
 	else {

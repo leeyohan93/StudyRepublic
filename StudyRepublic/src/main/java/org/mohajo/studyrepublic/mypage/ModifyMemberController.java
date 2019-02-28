@@ -60,7 +60,7 @@ public String pwdmodi(Model model) {
    
 }
 
-/*@PostMapping("/complatepwdcheck")
+/*@PostMapping("/completepwdcheck")
 @ResponseBody
 public Map <Object,Object> passwordcheck(@RequestBody String password){
    
@@ -111,8 +111,6 @@ public String memberexit(@ModelAttribute Member member) {
    int exitresult = mbr.memberExit(member.getId());
    
    
-   System.out.println(123);
-   
    return "redirect:/logout";
 }
 
@@ -159,7 +157,7 @@ public String update_email(@RequestParam("email")String email, @RequestParam("ph
    member.setVisibility(visibility);
    
    mbr.save(member);
-   System.out.println(777);
+  
    return "redirect:/mypage";
    
 }
@@ -181,7 +179,7 @@ public Map <String, Integer> chk_email(@RequestParam String email) {
 @RequestMapping(value="/mypage/passwordAuth", method=RequestMethod.POST)
 @ResponseBody 
 public Map <String, Integer> chk_password(@RequestParam String password) {      
-   System.out.println(password);
+  
    Authentication auth =(Authentication)SecurityContextHolder.getContext().getAuthentication();
    String id = auth.getName();
    Member memberpassword = mbr.findById(id).get();
@@ -243,7 +241,7 @@ public ResponseEntity<?> uploadAttachment(MultipartHttpServletRequest request ,H
    int uploadResult = mbr.changeProfile(sourceFileName+sourceFileNameExtension, saveFileName, id);
    
    membercontroller.createSession(session, member);
-   System.out.println("발동중??");
+   
    
    return new ResponseEntity<>(response,HttpStatus.OK);
 }

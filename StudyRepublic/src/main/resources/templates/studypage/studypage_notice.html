@@ -57,6 +57,7 @@
 	  	.userProfile{
 	  		width: 8%;
 	  		display: inline-block;
+	  		font-size: xx-small;
 	  	}
 	  	.contentReplyWriteDiv{
 	  		width: 70%;
@@ -141,6 +142,18 @@
 	  	.dateFont{
 	  		font-weight: bold;
 	  	}
+	  	.profileBoxPhotoIamge,.commentProfile{
+	  		border-radius: 100%;
+		    width: 40px;
+		    height: 40px;
+		    display: inline-block;
+	  	}
+	  	.pageForm{
+	  	    text-align: center;
+	  	}
+	  	.pagination{
+	  		display: -webkit-inline-box;
+	  	}
   	</style>
  	</th:block>  
  		<div id="rightContent"> 
@@ -177,17 +190,24 @@
 							
 							</div>
 							<div class="contentReplyWriteForm"
-								><div class="userProfile">프</div
+								><div class="userProfile"><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${session.memberimg}}"
+								><br><span th:text = "${session.nickname}+'님'">
+								</span></div
 								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
 								><button type="button" class="btn btn-dark replyButton">댓글 작성</button
 							></div
 						></div>
 						<div class="contentModifyAndDelete">
+							<form th:id="contentModifyAndDeleteId + ${fasn.number}">
+								<input type="hidden" th:id="number+${fasn.number}"  name="number" th:value="${fasn.number}"/>
+								<input type="hidden" th:id="studyId+${fasn.number}" name="studyId"/>
+								<input type="hidden" th:id="boardName+${fasn.number}" name="boardName"/>
+							</form>
 							<div class="contentModify">
-								<button type="button" class="btn btn-dark modifyButton">수정</button>
+								<button type="button" class="btn btn-dark modifyButton" th:value="${fasn.number}">수정</button>
 							</div>
 							<div class="contentDelete">
-								<button type="button" class="btn btn-dark deleteButton">삭제</button>
+								<button type="button" class="btn btn-dark deleteButton" th:value="${fasn.number}">삭제</button>
 							</div>
 						</div>
 					</div>
@@ -234,6 +254,7 @@
 			<span></span> <span></span> <span></span> <span></span>
 		</div>
 		<script>
+			var contentCheck;
 			$(document).ready(function() {
 								var token = $("meta[name='_csrf']").attr("content");
 								var header = $("meta[name='_csrf_header']").attr("content");
@@ -260,7 +281,7 @@
 																success : function(data) {
 																	console.log(StudyNoticeboard.number)
 																	console.log(data);
-																	console.log("success");
+																	console.log("success1");
 																	/**
 																	 *설명 : 덧글만 따로 뽑아내기 위한 Ajax
 																	 *주의 : 해당 방식으로 하지 않을 경우, 덧글을 사용자에 필요에 맞게 정렬 된 결과로 가지고 올 수 없음.
@@ -275,20 +296,40 @@
 																					data.forEach(function(list) {
 																								console.log(list);
 																					});
-																					console.log("success");
+																					console.log("success2");
 																					
 																				},error : function() {
-																					alert("error");
+																					alert("error2");
 																				}
 																			});
 																},error : function() {
-																	alert("error");
+																	alert("error1");
 																}
 															});
 												});
 								$("#writeButton").on("click", function(){
 									//tip! : 버튼에 href 링크 넣기
 									$(location).attr('href',  '/StudyPage/Write?board=Noticeboard');
+								});
+								
+								$(".deleteButton").on("click", function(){
+									$("#studyId"+this.value).val(window.name);
+									console.log($("#studyId" + this.value)[0].value);
+									$("#boardName" + this.value).val("Noticeboard");
+									console.log($("#boardName" + this.value)[0].value);
+									$("#contentModifyAndDeleteId" + this.value)[0].action = "/StudyPage/WriterDelete";
+									console.log($("#contentModifyAndDeleteId" + this.value)[0].action);
+									$("#contentModifyAndDeleteId" + this.value)[0].submit();
+								});
+								
+								$(".modifyButton").on("click", function(){
+									$("#studyId"+this.value).val(window.name);
+									console.log($("#studyId"+this.value)[0].value);
+									$("#boardName" + this.value).val("Noticeboard");
+									console.log($("#boardName"+this.value)[0].value);
+									$("#contentModifyAndDeleteId" + this.value).action = "StudyPage/WriterModify";
+									console.log($("#contentModifyAndDeleteId" + this.value)[0].action);
+									//$("#contentModifyAndDeleteId" + this.value).submit();
 								});
 							});	//readyEnd
 							

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Course Details</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Unicat project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="styles/course.css">
+<link rel="stylesheet" type="text/css" href="styles/course_responsive.css">
+</head>
+<body>
+
+<div class="super_container">
+
+
+	<!-- Course -->
+
+	<div class="course">
+		<div class="container">
+			<div class="row">
+
+				<!-- Course -->
+				<div class="col-lg-8 study_detail_container">
+
+					<!-- Course Image -->
+					<div class="course_image">
+						<img src="images/home_slider_1.jpg" alt="">
+						<div class="studyType" th:text="${study.typeCode.codeValueKorean}">type</div>
+						<div class="studyOnoff" th:text="${study.onoffCode.codeValueKorean}">onoff</div>
+						<div class="studyStatus" id="study-status" th:value="${study.studyStatusCode.studyStatusCode}" th:text="${study.studyStatusCode.codeValueKorean}">상태</div>
+						<div class="course_title" th:text="${study.name}">스터디명</div>
+					</div>
+					
+
+					<div class="course_container">
+
+
+						<!-- Course Info 1 -->
+						<div class="course_essential course-section">
+							<div class="course_essential_title sub_title">기본정보</div>
+
+							<div class="course_essential_content">
+
+								<div class="course_essential_inner">
+									<div class="course_essential_inner_title">
+										기간
+									</div>
+									<div class="course_essential_inner_content">
+										<span th:text="|${study.startDate}~${study.endDate}|">period</span>
+										(총 <span th:text="${study.studyCount}">n</span>회)
+									</div>
+								</div>
+
+								<div class="course_essential_inner">
+									<div class="course_essential_inner_title">
+										일시
+									</div>
+									<div class="course_essential_inner_content">
+										<span th:utext="|매주 ${study.dayCode.codeValueKorean}요일 ${#dates.format(study.startTime, 'HH:mm')}~${#dates.format(study.endTime, 'HH:mm')}|">schedule</span>
+										(<span th:text="${#dates.format(study.timeDiff, 'H')}">n</span>시간)
+									</div>
+								</div>
+
+								<div class="course_essential_inner" th:if="${study.onoffCode} != 'O'">
+									<div class="course_essential_inner_title">
+										지역
+									</div>
+									<div class="course_essential_inner_content">
+										<th:block th:each="location : ${study.studyLocation}"><i class="tag" th:text="${location.interestLocation}">location</i>&nbsp;</th:block>
+									</div>
+								</div>
+
+								<div class="course_essential_inner">
+									<div class="course_essential_inner_title">
+										분야
+									</div>
+									<div class="course_essential_inner_content">
+										<th:block th:each="interest : ${study.studyInterest}"><i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;</th:block>
+									</div>
+								</div>
+
+								<div class="course_essential_inner" th:if="${study.typeCode} == 'P'">
+									<div class="course_essential_inner_title">
+										가격
+									</div>
+									<div class="course_essential_inner_content course_price">
+										<th:block th:text="${study.price.price}">price</th:block>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+
+
+						<!-- Course Info 2 -->
+						<div class="course_info course-section d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+
+							<!-- Course Info Item -->
+							<div class="course_info_item">
+								<div class="course_info_title">정원</div>
+								<div class="course_info_text enroll-count" th:text="|${study.enrollActual}/${study.enrollCapacity}|">enrollCount</div>
+							</div>
+
+							<!-- Course Info Item -->
+							<div class="course_info_item">
+								<div class="course_info_title">레벨테스트</div>
+								<div class="course_info_text" th:text="${study.hasLeveltest==1?'있음':'없음'}">hasLeveltest</div>
+							</div>
+
+							<!-- Course Info Item -->
+							<div class="course_info_item">
+								<div class="course_info_title level">난이도</div>
+								<div class="course_info_text" th:text="${study.levelCode.codeValueKorean}">level</div>
+							</div>
+
+						</div>
+
+
+						<!-- Introduction -->
+						<div class="course_intro course-section">
+							<div class="course_intro_title sub_title">스터디 소개</div>
+
+							<div class="course_intro_content intro-content">
+								<p th:utext="${study.introduction}"></p>
+							</div>
+
+						</div>
+
+
+						<!-- Course Tabs -->
+						<div class="course_tabs_container course-section additional-info">
+							<div class="tabs d-flex flex-row align-items-center justify-content-start">
+								<!-- <div class="tab active">description</div> -->
+								<div class="tab tab-title active" id="tab-title-leaderInfo">리더 정보</div>
+								<div class="tab tab-title disable" id="tab-title-review">강의 후기</div>
+							</div>
+							<div class="tab_panels">
+
+								<div class="tab_panel_wrapper">
+								
+									<!-- Curriculum -->
+									<div class="tab-content leader-info tab_panel tab_panel_2 active" id="tab-content-leaderInfo" th:with="leaderInfo = ${tutorInfo}? ${tutorInfo.member} : ${leaderInfo}">
+										
+										<div class="profile-container">
+											<div class="profile-image-container">
+													<!-- <img th:src = "@{'/member_image/'+${session.memberimg}}" style = "width:40px; height:40px; border-radius:100%;"> -->
+												<img th:alt="|${leaderInfo.nickname}님의 프로필 사진|" th:src="@{'/member_image/' + ${leaderInfo.profileSaveName}}" style = "width:40px; height:40px; border-radius:100%;">
+												<span th:text="${leaderInfo.nickname}">리더 닉네임</span>
+											</div>
+										</div>
+										<div class="member-interest-container">
+											<h5>관심분야</h5>
+											<div th:text="${#lists.isEmpty(leaderInfo.memberInterest)}? 없음">
+												<th:block th:each="interest : ${leaderInfo.memberInterest}">
+													<i class="tag" th:text="${interest.interest2code.codeValueKorean}">interest</i>&nbsp;
+												</th:block>
+											</div>
+										</div>
+										<div class="study-activity">
+											<h5>전체 활동내역</h5>
+											<table>
+												<tr>
+													<th>스터디명</th>
+													<th>기간</th>
+													<th>평점</th>
+												</tr>
+												<tr th:each="tempStudyActivity : ${studyActivity}">
+													<th:block th:with="tempStudy = ${tempStudyActivity.study}" th:if="${tempStudyActivityStat.index} < 5">
+														<td><a th:href="@{'/study/detail/' + ${tempStudy.studyId}}" th:text="${tempStudy.name}">studyName</a>&nbsp;<i class="tag" th:text="${tempStudy.studyStatusCode.codeValueKorean}">status</i></td>
+														<td th:text="|${tempStudy.startDate}~${tempStudy.endDate}|">period</td>
+														<td th:if="${tempStudy.averageScore}==-1">-</td>
+														<td th:unless="${tempStudy.averageScore}==-1" class="score-container">
+															<div class="stars-outer"><div class="stars-inner">별</div></div>
+															<span class="stars-score" th:text="${tempStudy.averageScore}!=-1? ${tempStudy.averageScore} : '-'">avgScore</span>
+														</td>
+													</th:block>
+												</tr>
+											</table>
+										</div>
+										
+									</div>
+
+									<!-- Reviews -->
+									<div class="tab_panel tab_panel_3 review " id="tab-content-review">
+									<!-- <div class="tab_panel tab_panel_3 review invisible" id="tab-content-review"> -->
+										<!-- <div class="tab_panel_title"th:text="${#lists.isEmpty(study.review)}? '작성 된 후기가 없습니다.' ">후기 리스트</div> -->
+										
+										<!-- Comments -->
+										<div class="comments_container">
+											<th:block th:if="${not #lists.isEmpty(study.review)}">
+												총 <span class="review-counter" ></span>건
+												<hr/>
+
+											<ul class="comments_list">
+												<li th:each="review : ${study.review}" th:with="reviewer = ${review.studyMember.member}">
+													<div class="comment_item d-flex flex-row align-items-start jutify-content-start">
+														<div class="comment_image"><div><img th:src="@{'/member_image/' + ${reviewer.profileSaveName}}" alt="리뷰어 프로필 사진"></div></div>
+														<div class="comment_content">
+															<div class="comment_title_container d-flex flex-row align-items-center justify-content-start">
+																<div class="comment_author" th:text="${reviewer.nickname}">Milley Cyrus</div>
+																<div class="comment_rating">
+																	<div class="score-container">
+																		<div class="stars-outer"><div class="stars-inner">별</div></div>
+																		<span class="stars-score" th:text="${review.score}">score</span>
+																	</div>
+																</div>
+															</div>
+															<div class="comment_text">
+																<p th:text="${review.content}">후기 내용</p>
+															</div>
+															<!-- <div class="comment_extras d-flex flex-row align-items-center justify-content-start">
+																<div class="comment_extra comment_likes"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i><span>15</span></a></div>
+																<div class="comment_extra comment_reply"><a href="#"><i class="fa fa-reply" aria-hidden="true"></i><span>Reply</span></a></div>
+															</div> -->
+														</div>
+													</div>
+												</li>
+											</ul>
+
+											</th:block>
+
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="styles/bootstrap4/popper.js"></script>
+<script src="styles/bootstrap4/bootstrap.min.js"></script>
+<script src="plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+<script src="plugins/easing/easing.js"></script>
+<script src="plugins/parallax-js-master/parallax.min.js"></script>
+<script src="plugins/colorbox/jquery.colorbox-min.js"></script>
+<script src="js/course.js"></script>
+</body>
+</html>

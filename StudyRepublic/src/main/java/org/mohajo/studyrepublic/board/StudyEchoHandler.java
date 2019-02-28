@@ -59,18 +59,18 @@ public class StudyEchoHandler extends TextWebSocketHandler{
 			String[] strs = msg.split(",");
 			if (strs != null && strs.length == 5) {
 				String cmd = strs[0];
-				String replyWriter = strs[1];
-				String boardWriter = strs[2];
-				String freeBoardId = strs[3];
+				String userId = strs[1];
+				String leaderId = strs[2];
+				String studyId = strs[3];
 				
 				
 			
-				WebSocketSession boardWriterSession = userSessions.get(boardWriter);
+				WebSocketSession boardWriterSession = userSessions.get(leaderId);
 				log.info("boardWriterSession :" + boardWriterSession);
 				
 				if ("study".equals(cmd) && boardWriterSession != null) {
-					TextMessage tmpMsg = new TextMessage(replyWriter + "님이 "
-							+ "<a href='/board/viewBoard?freeBoardId=" + freeBoardId + "'>" + freeBoardId + "</a>번 게시글에 댓글을 달았습니다!");
+					TextMessage tmpMsg = new TextMessage(userId + "님이 "
+							+ "<a href='/board/viewBoard?freeBoardId=" + studyId + "'>" + studyId + "</a>스터디에 가입신청을 했습니다!");
 					log.info("=============================");
 					boardWriterSession.sendMessage(tmpMsg);
 				}

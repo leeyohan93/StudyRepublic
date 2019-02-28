@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -38,14 +40,15 @@ public class StudyNoticeboardReply/* extends StudyBoardReply implements Serializ
 	@Column(name = "study_noticeboard_id")
 	private int studyNoticeboardId;
 	
-	@Column(name = "study_id", insertable=false, updatable=false)
+	@Column(name = "study_id"/*, insertable=false, updatable=false*/)
 	private String studyId;
-	@Column(name = "id", insertable=false, updatable=false)
+	@Column(name = "id"/*, insertable=false, updatable=false*/)
 	private String id;
 	@Column
 	private String content;
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column
-	private Date date;
+	private Date date = new Date();
 	@Column(name = "replygroup")
 	private int replyGroup;
 	@Column(name = "replystep")

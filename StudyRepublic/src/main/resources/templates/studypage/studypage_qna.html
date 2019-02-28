@@ -52,6 +52,7 @@
 	  	.userProfile{
 	  		width: 8%;
 	  		display: inline-block;
+	  		font-size: xx-small;
 	  	}
 	  	.contentReplyWriteDiv{
 	  		width: 70%;
@@ -145,7 +146,19 @@
 	  	    text-align: center;
 	  	}
 	  	.pagination{
-	  		display: inline-block;
+	  		display: -webkit-inline-box;
+	  	}
+	  	.profileBoxPhotoIamge,.commentProfile{
+	  		border-radius: 100%;
+		    width: 40px;
+		    height: 40px;
+		    display: inline-block;
+	  	}
+	  	.pageForm{
+	  	    text-align: center;
+	  	}
+	  	.pagination{
+	  		display: -webkit-inline-box;
 	  	}
   	</style>
 	</th:block> 
@@ -165,7 +178,7 @@
 						><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${fasq.studyMember.member.profileSaveName}}"
 						><div class="profileName" th:text = "${fasq.studyMember.member.nickname}"></div
 					></div
-					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasq.number}" th:name=|${fasq.studyQnaboardId}| data-toggle="collapse" class="boardList"
+					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasq.number}" onclick="commentList(|${fasq.studyQnaboardId}|)" th:name=|${fasq.studyQnaboardId}| data-toggle="collapse" class="boardList"
 							th:text="${fasq.title}" th:id="${fasq.number}"></a>
 					</div
 					><div class="rightRight rightTitle contentWriteDate">
@@ -174,7 +187,7 @@
 					</div>
 					<div class="collapse contentForm" th:id="'write'+${fasq.number}">
 						<input type="hidden" th:id="${fasq.number}">
-						<div class="content" th:text="${fasq.content}">
+						<div class="content" th:utext="${fasq.content}">
 						</div>
 						<!--댓글  -->
 						<div class="contentReplyForm"
@@ -184,18 +197,25 @@
 							  <div class="commentList"></div>
 							</div>
 							<div class="contentReplyWriteForm"
-								><div class="userProfile">프</div
+								><div class="userProfile"><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${session.memberimg}}"
+								><br><span th:text = "${session.nickname}+'님'">
+								</span></div
 								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" th:name=|content${fasq.studyQnaboardId}| cols="30" rows="3" maxlength="255"></textarea></div
 								><button type="button" class="btn btn-dark replyButton" th:value="${fasq.studyQnaboardId}">댓글 작성</button
 							></div
 						></div>
 						<!--댓글 끝  -->
 						<div class="contentModifyAndDelete">
+							<form th:id="contentModifyAndDeleteId + ${fasq.number}">
+								<input type="hidden" th:id="number+${fasq.number}"  name="number" th:value="${fasq.number}"/>
+								<input type="hidden" th:id="studyId+${fasq.number}" name="studyId"/>
+								<input type="hidden" th:id="boardName+${fasq.number}" name="boardName"/>
+							</form>
 							<div class="contentModify">
-								<button type="button" class="btn btn-dark modifyButton">수정</button>
+								<button type="button" class="btn btn-dark modifyButton" th:value="${fasq.number}">수정</button>
 							</div>
 							<div class="contentDelete">
-								<button type="button" class="btn btn-dark deleteButton">삭제</button>
+								<button type="button" class="btn btn-dark deleteButton" th:value="${fasq.number}">삭제</button>
 							</div>
 						</div>
 					</div>
@@ -297,7 +317,26 @@
 												}); */
 								$("#writeButton").on("click", function(){
 									//tip! : 버튼에 href 링크 넣기
-									$(location).attr('href',  '/StudyPage/Write?board=Noticeboard');
+									$(location).attr('href',  '/StudyPage/Write?board=Qnaboard');
+								});
+								$(".deleteButton").on("click", function(){
+									$("#studyId"+this.value).val(window.name);
+									console.log($("#studyId" + this.value)[0].value);
+									$("#boardName" + this.value).val("Qnaboard");
+									console.log($("#boardName" + this.value)[0].value);
+									$("#contentModifyAndDeleteId" + this.value)[0].action = "/StudyPage/WriterDelete";
+									console.log($("#contentModifyAndDeleteId" + this.value)[0].action);
+									$("#contentModifyAndDeleteId" + this.value)[0].submit();
+								});
+								
+								$(".modifyButton").on("click", function(){
+									$("#studyId"+this.value).val(window.name);
+									console.log($("#studyId"+this.value)[0].value);
+									$("#boardName" + this.value).val("Qnaboard");
+									console.log($("#boardName"+this.value)[0].value);
+									$("#contentModifyAndDeleteId" + this.value).action = "StudyPage/WriterModify";
+									console.log($("#contentModifyAndDeleteId" + this.value)[0].action);
+									//$("#contentModifyAndDeleteId" + this.value).submit();
 								});
 							});	//readyEnd
 							
@@ -348,7 +387,7 @@
 							 });
 							 
 							 //댓글 목록 
-							  $(".boardList").on("click", function(){
+						/* 	  $(".boardList").on("click", function(){
 								 
 								 var studyQnaBoardId = this.name;
 								 console.log(studyQnaBoardId);
@@ -359,25 +398,24 @@
 							         success : function(data){
 							        	 console.log("성공");
 							             var a =''; 
-// 							             console.log(data);
-							            /*   $.each(data, function(key, value){ 
+ 							             console.log(data);
+							               $.each(data, function(key, value){ 
 							            	
 							                 a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
 							                  a += '<div class="commentInfo'+value.studyQnaboardReplyId+'"><img class="commentProfile" src="/member_image/'+value.studyReplyMember.member.profileSaveName+'" > '+value.studyReplyMember.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
 							          				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");  
-							                 a += '<a onclick="commentUpdate('+value.studyQnaboardReplyId+',\''+value.content+'\');"> 수정 </a>';
-							                 a += '<a onclick="commentDelete('+value.studyQnaboardReplyId+');"> 삭제 </a> </div>';
+							                  a += '<a onclick="commentDelete('+value.studyQnaboardReplyId+',\''+value.studyqnaboardId+'\');"> 삭제 </a> </div>';
 							                 a += '<div class="commentContent'+value.studyQnaboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
 							                 a += '</div></div>';
  							             $(".commentList").html(a); 
-							             });  */
+							             });  
 							           
 							         },
 							         error : function(data){
 							        	 console.log("에러");
 							         }
 							     }); 
-							 }); 
+							 });  */
 							 
 							 //댓글 목록
 							 function commentList(studyQnaBoardId){
@@ -428,13 +466,7 @@
 							         }
 							     });
 							 }
-						
-							
-							 
-							 
-							
 		</script>
 	</div>
-</script>
 </body>
 </html>
