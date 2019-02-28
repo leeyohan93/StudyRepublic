@@ -292,6 +292,13 @@ public class StudyController {
 				break;
 		}
 		
+		StudyFile studyFile = sfr.findByStudyId(studyId);
+		
+		if(studyFile != null) {
+			model.addAttribute("studyFile", studyFile);
+			
+		}
+		
 		model.addAttribute("studyActivity", studyActivity);
 
 		return "/study/detail";
@@ -618,9 +625,10 @@ public class StudyController {
 		
 		final DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
 		
-		Resource resource = defaultResourceLoader.getResource("file:src\\main\\resources\\static\\study\\" + studyId);
-		String uploadRootPath = resource.getFile().getAbsolutePath();	//예외처리 필요
+/*		Resource resource = defaultResourceLoader.getResource("file:src\\main\\resources\\static\\study\\" + studyId);
+		String uploadRootPath = resource.getFile().getAbsolutePath();	//예외처리 필요*/
 		
+		String uploadRootPath =  request.getSession().getServletContext().getRealPath("study/" + studyId);		// 테스트 중
 		File file = new File(uploadRootPath);	//폴더생성용
 		
 		if(!file.exists()) {
@@ -653,8 +661,8 @@ public class StudyController {
 					studyFile.setStudyId(studyId);
 					studyFile.setStudyfileOriginname(fileOriginName);
 					studyFile.setStudyfileSavename(fileSaveName);
-					studyFile.setStudyfileParturl("\\study\\" + studyId + "\\" + fileSaveName);
-					studyFile.setStudyfileFullurl(uploadRootPath + "\\" + fileSaveName);
+					studyFile.setStudyfileParturl("/study/" + studyId + "/" + fileSaveName);
+					studyFile.setStudyfileFullurl(uploadRootPath + "/" + fileSaveName);
 					
 					log.info(studyFile.toString());
 					

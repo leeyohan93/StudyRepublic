@@ -8,24 +8,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    
     <!-- 참고:  https://jqueryui.com/sortable/#portlets -->
     <!-- 설명:  jQuery UI 의 sortable - portlets 예제를 기반으로 수정 / 발전시킨 코드 -->
     <title>스터디 오픈</title>
+
 </head>
 <th:block layout:fragment="customCss">
    
-    <!-- Font Awesome -->
+            	<!-- 성호님 -->
+	<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+	
+    	<!-- Paper Bootstrap Wizard -->
+	<link href="/paperBootstrapWizard/assets/css/paper-bootstrap-wizard.css" rel="stylesheet" />
+    
+        <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    
+        
 
 	<!-- Datepicker -->
 <!-- 	<link type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet"> -->
 <!-- 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script> -->
 <!-- 	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> -->
 
-	<!-- 성호님 -->
-	<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
-	
+
     
     <!-- Sortable (for leveltest) -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -34,16 +40,19 @@
 	<!-- Smart Editor -->
 	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 	
-	<!-- Paper Bootstrap Wizard -->
-	<link href="/paperBootstrapWizard/assets/css/paper-bootstrap-wizard.css" rel="stylesheet" />
+
 	
 
     <style>
-    
+    	#main {
+    		padding-bottom: 1.5rem;
+    		padding-top: 1.5rem
+    	}
     	.ghost {
-    		opacity: 0;
-    		position: absolute;
-    		z-index: -9999;
+     		opacity: 0; 
+     		position: absolute; 
+     		z-index: -9999; 
+     		zoom: 0%;
     	}
     	
     	h1, h2, h3, h4, h5, h6 {
@@ -641,6 +650,9 @@
         } 
 
         /********************************** leveltest - CSS 끝 **********************************/
+        .wizard-card {
+        	background-color: white;
+        }
         
         .tab-pane {
         	margin-top: 2rem;
@@ -1025,7 +1037,23 @@
        }  
 
         /********************************** leveltest - CSS 끝 **********************************/
-				
+			
+		/********************************** mainLayout - main CSS **********************************/
+		
+		.dropdown-toggle::after {
+			content: none !important;
+		}
+		
+		.time-input-container {
+			    line-height: 5;
+			
+		}
+		
+		#input-study-timeDiff {
+			    padding: 35px 0;
+			
+		}
+		
     </style>
  
 </th:block>

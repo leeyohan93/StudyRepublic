@@ -271,10 +271,12 @@
                     <h4 style="font-weight: 900;">일반스터디</h4><br>
                           <div th:each="smr : ${smr}">
                            <h5 th:text="${smr.study.name}" style="font-weight: 900;"></h5>
+
                           [<span th:text="${smr.study.OnoffCode.codeValueKorean}"></span>]
                            <span th:text="|${smr.study.startDate}~${smr.study.endDate}|"></span>
                            (<span th:text="${smr.study.DayCode.codeValueKorean}"></span>)
                         </div>
+
                     
                   </div>  
                   <div class="col-md-6 studyinfo" style="height: 227px; border:solid; ">
@@ -287,6 +289,7 @@
                         </div>
                   </div>
                      
+                          
                            
                   
                         
