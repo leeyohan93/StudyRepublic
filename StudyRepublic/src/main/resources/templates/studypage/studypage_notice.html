@@ -57,6 +57,7 @@
 	  	.userProfile{
 	  		width: 8%;
 	  		display: inline-block;
+	  		font-size: xx-small;
 	  	}
 	  	.contentReplyWriteDiv{
 	  		width: 70%;
@@ -147,6 +148,12 @@
 		    height: 40px;
 		    display: inline-block;
 	  	}
+	  	.pageForm{
+	  	    text-align: center;
+	  	}
+	  	.pagination{
+	  		display: -webkit-inline-box;
+	  	}
   	</style>
  	</th:block>  
  		<div id="rightContent"> 
@@ -183,8 +190,9 @@
 							
 							</div>
 							<div class="contentReplyWriteForm"
-								><div class="userProfile"><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${fasn.studyMember.member.profileSaveName}}"
-								></div
+								><div class="userProfile"><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${session.memberimg}}"
+								><br><span th:text = "${session.nickname}+'님'">
+								</span></div
 								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" cols="30" rows="3" maxlength="255"></textarea></div
 								><button type="button" class="btn btn-dark replyButton">댓글 작성</button
 							></div

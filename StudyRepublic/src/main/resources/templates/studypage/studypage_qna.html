@@ -52,6 +52,7 @@
 	  	.userProfile{
 	  		width: 8%;
 	  		display: inline-block;
+	  		font-size: xx-small;
 	  	}
 	  	.contentReplyWriteDiv{
 	  		width: 70%;
@@ -145,7 +146,19 @@
 	  	    text-align: center;
 	  	}
 	  	.pagination{
-	  		display: inline-block;
+	  		display: -webkit-inline-box;
+	  	}
+	  	.profileBoxPhotoIamge,.commentProfile{
+	  		border-radius: 100%;
+		    width: 40px;
+		    height: 40px;
+		    display: inline-block;
+	  	}
+	  	.pageForm{
+	  	    text-align: center;
+	  	}
+	  	.pagination{
+	  		display: -webkit-inline-box;
 	  	}
   	</style>
 	</th:block> 
@@ -174,7 +187,7 @@
 					</div>
 					<div class="collapse contentForm" th:id="'write'+${fasq.number}">
 						<input type="hidden" th:id="${fasq.number}">
-						<div class="content" th:text="${fasq.content}">
+						<div class="content" th:utext="${fasq.content}">
 						</div>
 						<!--댓글  -->
 						<div class="contentReplyForm"
@@ -184,7 +197,9 @@
 							  <div class="commentList"></div>
 							</div>
 							<div class="contentReplyWriteForm"
-								><div class="userProfile"></div
+								><div class="userProfile"><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${session.memberimg}}"
+								><br><span th:text = "${session.nickname}+'님'">
+								</span></div
 								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" th:name=|content${fasq.studyQnaboardId}| cols="30" rows="3" maxlength="255"></textarea></div
 								><button type="button" class="btn btn-dark replyButton" th:value="${fasq.studyQnaboardId}">댓글 작성</button
 							></div
@@ -384,7 +399,7 @@
 							        	 console.log("성공");
 							             var a =''; 
 // 							             console.log(data);
-							            /*   $.each(data, function(key, value){ 
+							             $.each(data, function(key, value){ 
 							            	
 							                 a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
 							                  a += '<div class="commentInfo'+value.studyQnaboardReplyId+'"><img class="commentProfile" src="/member_image/'+value.studyReplyMember.member.profileSaveName+'" > '+value.studyReplyMember.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
@@ -394,7 +409,7 @@
 							                 a += '<div class="commentContent'+value.studyQnaboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
 							                 a += '</div></div>';
  							             $(".commentList").html(a); 
-							             });  */
+							             });
 							           
 							         },
 							         error : function(data){
@@ -452,13 +467,7 @@
 							         }
 							     });
 							 }
-						
-							
-							 
-							 
-							
 		</script>
 	</div>
-</script>
 </body>
 </html>

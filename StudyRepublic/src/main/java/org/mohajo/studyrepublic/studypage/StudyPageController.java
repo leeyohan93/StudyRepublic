@@ -30,6 +30,7 @@ import org.apache.http.auth.AUTH;
 import org.mohajo.studyrepublic.domain.Leveltest;
 import org.mohajo.studyrepublic.domain.LeveltestResponse;
 import org.mohajo.studyrepublic.domain.StudyFileshareboard;
+import org.mohajo.studyrepublic.domain.StudyFileshareboardReply;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberStatusCD;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
@@ -200,19 +201,15 @@ public class StudyPageController {
 
 	@RequestMapping("/Noticeboard")
 	public String studyNoticeboard(Model model, @Param(value="studyId") String studyId,PageDTO pageDTO) {
-		
-	/*	studyId = "BB00001";
-		String id = "aaa123";*/
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
 		log.info("id : " + id + " / " + "studyId : " + studyId);
 		///페이징 갯수
-		pageDTO.setSize(1);
+		pageDTO.setSize(10);
 		log.info("====");
 		
-		Pageable page = pageDTO.makePageable(0, "studyId");
+		Pageable page = pageDTO.makePageable(0, "day");
 		Page<StudyNoticeboard> list = studyNoticeboardRepository.findAll(studyNoticeboardRepository.makePredicate(studyId), page);
 		model.addAttribute("findAllStudyNoticeboard",new PageMaker<>(list));
-//		model.addAttribute("findAllStudyNoticeboard", studyNoticeboardRepository.findNoticeboardListByStudyId(studyId));
 		return "studypage/studypage_notice";
 	}
 
@@ -226,31 +223,25 @@ public class StudyPageController {
 		//페이징 갯수
 		pageDTO.setSize(10);
 		
-		Pageable page = pageDTO.makePageable(0, "studyId");
+		Pageable page = pageDTO.makePageable(0, "date");
 		Page<StudyQnaboard> list = studyQnaboardRepository.findAll(studyQnaboardRepository.makePredicate(studyId), page);
 		
 		model.addAttribute("findQnaboardInfoByStudyId",new PageMaker<>(list));
-//		model.addAttribute("findQnaboardInfoByStudyId",
-//				predicate.studyQnaResultPredicate(studyId, 10, studyQnaboardRepository));
-		//model.addAttribute("findQnaboardInfoByStudyId", studyQnaboardRepository.findQnaboardInfoByStudyId(studyId));
 		return "studypage/studypage_qna";
 	}
 
 	@RequestMapping("/Fileshareboard")
 	public String studyFileshareboard(Model model,PageDTO pageDTO,String studyId) {
-		/*String studyId = "BB00001";
-		String id = "aaa123";*/
 	   String id = SecurityContextHolder.getContext().getAuthentication().getName();
 	   log.info("id : " + id + " / " + "studyId : " + studyId);
 
 		pageDTO.setSize(10);
 		
-		Pageable page = pageDTO.makePageable(0, "studyId");
+		Pageable page = pageDTO.makePageable(0, "date");
 		Page<StudyFileshareboard> list = studyFileshareboardRepository.findAll(studyFileshareboardRepository.makePredicate(studyId), page);
 		
 		model.addAttribute("findAllStudyFileshareboard",new PageMaker<>(list));
-//		model.addAttribute("findAllStudyFileshareboard",
-//				predicate.studyFileshareResultPredicate(studyId, 10, studyFileshareboardRepository));
+		log.debug("Fileshareboard : 완료 됨");
 		return "studypage/studypage_fileshare";
 	}
 	
@@ -323,13 +314,14 @@ public class StudyPageController {
 	
 	@RequestMapping(value="/Register", method= RequestMethod.POST)
 	public String writeRegister(Model model, @ModelAttribute StudyNoticeboard studyNoticeboard,
-			@ModelAttribute StudyFileshareboard studyfileshare, @ModelAttribute StudyQnaboard studyQnaboard,
+			@ModelAttribute StudyFileshareboard studyFileshareboard, @ModelAttribute StudyQnaboard studyQnaboard,
 			@RequestParam(name="boardName") String boardName, @RequestParam(name="studyNameId") String studyNameId,
 			@RequestParam MultipartFile file, MultipartHttpServletRequest mpsr){
 
 		String id = SecurityContextHolder.getContext().getAuthentication().getName();
 		StudyMember studyMember;
 		
+		log.info(studyNameId + "/" + boardName);
 		//값이 조회되는지 확인한다.
 		try{
 			studyMember = smr.findByStudyIdAndId(studyNameId, id);
@@ -378,14 +370,46 @@ public class StudyPageController {
 			List<MultipartFile> uploadFileList = request.getFiles("file");
 			doUpload(request, model, uploadFileList, tutor, member);*/
 			
-			return "redirect:/StudyPage/Noticeboard";
+			return "redirect:/StudyPage/Noticeboard?studyId="+studyNameId;
 		case "Fileshareboard":
+			studyFileshareboard.setId(id);
+			studyFileshareboard.setStudyId(studyNameId);
+			
+			List<StudyFileshareboard> studyFileshareboardList = studyFileshareboardRepository.findFileshareboardListByStudyId(studyNameId);
+			if(studyMember==null) {
+				log.info("값은 조회됐지만, null임");
+				return null;
+			}else {
+				//조회되는 리스트의 갯수를 확인하고 해당 리스트 + 1 해서 number를 설정해준다.
+				int number = studyFileshareboardList.size();
+				log.info("제대로 된 값이 들어옴" + number);
+				studyQnaboard.setNumber(number+1);
+			}
+			
+			model.addAttribute("memberid", id);
+			
+			log.info("현 최종 목적지에 도달함3");
+			studyFileshareboardRepository.save(studyFileshareboard);
+			return "redirect:/StudyPage/Fileshareboard?studyId="+studyNameId;
+		case "Qnaboard":
+			studyQnaboard.setId(id);
+			studyQnaboard.setStudyId(studyNameId);
+			
+			List<StudyQnaboard> studyQnaboardList = studyQnaboardRepository.findQnaboardListByStudyId(studyNameId);
+			if(studyMember==null) {
+				log.info("값은 조회됐지만, null임");
+				return null;
+			}else {
+				//조회되는 리스트의 갯수를 확인하고 해당 리스트 + 1 해서 number를 설정해준다.
+				int number = studyQnaboardList.size();
+				log.info("제대로 된 값이 들어옴" + number);
+				studyQnaboard.setNumber(number+1);
+			}
+			
+			model.addAttribute("memberid", id);
 			log.info("현 최종 목적지에 도달함3");
 			studyQnaboardRepository.save(studyQnaboard);
-			return "redirect:/StudyPage/Fileshareboard";
-		case "Qnaboard":
-			studyFileshareboardRepository.save(studyfileshare);
-			return "redirect:/StudyPage/Qnaboard";
+			return "redirect:/StudyPage/Qnaboard?studyId="+studyNameId;
 		}
 		
 		return "studypage/error";
@@ -979,13 +1003,25 @@ public class StudyPageController {
 			
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			String id = auth.getName();
-		 
-		 StudyQnaboardReply studyQnaboardReply = new StudyQnaboardReply();
 		
+			 StudyQnaboardReply studyQnaboardReplyDesc;
+			
+		 try {
+			 studyQnaboardReplyDesc = studyQnaboardReplyRepository.findStudyQnadboardReplyByStudyQnaBoardIdOrderbyGroupDecsLimit1(studyQnaBoardId);
+			  if(studyQnaboardReplyDesc == null) {
+				  studyQnaboardReplyDesc = new StudyQnaboardReply();
+				  studyQnaboardReplyDesc.setReplyGroup(0);
+			  }
+		 }catch(Exception e){
+			 studyQnaboardReplyDesc = new StudyQnaboardReply();
+			 studyQnaboardReplyDesc.setReplyGroup(0);
+		 }
+		 StudyQnaboardReply studyQnaboardReply = new StudyQnaboardReply();
+		 
 		 studyQnaboardReply.setStudyqnaboardId(studyQnaBoardId);
 		 studyQnaboardReply.setStudyId(studyId);
 		 studyQnaboardReply.setContent(content);
-		 studyQnaboardReply.setReplyGroup(replyGroup);
+		 studyQnaboardReply.setReplyGroup(studyQnaboardReplyDesc.getReplyGroup()+1);
 		 studyQnaboardReply.setReplyStep(replystep);
 		 studyQnaboardReply.setId(id);
 		
@@ -1000,11 +1036,12 @@ public class StudyPageController {
 			log.info("studyQnaBoardId:" + studyQnaBoardId);
 		
 			log.info("=================");
-			 StudyQnaboard studyQnaboard = studyQnaboardRepository.findById(studyQnaBoardId).get();
-			 log.info("왜안되냐고!!!:"+studyQnaboard.toString());
+			 //StudyQnaboard studyQnaboard = studyQnaboardRepository.findById(studyQnaBoardId).get();
+			List<StudyQnaboardReply> studyQnaboardReply = studyQnaboardReplyRepository.findStudyQnaboardReplyByStudyQnaBoardIdOrderbyGroup(studyQnaBoardId);
+			/* log.info("왜안되냐고!!!:"+studyQnaboard.toString());
 			 log.info(studyQnaboard.getStudyQnaboardReply().toString());
-			
-			return studyQnaboard.getStudyQnaboardReply();
+			*/
+			return studyQnaboardReply;
 			
 			
 		}
@@ -1020,5 +1057,63 @@ public class StudyPageController {
 			return studyQnaboardReplyId;
 		}
 		
+		//파일 공유 게시판 댓글
+		@PostMapping("/fileshareBoardReplyRegister")
+		@ResponseBody
+		public StudyFileshareboardReply fileshareBoardReplyRegister(int studyFileshareBoardId, String studyId, String content, int replyGroup, int replystep) {
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			String id = auth.getName();
+		 log.info(""+studyFileshareBoardId);
+		 StudyFileshareboardReply studyFilelshareboardReplyDesc;
+		 try {
+			  studyFilelshareboardReplyDesc = studyFileshareboardReplyRepository.findStudyFileshareboardReplyByStudyFileshareIdOrderbyGroupDecsLimit1(studyFileshareBoardId);
+			  if(studyFilelshareboardReplyDesc == null) {
+				  studyFilelshareboardReplyDesc = new StudyFileshareboardReply();
+					studyFilelshareboardReplyDesc.setReplyGroup(0);
+			  }
+		 }catch(Exception e){
+			 studyFilelshareboardReplyDesc = new StudyFileshareboardReply();
+			 studyFilelshareboardReplyDesc.setReplyGroup(0);
+		 }
+		 StudyFileshareboardReply studyFilelshareboardReply = new StudyFileshareboardReply();
 		
+		 studyFilelshareboardReply.setStudyfileshareboardId(studyFileshareBoardId);
+		 studyFilelshareboardReply.setStudyId(studyId);
+		 studyFilelshareboardReply.setContent(content);
+		 studyFilelshareboardReply.setReplyGroup(studyFilelshareboardReplyDesc.getReplyGroup()+1);
+		 studyFilelshareboardReply.setReplyStep(replystep);
+		 studyFilelshareboardReply.setId(id);
+		
+			return studyFileshareboardReplyRepository.save(studyFilelshareboardReply);
+
+		}
+		//댓글리스트
+		@GetMapping("/fileshareBoardReplyList")
+		@ResponseBody
+		public List<StudyFileshareboardReply> fileshareBoardReplyList(int studyFileshareBoardId) {
+			
+			log.info("studyFileShareBoardId:" + studyFileshareBoardId);
+		
+			log.info("=================");
+			 //StudyQnaboard studyQnaboard = studyQnaboardRepository.findById(studyQnaBoardId).get();
+			List<StudyFileshareboardReply> studyFilelshareboardReply = studyFileshareboardReplyRepository.findStudyFileshareReplyByStudyFileshareIdOrderbyGroup(studyFileshareBoardId);
+			/* log.info("왜안되냐고!!!:"+studyQnaboard.toString());
+			 log.info(studyQnaboard.getStudyQnaboardReply().toString());
+			*/
+			return studyFilelshareboardReply;
+			
+			
+		}
+		//댓글삭제
+		@PostMapping("/fileshareBoardReplyDelete/{studyFileshareboardReplyId}")
+		@ResponseBody
+		public int fileshareBoardReplyDelete(@PathVariable int studyFileshareboardReplyId) {
+
+			log.info("=======================");
+			log.info("studyQnaboardReplyId:"+studyFileshareboardReplyId);
+			log.info("=======================");
+			studyQnaboardReplyRepository.deleteById(studyFileshareboardReplyId);
+			return studyFileshareboardReplyId;
+		}
 }

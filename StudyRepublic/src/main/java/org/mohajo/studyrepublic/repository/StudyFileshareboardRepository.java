@@ -1,5 +1,7 @@
 package org.mohajo.studyrepublic.repository;
 
+import java.util.List;
+
 import org.mohajo.studyrepublic.domain.QStudyFileshareboard;
 import org.mohajo.studyrepublic.domain.QStudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyFileshareboard;
@@ -22,6 +24,12 @@ public interface StudyFileshareboardRepository extends JpaRepository<StudyFilesh
 
 		return builder; 
 	}
+	
+	@Query(value = "select *\r\n" + 
+			"from study_fileshareboard\r\n" + 
+			"where study_id = :studyId and status = 0\r\n" + 
+			"order by study_fileshareboard_id desc", nativeQuery = true)
+	List<StudyFileshareboard> findFileshareboardListByStudyId(@Param(value="studyId") String studyId);
 
 	@Query(value="select *\r\n" + 
 			"from study_qnaboard left join study_member using (study_id, id)\r\n" + 

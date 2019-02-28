@@ -1,6 +1,9 @@
 package org.mohajo.studyrepublic.repository;
 
+import java.util.List;
+
 import org.mohajo.studyrepublic.domain.QStudyQnaboard;
+import org.mohajo.studyrepublic.domain.StudyFileshareboard;
 import org.mohajo.studyrepublic.domain.StudyNoticeboard;
 import org.mohajo.studyrepublic.domain.StudyQnaboard;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +26,11 @@ public interface StudyQnaboardRepository extends JpaRepository<StudyQnaboard, In
 		
 		return builder; 
 	}
+	@Query(value = "select *\r\n" + 
+			"from study_qnaboard\r\n" + 
+			"where study_id = :studyId and status = 0\r\n" + 
+			"order by study_qnaboard_id desc", nativeQuery = true)
+	List<StudyQnaboard> findQnaboardListByStudyId(@Param(value="studyId") String studyId);
 	
 	@Query(value="select *\r\n" + 
 			"from study_qnaboard left join study_member using (study_id, id)\r\n" + 

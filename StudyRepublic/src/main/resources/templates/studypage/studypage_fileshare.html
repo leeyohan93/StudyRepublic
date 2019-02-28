@@ -4,81 +4,426 @@
 <head>
 <meta charset="UTF-8">
 <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-<!-- default header name is X-CSRF-TOKEN -->
 <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 <title>스터디 파일공유 게시판 입니다.</title>
 </head>
 <body>
 	<div id="right" layout:fragment="right">
-		<table>
-			<tr>
-			   
-				<td>프로필 사진</td>
-				<td>작성자</td>
-				<td>제목</td>
-				<td>작성일시</td>
-			</tr>
-			<div th:with="result=${findAllStudyFileshareboard.list}">
-			<tr th:each="fasf : ${result.content}">
-				<td th:text = "${fasf.studyMember.member.profileSaveName}"></td>
-				<td th:text = "${fasf.studyMember.member.nickname}"></td>
-				<td><a th:href="@{/StudyPage/Noticeboard}" th:text="${fasf.title}"></a></td>
-				<td th:text = "${#dates.format(fasf.date, 'yyyy/MM/dd HH:mm:ss')}"></td>
-			</tr>
+		<th:block layout:fragment="customCss">
+		<style>
+		  	table{
+		  		margin-bottom: 1%;
+		  		background-color: #ffe300b5;
+		  	}
+		  	.contentForm{
+		  		padding-left: 5%;
+		  	}
+		  	.contentDate{
+		  		display: inline-block;
+		  	}
+		  	.contentWriteDate{
+	 	  		display: inline-block;
+			    width: 100%;
+			    text-align: center;
+			    font-size: 75%;
+		  	}
+		  	.content{
+		  	    width: 95%;
+			    margin-top: 5%;
+			    margin-bottom: 3%;
+		  	}
+		  	.contentReplyForm{
+		  	    width: 95%;
+			    border: gray 1px;
+			    border-style: inset;
+			    border-radius: 10px;
+			    padding : 1%;
+			    padding-left : 2%;
+			    padding-right: 2%;
+				background-color: #73737333;
+		  	}
+		  	#contentReply{
+		  		margin-bottom: 2%;
+		  	}
+		  	.contentReplyWriteForm{
+		  		width:100%;
+		  		display: inline-flex;
+		  	}
+		  	.userProfile{
+		  		width: 8%;
+		  		display: inline-block;
+		  		font-size: xx-small;
+		  	}
+		  	.contentReplyWriteDiv{
+		  		width: 70%;
+		  		display: inline-block;
+		  		background-color: white;
+		  	}
+		  	.contentReplyWriteInput{
+		  		width: 100%;
+		  		background-color: white;
+		  	}
+		  	.replyButton{
+		  		width: 18%;
+		  		display: inline-block !important;
+		  		margin-left: 4%;
+		  		color: snow !important;
+		  	}
+		  	.contentModifyAndDelete div{
+		  		display: inline-block;
+		  	}
+		  	#writeButtonSpace{
+		  		text-align: right;
+		  	}
+		  	.btn-dark{
+		  	    background-color: dimgrey;
+		  	}
+		  	#writeButton{
+		  		padding-left: 3%;
+	    		padding-right: 2%;
+	    		color: snow !important;
+		  	}
+		  	.rightLeft{
+				width: 25%;
+		  		text-align: left;
+		  		padding-left: 2%;
+		  	}
+			.rightMiddle{
+		  		width: 60%;
+		  		text-align: left;
+		  	}
+		  	.rightRight{
+		  		width: 15%;
+		  		text-align: center;
+		  	}
+		  	.btn-dark{
+		  		border : 0px;
+		  	}
+			.rightContent{
+			    height: 20%;
+			    width: 100%;
+			    padding-top: 20px;
+			    padding-bottom: 20px;
+			    border: gray 1px;
+			    border-style: inset;
+		 	    border-radius: 10px;
+			    margin-bottom: 1%;
+		  	}
+		  	.rightTitle{
+		  		display: inline-block;
+		  	}
+			#right{
+		  		heigth: 100%;
+		  	}
+		  	input[type="submit"]:hover,
+		  	input[type="reset"]:hover,
+		  	input[type="button"]:hover,
+		  	button:hover,
+		  	.button:hover{
+		  		color : white !important;
+		  		box-shadow: none;
+		  	}
+		  	.dateFont{
+		  		font-weight: bold;
+		  	}
+		  	.profileBoxPhotoIamge,.commentProfile{
+		  		border-radius: 100%;
+			    width: 20%;
+			    display: inline-block;
+		  	}
+		  	.commentProfile{
+		  	    width: 30px;
+		  	}
+		  	.profileName{
+		  		display: inline-block;
+		  		padding-left: 5%
+		  	}
+		  	#boardName{
+		  		padding: 1%;
+		  		font-weight: bolder;
+		  	}
+		  	.pageForm{
+		  	    text-align: center;
+		  	}
+		  	.pagination{
+		  		display: -webkit-inline-box;
+		  	}
+		  	.profileBoxPhotoIamge,.commentProfile{
+		  		border-radius: 100%;
+			    width: 40px;
+			    height: 40px;
+			    display: inline-block;
+		  	}
+		  	.pageForm{
+		  	    text-align: center;
+		  	}
+		  	.pagination{
+		  		display: -webkit-inline-box;
+		  	}
+	  	</style>
+  	</th:block>
+  		<div id="rightContent">
+			<div id="boardName">
+				>>파일 공유 게시판
 			</div>
-		</table>
-			
-			<!-- 페이징   -->
-
-
-			 		<nav>
-						<div class="pageForm">
-							<ul class="pagination">
-								<li class="page-item" th:if="${findAllStudyFileshareboard.prevPage}"><a
-									class="page-link" th:href="${findAllStudyFileshareboard.prevPage.pageNumber}+ 1">
-										〈&nbsp&nbsp이전 </a></li>
-								<li class="page-item" th:each="p:${findAllStudyFileshareboard.pageList}"
-									th:classappend="${p.pageNumber == findAllStudyFileshareboard.currentPageNum -1}?active: '' "><a
-									class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
-										+ 1]]</a></li>
-
-								<li class="page-item" th:if="${findAllStudyFileshareboard.nextPage}"><a
-									class="page-link" th:href="${findAllStudyFileshareboard.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
-								</li>
-							</ul>
+			<div th:with="result=${findAllStudyFileshareboard.list}">
+			<div th:each="fasf : ${result.content}">
+				<div class="rightContent rightAll" >
+			        
+			        <input id="studyFileshareboardId" type="hidden" th:value="${fasf.studyFileshareboardId}"/>
+			        
+					<div><input type="hidden" th:value="${fasf.number}" name="number">
+					</div>
+					<div class="rightLeft rightTitle"
+						><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${fasf.studyMember.member.profileSaveName}}"
+						><div class="profileName" th:text = "${fasf.studyMember.member.nickname}"></div
+					></div
+					><div class="rightMiddle rightTitle"><a th:href="'#write'+${fasf.number}" th:name=|${fasf.studyFileshareboardId}| data-toggle="collapse" class="boardList"
+							th:text="${fasf.title}" th:id="${fasf.number}"></a>
+					</div
+					><div class="rightRight rightTitle contentWriteDate">
+							<div class="" th:text="${#dates.format(fasf.date, 'yyyy/MM/dd')}"></div>
+							<div class="" th:text="${#dates.format(fasf.date, 'HH:mm:ss')}+' 작성'"></div>
+					</div>
+					<div class="collapse contentForm" th:id="'write'+${fasf.number}">
+						<input type="hidden" th:id="${fasf.number}">
+						<div class="content" th:utext="${fasf.content}">
 						</div>
-					</nav> 
-					
-				
-					<form id="f1" th:action="@{Fileshareboard}" method="get">
-						<input type="hidden" name="page" th:value=${findAllStudyFileshareboard.currentPageNum}>
-						<input type="hidden" name="size"
-							th:value=${findAllStudyFileshareboard.currentPage.pageSize}>
-							<input type="hidden" id="pageStudyId" name="studyId"/>
-					</form>
+						댓글 
+						<div class="contentReplyForm"
+							>
+							<div class="contentReply">
+							  <div class="commentList"></div>
+							</div>
+							<div class="contentReplyWriteForm"
+								><div class="userProfile"><img class="profileBoxPhotoIamge" th:src = "@{'/member_image/'+${session.memberimg}}"
+								><br><span th:text = "${session.nickname}+'님'">
+								</span></div
+								><div class="contentReplyWriteDiv"><textarea class="contentReplyWriteInput" th:name=|content${fasf.studyFileshareboardId}| cols="30" rows="3" maxlength="255"></textarea></div
+								><button type="button" class="btn btn-dark replyButton" th:value="${fasf.studyFileshareboardId}">댓글 작성</button
+							></div
+						></div>
+						<div class="contentModifyAndDelete">
+							<form th:id="contentModifyAndDeleteId + ${fasf.number}">
+								<input type="hidden" th:id="number+${fasf.number}"  name="number" th:value="${fasf.number}"/>
+								<input type="hidden" th:id="studyId+${fasf.number}" name="studyId"/>
+								<input type="hidden" th:id="boardName+${fasf.number}" name="boardName"/>
+							</form>
+							<div class="contentModify">
+								<button type="button" class="btn btn-dark modifyButton" th:value="${fasf.number}">수정</button>
+							</div>
+							<div class="contentDelete">
+								<button type="button" class="btn btn-dark deleteButton" th:value="${fasf.number}">삭제</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		 <nav>
+				<div class="pageForm">
+					<ul class="pagination">
+						<li class="page-item" th:if="${findAllStudyFileshareboard.prevPage}"><a
+							class="page-link" th:href="${findAllStudyFileshareboard.prevPage.pageNumber}+ 1">
+								〈&nbsp&nbsp이전 </a></li>
+						<li class="page-item" th:each="p:${findAllStudyFileshareboard.pageList}"
+							th:classappend="${p.pageNumber == findAllStudyFileshareboard.currentPageNum -1}?active: '' "><a
+							class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
+								+ 1]]</a></li>
 
-					<!--페이징 끝  -->
-			
-	
-	
-	<script type="text/javascript">
-	
+						<li class="page-item" th:if="${findAllStudyFileshareboard.nextPage}"><a
+							class="page-link" th:href="${findAllStudyFileshareboard.nextPage.pageNumber}+ 1">다음&nbsp&nbsp〉</a>
+						</li>
+					</ul>
+				</div>
+			</nav> 
+			<form id="f1" th:action="@{Fileshareboard}" method="get">
+				<input type="hidden" name="page" th:value=${findAllStudyFileshareboard.currentPageNum}>
+				<input type="hidden" name="size"
+					th:value=${findAllStudyFileshareboard.currentPage.pageSize}>
+				<input type="hidden" id="pageStudyId" name="studyId"/>
+			</form>
+			<div id="writeButtonSpace">
+				<button type="button" class="btn btn-dark" id="writeButton">글쓰기</button>
+			</div>
+			<div id="pagingButtons">
+				<span></span> <span></span> <span></span> <span></span>
+			</div>
+		
+	<script>
+			var contentCheck;
+			$(document).ready(function() {
+								var token = $("meta[name='_csrf']").attr("content");
+								var header = $("meta[name='_csrf_header']").attr("content");
+								$(function() {
+									$(document).ajaxSend(
+											function(e, xhr, options) {
+												xhr.setRequestHeader(header,token);
+											});
+								});
+								
 
-	
+								$("#writeButton").on("click", function(){
+									//tip! : 버튼에 href 링크 넣기
+									$(location).attr('href',  '/StudyPage/Write?board=Fileshareboard');
+								});
+								$(".deleteButton").on("click", function(){
+									$("#studyId"+this.value).val(window.name);
+									console.log($("#studyId" + this.value)[0].value);
+									$("#boardName" + this.value).val("Fileshareboard");
+									console.log($("#boardName" + this.value)[0].value);
+									$("#contentModifyAndDeleteId" + this.value)[0].action = "/StudyPage/WriterDelete";
+									console.log($("#contentModifyAndDeleteId" + this.value)[0].action);
+									$("#contentModifyAndDeleteId" + this.value)[0].submit();
+								});
+								
+								$(".modifyButton").on("click", function(){
+									$("#studyId"+this.value).val(window.name);
+									console.log($("#studyId"+this.value)[0].value);
+									$("#boardName" + this.value).val("Fileshareboard");
+									console.log($("#boardName"+this.value)[0].value);
+									$("#contentModifyAndDeleteId" + this.value).action = "StudyPage/WriterModify";
+									console.log($("#contentModifyAndDeleteId" + this.value)[0].action);
+									//$("#contentModifyAndDeleteId" + this.value).submit();
+								});
+							});	//readyEnd
+							
 							//페이징
+							
 							var formObj = $("#f1");
 							$(".pagination a").click(function(e) {
-								
+
 								e.preventDefault();
 								$('#pageStudyId').val(window.name); 
 					      
 								formObj.find('[name="page"]').val($(this).attr('href'));
+
 								formObj.submit();
 
 							});
-	
-	</script>
-	
-	</div>
+							
+							//댓글 등록 버튼 클릭
+							var replyGroup = 0;
+							var replystep =0;
+							 $(".replyButton").click(function(){  
+								 
+							var studyId = window.name
+							var studyFileshareBoardId = this.value;
+							var content = $('[name=content'+studyFileshareBoardId+']').val();
+							
+								 console.log("히힛!");
+								 console.log(studyFileshareBoardId);
+								 console.log(studyId);
+								 console.log(content);
+								 
+							 	 $.ajax({
+							         url : '/StudyPage/fileshareBoardReplyRegister',
+							         type : 'post',
+							         data : {'studyFileshareBoardId' : studyFileshareBoardId, 'studyId' : studyId , 'content' : content,  'replyGroup' : replyGroup,  'replystep' : replystep},
+							         success : function(data){
+							        	 console.log("성공");
+						                 $(".contentReplyWriteInput").val('');
+							        	 commentList(studyFileshareBoardId); 
+							             },
+							         
+							         error :function(){
+											console.log("실패");
+										}
+							         
+							     });  
+							     
+							 });
+							 
+							 //댓글 목록 
+							  $(".boardList").on("click", function(){
+								 
+								 var studyFileshareBoardId = this.name;
+								 console.log(studyFileshareBoardId);
+							      $.ajax({
+							         url : '/StudyPage/fileshareBoardReplyList',
+							         type : 'get',
+							         data : {'studyFileshareBoardId':studyFileshareBoardId},
+							         success : function(data){
+							        	 console.log("성공");
+							             var a =''; 
+ 							             console.log(data);
+							             $.each(data, function(key, value){ 
+							            	
+							                 a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+							                  a += '<div class="commentInfo'+value.studyFileshareboardReplyId+'"><img class="commentProfile" src="/member_image/'+value.studyReplyMember.member.profileSaveName+'" > '+value.studyReplyMember.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
+							          				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");  
+							                 a += '<a onclick="commentUpdate('+value.studyFileshareboardReplyId+',\''+value.content+'\');"> 수정 </a>';
+							                 a += '<a onclick="commentDelete('+value.studyFileshareboardReplyId+');"> 삭제 </a> </div>';
+							                 a += '<div class="commentContent'+value.studyFileshareboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
+							                 a += '</div></div>';
+ 							            	 $(".commentList").html(a); 
+ 							             //댓글 목록
+							             });
+							           
+							         },
+							         error : function(data){
+							        	 console.log("에러");
+							         }
+							     }); 
+							 }); 
+							 
+							 //댓글 목록
+							 function commentList(studyFileshareBoardId){
+								 $.ajax({
+							         url : '/StudyPage/fileshareBoardReplyList',
+							         type : 'get',
+							         data : {'studyFileshareBoardId':studyFileshareBoardId},
+							         success : function(data){
+							        	 console.log("성공");
+							             var a =''; 
+							             console.log(data);
+							              $.each(data, function(key, value){ 
+                                              console.log("value.studyFileshareboardId:"+value.studyfilshareboardId);							            	
+							                 a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+							                 a += '<div class="commentInfo'+value.studyFileshareReplyId+'"><img class="commentProfile" src="/member_image/'+value.studyReplyMember.member.profileSaveName+'" > '+value.studyReplyMember.member.nickname+'&nbsp&nbsp&nbsp'+new Date(value.date).toLocaleString().replace(
+							          				/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3"); 
+							                
+							                 a += '<a onclick="commentDelete('+value.studyFileshareboardReplyId+',\''+value.studyfileshareboardId+'\');"> 삭제 </a> </div>';
+							                 a += '<div class="commentContent'+value.studyFileshareboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
+							                 a += '</div></div>';
+ 							             $(".commentList").html(a);
+ 							             //댓글 목록
+							             }); 
+							           
+							         },
+							         error : function(data){
+							        	 console.log("에러");
+							         }
+							     });
+								 
+							 };
+							 
+								//댓글 삭제 
+							 function commentDelete(studyFileshareboardReplyId,studyFileshareboardId){ 
+								 console.log("studyFileshareboardId:"+studyFileshareboardId);
+							     $.ajax({
+							         url : '/StudyPage/fileshareBoardReplyDelete/'+studyFileshareboardReplyId,
+							         type : 'post',
+							         success : function(data){ 
+							        	 console.log(data);
+							        	 console.log("studyFileshareboardId:"+studyFileshareboardId);
+							        	 console.log("=============");
+							        	 console.log("성공");
+							             commentList(studyFileshareboardId); 
+							         },
+							         error : function(data){
+							        	 console.log(data);
+							        	 console.log("에러");
+							         }
+							     });
+							 }
+						
+							
+							 
+							 
+							
+		</script>
+	</div>	
 </body>
 </html>
