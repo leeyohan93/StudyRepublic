@@ -19,6 +19,13 @@
 
 
 <style>
+.messageDropdown{
+    border-radius: 8px;
+}
+.messageImg{
+    width: 30px;
+    padding-right: 10px;
+}
 .tab-link {
 	display: inline-block;
     cursor: pointer;
@@ -164,12 +171,12 @@ height: 90px !important;
 
 									<a class="dropdown-item" data-toggle="modal"
 										data-target="#messagewrite"
-										th:data-receive-id="${fbr.member.id}">쪽지쓰기</a>
+										th:data-receive-id="${fbr.member.id}"><img class="messageImg" src="/board/img/baseline_unsubscribe_black_18dp.png">쪽지쓰기</a>
 										 <a
 										class="dropdown-item" data-toggle="modal"
 										data-target="#memberinfo"
-										th:data-member-info="${fbr.member.id}">유저정보</a>
-									 <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${fbr.member.id}" >신고하기</a>
+										th:data-member-info="${fbr.member.id}"><img class="messageImg" src="/board/img/baseline_account_box_black_18dp.png">유저정보</a>
+									 <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${fbr.member.id}" ><img class="messageImg" src="/board/img/baseline_message_black_18dp.png">신고하기</a>
 								</div>
 							</div>
 						</td>
@@ -371,11 +378,11 @@ height: 90px !important;
 								<div class="dropdown-menu">
 									<a class="dropdown-item" data-toggle="modal"
 										data-target="#messagewrite"
-										th:data-receive-id="${ibr.member.id}">쪽지쓰기</a> <a
+										th:data-receive-id="${ibr.member.id}"><img class="messageImg" src="/board/img/baseline_unsubscribe_black_18dp.png">쪽지쓰기</a> <a
 										class="dropdown-item" data-toggle="modal"
 										data-target="#memberinfo"
-										th:data-member-info="${ibr.member.id}">유저정보</a>
-										 <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${ibr.member.id}" >신고하기</a>
+										th:data-member-info="${ibr.member.id}"><img class="messageImg" src="/board/img/baseline_account_box_black_18dp.png">유저정보</a>
+										 <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${ibr.member.id}" ><img class="messageImg" src="/board/img/baseline_message_black_18dp.png">신고하기</a>
 								</div>
 							</div>
 						</td>
@@ -580,11 +587,11 @@ height: 90px !important;
 								<div class="dropdown-menu">
 									<a class="dropdown-item" data-toggle="modal"
 										data-target="#messagewrite"
-										th:data-receive-id="${rbr.member.id}">쪽지쓰기</a> <a
+										th:data-receive-id="${rbr.member.id}"><img class="messageImg" src="/board/img/baseline_unsubscribe_black_18dp.png">쪽지쓰기</a> <a
 										class="dropdown-item" data-toggle="modal"
 										data-target="#memberinfo"
-										th:data-member-info="${rbr.member.id}">유저정보</a>
-										<a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${rbr.member.id}" >신고하기</a>
+										th:data-member-info="${rbr.member.id}"><img class="messageImg" src="/board/img/baseline_account_box_black_18dp.png">유저정보</a>
+										<a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${rbr.member.id}" ><img class="messageImg" src="/board/img/baseline_message_black_18dp.png">신고하기</a>
 								</div>
 							</div>
 						</td>

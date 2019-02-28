@@ -33,7 +33,7 @@ public class PageDTO {
    private int page;
 //   private int DEFAULT_SIZE = 15;
 //   private int size = DEFAULT_SIZE;
-   private int size = 12;
+   private int size = 15;
    private String keyword;
    private String searchType;
    private String searchPeriod;

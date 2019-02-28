@@ -503,6 +503,7 @@ span.listReplyCount {
 			var memberId = [[${memberId}]]
 			console.log(memberId);
 			console.log(listBoardIdlength);
+			
 			for(var i = 0; i< listBoardIdlength; i++){
 				 console.log($('.listBoardId').eq(i).attr("name"));
  				 if($('.listBoardId').eq(i).attr("name")==memberId || memberId =="admin123"){
@@ -513,7 +514,8 @@ span.listReplyCount {
  					
  					formObj.submit();
  					 
- 				 }else{
+ 				 }
+ 				 else{
  					Swal.fire("비공개 게시글 입니다.","");
  				 }
 				
