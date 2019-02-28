@@ -136,7 +136,7 @@ height: 90px !important;
                         <label>내용</label>
                         <a class="btn btn-info" style="margin-left: 46%;" th:href="@{'/message/remessageWrite'(sendId=${viewReceiveMessage.sendId})}">답장</a>
 						<a class="btn btn-info" data-toggle="modal" data-target="#reportModal">신고</a>
-						<a class="btn btn-info" th:href="@{'/message/receivemessageDelete'(messageReceiveId=${viewReceiveMessage.messageReceiveId})}">삭제</a>
+						<a class="btn btn-info" id="deletebtn" th:href="@{'/message/receivemessageDelete'(messageReceiveId=${viewReceiveMessage.messageReceiveId})}">삭제</a>
                         <div  class="border" th:text="${viewReceiveMessage.messageContent}" style="width: 600px; height: 200px;"></div><br>
 
                       
@@ -215,7 +215,7 @@ height: 90px !important;
 
 
     </div>
-	</div>
+	
 
 
 
@@ -280,10 +280,15 @@ $('#reportRegister').click(function(){
 		});  
 };  
 
+$('#deletebtn').click(function(){
+	
+	alert("삭제가 완료되었습니다.");
+});
+
 		
 		</script>
 	
-	
+	</div>
 	</div>
 	
 

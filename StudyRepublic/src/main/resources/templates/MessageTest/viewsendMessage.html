@@ -51,7 +51,7 @@
                      
                       
                         <label>내용</label>
-						<a class="btn btn-info" th:href="@{'/message/messageDelete'(messageSendId=${viewsend.messageSendId})}"  style="margin-left: 61%;">삭제</a>
+						<a class="btn btn-info" id="deletebtn" th:href="@{'/message/messageDelete'(messageSendId=${viewsend.messageSendId})}"  style="margin-left: 61%;">삭제</a>
                         <div  class="border" th:text="${viewsend.messageContent}" style="width: 600px; height: 200px;"></div><br>
                       
 						
@@ -67,6 +67,18 @@
 
 
 	</div>
+<script type="text/javascript">
+
+
+$('#deletebtn').click(function(){
+	
+	alert("삭제가 완료되었습니다.");
+});
+
+
+</script>	
+	
+	
 </div>
 </div>
 
