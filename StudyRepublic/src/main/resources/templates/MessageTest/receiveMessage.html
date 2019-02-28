@@ -8,6 +8,9 @@
 <title>받은쪽지함</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}" />
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
@@ -26,6 +29,78 @@
     border-radius: 4px;
     padding-left: 10px;
     margin-left: 70%;
+}
+
+.reportOption{
+ text-align: center;
+ width: 40%;
+ float: left;
+ font-weight: bold;
+}
+#reportBody{
+ border: 1px solid #ccc;
+ padding: 5px;
+}
+.reportContent{
+text-align: center;
+ width: 59.5%;
+ float: right;
+}
+#reportClose{
+    padding: 9px;
+    height: 40px;
+    margin: 0px;
+        width: 36px;
+}
+#reprotContentOption{
+    height: 93px;
+}
+#reportHeader{
+padding: 1.5rem 40px 1rem;
+font-weight: bold;
+}
+#reportForm{
+margin: 0px;
+}
+#reportForm input{
+ border: 0.5px solid;
+ border-radius: 3px;
+ margin: 0.6px;
+}
+#reportForm select{
+    border: 1px solid;
+    border-radius: 3px;
+    height: 50px;
+        padding-left: 40px;
+}
+#reportForm textarea{
+height: 90px !important;
+    border: 1px solid;
+    padding: 10px;
+    margin-top: 2px;
+    border-radius: 3px;
+    text-align: left;
+}
+#reportCancel,#reportRegister{
+ background-color: white;
+   color: rgb(66, 161, 226) !important;
+   text-align: center;
+   display: inline-block;
+   margin: 0px;
+   cursor: pointer;
+   padding: 9px 2px 2px 2px;
+   width: 100px;
+   height: 50px;
+   border: 1px solid ;
+   border-radius: 3px;
+   margin: 5px;
+   font-size: 19px;
+
+}
+.commentModifyBtn{
+    height: 62px;
+    border: 1px solid #ccc;
+    margin-left: 10px;
 }
 
 
@@ -47,9 +122,9 @@
 				<ul class="nav nav-pills flex-column">
 				
 					<li class="nav-item">
-						<a class="nav-link" href="messageWrite">쪽지쓰기</a>
-						<a class="nav-link" href="receiveMessage">받은쪽지함</a>
-						<a class="nav-link" href="sendMessage">보낸쪽지함</a>
+						<a class="nav-link" href="/message/messageWrite">쪽지쓰기</a>
+						<a class="nav-link" href="/message/receiveMessage">받은쪽지함</a>
+						<a class="nav-link" href="/message/sendMessage">보낸쪽지함</a>
 						
 					</li>   	
 				</ul>
@@ -60,7 +135,7 @@
 <h2>받은쪽지함</h2>
 
 <!-- <div th:with="result = ${list.list}"> -->
-<form name="checkdelete" id="checkdelete" action = "/receiveCheckdelete">
+<form name="checkdelete" id="checkdelete" action = "/message/receiveCheckdelete">
 <div class = "messageBar" style="margin-bottom: 1%;">
 <input type="submit" value="삭제"  style="background-color:rgb(179,220,248);"/>
 <select class="messageSelect">
@@ -92,9 +167,10 @@
 		    <div class="dropdown-menu">
 		      <a class="dropdown-item" data-toggle="modal" data-target="#messagewrite" th:data-receive-id="${receive.sendId}" >쪽지쓰기</a>
 		      <a class="dropdown-item" data-toggle="modal" data-target="#memberinfo" th:data-member-info="${receive.sendId}" >유저정보</a>
+	 		  <a class="dropdown-item" data-toggle="modal" data-target="#reportModal" th:data-member-info="${receive.sendId}" >신고하기</a>
 	    	</div>
 	 </div></td>
-		<td><a th:href="@{'/viewReceivemessage/'(messageReceiveId=${receive.messageReceiveId})}" th:text="${receive.messageContent}" ></a></td>
+		<td><a th:href="@{'/message/viewReceivemessage/'(messageReceiveId=${receive.messageReceiveId})}" th:text="${receive.messageContent}" ></a></td>
 		<td th:text="${receive.messageDate}"/>
 	<!-- 	<td th:text="${receive.messageDelete}"/> -->
 	</tr>	
@@ -104,7 +180,7 @@
 		
 
 	
-	<!-- 모달창 쪽지쓰기창 시작 -->   
+		<!-- 모달창 쪽지쓰기창 시작 -->   
 	 <div class="modal" id="messagewrite">
 		      	<div class="modal-dialog">
 		      		<div class="modal-content">
@@ -116,8 +192,9 @@
 				        
 				        
 				        <div class="modal-body">
-				          <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
-				        <div class="card border-primary rounded-0">
+				          
+                    <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
+                        <div class="card border-primary rounded-0">
                             <div class="card-header p-0">
                                 <div class="bg-info text-white text-center py-2" style="width: 100%;">
                                     <h3><i class="fa fa-envelope"></i> </h3>
@@ -155,6 +232,11 @@
                         </div>
                     </form>
 				        </div>
+
+         						
+                                        
+                                 
+
 				        <div class="modal-footer">
 				          <button type="button" class="btn btn-danger" data-dismiss="modal"> Close</button>
 				        </div>
@@ -176,7 +258,7 @@
 				      </div>
 				
 				      <!-- Modal body -->
-				      <div class="modal-body2" id="modal_memberInfolist" style="text-align:center;">
+				      <div class="modal-body2" id="modal_memberInfolist" style="text-align: center;">
 				      
 				      </div>
 				
@@ -190,6 +272,73 @@
 				</div>
 				
 				  <!-- 모달창 유저정보 끝 -->
+				  
+				   <!-- 신고 modal  -->
+
+         <div class="modal fade" id="reportModal" tabindex="-1">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                    <div>
+                     <h3 id= "reportHeader">신고하기</h3>
+                     </div>
+                     
+                     <button class="close" id="reportClose" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body" id="reportBody" style="text-align: center;">
+                     <form id="reportForm">
+                       <input type="hidden" name = "reportTypeCD" value="message">
+                  
+                        <input type="hidden" name = "id" id="reportUser" value="">
+                         <input type="hidden" name ="target" id="reportTarget" value="">
+                     <div>
+                        <input class="reportOption" type="text" value="신고자" readonly>
+                        <input class="reportContent" id ="reportUserNickname"name="idNickname" type="text"
+                           value="" readonly>
+                           </div>
+                           <div>
+                            <input
+                           class="reportOption" type="text" value="신고일" readonly>
+                  <input class="reportContent" name="date" type="text" id="reportDate"
+                           value=""
+                           readonly> 
+                           </div>
+                           <div>
+                           <input class="reportOption"
+                           type="text" value="신고대상자" readonly> <input
+                           class="reportContent" name="targetNickname" id="reportTargetNickname" type="text"
+                           value="" readonly> 
+                           </div>
+                           <div>
+                            <input
+                           class="reportOption" type="text" value="신고유형" readonly>
+                        <select class="reportContent" id="reportWhyCD" name="reportWhyCD">
+                           <option value="1">영리목적 및 홍보성</option>
+                           <option value="2">불법정보</option>
+                           <option value="3">음란성 및 선정성</option>
+                           <option value="4">욕설 및 인신공격</option>
+                           <option value="5">개인정보노출</option>
+                           <option value="6">반복게시 및 도배</option>
+                           <option value="7">기타</option>
+                        </select> 
+                                 </div>
+                                 <div>
+                            <input class="reportOption" type="text" value="신고내용" id="reprotContentOption" readonly> <textarea class="reportContent" id="reportContent" name="content" placeholder="신고내용을 작성해주세요."
+                           ></textarea>
+                           </div>
+                  </div>
+                  <div class="modal-footer" id="reportFooter">
+                     <a class="btn" id="reportCancel" data-dismiss="modal">취소</a>
+                     <a class="btn" id="reportRegister" data-toggle="model" data-target="#reportConfirm">신고하기</a>
+                     </form>
+                  </div>
+
+               </div>
+            </div>
+
+         </div>
+
+      <!-- 신고 모달 끝 -->
          						
 
          						
@@ -205,12 +354,12 @@
 	</nav>
 
 
-			<form id="pageForm" th:action="@{receiveMessage}" method="get">
+			<form id="pageForm" th:action="@{/message/receiveMessage}" method="get">
 					<input type="hidden" name="page" th:value="${receiveList.currentPageNum}">
 					<input type="hidden" name="size" th:value="${receiveList.currentPage.pageSize}">
 			</form>
 			
-			<form id="listForm" th:action="@{receiveMessageSelect}" method="get">						
+			<form id="listForm" th:action="@{/message/receiveMessageSelect}" method="get">						
 					<input type="hidden" name="listCount" id="listCount">
 			</form>
 						   
@@ -227,9 +376,25 @@
 </div>
 
 </div>
+<input type = "text" id ="userid" style = "display:none" th:value = "${session.userid}">
+<input type = "text" id ="userNickname" style = "display:none" th:value = "${session.nickname}">
+
 <script type="text/javascript">
 
+// alert($('#userid').val());
+var loginUser = $('#userid').val();
+var loginNickname = $('#userNickname').val();
+ var loginToday  = new Date().toLocaleString();	
+ //ajax사용하기위한 전역변수
+ var token = $("meta[name='_csrf']").attr("content");
+ var header = $("meta[name='_csrf_header']").attr("content");
+			
 		$(document).ready(function(){
+			
+			//ajax사용
+			 $(document).ajaxSend(function(e, xhr, options) {
+		         xhr.setRequestHeader(header, token);
+		     });
 			
 			
 			 /*페이징*/
@@ -272,8 +437,9 @@
 		        type: 'GET', 
 		        data: {id : memberInfo},
 		        datatype: 'JSON',
-		        success:function(success){
-		        	var mydata = success.memberInfo[0];
+		        success:function(data){
+		        	console.log(data);
+		        	var mydata = data
 		        	var a = '';
 		        	/* alert(mydata); */
 		        	$("#img_profile").attr('src','/member_image/'+mydata.profileSaveName);
@@ -302,8 +468,68 @@
 			
 		 	alert("쪽지 전송이 완료되었습니다.")
 		});
-
-
+		
+		$('#reportModal').on('show.bs.modal', function(e) {
+            console.log("신고");
+            
+            var memberInfo = $(e.relatedTarget).data('member-info');
+             $(e.currentTarget).find('input[name="memberInfo"]').val(memberInfo);
+             console.log("memberInfo: " +memberInfo);
+             $.ajax({
+                   url: './modalmember',
+                    type: 'get', 
+                    data: {id : memberInfo},
+                    success:function(data){
+                       
+                       $('#reportTarget').val(data.id);
+                       $('#reportUser').val(loginUser);
+                       $('#reportTargetNickname').val(data.nickname);
+                       $('#reportUserNickname').val(loginNickname);
+                       $('#reportDate').val(loginToday);
+                       
+                    },
+                    
+                    error : function(data){
+                       console.log("실패");
+                    }
+                    });
+         });
+         
+       //신고하기
+          $('#reportRegister').click(function(){
+         var reportData = $("#reportForm").serialize(); 
+            console.log("reportData:" + reportData);
+            
+            if($('#reportTarget').val()== loginUser){
+               Swal.fire("나를 신고 할수 없습니다.","");
+            }else if($('#reportWhyCD').val()== ""){
+               Swal.fire("신고유형을 선택해주세요.","");
+            }else if($('#reportContent').val()== "" || $('#reportContent').val() == null || $('#reportContent').val() == '&nbsp;'){
+               Swal.fire("신고내용을 입력해주세요.","");
+            }
+            else {
+               reportInsert(reportData);
+            }
+        }); 
+   
+         function reportInsert(reportData){
+            console.log(reportData);
+            
+            $.ajax({
+                url : '/board/report',
+                type :'post',
+                data : reportData,
+                success : function(){
+                   console.log("성공");
+                   Swal.fire("신고 처리 되었습니다.","");
+                   $("#reportModal .close").click()
+                },
+                   
+                error :function(){
+                   console.log("실패");
+                }
+             });
+         }; 
 		
 </script>
 				

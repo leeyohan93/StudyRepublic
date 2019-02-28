@@ -14,6 +14,9 @@ import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberInterest;
 import org.mohajo.studyrepublic.domain.MemberPoint;
 import org.mohajo.studyrepublic.domain.MemberRoles;
+import org.mohajo.studyrepublic.domain.Report;
+import org.mohajo.studyrepublic.domain.ReportTypeCD;
+import org.mohajo.studyrepublic.domain.ReportWhyCD;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.repository.Interest1CDRepository;
 import org.mohajo.studyrepublic.repository.Interest2CDRepository;
@@ -21,12 +24,15 @@ import org.mohajo.studyrepublic.repository.InterestLocationRepository;
 import org.mohajo.studyrepublic.repository.MemberInterestRepository;
 import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.ReportRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,6 +65,8 @@ public class MypageController {
 	private Interest2CDRepository i2cdr;
 	@Autowired
 	MemberPointRepository  memberpointrepository;
+	@Autowired
+	ReportRepository reportRepository;
 	
 	private Member member;
 	
@@ -92,7 +100,7 @@ public class MypageController {
 	      List<Interest2CD> Ninterest2cd = i2cdr.Ninterest2List();
 	      List<MemberInterest> mymemberinterest = mir.findMemberInterest(id);
 	      
-	      System.out.println("나의 관심분야: " + mymemberinterest);
+	    //  System.out.println("나의 관심분야: " + mymemberinterest);
 	      
 
 	      model.addAttribute("interest1cd", interest1cd);
@@ -115,7 +123,7 @@ public class MypageController {
 		
     	         
         session.setAttribute("memberpoint", memberpoint.getPoint());
-        System.out.println("보유포인트갱신: " + memberpoint.getPoint());
+       // System.out.println("보유포인트갱신: " + memberpoint.getPoint());
 		
 		return "mypage/mypage_main";
 		/*회원 스터디정보 가져오기*/
@@ -133,14 +141,14 @@ public class MypageController {
 		Member modifyuser = mbr.findById(id).get();
 		model.addAttribute("mdu",modifyuser);
 		
-		System.out.println(modifyuser);
+	//	System.out.println(modifyuser);
 		return "mypage/member_modify";
 		
 		
 	}
 		
 
-	@RequestMapping("/activityinfo")
+	@RequestMapping("/activity/activityinfo")
 	public String allboard(Model model) {
 		Authentication auth =SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
@@ -178,7 +186,7 @@ public class MypageController {
 	   }
 	
 		
-	@RequestMapping("/modalmember")
+	/*@RequestMapping("/modalmember")
 	@ResponseBody
 	public Map<String, Object> modalmeber(Model model, @RequestParam String id){
 		List<Member> member = mbr.findMemberbyId(id);
@@ -190,7 +198,17 @@ public class MypageController {
 		
 
 		return map;
-	}
+	}*/
+	   
+	 //유저정보 
+	   @GetMapping("/**/modalmember")
+	   @ResponseBody
+	   public Member modalmeber(Model model, @RequestParam String id){
+	      
+	      Member member = mbr.findById(id).get();
+	    
+	      return member;
+	   }
 
 	@RequestMapping("/member/modify/interest") 
 	public String modifyInterest(Model model, @RequestParam String[] minterest) {
@@ -244,7 +262,7 @@ public class MypageController {
 		System.out.println("interest" + i + " : " + mlocation[i]);
 		
 		InterestLocation interestlocation = new InterestLocation();
-		interestlocation.setMember(member);
+		interestlocation.setId(id);
 		interestlocation.setInterestLocation(mlocation[i]);
 		iir.save(interestlocation);
 
@@ -252,6 +270,29 @@ public class MypageController {
 		
 		return "redirect:/mypage";
 	}
+	
+	   //신고하기
+	   @PostMapping("/report")
+	   @ResponseBody
+	   public int boardReport(Model model, String id,String target,String reportTypeCD,int reportWhyCD,String content) {
+	   
+	  
+	     
+	     
+	     Report report = new Report();
+	     report.setId(id);
+	     report.setTarget(target);
+
+	     report.setReportTypeCD(new ReportTypeCD(reportTypeCD));
+	     report.setReportWhyCD(new ReportWhyCD(reportWhyCD));
+	     report.setContent(content);
+	     
+	     reportRepository.save(report);
+	     
+	         
+	      return 1;
+	      
+	   }
 
 	
 		

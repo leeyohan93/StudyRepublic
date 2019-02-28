@@ -27,7 +27,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 
 
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기 */
-	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where s1.study_status_code='O'",nativeQuery=true)
+	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where s1.study_status_code='G'",nativeQuery=true)
 	List<StudyMember> findActivityById(String id);
 	
 	@Query(value="select * from study_member a1, study_view s1 where a1.study_id = s1.study_id and a1.id=:id",nativeQuery=true)
@@ -48,10 +48,10 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.id = :id and sv.type_code='P' order by start_date DESC",nativeQuery=true)
 	List<StudyMember> findPremiumStudylist(String id);
 	/*스터디 정보 가져오는데 일반스터디 이고 진행중인 스터디 상위 1개 가져오기(가져오는갯수 수정가능) 마이페이지 메인에서 사용 */
-	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'B' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 1",nativeQuery=true)
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'B' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 3",nativeQuery=true)
 	List<StudyMember> findstudyall(String id);
 	/*스터디 정보 가져오는데 프리미엄 이고 진행중인 스터디 상위 1개 가져오기(가져오는갯수 수정가능) 마이페이지 메인에서 사용 */
-	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'P' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 1",nativeQuery=true)
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'P' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 3",nativeQuery=true)
 	List<StudyMember> findstudyall2(String id);
 	/*위에꺼에 맴버상태넣지않은것*/
 	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.id = :id",nativeQuery=true)

@@ -9,46 +9,13 @@
 <title>마이페이지</title>
 <meta name="viewport"
    content="width=device-width, initial-scale=1, user-scalable=no" />
-<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+   <link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" th:href="@{/assets/css/main.css}">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/datepicker/css/datepicker.css}"
    type="text/css">
-<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> -->
-<link rel="icon" type="image/png"
- href="/Login_v18/images/icons/favicon.ico" />
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-   href="/Login_v18/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-   href="/Login_v18/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-   href="/Login_v18/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-   href="/Login_v18/vendor/animate/animate.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-   href="/Login_v18/vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-   href="/Login_v18/vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-   href="/Login_v18/vendor/select2/select2.min.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css"
-   href="/Login_v18/vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="/Login_v18/css/util.css">
-<link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
-
+   
 
 
 <style type="text/css">
@@ -120,7 +87,7 @@
         border-radius: 100%;
         width: 50%;
          height: 120px;
-       margin-left: 21%;
+       margin-left:3%;
           margin-top: 13%;
    
    }
@@ -218,7 +185,7 @@
                     쪽지페이지         
                </li>
                <li class="nav-item">   
-                  <a  class="nav-link" href="receiveMessage">쪽지함</a> 
+                  <a  class="nav-link" href="/message/receiveMessage">쪽지함</a> 
                      </li> 
             </ul>   
               <ul class="nav nav-pills flex-column">       
@@ -226,7 +193,7 @@
                     활동정보페이지              
                </li> 
                <li class="nav-item">  
-                       <a  class="nav-link" href="activityinfo">활동정보</a>
+                       <a  class="nav-link" href="/activity/activityinfo">활동정보</a>
                </li> 
             </ul>   
             
@@ -304,6 +271,7 @@
                     <h4 style="font-weight: 900;">일반스터디</h4><br>
                           <div th:each="smr : ${smr}">
                            <h5 th:text="${smr.study.name}" style="font-weight: 900;"></h5>
+                           <span th:text="|${smr.study.startDate}~${smr.study.endDate}|"></span>
                         </div>
                     
                   </div>  
@@ -311,6 +279,7 @@
                      <h4 style="font-weight: 900;">프리미엄스터디</h4><br>
                         <div th:each="smr2 : ${smr2}" >
                            <h5  th:text="${smr2.study.name}" style="font-weight: 900;" ></h5>
+                            <span th:text="|${smr2.study.startDate}~${smr2.study.endDate}|"></span>
                         </div>
                   </div>
                      
