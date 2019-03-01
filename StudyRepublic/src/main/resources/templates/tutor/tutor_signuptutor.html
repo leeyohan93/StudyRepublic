@@ -99,7 +99,7 @@
 								<img id="img_profile"
 									th:src="@{'/member_image/'+${md.profileSaveName}}"
 									style="width: 200px; height: 240px; border-radius:100%;"  /> <br> <label
-									style="width: 120px; margin: 0 0 10px 40px;"> 프로필사진등록하기
+									style="width: 140px; margin: 0 0 10px 26px;"> 프로필사진등록하기
 									<input name="sourceFile" id="sourceFile" type="file">
 								</label>
 
@@ -288,11 +288,8 @@
 							</div>
 						</div>
 
-						<div class="join-input100"
-							style="width: 100%; height: 500px; align-items: baseline">
-							<textarea class="input100" name="introduction" form="tutorjoin"
-								autofocus required wrap="hard" placeholder="리더페이지에 소개될 내용입니다."
-								style="padding: 20px; width: 830px; height: 500px"></textarea>
+						<div id = "introduction" class="join-input100" style="width: 100%; align-items: baseline; height:500px">
+							<textarea id = "introductionContent" class="input100" name="introduction" form="tutorjoin" autofocus required wrap="hard" placeholder="리더페이지에 소개될 내용입니다." style="padding: 20px; width:830px" onkeyup = "heightAuto()"></textarea>
 						</div>
 
 
@@ -376,6 +373,7 @@
 			<script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
 			<!--===============================================================================================-->
 			<script src="/Login_v18/js/main.js"></script>
+			
 
 			<script
 				src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -608,7 +606,7 @@
 								// ajax
 								$.ajax({
 
-									url : '/attachments',
+									url : '/mypage/attachments',
 
 									type : 'POST',
 									data : fileData,
@@ -624,6 +622,11 @@
 								alert("파일이 첨부되지 않았습니다.");
 							}
 						});
+				
+
+
+				
+				
 			</script>
 
 
