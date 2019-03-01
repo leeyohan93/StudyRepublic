@@ -52,7 +52,9 @@
      		opacity: 0; 
      		position: absolute; 
      		z-index: -9999; 
-     		zoom: 0%;
+/*      		zoom: 0.1%; */
+			height: 1px !important;
+			top: -2000000px;
     	}
     	
     	h1, h2, h3, h4, h5, h6 {
@@ -463,6 +465,7 @@
         #leveltestArea input.question-edit {
             width: 84%;
             font-size: 0.95rem;
+	        font-weight: lighter !important;
         }
 
         #leveltestArea input.question-choice-group {
@@ -1740,11 +1743,11 @@
 	
 	                if ($(this).hasClass("multiple-choice-leveltest-maker")) {
 	                    $newQuestion = $("<div class='leveltest'><div class='question'><input type='hidden' name='leveltestTypeCode.leveltestTypeCode' value='MC'><input class='numbering question-numbering' name='questionNumber' readonly value='" +
-	                        nextNumber + "'>&nbsp;<span class='question-content'>+ 를 클릭해서 객관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-choice' style='display:none'><input type='hidden' name='choice' value=''><div class='question-choice-group'><span class='numbering choice-numbering'>1</span>&nbsp;<input class='question-choice-option' type='text' placeholder='보기를 수정하세요'/></div><div class='question-choice-group'><span class='numbering choice-numbering'>2</span>&nbsp;<input class='question-choice-option' type='text'  placeholder='보기를 수정하세요'/></div><div class='question-choice-placeholder'>보기를 추가하려면 클릭하세요!</div></div><div class='question-answer' style='display:none'>정답: <select name='correctAnswer'><option>1</option><option>2</option></select></div></div>");
+	                        nextNumber + "'>&nbsp;<span class='question-content'>더보기를 클릭해서 객관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-choice' style='display:none'><input type='hidden' name='choice' value=''><div class='question-choice-group'><span class='numbering choice-numbering'>1</span>&nbsp;<input class='question-choice-option' type='text' placeholder='보기를 수정하세요'/></div><div class='question-choice-group'><span class='numbering choice-numbering'>2</span>&nbsp;<input class='question-choice-option' type='text'  placeholder='보기를 수정하세요'/></div><div class='question-choice-placeholder'>보기를 추가하려면 클릭하세요!</div></div><div class='question-answer' style='display:none'>정답: <select name='correctAnswer'><option>1</option><option>2</option></select></div></div>");
 	
 	                } else {
 	                    $newQuestion = $("<div class='leveltest'><div class='question'><input type='hidden' name='leveltestTypeCode.leveltestTypeCode' value='SA'><input class='numbering question-numbering' name='questionNumber' readonly value='" +
-	                        nextNumber + "'>&nbsp;<span class='question-content'>+ 를 클릭해서 주관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-answer' style='display:none'>정답: <input name='correctAnswer' class='question-answer-input' type='text' placeholder='답안을 작성하세요'></div></div>");
+	                        nextNumber + "'>&nbsp;<span class='question-content'>더보기를 클릭해서 주관식 문제를 수정하세요!</span><input class='question-edit' name='content' type='text' style='display:none'><span class='icon icon-plus leveltest-toggle'></span></div><div class='question-answer' style='display:none'>정답: <input name='correctAnswer' class='question-answer-input' type='text' placeholder='답안을 작성하세요'></div></div>");
 	
 	                }
 	                $('.leveltest-container').append($newQuestion);

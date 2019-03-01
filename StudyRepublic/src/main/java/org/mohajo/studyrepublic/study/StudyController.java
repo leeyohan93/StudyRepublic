@@ -275,20 +275,21 @@ public class StudyController {
 		List<StudyMember> studyActivity = null;
 		
 		switch(studyTypeCode) {
+			case "P":
+				if(study.getMember().getGradeCD().getGradeCode().equals("T")) {
+					tutorInfo = tr.findByTutor(leaderId);
+					log.info(tutorInfo.toString());
+					studyActivity = smr.findTutorActivityById(leaderId);
+					model.addAttribute("tutorInfo", tutorInfo);
+					break;
+				}
+				
 			case "B":
 				leaderInfo = mr.findById(leaderId).get();
 				log.info(leaderInfo.toString());
 				studyActivity = smr.findStudyActivityById(leaderId);
 				
 				model.addAttribute("leaderInfo", leaderInfo);
-				break;
-				
-			case "P":
-				tutorInfo = tr.findByTutor(leaderId);
-				log.info(tutorInfo.toString());
-				studyActivity = smr.findTutorActivityById(leaderId);
-				
-				model.addAttribute("tutorInfo", tutorInfo);
 				break;
 		}
 		
