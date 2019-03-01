@@ -28,8 +28,8 @@
 	border: 1px solid #ccc;
 }
 #goBeforeFreePage, #goAfterFreePage, #likeCountBtn, #viewRepotBtn {
-	background-color: white;
-	color: rgb(66, 161, 226);
+	background-color: rgb(19,134,211) !important;
+	color: white;
 	border: 1px solid;
 	text-align: center;
 	display: inline-block;
@@ -98,8 +98,8 @@
 }
 #viewModify,#viewStatus,#boardList,#writeBtn{
 	
-	background-color: white;
-	color: rgb(66, 161, 226);
+	background-color: rgb(19,134,211) !important;
+	color: white;
 	border: 1px solid;
 	text-align: center;
 	display: inline-block;
@@ -659,13 +659,13 @@ height: 90px !important;
                  commentList(); 
                  $("#registerContent").val('');
                  
-                  console.log("socket: "+ socket)
+              /*     console.log("socket: "+ socket)
       			if (socket) {
       				// websocket에 보내기(study,댓글작성자,게시글작성자,글번호)
       				var socketMsg = "study," + commentWriterNickName + "," + freeBoardWriter  + "," + freeBoardId + "," +memberId
       				console.log("socketMsg:" +  socketMsg)
       				socket.send(socketMsg);
-      			} 
+      			}  */
              
          }
      });

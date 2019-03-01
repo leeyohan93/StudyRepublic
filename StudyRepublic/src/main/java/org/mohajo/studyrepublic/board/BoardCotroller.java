@@ -103,7 +103,7 @@ public class BoardCotroller {
 	@GetMapping("/listFreeBoard")
 	public void listFreeBoard(@ModelAttribute("pageDTO") PageDTO pageDTO, Model model) {
        	       
-		
+		pageDTO.setSize(12);
 		log.info(pageDTO.toString());
 		Pageable page = pageDTO.makePageable(0, "freeBoardId");
 		Pageable noticePage = pageDTO.noticeMakePageable("notice", "freeBoardId");
@@ -119,6 +119,7 @@ public class BoardCotroller {
 	@GetMapping("/listRequestBoard")
 	public void listRequestBoard(@ModelAttribute("pageDTO") PageDTO pageDTO, Model model) {
 
+		pageDTO.setSize(12);
 		Pageable page = pageDTO.makePageable(0, "requestBoardId");
 		Pageable noticePage = pageDTO.noticeMakePageable("notice", "requestBoardId");
 		Page<RequestBoard> list = requestBoardRepository.findAll(requestBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),noticePage);
@@ -131,7 +132,7 @@ public class BoardCotroller {
 	//뮨의게시판 글목록 페이징
 	@GetMapping("/listInquireBoard")
 	public void listInquireBoard(@ModelAttribute("pageDTO") PageDTO pageDTO, Model model) {
-
+		pageDTO.setSize(12);
 		Pageable page = pageDTO.makePageable(0, "commentGroup");
 		Page<InquireBoard> list = inquireBoardRepository.findAll(inquireBoardRepository.makePredicate(pageDTO.getSearchType(), pageDTO.getKeyword(), pageDTO.getSearchPeriod()),page);
 

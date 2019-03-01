@@ -160,14 +160,14 @@ span.listReplyCount {
 }
 
 .page-item.active .page-link {
-	background-color: rgb(179,220,248) !important;
-	border-color: rgb(179,220,248) !important;
+	background-color: rgb(19,134,211) !important;
+	border-color: rgb(19,134,211) !important;
 	color: white !important;
 }
 
 #writeBtn {
-	background-color: white;
-	color: rgb(66, 161, 226); 
+	background-color: rgb(19,134,211) !important;
+	color: white; 
 	border : 1px solid !important;
 	text-align: center;
 	display: inline-block;
@@ -264,8 +264,8 @@ span.listReplyCount {
 									
                                      
 									<td class="text-left boardTtile"><a
-										th:href='${board.inquireBoardId}' class="boardLink">[[${board.title}]]</a>
-										<a th:href='${board.inquireBoardId}' class="boardLink"> <span
+										th:href='${board.inquireBoardId}' class="boardLink">[[${board.title}]]
+										<span
 											class="listReplyCount" th:name=|${board.inquireBoardReply.size()}|></span>
 											<span class="listDateConfirm"></span>
 											</a>
@@ -499,14 +499,16 @@ span.listReplyCount {
 			
 			e.preventDefault();
 			
-			var listBoardIdlength = $('.listBoardId').length
-			var memberId = [[${memberId}]]
+			var listBoardIdlength = $('.listBoardId').length;
+			var memberId = [[${memberId}]];
 			console.log(memberId);
 			console.log(listBoardIdlength);
 			
-			for(var i = 0; i< listBoardIdlength; i++){
-				 console.log($('.listBoardId').eq(i).attr("name"));
- 				 if($('.listBoardId').eq(i).attr("name")==memberId || memberId =="admin123"){
+			console.log($(this).parent().parent().find('.listBoardId').attr("name"));
+			
+// 			for(var i = 0; i< listBoardIdlength; i++){
+// 				 console.log($('.listBoardId').eq(i).attr("name"));
+ 				 if($(this).parent().parent().find('.listBoardId').attr("name")==memberId || memberId =="admin123"){
  					var boardNo = $(this).attr("href");
  					
  					formObj.attr("action",[[@{'/board/viewBoard'}]]);
@@ -519,7 +521,7 @@ span.listReplyCount {
  					Swal.fire("비공개 게시글 입니다.","");
  				 }
 				
-			}
+			
 			
 			/* var boardNo = $(this).attr("href");
 			
