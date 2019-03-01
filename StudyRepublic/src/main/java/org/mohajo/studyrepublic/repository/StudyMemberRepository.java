@@ -17,11 +17,11 @@ import org.springframework.data.repository.query.Param;
  */
 public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyMemberId>, QuerydslPredicateExecutor<StudyMember>{
 	
-	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code in ('LE', 'ME') order by study.endDate DESC")
+	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code in ('LE', 'ME') and sm.study.studyStatusCode != 'D' order by study.endDate DESC")
 	List<StudyMember> findStudyActivityById(String id);
 //	List<StudyMember> findStudyActivityByStudyMemberId(StudyMemberId studyMemberId);
 
-	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code = 'LE'")
+	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code = 'LE' and sm.study.studyStatusCode != 'D' order by study.endDate DESC")
 	List<StudyMember> findTutorActivityById(String id);
 //	List<StudyMember> findTutorActivityByStudyMemberId(StudyMemberId studyMemberId);
 
