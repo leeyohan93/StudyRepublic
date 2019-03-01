@@ -38,7 +38,8 @@ public class StudyEchoHandler extends TextWebSocketHandler{
 //		auth.getName();
 //		String senderId =UserDetatilsServiceImpl.socketId;
 		
-		String senderId = UserDetatilsServiceImpl.socketId;
+//		String senderId = UserDetatilsServiceImpl.socketId;
+		String senderId = "유노원식";
 		System.out.println(senderId);
 
 		log.info("senderId:"+senderId);
@@ -60,19 +61,19 @@ public class StudyEchoHandler extends TextWebSocketHandler{
 			if (strs != null && strs.length == 5) {
 				String cmd = strs[0];
 				String userId = strs[1];
-				String leaderId = strs[2];
+				String nickName = strs[2];
 				String studyId = strs[3];
 				
 				
 			
-				WebSocketSession boardWriterSession = userSessions.get(leaderId);
-				log.info("boardWriterSession :" + boardWriterSession);
+				WebSocketSession targetUserSession = userSessions.get(nickName);
+				log.info("targetUserSession :" + targetUserSession);
 				
-				if ("study".equals(cmd) && boardWriterSession != null) {
+				if ("study".equals(cmd) && targetUserSession != null) {
 					TextMessage tmpMsg = new TextMessage(userId + "님이 "
 							+ "<a href='/board/viewBoard?freeBoardId=" + studyId + "'>" + studyId + "</a>스터디에 가입신청을 했습니다!");
 					log.info("=============================");
-					boardWriterSession.sendMessage(tmpMsg);
+					targetUserSession.sendMessage(tmpMsg);
 				}
 			}
 		}
