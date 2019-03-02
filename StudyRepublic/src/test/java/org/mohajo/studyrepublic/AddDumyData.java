@@ -174,11 +174,9 @@ public class AddDumyData {
 	
 	
 	
-	@Test
+/*	@Test
 	public void addInsertTutor() {
-		
-		
-		
+			
 		for ( int i = 1; i <= 50; i++ ) {
 			
 			Tutor tutor = new Tutor();
@@ -227,7 +225,16 @@ public class AddDumyData {
 			
 		}
 		
-	}
+	}*/
 	
+/*	@Test
+	public void deleteMember() {
+		memberrepository.deleteById("mohajo2");
+		for ( int i = 2; i <= 499; i++ ) {
+		memberrepository.deleteById("mohajo"+i);
+//		memberrolerepository.deleteTutor("mohajo"+i);
+		}
+	}
+	*/
 	
 }

@@ -214,29 +214,24 @@ public class TutorController implements Serializable {
 
 		String fileOriginName = "";
 
-
-
-/*		String uploadRootPath = "C:\\Users\\82102\\Desktop\\SeongHo\\StudyRepublic\\StudyRepublic\\src\\main\\resources\\static\\tutorFileUpload";
-		System.out.println("uploadRootPath = " + uploadRootPath);*/
 		
 		//
 	
-		/*		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
-		
+// 221줄 ~ 226줄은 localhost용 파일업로드 방법.		
+/*		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();	
 		Resource resource = defaultresourceloader
 				.getResource("file:src\\main\\resources\\static\\tutorFileUpload\\" + member.getId());
-		Resource resource = defaultresourceloader
-			.getResource("tutorFileUpload\\" + member.getId());
+
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
-		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());  */
+		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());  
+		String uploadRootPath = resource.getFile().getAbsolutePath();*/
+
 		
-//		String uploadRootPath = resource.getFile().getAbsolutePath();
-//		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload\\" + member.getId());
+//231번줄은 서버용 파일업로드 방법.
 		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload/" + member.getId());
-//		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("WEB_INF");
+
 		System.out.println(uploadRootPath);		 
 		 File file = new File(uploadRootPath);
-//		File file = new File(tutorFileFullUrl);
 
 		
 	      if (!file.exists()) {
@@ -363,27 +358,28 @@ public class TutorController implements Serializable {
 		System.out.println(tutorFileFullUrl);
 /*		String uploadRootPath = request.getServletContext().getRealPath("/");
 		System.out.println("업로드 루트 패쓰" + uploadRootPath);*/
-
-		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		
-		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload/" + id);
+
+// 368번째줄 ~ 370번째줄은 서버용 파일다운로드 방법... 안먹힘...
+/*		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload/" + id);
 		 System.out.println(uploadRootPath);		 
-		 File file = new File(uploadRootPath);
-		
-/*		Resource resource = defaultresourceloader
+		 File file = new File(uploadRootPath);*/
+	
+// 372번째줄 ~ 377번째줄은 localhost용 파일다운로드 방법
+		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
+		Resource resource = defaultresourceloader
 				.getResource("file:src\\main\\resources\\static" +tutoruploadfile.getTutorfilePartUrl());
 				
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
 		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
 
-		File file = new File(resource.getFile().getAbsolutePath());*/
+		File file = new File(resource.getFile().getAbsolutePath());
 		
 		
 		
-//		File file = new File(tutorFileFullUrl);
+
 		System.out.println("file: " + file);
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 
@@ -412,23 +408,23 @@ public class TutorController implements Serializable {
 
 		TutorUploadFile tutoruploadfile = tutoruploadfilerepository.findByTutorUploadPreviewFile(tutorFileFullUrl);
 		tutoruploadfilerepository.deleteById(tutoruploadfile.getTutorFileId());
-		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		
-/*		Resource resource = defaultresourceloader
+// 413번째줄 424번째줄은 localhost용 삭제방법.
+/*		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
+		Resource resource = defaultresourceloader
 				.getResource("file:src\\main\\resources\\static" + tutoruploadfile.getTutorfilePartUrl());
 		
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
 		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
-
 		File file = new File(resource.getFile().getAbsolutePath());*/
 		
+// 421번째줄 425번째줄은 서버용 파일삭제방법	
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		
-		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload/" + id);
-		 System.out.println(uploadRootPath);		 
-		 File file = new File(uploadRootPath);
-//		File file = new File(tutorFileFullUrl);
+		String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload/" + id);
+		System.out.println(uploadRootPath);		 
+		File file = new File(uploadRootPath);
+
 
 		System.out.println("file: " + file);
 

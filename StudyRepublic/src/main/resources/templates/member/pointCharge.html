@@ -325,7 +325,14 @@ border-bottom:none
 					
 					success:function(data) {
 /* 						alert(data); */
-						alert(data.chargingPoint + "원 충전이 완료되었습니다. "); 				
+//						alert(); 
+		           		Swal.fire({
+		      				type: 'success',
+		      				title: '충전완료',
+		     			 	text: '',
+//		     			 	timer:1500
+		      		
+		    				}) 
 					},
 					error:function(error) {
 						alert("error: " + error);
@@ -344,7 +351,7 @@ border-bottom:none
 					msg += '에러내용 : ' + rsp.error_msg;
 				}
 
-				alert(msg);
+//				alert(msg);
 				window.location.href = '/member/point/charge';
 			});
 		
