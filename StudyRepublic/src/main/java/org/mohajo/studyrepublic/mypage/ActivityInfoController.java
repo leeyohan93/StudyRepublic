@@ -77,10 +77,14 @@ public class ActivityInfoController {
 		model.addAttribute("smr",mybasicStudy);
 		
 		String[] studyList = new String[mybasicStudy.size()];
-		for(int i=0; i<mybasicStudy.size(); i++) {
-			studyList[i]=mybasicStudy.get(i).getStudyId();
+		if(mybasicStudy.size() > 0) {
+			for(int i=0; i<mybasicStudy.size(); i++) {
+				studyList[i]=mybasicStudy.get(i).getStudyId();
+			}
+		}else{
+			studyList = new String[1];
+			studyList[0] = "";
 		}
-		
 		List<Review> reviewList = reviewRepository.findStudyReview(studyList, id);
 		if(reviewList!=null) {
 			for(int i=0; i<reviewList.size(); i++) {
@@ -102,9 +106,15 @@ public class ActivityInfoController {
 		model.addAttribute("myp",mypremiumStudy);
 		
 		String[] studyList = new String[mypremiumStudy.size()];
-		for(int i=0; i<mypremiumStudy.size(); i++) {
-			studyList[i]=mypremiumStudy.get(i).getStudyId();
+		if(mypremiumStudy.size() > 0) {
+			for(int i=0; i<mypremiumStudy.size(); i++) {
+				studyList[i]=mypremiumStudy.get(i).getStudyId();
+			}
+		}else {
+			studyList = new String[1];
+			studyList[0] = "";
 		}
+			
 		
 		List<Review> reviewList = reviewRepository.findStudyReview(studyList, id);
 		if(reviewList!=null) {
