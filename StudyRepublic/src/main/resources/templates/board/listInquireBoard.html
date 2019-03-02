@@ -20,6 +20,9 @@
 
 
 <style>
+#main{
+background-color: white !important;
+}
 .boardName {
 	margin: 20px !important;
 }
@@ -504,11 +507,13 @@ span.listReplyCount {
 			console.log(memberId);
 			console.log(listBoardIdlength);
 			
-			console.log($(this).parent().parent().find('.listBoardId').attr("name"));
+			console.log($(this).parent().parent().find('.listBoardHide').attr("name"));
 			
-// 			for(var i = 0; i< listBoardIdlength; i++){
-// 				 console.log($('.listBoardId').eq(i).attr("name"));
- 				 if($(this).parent().parent().find('.listBoardId').attr("name")==memberId || memberId =="admin123"){
+
+  			  if($(this).parent().parent().find('.listBoardHide').attr("name")== "1"){
+  				  
+  			  
+ 				 if($(this).parent().parent().find('.listBoardId').attr("name")==memberId || memberId =="admin123" || memberId =="mohajo500"){
  					var boardNo = $(this).attr("href");
  					
  					formObj.attr("action",[[@{'/board/viewBoard'}]]);
@@ -520,7 +525,13 @@ span.listReplyCount {
  				 else{
  					Swal.fire("비공개 게시글 입니다.","");
  				 }
-				
+  			  }else{
+  				var boardNo = $(this).attr("href");
+  				  formObj.attr("action",[[@{'/board/viewBoard'}]]);
+					formObj.append("<input type='hidden' name='inquireBoardId' value='"+ boardNo + "'>");
+					
+					formObj.submit();
+  			  }
 			
 			
 			/* var boardNo = $(this).attr("href");

@@ -789,11 +789,11 @@ padding-left: 45px;
 							    	  console.log("reportData:" + reportData);
 							    	  
 							    	  if($('#reportTarget').val()== loginUser){
-							    		  Swal.fire("나를 신고 할수 없습니다.","");
+							    		  Swal.fire("","나를 신고 할수 없습니다.");
 							    	  }else if($('#reportWhyCD').val()== ""){
-							    		  Swal.fire("신고유형을 선택해주세요.","");
+							    		  Swal.fire("","신고유형을 선택해주세요.");
 							    	  }else if($('#reportContent').val()== "" || $('#reportContent').val() == null || $('#reportContent').val() == '&nbsp;'){
-							    		  Swal.fire("신고내용을 입력해주세요.","");
+							    		  Swal.fire("","신고내용을 입력해주세요.");
 							    	  }
 							    	  else {
 							    		  reportInsert(reportData);
@@ -809,7 +809,7 @@ padding-left: 45px;
 							    			data : reportData,
 							    			success : function(){
 							    				console.log("성공");
-							    				Swal.fire("신고 처리 되었습니다.","");
+							    				Swal.fire("","신고 처리 되었습니다.");
 							    				$('#reportWhyCD').val("");
 							    				$('#reportContent').val("");
 							    				$("#reportModal .close").click()

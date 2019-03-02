@@ -25,6 +25,12 @@
 	
 
 <style>
+.fileImg{
+width: 250px;
+}
+#main{
+background-color: white !important;
+}
 #beforeAfter {
 	padding: 0px !important;
 	margin: 1px;
@@ -307,7 +313,8 @@ height: 90px !important;
 			<div class= "fileForm" th:each = "frf : ${requestBoard.requestBoardFile}" >
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 			<input type="hidden" name ="boardFileUrl" th:value="${frf.fullUrl}" />
-		    <a th:href = "@{'/board/requestBoardFile'(fullUrl=${frf.fullUrl})}">[[${frf.originName}]]</a>
+		    <a th:href = "@{'/board/requestBoardFile'(fullUrl=${frf.fullUrl})}">[[${frf.originName}]]</a></br>
+		    <img class="fileImg" th:src="${frf.partUrl}">
 		    </div>
 			</div>
      
@@ -784,11 +791,11 @@ height: 90px !important;
  	  console.log("reportData:" + reportData);
  	  
  	  if($('#reportTarget').val()==[[${memberId}]]){
- 		 Swal.fire("내가 작성한 글입니다.","");
+ 		 Swal.fire("","내가 작성한 글입니다.");
  	  }else if($('#reportWhyCD').val()== ""){
- 		 Swal.fire("신고유형을 선택해주세요.","");
+ 		 Swal.fire("","신고유형을 선택해주세요.");
  	  }else if($('#reportContent').val()== "" || $('#reportContent').val() == null || $('#reportContent').val() == '&nbsp;'){
- 		 Swal.fire("신고내용을 입력해주세요.","");
+ 		 Swal.fire("","신고내용을 입력해주세요.");
  	  }
  	  else {
  		  reportInsert(reportData);
@@ -804,7 +811,7 @@ height: 90px !important;
  			data : reportData,
  			success : function(){
  				console.log("성공");
- 				Swal.fire("신고 처리 되었습니다.","");
+ 				Swal.fire("","신고 처리 되었습니다.");
  				$('#reportWhyCD').val("");
 				$('#reportContent').val("");
  				$("#reportModal .close").click()

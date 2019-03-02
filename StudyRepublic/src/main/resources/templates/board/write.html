@@ -22,6 +22,10 @@
 		============================================ -->
 <link rel="stylesheet" th:href="@{/adminOnly/css/modals.css}">
 <style>
+#main {
+	background-color: white !important;
+}
+
 .writeTop {
 	margin-top: 20px !important;
 	margin-bottom: 20px !important;
@@ -68,7 +72,6 @@ h3 {
 
 #smarteditor {
 	width: 98%;
-	
 }
 
 .writeForm {
@@ -83,9 +86,8 @@ h3 {
 	float: right;
 }
 
-
 #cancelBtn, #previewBtn, #registerBtn {
-	background-color: rgb(19,134,211) !important;
+	background-color: rgb(19, 134, 211) !important;
 	color: white !important;
 	text-align: center;
 	display: inline-block;
@@ -96,49 +98,54 @@ h3 {
 	height: 42px;
 	border: 1px solid;
 }
+
 #registerBtn {
-		padding-top: 4px;
+	padding-top: 4px;
 }
 
 #previewBtn {
 	width: 100px;
 }
- 
-#fileAddBtn{
-margin-bottom: 10px;
+
+#fileAddBtn {
+	margin-bottom: 10px;
 }
 
-#fileAddBtn button{
-     font-size: 15px;
-     background: white;
-     border: 1px solid #ccc;
-     height: 40px;
-    padding: 0px 20px;
-    border-radius: 4px;
+#fileAddBtn button {
+	font-size: 15px;
+	background: white;
+	border: 1px solid #ccc;
+	height: 40px;
+	padding: 0px 20px;
+	border-radius: 4px;
 }
-.yshbtn{
-background: white;
-     border: 1px solid #ccc !important;
-     height: 40px;
-    border-radius: 4px;
+
+.yshbtn {
+	background: white;
+	border: 1px solid #ccc !important;
+	height: 40px;
+	border-radius: 4px;
 }
+
 #file_route {
- display: inline-block;
+	display: inline-block;
 }
 
-.file_input{
- padding: 10px;
+.file_input {
+	padding: 10px;
 }
-#liidel0{
-      height: 46px;
-      background: white;
-    color: black;
-    border:1px solid #ccc;
-    border-radius: 4px;
-}  
-.se2_inputarea{
- height: 1000px !important;
-}     
+
+#liidel0 {
+	height: 46px;
+	background: white;
+	color: black;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.se2_inputarea {
+	height: 1000px !important;
+}
 </style>
 
 </head>
@@ -151,7 +158,6 @@ background: white;
 			<h3>글쓰기</h3>
 		</div>
 		<div class="inner writeForm">
-
 
 			<form id="boardWriteForm" th:action="@{registerBoard}" method="post" enctype="multipart/form-data" >
 
@@ -268,7 +274,6 @@ $(document).ready(function(){
 
 	       if (boardType == ''){
 	    	   Swal.fire("게시판을 선택해주세요!","");
-	    	   
 	    	   return false;
 	       }
 	       else if (boardTitle == ''){
