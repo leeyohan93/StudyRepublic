@@ -110,7 +110,7 @@ padding: 2em 1.2em;
 								<!-- <span class="login100-form-title p-b-43"> 프리미엄등급 신청 내역 </span> -->
 
 								<div class="wrap-input100_label" th:each = "member : ${mdu}"style="width: auto; height: auto; margin-bottom: 120px" >
-									<span class="label-input100_label"  th:text = "${member.name} + '님 신청내역'"style="width: 220px; font-size:25px">
+									<span class="label-input100_label"  th:text = "${member.name} + '님 신청내역'"style="width: auto; font-size:25px">
 										</span>
 								</div>
 
@@ -121,7 +121,7 @@ padding: 2em 1.2em;
 										프로필</span>
 								</div>
 								
-								<div class="wrap-input100_ validate-input" style = "width:250px; float:left;">
+								<div class="wrap-input100_ validate-input" style = "width:300px; float:left;">
 								<img id="img_profile"
 									th:src="@{'/member_image/'+${md.profileSaveName}}"
 									style="width: 200px; height: 240px; border-radius:100%;"  />
@@ -129,38 +129,31 @@ padding: 2em 1.2em;
 
 								   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 								   
-<!-- 								<div class="wrap-input100_ validate-input" style = "width:500px;float:left; top:53px;">	
-								
-								<div th:each="member : ${mdu}" >
-								<div th:text= "${member.name}"></div>
-								</div>
-								
-								</div>	 -->
-								
-<!-- 						<div class="join-input100" style = "float:left;"> 
-			
-						<span class="focus-input100"></span>
-						<span class="label-input100">윤성호</span>
-						<span class="label-input100">이름</span>
-						</div> -->
 							
+					
 					<div class="wrap-input100_ validate-input" style = "width:500px;float:left;">
-					<table id="table" class="bluetop" th:each="member : ${mdu}" th:inline = "text" border = "1">
 					
-					<tr >
-					<td>이름</td><td th:text = "${member.name}"></td>
-					<td>생년월일</td><td th:text = "${member.birth}"></td>
-					</tr>
-					<tr>
-					<td>닉네임</td><td th:text = "${member.nickname}"></td>
-					<td>최종학력</td><td th:text = "${tutorEducationCD}"></td>
-					</tr>
-					<tr>
-					<td>이메일</td><td th:text = "${member.email}"></td>
-				    <td>연락처</td><td th:text = "${member.phonenumber}"></td>
-					</tr>
+					<div class="wrap-input100_label" style = "height:40px;">
+					<span style = "width:200px; font-weight:bold">이름</span>
+					<span th:text = "${mdu.name}" style = "width:auto"></span> 
+					</div>
+				
+					<div class="wrap-input100_label" style = "height:40px">
+					<span style = "width:200px; font-weight:bold">최종학력</span>
+					<span th:text = "${tutorEducationCD}"></span>
+					</div>
+				
+					<div class="wrap-input100_label" style = "height:40px">
+					<span style = "width:200px; font-weight:bold">이메일</span>
+					<span th:text = "${mdu.email}"></span>
+					</div>
 					
-					</table>
+					<div class="wrap-input100_label" style = "height:40px">
+					<span style = "width:200px; font-weight:bold">연락처</span>
+					<span th:text = "${mdu.phonenumber}"></span>
+					</div>
+					
+					
 					</div>
 							
 							</form>
@@ -275,8 +268,8 @@ padding: 2em 1.2em;
 						<!-- <span th:text = "${tf.tutorfileOriginname}" ></span> -->
 						<input id = "fileUrl" name = "tutorFileFullUrl" type = "text" th:value = "${tf.tutorFileFullUrl}" style = "display:none">
 						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-						<!-- <a th:href = "${tf.tutorfilePartUrl}" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a> -->
-						<a th:href = "@{'/tutor_fileUpload/'+${session.userid} +'/'${tf.tutorfileSavename}'/'" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a>
+						<a th:href = "${tf.tutorfilePartUrl}" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a>
+						<!-- <a th:href = "@{'/tutor_fileUpload/'+${session.userid} +'/'${tf.tutorfileSavename}'/'" th:text = "${tf.tutorfileOriginname}" style = "padding: 0 10px 0 0; margin: 0 0 0 35px; font-size:20px"></a> -->
 						<a th:href = "@{'/tutor/file'(tutorFileFullUrl=${tf.tutorFileFullUrl})}" style = "color:blue">다운로드</a> 
 						</div>
 	<!-- 					<a th:href = "@{'/tutor/file/delete'(tutorFileFullUrl=${tf.tutorFileFullUrl})}">X(삭제)</a>  -->
