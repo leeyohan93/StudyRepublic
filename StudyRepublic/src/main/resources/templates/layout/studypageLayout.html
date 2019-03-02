@@ -21,7 +21,7 @@
 <div layout:fragment="bootJs">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script> 
   	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 </div>
 <style>
@@ -120,6 +120,12 @@
 					font-size: 19px;
 				
 				}
+					.modal-backdrop{
+					position: inherit !important;
+					}
+					.modal-content{
+					position: fixed;
+					}
 					
 				</style><div id="left" layout:fragment="left"
 				>
@@ -157,82 +163,13 @@
 				</div>
 				
 				
-			<!-- 신고 modal  -->
-
-			<div class="modal" id="reportModal" tabindex="-1">
 			
-				 <div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-						  <div>
-							<h3 id= "reportHeader">신고하기</h3>
-							</div>
-							
-							<button class="close" id="reportClose" data-dismiss="modal">&times;</button>
-						</div>
-						<div class="modal-body" id="reportBody" style="text-align: center;">
-							<form id="reportForm">
-							  <input type="hidden" name = "reportTypeCD" value="study">
-						
-							   <input type="hidden" name = "id" value="">
-							    <input type="hidden" name ="target" id="reportTarget" value="">
-							<div>
-								<input class="reportOption" type="text" value="신고자" readonly>
-								<input class="reportContent" name="idNickname" type="text"
-									value="" readonly>
-									</div>
-									<div>
-									 <input
-									class="reportOption" type="text" value="신고일" readonly>
-						<input class="reportContent" name="date" type="text" id="reportDay"
-									value="" readonly> 
-									</div>
-									<div>
-									<input class="reportOption"
-									type="text" value="신고 스터디" readonly> <input
-									class="reportContent" name="targetNickname" type="text"
-									value="" readonly> 
-									</div>
-									<div>
-									 <input
-									class="reportOption" type="text" value="신고유형" readonly>
-								<select class="reportContent" id="reportWhyCD" name="reportWhyCD">
-									<option value="1">영리목적 및 홍보성</option>
-									<option value="2">불법정보</option>
-									<option value="3">음란성 및 선정성</option>
-									<option value="4">욕설 및 인신공격</option>
-									<option value="5">개인정보노출</option>
-									<option value="6">반복게시 및 도배</option>
-									<option value="7">기타</option>
-								</select> 
-                                 </div>
-                                 <div>
- 									<input class="reportOption" type="text" value="신고내용" id="reprotContentOption" readonly> <textarea class="reportContent" id="reportContent" name="content" placeholder="신고내용을 작성해주세요."
-									></textarea>
-									</div>
-						</div>
-						<div class="modal-footer" id="reportFooter">
-							<a class="btn" id="reportCancel" data-dismiss="modal">취소</a>
-							<a class="btn" id="reportRegister" data-toggle="model" data-target="#reportConfirm">신고하기</a>
-							</form>
-						</div>
-
-					</div>
-				</div> 
-
-			</div>
-
-		<!-- 신고 모달 끝 -->
 				
 	        <script type="text/javascript">
 	        
 	         
 	        
-	       /*  $('#reportModal').on('show.bs.modal', function(e) {
-	    	 e.preventDefault();
-	        	$('#reportModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
-	    		
-	    	});  */
+	       
 /* 	        $('document').ready(function(){
 	        	$('.check').on('click', function(e){
 	        		var form = $('#formAction');
@@ -322,9 +259,7 @@
 		       
 	        }); 
 	        
-	/* $('#reportModal').on('show.bs.modal', function(e) {
-		$('#reportModal').modal({backdrop: 'static'});
-	}); */
+	
       
     var popOpen;
  

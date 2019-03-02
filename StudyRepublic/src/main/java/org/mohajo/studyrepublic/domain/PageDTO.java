@@ -1,9 +1,8 @@
+
 /**
  * 
  */
 package org.mohajo.studyrepublic.domain;
-
-
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -116,6 +115,4 @@ public class PageDTO {
       return "PageDTO [page=" + page + ", size=" + size + ", keyword=" + keyword + ", searchType=" + searchType
             + ", searchPeriod=" + searchPeriod + "]";
    }
-
-
 }

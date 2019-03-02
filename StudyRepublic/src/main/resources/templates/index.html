@@ -86,6 +86,13 @@ height: 90px !important;
 .dropdown-item{
 padding-left: 45px;
 }
+ .btn-danger{
+ background-color: white;
+    color: rgb(66, 161, 226) !important;
+    border-color: rgb(66, 161, 226) !important;
+ }
+
+
 </style>
 </head>
 <body>
@@ -511,7 +518,7 @@ padding-left: 45px;
 									<a th:text="${member.nickname}" href="#"
 										class="list-group-item">aaa123</a>
 								</div> -->
-								<div class="list-group"	th:each="member : ${recommendTutorMember}">
+								<div class="list-group"	th:each="member : ${recommendNomalMember}">
 										<div class="dropdown">
          								<a class="list-group-item" data-toggle="dropdown" th:text="${member.nickname}"></a>
           								<div class="dropdown-menu messageDropdown">
@@ -736,6 +743,9 @@ padding-left: 45px;
 							                  a +=  'Member ID :<font id="modal_memberId" name="modal_memberId" >'+mydata.id+'</font><br>'
 							                  a += 'Member Nick Name : <font id="modal_memberNickname" name="modal_memberNickname">'+mydata.nickname+'</font><br>'
 							                  a += '성별 : <font id="modal_memberGender" name="modal_memberGender">'+mydata.gender+'</font><br></div>'
+							                  for(var i=0; i<mydata.interestlocation.length; i++){
+													a += '관심지역 '+(i+1)+':<font id="mdal_memberLocation" name="modal_memberLocation">'+mydata.interestlocation[i].interestLocation+'</font><br>'
+												} 
 							               }else {
 							                  a += '<p>비공개입니다</p>'
 							                  
@@ -789,11 +799,11 @@ padding-left: 45px;
 							    	  console.log("reportData:" + reportData);
 							    	  
 							    	  if($('#reportTarget').val()== loginUser){
-							    		  Swal.fire("나를 신고 할수 없습니다.","");
+							    		  Swal.fire("","나를 신고 할수 없습니다.");
 							    	  }else if($('#reportWhyCD').val()== ""){
-							    		  Swal.fire("신고유형을 선택해주세요.","");
+							    		  Swal.fire("","신고유형을 선택해주세요.");
 							    	  }else if($('#reportContent').val()== "" || $('#reportContent').val() == null || $('#reportContent').val() == '&nbsp;'){
-							    		  Swal.fire("신고내용을 입력해주세요.","");
+							    		  Swal.fire("","신고내용을 입력해주세요.");
 							    	  }
 							    	  else {
 							    		  reportInsert(reportData);
@@ -809,7 +819,7 @@ padding-left: 45px;
 							    			data : reportData,
 							    			success : function(){
 							    				console.log("성공");
-							    				Swal.fire("신고 처리 되었습니다.","");
+							    				Swal.fire("","신고 처리 되었습니다.");
 							    				$('#reportWhyCD').val("");
 							    				$('#reportContent').val("");
 							    				$("#reportModal .close").click()

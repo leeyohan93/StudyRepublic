@@ -1,8 +1,4 @@
 
-
-
-
-
 [ RESTYLE TAG ]*/
 
 /* * { */
@@ -517,7 +513,7 @@ input.radio100 {
 
 
 .has-val {
-  height: 500px; !important;
+  height: 48px !important;
 }
 
 .has-val + .focus-input100 + .label-input100 {
@@ -1125,12 +1121,4 @@ padding:5px;
 	padding:0;
 	border:1;
 }
-
-
-
-
-
-
-
-
 
