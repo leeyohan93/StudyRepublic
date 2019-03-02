@@ -299,6 +299,13 @@ height: 90px !important;
     width: 30px;
     padding-right: 10px;
 }
+ .btn-danger{
+ background-color: white;
+    color: rgb(66, 161, 226) !important;
+    border-color: rgb(66, 161, 226) !important;
+ }
+
+
 </style>
 
 </head>
@@ -839,6 +846,9 @@ height: 90px !important;
 	                  a +=  'Member ID :<font id="modal_memberId" name="modal_memberId" >'+mydata.id+'</font><br>'
 	                  a += 'Member Nick Name : <font id="modal_memberNickname" name="modal_memberNickname">'+mydata.nickname+'</font><br>'
 	                  a += '성별 : <font id="modal_memberGender" name="modal_memberGender">'+mydata.gender+'</font><br></div>'
+	                  for(var i=0; i<mydata.interestlocation.length; i++){
+							a += '관심지역 '+(i+1)+':<font id="mdal_memberLocation" name="modal_memberLocation">'+mydata.interestlocation[i].interestLocation+'</font><br>'
+						} 
 	               }else {
 	                  a += '<p>비공개입니다</p>'
 	                  
