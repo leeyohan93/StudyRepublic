@@ -10,17 +10,15 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mohajo.studyrepublic.domain.CareerCD;
-import org.mohajo.studyrepublic.domain.EducationCD;
 import org.mohajo.studyrepublic.domain.GradeCD;
 import org.mohajo.studyrepublic.domain.Interest1CD;
 import org.mohajo.studyrepublic.domain.Interest2CD;
+import org.mohajo.studyrepublic.domain.InterestLocation;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberInterest;
 import org.mohajo.studyrepublic.domain.MemberPoint;
 import org.mohajo.studyrepublic.domain.MemberRoles;
-import org.mohajo.studyrepublic.domain.Tutor;
-import org.mohajo.studyrepublic.domain.TutorCareer;
-import org.mohajo.studyrepublic.domain.TutorInterest;
+import org.mohajo.studyrepublic.domain.MemberStatusCD;
 import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.MemberRolesRepository;
@@ -88,12 +86,12 @@ public class AddDumyData {
     }
 
 	
-/*	@Test
+	@Test
 	public void addInsertMember() throws ParseException {
 		
-		for(int i = 501; i <= 520; i++) {	// 501번부터 이용가능
+		for(int i = 421; i <= 600; i++) {	// 601번부터 이용가능
 			Member member = new Member();
-			member.setId("mohajo" + i);
+			member.setId("bit" + i);
 			member.setPassword(bcryptpasswordencoder.encode("123"));
 			
 			MemberRoles memberroles = new MemberRoles();
@@ -110,7 +108,7 @@ public class AddDumyData {
 				member.setGender("여");
 				}
 			
-			LocalDate randomDate = createRandomDate(1900, 2000);
+			LocalDate randomDate = createRandomDate(1980, 2000);
 			member.setBirth(randomDate+"");
 			
 
@@ -127,7 +125,7 @@ public class AddDumyData {
 			member.setProfileOriginName("default_img.png");
 			member.setProfileSaveName("default_img.png");
 						
-			String sdate = createRandomDate(2014, 2018).toString();
+			String sdate = createRandomDate(2019, 2019).toString();
 			SimpleDateFormat dt1 = new SimpleDateFormat("yyyyy-mm-dd");
 			Date date = dt1.parse(sdate);
 			member.setRegistrationDate(date);
@@ -135,20 +133,20 @@ public class AddDumyData {
 			member.setGradeCD(new GradeCD("N"));
 			member.setMemberStatusCD(new MemberStatusCD("N"));
 			
-			InterestLocation intloc = new InterestLocation();
-			intloc.setInterestLocation("서울강남구역삼동");
-			member.setInterestlocation(Arrays.asList((intloc)));
-			
-			MemberInterest memint = new MemberInterest();
-			Interest2CD int2 = new Interest2CD();
-			int2.setCodeValueKorean("오라클");
-			int2.setInterest2Code("D02");
-			Interest1CD int1 = new Interest1CD();
-			int1.setCodeValueKorean("데이터베이스");
-			int1.setInterest1Code("D");
-			int2.setInterest1cd(int1);
-			memint.setInterest2cd(int2);
-			member.setMemberInterest(Arrays.asList((memint)));
+//			InterestLocation intloc = new InterestLocation();
+//			intloc.setInterestLocation("서울강남구역삼동");
+//			member.setInterestlocation(Arrays.asList((intloc)));
+//			
+//			MemberInterest memint = new MemberInterest();
+//			Interest2CD int2 = new Interest2CD();
+//			int2.setCodeValueKorean("오라클");
+//			int2.setInterest2Code("D02");
+//			Interest1CD int1 = new Interest1CD();
+//			int1.setCodeValueKorean("데이터베이스");
+//			int1.setInterest1Code("D");
+//			int2.setInterest1cd(int1);
+//			memint.setInterest2cd(int2);
+//			member.setMemberInterest(Arrays.asList((memint)));
 			
 
 			memberrepository.save(member);
@@ -165,7 +163,7 @@ public class AddDumyData {
 		} 
 				
 	}
-	*/
+	
 	public String suffleEducationList() {	
 		List<String> randomEducation = Arrays.asList("A","B","D","E","M");
 		Collections.shuffle(randomEducation);
@@ -227,14 +225,6 @@ public class AddDumyData {
 		
 	}*/
 	
-/*	@Test
-	public void deleteMember() {
-		memberrepository.deleteById("mohajo2");
-		for ( int i = 2; i <= 499; i++ ) {
-		memberrepository.deleteById("mohajo"+i);
-//		memberrolerepository.deleteTutor("mohajo"+i);
-		}
-	}
-	*/
+	
 	
 }

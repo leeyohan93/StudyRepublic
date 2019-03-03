@@ -207,12 +207,14 @@ iframe {
 [ Form ]*/
 
 .login100-form {
+	margin-bottom:0;
   margin-left:auto;
   margin-right:auto;
   width: 650px;
  /*  min-height: 100vh; */
   display: block;
   background-color: #f7f7f7;
+
   padding: 100px 55px 55px 55px;
 }
 

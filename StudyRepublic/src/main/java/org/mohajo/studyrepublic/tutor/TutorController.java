@@ -30,6 +30,7 @@ import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
+import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
@@ -45,6 +46,7 @@ import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.MemberRolesRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
+import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.mohajo.studyrepublic.repository.StudyViewRepository;
 import org.mohajo.studyrepublic.repository.TutorCareerRepository;
 import org.mohajo.studyrepublic.repository.TutorInterestRepository;
@@ -99,6 +101,8 @@ public class TutorController implements Serializable {
 	TutorCareerRepository tutorcareerrepository;
 	@Autowired
 	TutorInterestRepository tutorinterestrepository;
+	@Autowired
+	StudyRepository sr;
 	
 	@Autowired
 	TypeCD typeCd;
@@ -484,6 +488,7 @@ public class TutorController implements Serializable {
 		Tutor tutor = tutorrepository.findByTutor(id);
 			
 		model.addAttribute("tutor", tutor);
+		model.addAttribute("tutorEducationCD", tutor.getEducationCD().getCodeValueKorean());
 
 		List<StudyMember> studyActivity = smr.findTutorActivityById(id);
 		model.addAttribute("studyActivity", studyActivity);
@@ -497,7 +502,12 @@ public class TutorController implements Serializable {
 		List<TutorCareer> selectedtutorcareer = tutorcareerrepository.selectedtutorcareer(tutor_number);
 		model.addAttribute("selectedtutorcareer", selectedtutorcareer);
 		
+		Pageable page = pageDto.profilePageable(0, 10, "post_date");
+		Page<Study> list = sr.findStudy(id, page);
 		
+		model.addAttribute("pagedList", new PageMaker<>(list));
+		model.addAttribute("typeCode", typeCode);
+			
 		return "tutor/tutor_profile";
 		
 	}

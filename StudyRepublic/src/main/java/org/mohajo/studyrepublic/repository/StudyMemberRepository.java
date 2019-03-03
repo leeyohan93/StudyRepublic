@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -24,7 +26,6 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code = 'LE' and sm.study.studyStatusCode != 'D' order by study.endDate DESC")
 	List<StudyMember> findTutorActivityById(String id);
 //	List<StudyMember> findTutorActivityByStudyMemberId(StudyMemberId studyMemberId);
-
 
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기 */
 	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where s1.study_status_code='G'",nativeQuery=true)
