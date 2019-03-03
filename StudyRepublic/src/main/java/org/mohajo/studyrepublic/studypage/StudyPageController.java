@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
+import org.mohajo.studyrepublic.domain.Report;
+import org.mohajo.studyrepublic.domain.ReportTypeCD;
+import org.mohajo.studyrepublic.domain.ReportWhyCD;
 import org.mohajo.studyrepublic.domain.RequestBoardReply;
 import org.apache.http.auth.AUTH;
 import org.mohajo.studyrepublic.domain.Leveltest;
@@ -40,6 +44,7 @@ import org.mohajo.studyrepublic.domain.StudyQnaboardReply;
 import org.mohajo.studyrepublic.domain.StudyStatusCD;
 import org.mohajo.studyrepublic.domain.TutorUploadFile;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.ReportRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardFileRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardReplyRepository;
 import org.mohajo.studyrepublic.repository.StudyFileshareboardRepository;
@@ -123,6 +128,9 @@ public class StudyPageController {
 	StudyQnaboardFileRepository studyQnaboardFileRepository;
 	@Autowired
 	StudyQnaboardReplyRepository studyQnaboardReplyRepository;
+	
+	@Autowired
+	ReportRepository reportRepository;
 	
 	@RequestMapping("/PowerCheck")
 	public @ResponseBody String[] powerCheck(@RequestBody String studyId) {
@@ -337,7 +345,7 @@ public class StudyPageController {
 			studyNoticeboard.setStudyId(studyNameId);
 			
 			List<StudyNoticeboard> studyNoticeboardList = studyNoticeboardRepository.findNoticeboardListByStudyId(studyNameId);
-			if(studyMember==null) {
+			if(studyNoticeboardList==null) {
 				log.info("값은 조회됐지만, null임");
 				return null;
 			}else {
@@ -376,14 +384,14 @@ public class StudyPageController {
 			studyFileshareboard.setStudyId(studyNameId);
 			
 			List<StudyFileshareboard> studyFileshareboardList = studyFileshareboardRepository.findFileshareboardListByStudyId(studyNameId);
-			if(studyMember==null) {
+			if(studyFileshareboardList==null) {
 				log.info("값은 조회됐지만, null임");
 				return null;
 			}else {
 				//조회되는 리스트의 갯수를 확인하고 해당 리스트 + 1 해서 number를 설정해준다.
 				int number = studyFileshareboardList.size();
 				log.info("제대로 된 값이 들어옴" + number);
-				studyQnaboard.setNumber(number+1);
+				studyFileshareboard.setNumber(number+1);
 			}
 			
 			model.addAttribute("memberid", id);
@@ -868,6 +876,31 @@ public class StudyPageController {
 		return null;
 	}
 	
+	@RequestMapping(value="/Report", method=RequestMethod.POST)
+	@ResponseBody
+	public String studypageReport(@RequestBody HashMap map) {
+				
+		String id = (String)map.get("id");
+		String target =(String)map.get("target");
+		String reportTypeCD = (String)map.get("reportTypeCD");
+		int reportWhyCD = Integer.parseInt((String)map.get("reportWhyCD"));
+		String content = (String)map.get("content");
+		
+		log.info(id + "/" + target + "/" + reportTypeCD + "/" + reportWhyCD + "/" + content);
+		
+		
+		Report report = new Report();
+		report.setId(id);
+		report.setTarget(target);
+		report.setReportTypeCD(new ReportTypeCD(reportTypeCD));
+		report.setReportWhyCD(new ReportWhyCD(reportWhyCD));
+		report.setContent(content);
+		
+		reportRepository.save(report);
+		
+		return null;
+	}
+	
 	@RequestMapping(value="/WriterModify")
 	public String studypageWriterModify(String studyId, String boardName, String number) {
 		
@@ -1110,10 +1143,28 @@ public class StudyPageController {
 		@ResponseBody
 		public int fileshareBoardReplyDelete(@PathVariable int studyFileshareboardReplyId) {
 
+			String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+			
 			log.info("=======================");
-			log.info("studyQnaboardReplyId:"+studyFileshareboardReplyId);
+			log.info("studyFileshareboardReplyId:"+studyFileshareboardReplyId);
 			log.info("=======================");
-			studyQnaboardReplyRepository.deleteById(studyFileshareboardReplyId);
-			return studyFileshareboardReplyId;
+			log.info(userId + "/" + studyFileshareboardReplyId);
+			try {
+				StudyFileshareboardReply studyFileshareboardReply = 
+						studyFileshareboardReplyRepository.findByIdAndStudyFileshareboardReplyId(userId, studyFileshareboardReplyId);
+				if(studyFileshareboardReply==null) {
+					log.info("fileshareBoardReplyDelete SQL 조회 결과 없음.");
+					return 0;
+				}else {
+					studyFileshareboardReplyRepository.deleteById(studyFileshareboardReplyId);
+					log.info("fileshareBoardReplyDelete 성공");
+					return studyFileshareboardReplyId;
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				log.info("fileshareBoardReplyDelete 예외 발생");
+				return 0;
+			}
+			
 		}
 }
