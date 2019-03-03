@@ -294,7 +294,7 @@ layout:decorate="~{/layout/mainLayout}">
                                        </div>
                                     </div>
             
-                                    <div class="course_essential_inner" th:if="${study.onoffCode} != 'O'">
+                                    <div class="course_essential_inner" th:if="${study.onoffCode.onoffCode} != 'O'">
                                        <div class="course_essential_inner_title">
                                           지역
                                        </div>
@@ -312,14 +312,11 @@ layout:decorate="~{/layout/mainLayout}">
                                        </div>
                                     </div>
             
-                                    <div class="course_essential_inner" th:if="${study.typeCode} == 'P'">
+                                    <div class="course_essential_inner" th:if="${study.typeCode.typeCode} == 'P'">
                                        <div class="course_essential_inner_title">
                                           가격
                                        </div>
-                                       <div class="course_essential_inner_content course_price">
-                                          <th:block th:text="${study.price.price}">price</th:block>
-                                       </div>
-                                    </div>
+                                       <div class="course_essential_inner_content course_price" th:text="|${#numbers.formatInteger(study.price.price, 0, 'COMMA')}P|">price</div>
             
                                  </div>
             

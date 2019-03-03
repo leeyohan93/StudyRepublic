@@ -778,6 +778,7 @@
             opacity: 0.86;
 /*             background: transparent\9;   */
 /*     		background:rgba(0,0,0,0.4);   */
+
             
         }
 
@@ -2026,7 +2027,8 @@
 			    	
 	            	var endDatepicker = $('#input-study-endDate').datepicker().data('datepicker');
 	            	endDatepicker.update({
-						minDate: new Date(date.getTime() + (7*24*60*60*1000)) 
+// 						minDate: new Date(date.getTime() + (7*24*60*60*1000))
+						minDate: new Date(date.getTime()) 
 			    	});
 	            	var startDate = new Date($('#input-study-startDate').val());
 		            var endDate = new Date($('#input-study-endDate').val());
@@ -2308,12 +2310,13 @@
 
 					var id = $(this).attr("id");
 					var $target;
-					var price;
+					var price = 0;
 					var studyCount = $('#input-study-studyCount').val();
 					
 					if(studyCount == "") {
 						console.log('널뛰기');
-						$target.val("");
+// 						$target.val("");
+						$(this).parent().siblings('div').find('input').val("");
 						return false;
 					}
 					
@@ -2325,6 +2328,8 @@
 							console.log('up 입장');
 							$target = $('#input-study-totalPrice');
 							price = $(this).val() * (studyCount-0);
+// 							price = price.toFixed(2);
+// 							$target.val(price.toFixed(2));
 							$target.val(price);
 							break;
 							
@@ -2332,8 +2337,9 @@
 							console.log('tp 입장');
 							$target = $('#input-study-unitPrice');
 							price = $(this).val() / (studyCount-0);
-							price = price.toFixed(2);
-							$target.val(price.toFixed(2));
+// 							price = price.toFixed(2);
+// 							$target.val(price.toFixed(2));
+							$target.val(price);
 							break;
 					}
 					
@@ -2420,20 +2426,20 @@
 				});
 				
 				$('#btn-previous').on("click", function(){
-					var currentIndex = $('.tab-item-container').find('.active').index() + 1;
-					console.log(currentIndex + '에서 이전 클릭');
+					var currentNth = $('.tab-item-container').find('.tab-item.active').index() + 1;
+					console.log(currentNth + '에서 이전 클릭');
 					
-					if(currentIndex != 1) {
-						$( ".tab-item-container .tab-item:nth-child(" + (currentIndex - 1) + ")" ).trigger("click");
+					if(currentNth != 1) {
+						$( ".tab-item-container .tab-item:nth-child(" + (currentNth - 1) + ")" ).trigger("click");
 					}
 				});
 				
 				$('#btn-next').on("click", function(){
-					var currentIndex = $('.tab-item-container').find('.active').index() + 1;
-					console.log(currentIndex + '에서 다음 클릭');
+					var currentNth = $('.tab-item-container').find('.tab-item.active').index() + 1;
+					console.log(currentNth + '에서 다음 클릭');
 					
-					if(currentIndex < 3) {
-						$( ".tab-item-container .tab-item:nth-child(" + (currentIndex + 1) + ")" ).trigger("click");
+					if(currentNth < 4) {
+						$( ".tab-item-container .tab-item:nth-child(" + (currentNth + 1) + ")" ).trigger("click");
 					}
 				});
 				

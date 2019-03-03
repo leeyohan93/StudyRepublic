@@ -200,7 +200,7 @@ public class StudyController {
 		// Pageable paging = pageDto.makePageable(0, "postDate");	//(ERROR) java.sql.SQLSyntaxErrorException: Unknown column 'sv.postDate' in 'order clause'
 		// pageDto.setSize(2);	//변화 없음
 		
-		Pageable page = pageDto.studyMakePageable(0, 2, "post_date");
+		Pageable page = pageDto.studyMakePageable(0, 3, "post_date");
 		log.info(page.toString());
 //		Pageable paging = PageRequest.of(0, 2, Sort.Direction.DESC, "post_date");
 		// Page<Study> list = sr.findValidStudyByTypeCode(typeCd, paging);
