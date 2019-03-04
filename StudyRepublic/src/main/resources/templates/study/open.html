@@ -1153,10 +1153,16 @@
 					                <div class="col-md-10 input-content" style="font-size: 0">
 				                        <label th:each="typeCode : ${typeCode}"><input type="radio" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode.typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label>
 	<!-- <label th:each="typeCode : ${typeCode}"><input type="text" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label> -->
-					                    <span class="input-study-type-alert" style="display:none">알림!
+					                    <span class="input-study-type-alert1" style="display:none; padding-top:0.5em">알림!
 					                        프리미엄 스터디는 유료로 진행되는 강의형 스터디로, 인증 절차를 <br/>
 					                        완료한 강사 등급의 회원만 개설할 수 있습니다.<br/>
 					                        <a th:href="@{/tutor/signup}">강사 등급 신청하기</a>
+					                    </span>
+					                    
+					            <span class="input-study-type-alert2" style="display:none;padding-top:0.5em">알림!
+					                    프리미엄 등급 신청을 심사중입니다.    <br/>
+					                       <br/>
+					      
 					                    </span>
 					                </div>
 					            </div>
@@ -1978,10 +1984,10 @@
 	                    if($('#input-study-member-gradeCode').val() != "T") {
 	                        
 	                    	if($('#input-study-member-gradeCode').val() == "N") {
-	                    		$('#basicInfoArea .input-study-type-alert').css("display", "block");
+	                    		$('#basicInfoArea .input-study-type-alert1').css("display", "block");
 	                    		
 	                    	} else if($('#input-study-member-gradeCode').val() == "W") {
-	                    		alert("아니라고!!!");
+	                    		$('#basicInfoArea .input-study-type-alert2').css("display", "block");
 	                    	}
 	                        $("#basicInfoArea input[name='typeCode.typeCode'][value='P']").prop('checked', false);
 							$("#basicInfoArea .type-p").addClass("disable");
