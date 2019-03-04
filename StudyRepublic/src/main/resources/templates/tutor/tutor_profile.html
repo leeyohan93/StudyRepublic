@@ -315,7 +315,7 @@
 					<div class="wrap-input100_ validate-input" style = "margin-bottom:30px">
 									<h3 style = "width:100%">개설스터디내역</h3><br>
 									</div>
-<!-- 							<table>
+							<table>
 								<tr>
 									<th>No.</th>
 									<th>스터디명</th>
@@ -334,46 +334,13 @@
 										</td>
 									</th:block>
 								</tr>
-							</table> -->			
+							</table>			
 					
 					<!--  -->
 
 	                  <!--  -->
               
-					      <table th:with = "list = ${pagedList.list}">
-                        <tr>
-                           <th>스터디명</th>
-                           <th>기간</th>
-                           <th>평점</th>
-                        </tr>
-                        <tr th:each="study : ${list}">
-                           <td><a th:text = "${study.name}" th:href = "@{'/study/detail/' + ${study.studyId}}"></a>&nbsp;<i class="tag" th:text="${study.studyStatusCode.codeValueKorean}">status</i></td>
-                           <td th:text = "${study.startDate} + '~' + ${study.endDate}"></td>
-                           <td th:if="${study.averageScore}==-1">-</td>
-                           <td th:unless="${study.averageScore}==-1" class="score-container">
-                           <div class="stars-outer"><div class="stars-inner">별</div></div>
-                           <span class="stars-score" th:text="${study.averageScore}!=-1? ${study.averageScore} : '-'">avgScore</span>
-                           </td>
-                        </tr>
-                     </table>      
-                  
-               <div style = "margin:auto; width:100%">
-                  <div class="pageForm">
-                     <ul class="pagination" style= "padding-left:450px">
-                        <li class="page-item" th:each="p:${pagedList.pageList}"
-                           th:classappend="${p.pageNumber == pagedList.currentPageNum -1}?active: '' "><a
-                           class="page-link" th:href="${p.pageNumber} +1">[[${p.pageNumber}
-                              + 1]]</a></li>
 
-                     </ul>
-                  </div>
-               </div>         
-
-            <form id="pageForm" th:action="@{/tutor/profile/p}" method="get">
-               <input type="hidden" name="id" th:value="${session.userid}">
-               <input type="hidden" name="page" th:value="${pagedList.currentPageNum}">
-               <input type="hidden" name="size" th:value="${pagedList.currentPage.pageSize}">
-            </form>
 					
 				
 				  </div>
