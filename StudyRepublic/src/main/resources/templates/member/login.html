@@ -265,7 +265,7 @@ layout:decorate="~{/layout/mainLayout}">
                
                <input id = "authNum" style = "display:none">
                
-               <div id = "authCheck" class="container-login100-form-btn_findpw" style = "display:none">
+               <div id = "authCheck" class="container-login100-form-btn_findpw" style = "display:none;padding:20px">
                   <button id = "authNumCheck" type="button" class="login100-form-btn">
                      	다음
                   </button>
@@ -393,11 +393,21 @@ layout:decorate="~{/layout/mainLayout}">
      $('#authNumCheck').on('click', function(){
      
      	if(document.getElementById('authNum').value == document.getElementById('messageNumber').value) {
-     		alert("일치");
+           	Swal.fire({
+				type: 'success',
+				title: '',
+			 	text: '인증번호가 일치합니다.',
+
+			}) 
      		$('#goModifyPw').submit();
      		
      	} else {
-     		alert("불일치");
+           	Swal.fire({
+				type: 'error',
+				title: '',
+			 	text: '인증번호가 일치하지 않습니다.',
+
+			}) 
      		document.getElementById('spancheckms').style.display = 'block';
     	 }
      });
