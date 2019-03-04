@@ -208,7 +208,7 @@ height: 90px !important;
 				        
 				        <div class="modal-body">
 				          
-                    <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
+                    <form method="POST" action="/modalmessageWriteResult" id="messageForm" name="messageForm">
                         <div class="card border-primary rounded-0">
                             <div class="card-header p-0">
                                 <div class="bg-info text-white text-center py-2" style="width: 100%;">
@@ -241,7 +241,7 @@ height: 90px !important;
                                 </div>
                                 <div class="text-center" style="width:100%;">
                                	    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-                                    <input type="submit" value="전송하기" class="btn btn-info btn-block rounded-0 py-2" id="gomessage">
+                                    <input type="button" value="전송하기" class="btn btn-info btn-block rounded-0 py-2" id="sendbtn">
                                 </div>
                             </div>
                         </div>
@@ -413,7 +413,7 @@ height: 90px !important;
 				        
 				        <div class="modal-body">
 				          
-                    <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
+                    <form method="POST" action="/modalmessageWriteResult" id="messageForm" name="messageForm">
                         <div class="card border-primary rounded-0">
                             <div class="card-header p-0">
                                 <div class="bg-info text-white text-center py-2" style="width: 100%;">
@@ -446,7 +446,7 @@ height: 90px !important;
                                 </div>
                                 <div class="text-center" style="width:100%;">
                                	    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-                                    <input type="submit" value="전송하기" class="btn btn-info btn-block rounded-0 py-2" id="gomessage">
+                                    <input type="button" value="전송하기" class="btn btn-info btn-block rounded-0 py-2" id="sendbtn">
                                 </div>
                             </div>
                         </div>
@@ -622,7 +622,7 @@ height: 90px !important;
 				        
 				        <div class="modal-body">
 				          
-                    <form method="POST" action="/modalmessageWriteResult" name="modalmessage">
+                    <form method="POST" action="/modalmessageWriteResult" id="messageForm" name="messageForm">
                         <div class="card border-primary rounded-0">
                             <div class="card-header p-0">
                                 <div class="bg-info text-white text-center py-2" style="width: 100%;">
@@ -655,7 +655,7 @@ height: 90px !important;
                                 </div>
                                 <div class="text-center" style="width:100%;">
                                	    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
-                                    <input type="submit" value="전송하기" class="btn btn-info btn-block rounded-0 py-2" id="gomessage">
+                                    <input type="button" value="전송하기" class="btn btn-info btn-block rounded-0 py-2" id="sendbtn">
                                 </div>
                             </div>
                         </div>
@@ -840,11 +840,6 @@ var loginNickname = $('#userNickname').val();
 			 
 			});
 
-			$('#gomessage').click(function(){
-				
-			 	alert("쪽지 전송이 완료되었습니다.")
-			});
-			
 			$('#reportModal').on('show.bs.modal', function(e) {
 	            console.log("신고");
 	            
@@ -915,6 +910,39 @@ var loginNickname = $('#userNickname').val();
 					$(this).addClass('on');
 					$("#" + tab_id).addClass('on');
 				});
+				
+				   $('#sendbtn').click(function(){
+		        		var data = {};
+		        		data.receiveId= $('#receiveId').val();
+		        	 
+		        		
+		        		if($('#receiveId').val() == ''){
+		        			Swal.fire("아이디를 입력해주세요.");
+		        		}else if($('#messageContent').val() == ''){
+		        			Swal.fire("내용을 입력해주세요");
+		        		}else{
+		        			$.ajax({
+		        				type:"GET",
+		        				data:data,
+		        				datatype:"JSON",
+		        				url:"/message/receiveIdAuth",
+		        				success:function(success){
+		        					if(success.idCount == 0){
+		        						Swal.fire("존재하지않는 회원입니다.");
+		        					}else{
+		        						$("#messageForm").submit();
+		        						Swal.fire("쪽지 전송이 완료되었습니다.");
+		        					}
+		        				},
+		        				error:function(error){
+		        					Swal.fire("올바른방식이 아닙니다.");
+		        				}
+		        			});
+		        		}
+		        	  });
+		         
+				
+				
 			</script>
 
 		</div>

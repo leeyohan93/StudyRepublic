@@ -19,6 +19,9 @@
 
 
 <style type="text/css">
+   ul li{
+   padding-left:0em;
+   }
 
 .sidebar {
    position: sticky;
@@ -300,7 +303,7 @@
 
 
 
-               <form  action="/member/modify/location" method="post" >
+               <form id="locationForm" action="/member/modify/location" method="post" >
                
                         <div class="row text-center placeholders" style="height: auto; margin-bottom:0; padding-bottom:0">
                         <div class="col-6 col-sm-12">
@@ -360,7 +363,7 @@
                      style="border: none; margin: auto; width: auto;margin-left: 600px; height:auto; ">
                      <div class="join-form-btn" style = "margin: 40px 40px 40px -30px"  >
 
-                     <button type="submit" style = "width:auto; height:auto; font-weight: bold; font-size:14px; ">적용</button>
+                     <button type="button" id="locationbtn" onclick="enrollLocation()" style = "width:auto; height:auto; font-weight: bold; font-size:14px; ">적용</button>
                      </div></div>
                </form>
 
@@ -641,6 +644,15 @@
                   }
 
                }
+               
+               function enrollLocation() {
+            	      
+                   if(document.getElementsByName('mlocation').length != 0) {            
+                      document.getElementById('locationForm').submit();               
+                      } else {
+                    	  Swal.fire("관심지역을 1개 이상 설정해주세요.");
+                   } 
+               }
 
                /* 관심분야 스크립트*/
 
@@ -744,7 +756,7 @@
                   if(document.getElementsByName('minterest').length != 0) {            
                      document.getElementById('enrollInt').submit();               
                      } else {
-                     alert("관심분야를 1개 이상 설정해주세요.");
+                    	 Swal.fire("관심분야를 1개 이상 설정해주세요.");
                   } 
                   
 /*                   if(document.getElementsByName('minterest').length == 0) {
@@ -766,5 +778,6 @@
    </div>
    </div>
 </body>
+>>>>>>> branch 'master' of https://github.com/leeyohan93/StudyRepublic.git
 
 </html>

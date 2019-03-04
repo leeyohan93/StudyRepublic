@@ -10,7 +10,7 @@
     
     <!-- 참고:  https://jqueryui.com/sortable/#portlets -->
     <!-- 설명:  jQuery UI 의 sortable - portlets 예제를 기반으로 수정 / 발전시킨 코드 -->
-    <title>스터디 오픈</title>
+    <title>스터디 개설하기</title>
 
 </head>
 <th:block layout:fragment="customCss">
@@ -1057,6 +1057,15 @@
 			
 		}
 		
+		#fileDumy {
+		    height: 100%;
+		    padding: 8px;
+		    margin: 0 15px 0 0;
+		    margin-bottom: 40px;
+		    width: 500px !important;
+		    float: left;
+		}
+		
     </style>
  
 </th:block>
@@ -1144,17 +1153,16 @@
 					                <div class="col-md-10 input-content" style="font-size: 0">
 				                        <label th:each="typeCode : ${typeCode}"><input type="radio" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode.typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label>
 	<!-- <label th:each="typeCode : ${typeCode}"><input type="text" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label> -->
-					                   
-					                    <span class="input-study-type-alert1" style="display:none">알림!
+					                    <span class="input-study-type-alert1" style="display:none; padding-top:0.5em">알림!
 					                        프리미엄 스터디는 유료로 진행되는 강의형 스터디로, 인증 절차를 <br/>
 					                        완료한 강사 등급의 회원만 개설할 수 있습니다.<br/>
 					                        <a th:href="@{/tutor/signup}">강사 등급 신청하기</a>
 					                    </span>
 					                    
-					                    <br>
-					          <span class="input-study-type-alert2" style="display:none">알림!
-					                      현재 프리미엄 등급 신청 심사 중 입니다.
-					                    
+					            <span class="input-study-type-alert2" style="display:none;padding-top:0.5em">알림!
+					                    프리미엄 등급 신청을 심사중입니다.    <br/>
+					                       <br/>
+					      
 					                    </span>
 					                </div>
 					            </div>
@@ -1404,10 +1412,18 @@
 								<!--  /********************************** Smart Editor - HTML 끝  **********************************/ -->
 							</div>
 							
-					
-							<div id="file-container">
-								<input type="file" name="file" multiple>
+						<div style="height: auto;">
+							<div class="join-form-btn" id="addFile"
+								style="margin: 15px 0px 0px 50px; width: 70px; height: 43px;">
+								<button type="button">파일추가</button>
 							</div>
+							<div class="wrap-input100 validate-input" id="fileDumy"
+								style="height: 100%; margin: 0 15px 0 0; margin-bottom: 40px; width: 730px; float: left; border:none;">
+							</div>
+						</div>
+<!-- 							<div id="file-container"> -->
+<!-- 								<input type="file" name="file" multiple> -->
+<!-- 							</div> -->
 						
 	<!-- 						<input type="hidden" th:name="${_csrf.parameterName}" -->
 	<!-- 							th:value="${_csrf.token}" /> -->
@@ -1954,6 +1970,7 @@
 	        
 	        /********************************** leveltest - Script 끝 **********************************/
 	
+	        
    	        /********************************** basicInfo - Script 시작 **********************************/
    	        
 	        // type, onoff 선택에 따라, 입력 폼의 상태를 visible 로 바꾸는 함수
@@ -1971,7 +1988,6 @@
 	                    		
 	                    	} else if($('#input-study-member-gradeCode').val() == "W") {
 	                    		$('#basicInfoArea .input-study-type-alert2').css("display", "block");
-	                    		//	                    		alert("아니라고!!!");
 	                    	}
 	                        $("#basicInfoArea input[name='typeCode.typeCode'][value='P']").prop('checked', false);
 							$("#basicInfoArea .type-p").addClass("disable");
@@ -2001,7 +2017,7 @@
 	                $('#basicInfoArea [blinded]').hide();
 	                $('#basicInfoArea .input:not([blinded])').show();
 	            });
-	        }               
+	        }        
 	
 	        // datepicker 기능 시작. ////////////////////////////////////////////////////////////////////////////////////////////////
 	        
@@ -2039,7 +2055,8 @@
 			    	
 	            	var endDatepicker = $('#input-study-endDate').datepicker().data('datepicker');
 	            	endDatepicker.update({
-						minDate: new Date(date.getTime() + (7*24*60*60*1000)) 
+// 						minDate: new Date(date.getTime() + (7*24*60*60*1000))
+						minDate: new Date(date.getTime()) 
 			    	});
 	            	var startDate = new Date($('#input-study-startDate').val());
 		            var endDate = new Date($('#input-study-endDate').val());
@@ -2321,12 +2338,13 @@
 
 					var id = $(this).attr("id");
 					var $target;
-					var price;
+					var price = 0;
 					var studyCount = $('#input-study-studyCount').val();
 					
 					if(studyCount == "") {
 						console.log('널뛰기');
-						$target.val("");
+// 						$target.val("");
+						$(this).parent().siblings('div').find('input').val("");
 						return false;
 					}
 					
@@ -2338,6 +2356,8 @@
 							console.log('up 입장');
 							$target = $('#input-study-totalPrice');
 							price = $(this).val() * (studyCount-0);
+// 							price = price.toFixed(2);
+// 							$target.val(price.toFixed(2));
 							$target.val(price);
 							break;
 							
@@ -2345,8 +2365,9 @@
 							console.log('tp 입장');
 							$target = $('#input-study-unitPrice');
 							price = $(this).val() / (studyCount-0);
-							price = price.toFixed(2);
-							$target.val(price.toFixed(2));
+// 							price = price.toFixed(2);
+// 							$target.val(price.toFixed(2));
+							$target.val(price);
 							break;
 					}
 					
@@ -2432,21 +2453,22 @@
 					}
 				});
 				
+				
 				$('#btn-previous').on("click", function(){
-					var currentIndex = $('.tab-item-container').find('.active').index() + 1;
-					console.log(currentIndex + '에서 이전 클릭');
+					var currentNth = $('.tab-item-container').find('.tab-item.active').index() + 1;
+					console.log(currentNth + '에서 이전 클릭');
 					
-					if(currentIndex != 1) {
-						$( ".tab-item-container .tab-item:nth-child(" + (currentIndex - 1) + ")" ).trigger("click");
+					if(currentNth != 1) {
+						$( ".tab-item-container .tab-item:nth-child(" + (currentNth - 1) + ")" ).trigger("click");
 					}
 				});
 				
 				$('#btn-next').on("click", function(){
-					var currentIndex = $('.tab-item-container').find('.active').index() + 1;
-					console.log(currentIndex + '에서 다음 클릭');
+					var currentNth = $('.tab-item-container').find('.tab-item.active').index() + 1;
+					console.log(currentNth + '에서 다음 클릭');
 					
-					if(currentIndex < 3) {
-						$( ".tab-item-container .tab-item:nth-child(" + (currentIndex + 1) + ")" ).trigger("click");
+					if(currentNth < 4) {
+						$( ".tab-item-container .tab-item:nth-child(" + (currentNth + 1) + ")" ).trigger("click");
 					}
 				});
 				
@@ -2604,6 +2626,39 @@
 
 			}
 			// 관심분야: 성호님 코드 끝
+			
+			// 파일 추가: 성호님
+			
+				var fileCount = 0;
+				$('#addFile')
+						.click(
+								
+								function() {
+									if(fileCount < 1) {
+										
+									var uploadFile = "<div class = 'file_input' id = 'lifile" + fileCount + "' style = 'margin: 0 60px 0 20px;'>"
+											+ "<input type = 'text' readonly = 'readonly' id = 'file_route" + fileCount + "'>"
+											+ "<label style = 'margin:10px'> 파일선택 <input type = 'file' id = 'fnum" + fileCount+ "' name = 'file' multiple onchange = \"javascript:document.getElementById('file_route"
+											+ fileCount
+											+ "').value = this.value.substring(12)\"></label>"
+											+ "<input class = 'yshbtn' type = 'button' value = 'X' id = 'liidel"
+											+ fileCount
+											+ "' onclick = 'deleteFile("
+											+ fileCount + ")'></div>"
+
+									$('#fileDumy').append(uploadFile);
+
+									fileCount++;
+									}
+								});
+
+				function deleteFile(num) {
+
+					$('#lifile' + num).remove();
+
+				}
+
+			
 	    </script>
 		<!--  Plugin for the Wizard -->
 		<script src="/paperBootstrapWizard/assets/js/jquery.bootstrap.wizard.js" type="text/javascript"></script>
