@@ -245,11 +245,7 @@ h2 {
 					var userId = document.getElementById('loggedInUserId').value;
 
 					if (joinBtn.dataset.userType == "anonymous") {
-	            		Swal.fire({
-	          				type: 'error',
-	          				title: '',
-	         			 	text: '로그인 후 신청할 수 있어요!',
-	        				}) 
+			               alert("로그인 후 신청할 수 있어요!");
 	        			location = "/study/pleaseLogin/?pathname=" + pathname;
 						window.location.href = originUrl + location;
 //	 					location = "/login";
@@ -293,31 +289,19 @@ h2 {
 								var studyMemberStatusCode = data.studyMemberStatusCode.studyMemberStatusCode;
 								console.log("studyMemberStatusCode = " + studyMemberStatusCode);
 
-								switch (studyMemberStatusCode) {
-									case "WA":
-			                   			Swal.fire({
-			                  				type: 'error',
-			                  				title: '',
-			                 			 	text: "승인 대기중인 스터디입니다.",
-			                				}) 
-			                			return;
-									case "ME":
-									case "LE":
-			                  			Swal.fire({
-			                  				type: 'error',
-			                  				title: '',
-			                 			 	text:  "이미 가입된 스터디입니다.",
-			               				}) 
-										return;
-									case "EX":
-									case "DE":
-			                 			Swal.fire({
-			                  				type: 'error',
-			                  				title: '',
-			                 			 	text: "가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.",
-			               				}) 
-										return;
-								}
+			                     switch (studyMemberStatusCode) {
+			                        case "WA":
+			                           alert("승인 대기중인 스터디입니다.");
+			                           return;
+			                        case "ME":
+			                        case "LE":
+			                           alert("이미 가입된 스터디입니다.");
+			                           return;
+			                        case "EX":
+			                        case "DE":
+			                           alert("가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.");
+			                           return;
+			                     }
 							},
 							error : function(e) {
 								console.log("Error: " + e);
