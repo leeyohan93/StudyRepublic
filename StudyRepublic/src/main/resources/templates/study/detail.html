@@ -3,7 +3,7 @@
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorate="~{/layout/mainLayout}">
 <head>
-<title>Study Detail View</title>
+<title>스터디 상세 보기</title>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 <!-- <meta property="og:title" content="제목"> -->
 <!-- <meta property="og:description" content="설명"> -->
@@ -204,6 +204,12 @@ layout:decorate="~{/layout/mainLayout}">
         font-weight: 900;
         color: #f8ce0b;
       }
+      
+      .tabs {
+	  	    padding-left: 2px;
+    	
+      }
+      
    </style>
    
    <!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous"> -->
@@ -231,6 +237,7 @@ layout:decorate="~{/layout/mainLayout}">
       
       <!-- <img src="/images/diamond.png" alt="Shard" class="shard"> -->
          <h3>스터디 상세</h3>
+      			
          
          
          <section class="studyDetail study_detail_container">
@@ -424,11 +431,11 @@ layout:decorate="~{/layout/mainLayout}">
                                           	 <p th:text="${#lists.isEmpty(study.review)}? '작성 된 후기가 없습니다.' "> </p>
                                           
                                              <th:block th:if="${not #lists.isEmpty(study.review)}">
-                                                총 <span class="review-counter" ></span>건
+                                                총 <span class="review-counter"></span>건
                                                 <hr/>
             
                                              <ul class="comments_list">
-                                                <li th:each="review : ${study.review}" th:with="reviewer = ${review.member}">
+                                                <li class="review-unit" th:each="review : ${study.review}" th:with="reviewer = ${review.member}">
                                                    <div class="comment_item d-flex flex-row align-items-start jutify-content-start">
                                                       <div class="comment_image"><div><img th:src="@{'/member_image/' + ${reviewer.profileSaveName}}" alt="리뷰어 프로필 사진"></div></div>
                                                       <div class="comment_content">

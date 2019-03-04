@@ -10,7 +10,7 @@
     
     <!-- 참고:  https://jqueryui.com/sortable/#portlets -->
     <!-- 설명:  jQuery UI 의 sortable - portlets 예제를 기반으로 수정 / 발전시킨 코드 -->
-    <title>스터디 오픈</title>
+    <title>스터디 개설하기</title>
 
 </head>
 <th:block layout:fragment="customCss">
@@ -1960,7 +1960,13 @@
 	            $('#basicInfoArea .input-field-type input').on('click', function() {
 	                if(this.value == "P") {
 	                    if($('#input-study-member-gradeCode').val() != "T") {
-	                        $('#basicInfoArea .input-study-type-alert').css("display", "block");
+	                        
+	                    	if($('#input-study-member-gradeCode').val() == "N") {
+	                    		$('#basicInfoArea .input-study-type-alert').css("display", "block");
+	                    		
+	                    	} else if($('#input-study-member-gradeCode').val() == "W") {
+	                    		alert("아니라고!!!");
+	                    	}
 	                        $("#basicInfoArea input[name='typeCode.typeCode'][value='P']").prop('checked', false);
 							$("#basicInfoArea .type-p").addClass("disable");
 	                        $('#basicInfoArea .input:not(.input-field-type)').hide();
