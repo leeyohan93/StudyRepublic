@@ -118,6 +118,7 @@ public class BoardCotroller {
 	//스터디 요청게시판 글목록 페이징
 	@GetMapping("/listRequestBoard")
 	public void listRequestBoard(@ModelAttribute("pageDTO") PageDTO pageDTO, Model model) {
+
 		pageDTO.setSize(12);
 		Pageable page = pageDTO.makePageable(0, "requestBoardId");
 		Pageable noticePage = pageDTO.noticeMakePageable("notice", "requestBoardId");

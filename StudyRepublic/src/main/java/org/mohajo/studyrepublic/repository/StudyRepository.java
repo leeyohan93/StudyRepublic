@@ -7,6 +7,8 @@ import org.mohajo.studyrepublic.domain.PopularStudy;
 import org.mohajo.studyrepublic.domain.QStudy;
 import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyIdGenerator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -104,4 +106,6 @@ public interface StudyRepository extends JpaRepository<Study, String>, QuerydslP
 	@Query(value = "select substring(study_id, 3)+1 as counter from study where type_code = :typeCode and onoff_code = :onoffCode order by study_id desc limit 1", nativeQuery=true)
 	public double getCounter(String typeCode, String onoffCode);	
 	
+	@Query(value = "select * from study where leader_id = :id" ,nativeQuery=true)
+	Page <Study> findStudy(String id, Pageable paging);
 }

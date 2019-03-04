@@ -52,10 +52,10 @@
                         <div class="analytics-sparkle-line table-mg-t-pro dk-res-t-pro-30">
                             <div class="analytics-content">
                                 <h5>목표 회원 수</h5>
-                                <h2><span class="counter">500</span> <span class="tuition-fees">명</span></h2>
-                                <span class="text-inverse" th:text="|${500/totalMember}%|" >80%</span>
+                                <h2><span class="counter">2500</span> <span class="tuition-fees">명</span></h2>
+                                <span class="text-inverse" th:text="|${((totalMember*100)/2500)}%|" >80%</span>
                                 <div class="progress m-b-0">
-                                    <div class="progress-bar progress-bar-inverse" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" th:style="|width:${500/totalMember}%;|"> <span class="sr-only">230% Complete</span> </div>
+                                    <div class="progress-bar progress-bar-inverse" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" th:style="|width:${((totalMember*100)/2500)}%;|"> <span class="sr-only">230% Complete</span> </div>
                                 </div>
                             </div>
                         </div>

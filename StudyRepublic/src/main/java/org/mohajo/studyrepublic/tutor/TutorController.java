@@ -30,6 +30,7 @@ import org.mohajo.studyrepublic.domain.Member;
 import org.mohajo.studyrepublic.domain.MemberRoles;
 import org.mohajo.studyrepublic.domain.PageDTO;
 import org.mohajo.studyrepublic.domain.PageMaker;
+import org.mohajo.studyrepublic.domain.Study;
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyView;
 import org.mohajo.studyrepublic.domain.Tutor;
@@ -45,6 +46,7 @@ import org.mohajo.studyrepublic.repository.Interest2CDRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
 import org.mohajo.studyrepublic.repository.MemberRolesRepository;
 import org.mohajo.studyrepublic.repository.StudyMemberRepository;
+import org.mohajo.studyrepublic.repository.StudyRepository;
 import org.mohajo.studyrepublic.repository.StudyViewRepository;
 import org.mohajo.studyrepublic.repository.TutorCareerRepository;
 import org.mohajo.studyrepublic.repository.TutorInterestRepository;
@@ -99,6 +101,8 @@ public class TutorController implements Serializable {
 	TutorCareerRepository tutorcareerrepository;
 	@Autowired
 	TutorInterestRepository tutorinterestrepository;
+	@Autowired
+	StudyRepository sr;
 	
 	@Autowired
 	TypeCD typeCd;
@@ -176,7 +180,8 @@ public class TutorController implements Serializable {
 		member.setGradeCD(new GradeCD("W"));
 		member.setRoles(roles);
 		
-		
+		memberrolesrepository.deleteNormal(member.getId());
+				
 		Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>(); 
 		
 		
@@ -213,25 +218,24 @@ public class TutorController implements Serializable {
 
 		String fileOriginName = "";
 
-
-
-/*		String uploadRootPath = "C:\\Users\\82102\\Desktop\\SeongHo\\StudyRepublic\\StudyRepublic\\src\\main\\resources\\static\\tutorFileUpload";
-		System.out.println("uploadRootPath = " + uploadRootPath);*/
 		
 		//
 	
-		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
-		
+// 221줄 ~ 226줄은 localhost용 파일업로드 방법.		
+/*		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();	
 		Resource resource = defaultresourceloader
 				.getResource("file:src\\main\\resources\\static\\tutorFileUpload\\" + member.getId());
-		
-		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
-		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
-		
-		String uploadRootPath = resource.getFile().getAbsolutePath();
 
-		File file = new File(uploadRootPath);
-//		File file = new File(tutorFileFullUrl);
+		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
+		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());  
+		String uploadRootPath = resource.getFile().getAbsolutePath();*/
+
+		
+//231번줄은 서버용 파일업로드 방법.
+		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload/" + member.getId());
+
+		System.out.println(uploadRootPath);		 
+		 File file = new File(uploadRootPath);
 
 		
 	      if (!file.exists()) {
@@ -288,9 +292,9 @@ public class TutorController implements Serializable {
 					tutoruploadfile.setTutorfileUploadPath(uploadRootPath);
 
 					tutoruploadfile.setTutorfileSavename(fileSaveName);
-					String fullUrl = uploadRootPath + "\\" + fileSaveName;
+					String fullUrl = uploadRootPath + "/" + fileSaveName;
 					tutoruploadfile.setTutorFileFullUrl(fullUrl);
-					String partUrl = "\\tutorFileUpload\\" + member.getId() + "\\" + fileSaveName;
+					String partUrl = "/tutorFileUpload/" + member.getId() + "/" + fileSaveName;
 
 					tutoruploadfile.setTutorfilePartUrl(partUrl);
 					tutoruploadfile.setMember(member);
@@ -356,14 +360,19 @@ public class TutorController implements Serializable {
 		TutorUploadFile tutoruploadfile = tutoruploadfilerepository.findByTutorUploadPreviewFile(tutorFileFullUrl);
 
 		System.out.println(tutorFileFullUrl);
-		String uploadRootPath = request.getServletContext().getRealPath("/");
-		System.out.println("업로드 루트 패쓰" + uploadRootPath);
-
-		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
+/*		String uploadRootPath = request.getServletContext().getRealPath("/");
+		System.out.println("업로드 루트 패쓰" + uploadRootPath);*/
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();
-		
+
+// 368번째줄 ~ 370번째줄은 서버용 파일다운로드 방법... 안먹힘...
+/*		 String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload/" + id);
+		 System.out.println(uploadRootPath);		 
+		 File file = new File(uploadRootPath);*/
+	
+// 372번째줄 ~ 377번째줄은 localhost용 파일다운로드 방법
+		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		Resource resource = defaultresourceloader
 				.getResource("file:src\\main\\resources\\static" +tutoruploadfile.getTutorfilePartUrl());
 				
@@ -371,7 +380,10 @@ public class TutorController implements Serializable {
 		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
 
 		File file = new File(resource.getFile().getAbsolutePath());
-//		File file = new File(tutorFileFullUrl);
+		
+		
+		
+
 		System.out.println("file: " + file);
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 
@@ -396,20 +408,27 @@ public class TutorController implements Serializable {
 	}
 
 	@GetMapping("/tutor/file/delete")
-	public String deleteFile(@RequestParam String tutorFileFullUrl) throws IOException {
+	public String deleteFile(@RequestParam String tutorFileFullUrl, HttpServletRequest request) throws IOException {
 
 		TutorUploadFile tutoruploadfile = tutoruploadfilerepository.findByTutorUploadPreviewFile(tutorFileFullUrl);
 		tutoruploadfilerepository.deleteById(tutoruploadfile.getTutorFileId());
-		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		
+// 413번째줄 424번째줄은 localhost용 삭제방법.
+/*		final DefaultResourceLoader defaultresourceloader = new DefaultResourceLoader();
 		Resource resource = defaultresourceloader
 				.getResource("file:src\\main\\resources\\static" + tutoruploadfile.getTutorfilePartUrl());
 		
 		System.out.println("resource: " + resource); // 파일 저장 위치가 사람마다 다르기 때문에 get resource를 받아와 이용자에 맞는 절대경로로 반환해준다.
 		System.out.println("resource 경로: " + resource.getFile().getAbsolutePath());
+		File file = new File(resource.getFile().getAbsolutePath());*/
+		
+// 421번째줄 425번째줄은 서버용 파일삭제방법	
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String id = auth.getName();
+		String uploadRootPath =  request.getSession().getServletContext().getRealPath("tutorFileUpload/" + id);
+		System.out.println(uploadRootPath);		 
+		File file = new File(uploadRootPath);
 
-		File file = new File(resource.getFile().getAbsolutePath());
-//		File file = new File(tutorFileFullUrl);
 
 		System.out.println("file: " + file);
 
@@ -469,6 +488,7 @@ public class TutorController implements Serializable {
 		Tutor tutor = tutorrepository.findByTutor(id);
 			
 		model.addAttribute("tutor", tutor);
+		model.addAttribute("tutorEducationCD", tutor.getEducationCD().getCodeValueKorean());
 
 		List<StudyMember> studyActivity = smr.findTutorActivityById(id);
 		model.addAttribute("studyActivity", studyActivity);
@@ -482,7 +502,12 @@ public class TutorController implements Serializable {
 		List<TutorCareer> selectedtutorcareer = tutorcareerrepository.selectedtutorcareer(tutor_number);
 		model.addAttribute("selectedtutorcareer", selectedtutorcareer);
 		
+		Pageable page = pageDto.profilePageable(0, 10, "post_date");
+		Page<Study> list = sr.findStudy(id, page);
 		
+		model.addAttribute("pagedList", new PageMaker<>(list));
+		model.addAttribute("typeCode", typeCode);
+			
 		return "tutor/tutor_profile";
 		
 	}

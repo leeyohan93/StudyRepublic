@@ -11,6 +11,8 @@
 <head>
 <title>Study Republic</title>
 <meta charset="utf-8" />
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
 <link rel = "stylesheet" type = "text/css" th:href = "@{/css/studymainpage.css}">
@@ -21,24 +23,22 @@
 <div layout:fragment="bootJs">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script> 
   	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 </div>
-<style>
-
-  
-
-</style>
 </head>
 <body>
 	<nav layout:fragment="header-nav"><ul>
-						<li class="nav-item"><a href="#"> </a></li>
+						<li class="nav-item"><div id="studyTitleA"></div></li>
 					</ul></nav>
 	<nav id="menu" layout:fragment="menu"
 		></nav>
-	<div id="main" layout:fragment="main"
+	<div id="main" style="background-color: white;" layout:fragment="main"
 		><div class="inner"
 			><style>
+				#left{
+					    border-radius: 10px 0px 0px 10px;
+				}
 					#leftDown{
 						text-align:center;
 					}
@@ -120,6 +120,7 @@
 					font-size: 19px;
 				
 				}
+				
 					
 				</style><div id="left" layout:fragment="left"
 				>
@@ -159,7 +160,8 @@
 				
 			<!-- 신고 modal  -->
 
-			<div class="modal" id="reportModal" tabindex="-1">
+			<div class="modal fade" id="reportModal" role="dialog">
+			<!-- tabindex="-1" -->
 			
 				 <div class="modal-dialog">
 					<div class="modal-content">
@@ -171,15 +173,15 @@
 							<button class="close" id="reportClose" data-dismiss="modal">&times;</button>
 						</div>
 						<div class="modal-body" id="reportBody" style="text-align: center;">
-							<form id="reportForm">
-							  <input type="hidden" name = "reportTypeCD" value="study">
-						
+							<form id="reportForm">						
 							   <input type="hidden" name = "id" value="">
 							    <input type="hidden" name ="target" id="reportTarget" value="">
 							<div>
 								<input class="reportOption" type="text" value="신고자" readonly>
-								<input class="reportContent" name="idNickname" type="text"
-									value="" readonly>
+								<input class="reportContent" name="nickName" type="text"
+									th:value="${session.nickname}" readonly>
+								<input class="reportContent" id="userId" name="id" type="hidden"
+									th:value="${session.userid}">
 									</div>
 									<div>
 									 <input
@@ -188,14 +190,14 @@
 									value="" readonly> 
 									</div>
 									<div>
-									<input class="reportOption"
-									type="text" value="신고 스터디" readonly> <input
-									class="reportContent" name="targetNickname" type="text"
-									value="" readonly> 
+									<input class="reportOption" type="text" value="신고 스터디" readonly>
+									<input class="reportContent" id="reportTypeCD" name="reportTypeCD" value="" type="hidden">
+									<input class="reportContent" id="reportStudyName" name="targetStudyName" type="text" value="" readonly>
+									<input class="reportContent" id="reportStudyId" name="target" type="hidden" value="" readonly> 
 									</div>
 									<div>
 									 <input
-									class="reportOption" type="text" value="신고유형" readonly>
+									class="reportOption" type="text" value="신고 사유" readonly>
 								<select class="reportContent" id="reportWhyCD" name="reportWhyCD">
 									<option value="1">영리목적 및 홍보성</option>
 									<option value="2">불법정보</option>
@@ -207,7 +209,8 @@
 								</select> 
                                  </div>
                                  <div>
- 									<input class="reportOption" type="text" value="신고내용" id="reprotContentOption" readonly> <textarea class="reportContent" id="reportContent" name="content" placeholder="신고내용을 작성해주세요."
+ 									<input class="reportOption" type="text" value="신고내용" id="reportContentOption" readonly
+ 									><textarea class="reportContent" id="reportContent" name="content" placeholder="신고내용을 작성해주세요."
 									></textarea>
 									</div>
 						</div>
@@ -224,28 +227,7 @@
 
 		<!-- 신고 모달 끝 -->
 				
-	        <script type="text/javascript">
-	        
-	         
-	        
-	       /*  $('#reportModal').on('show.bs.modal', function(e) {
-	    	 e.preventDefault();
-	        	$('#reportModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
-	    		
-	    	});  */
-/* 	        $('document').ready(function(){
-	        	$('.check').on('click', function(e){
-	        		var form = $('#formAction');
-	        		form.action = this.value;
-	        		form[0].name = "studyId";
-	        		form[0].value = window.name;
-	        		console.log(form.action + '/' + form[0].name + '/' + form[0].value);
-	        		alert("폼액션 - " + form.action);
-	        		alert("");
-//	        		form.submit();
-	        		$('#formAction').submit();
-	        	});
-	        }); */
+	       <script type="text/javascript" th:inline="javascript">
 	        
 	        var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
@@ -255,7 +237,7 @@
 							xhr.setRequestHeader(header,token);
 						});
 			});
-			var d;
+			var contentCheck;
 	        $('document').ready(function(){
 	        	
 	        	var studyInfo =  window.name;
@@ -305,7 +287,7 @@
 							$("#leftDown").append("<button class='check' value='" + data[0] + "'>" + data[1] + "</button></br>");
 						}
 						$('.check').on('click', function(e){
-			        		if(this.textContent!="탈퇴"){
+			        		if(this.textContent!="탈퇴" && this.textContent!="신고"){
 			        			form = $('#formAction')[0];
 				        		form.method = "POST";
 				        		form.action = this.value;
@@ -319,12 +301,66 @@
 						console.log(data);
 					}
 				});
-		       
+		        /*<![CDATA[*/
+		        $("#viewRepotBtn").on("click", function(){
+		        	var session = /*[[${session.studyNameAndStudyIdMap}]]*/;
+		        	var studyName;
+		        	$.each(session, function(key, value){
+		        			if(value==window.name){
+		        				studyName = key;
+		        				return;
+		        			}
+		        	});
+		        	//스터디명 배치
+		        	$("#reportStudyName").val(studyName);
+		        	
+		        	
+		        	//실제 전달 될 코드들
+		        	//스터디 유형 배치
+		        	$("#reportTypeCD").val("study");
+		        	//날짜 배치
+		        	$("#reportDay").val(new Date().toLocaleString());
+		        	//피신고자(스터디) ID배치
+		        	$("#reportStudyId").val(window.name);
+		        });
+		        
+		        var studyNameTitle;
+		        $.each(/*[[${session.studyNameAndStudyIdMap}]]*/, function(key, value){
+        			if(value==window.name){
+        				studyNameTitle = key;
+        				return;
+        			}
+        		});
+		        $("#studyTitleA").append('<h6 id="studyTitle" style="font-weight:600; color:dodgerblue;">'+studyNameTitle+'</h6>');
+		        /*]]>*/	
+		        
+		        $("#reportRegister").on("click", function(){
+		        	var jsonData = {
+		        			id : $("#userId").val(),
+		        			target : $("#reportStudyId").val(),
+		        			reportTypeCD : $("#reportTypeCD").val(),
+		        			reportWhyCD : $("#reportWhyCD")[0].value,
+		        			content : $("#reportContent").val()
+		        	};
+		        	contentCheck = jsonData;
+		        	console.log("실행됨");
+		        	$.ajax({
+		        		type :'POST',
+		        		contentType : "application/json; charset=UTF-8",
+		        		url : '/StudyPage/Report',
+		        		data : JSON.stringify(jsonData),
+		        		success : function(){
+		                    console.log("성공");
+		                    Swal.fire("신고 처리 되었습니다.","");
+		                    $("#reportModal .close").click()
+		                },error :function(){
+		                    console.log("실패");
+		                }
+		            });
+		        });
 	        }); 
 	        
-	/* $('#reportModal').on('show.bs.modal', function(e) {
-		$('#reportModal').modal({backdrop: 'static'});
-	}); */
+	
       
     var popOpen;
  

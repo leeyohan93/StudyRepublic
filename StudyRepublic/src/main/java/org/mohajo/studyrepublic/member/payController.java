@@ -33,7 +33,7 @@ public class payController {
 	
 	@RequestMapping("/member/point/charge")
 	public String chargePoint(Model model, HttpSession session
-			, @RequestParam(value="indicator", required=false) String indicator, @RequestParam(value = "needPoint") int needPoint) {
+			, @RequestParam(value="indicator", required=false) String indicator, @RequestParam(value = "needPoint" ,required=false) Integer needPoint) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String id = auth.getName();

@@ -240,35 +240,54 @@
 			<div class="body">
 			
 				
-			
-				<div class="wrap-input100_ validate-input" style = "display:inline-block; margin:50px 50px; width: 200px;">
+			<div style = "margin-bottom:100px; height:auto; width:auto">
+				<div class="wrap-input100_ validate-input" style = "display:inline-block;  width: 400px; float:left">
 								<img id="img_profile"
 									th:src="@{'/member_image/'+${mdu.profileSaveName}}"
 									style="width: 200px; height: 240px; border-radius:100%;"  />
 									</div>
 									
+								
+					<div class="wrap-input100_ validate-input" style = "width:500px; padding-top:30px">
+					
+					<div class="wrap-input100_label" style = "height:40px;">
+					<span style = "width:200px; font-weight:bold">이름</span>
+					<span th:text = "${mdu.name}" style = "width:auto"></span> 
+					</div>
 				
+					<div class="wrap-input100_label" style = "height:40px">
+					<span style = "width:200px; font-weight:bold">최종학력</span>
+					<span th:text = "${tutorEducationCD}"></span>
+					</div>
 				
+					<div class="wrap-input100_label" style = "height:40px">
+					<span style = "width:200px; font-weight:bold">이메일</span>
+					<span th:text = "${mdu.email}"></span>
+					</div>
+					
+					<div class="wrap-input100_label" style = "height:40px">
+					<span style = "width:200px; font-weight:bold">닉네임</span>
+					<span th:text = "${mdu.nickname}"></span>
+					</div>
+					
+					
+					</div>
 				
+				</div>
 
-						
-						<div class="join-input100" th:each = "tutor : ${tutor}"
-							style="width: auto; height:auto; align-items: baseline; float:right">
-							<div class="input100" name="introduction"  th:text = "${tutor.introduction}"
-								style="padding: 20px; width: 570px; height: 400px"></div>
+
+						<div class="wrap-input100_label"
+							style="width: auto; height: auto; margin-bottom: 70px; ">
+							<span class="label-input100_label" style="width: auto; ">
+								소개글</span>
 						</div>
 						
-						
-						
-						
-							<div class="wrap-input100 validate-input"
-							style="width: auto; margin: 0; border: none; margin: auto;">
-							<div class="wrap-input100_label"
-								style="width: 100%; display: block; margin-bottom: 20px">
-								<span class="label-input100_label" style="width: auto; top:-50px; margin: 30px 0 0 115px;" th:text="${tutor.member.nickname}"></span>
-							</div>
-						</div>	
-						
+						<div class="join-input100" th:each = "tutor : ${tutor}"
+							style="width: auto; height:auto; align-items: baseline;">
+							<div class="input100" name="introduction"  th:utext = "${tutor.introduction}"
+								style="padding: 20px; width: 100%; height: auto"></div>
+						</div>
+							
 						
 												<div class="wrap-input100_label"
 							style="width: auto; height: auto; margin-bottom: 70px; ">
@@ -296,7 +315,7 @@
 					<div class="wrap-input100_ validate-input" style = "margin-bottom:30px">
 									<h3 style = "width:100%">개설스터디내역</h3><br>
 									</div>
-									<table>
+							<table>
 								<tr>
 									<th>No.</th>
 									<th>스터디명</th>
@@ -316,12 +335,26 @@
 									</th:block>
 								</tr>
 							</table>
-						
+
+					
+					
+					<!--  -->
+
+	                  <!--  -->
+              
+					
+					
 				
 				  </div>
-</div>	
+				  			
+					
+				  </div>
+				  
+				  
+				  
 
-	
+
+
 
 
 
@@ -362,8 +395,22 @@
 			activateReviewTab();
 			prejoinCheck();
 			getRatingStars();
+ 
+			alert("size: " + document.getElementById('size').value); 
 			
 		});
+		
+
+            
+            var pageForm = $("#pageForm");
+            $(".pagination a").click(function(e) {
+               e.preventDefault();
+               pageForm.find('[name="page"]').val($(this).attr('href'));
+               pageForm.submit();
+            });
+		
+			
+		
 
 		//	1. 탭 메뉴 구현
 		function makeTabWorks() {

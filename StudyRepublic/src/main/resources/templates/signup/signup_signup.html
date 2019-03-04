@@ -37,6 +37,8 @@ layout:decorate="~{/layout/mainLayout}">
 
 <style>
 
+
+
 #main {
 background-color:#f8f9fa00;
 }
@@ -224,10 +226,25 @@ $(function() {
     });
 });
 
-                
+var regex_id="";
+var regex_pw="";
+var regex_name = "";
+var regex_nick ="";
+var regex_phone="";
+var regexArr = [regex_id, regex_pw, regex_name, regex_nick];
+
+ var uid;
+ var pw;
+ var rePw;
+ var name;
+ var birth;
+ var nickName;
+ var phoneNumber;
+ var gender;
+ var email;
      
      var data = {};
-     var idCheck;
+     var idCheck = 1;
          
        $('#checkId').on('click', function(){
           var inputedId = $('#id').val();
@@ -239,16 +256,27 @@ $(function() {
           
           success:function(data){
                if ( $.trim(inputedId).length == 0 ) {            
-                  alert("아이디를 입력해주세요.");
+  
 
                   idCheck = 1;
                } else if (data.count > 0) {
-                  alert("사용불가");
+               	Swal.fire({
+    				type: 'error',
+    				title: '',
+    			 	text: '이미 존재하는 아이디입니다.',
+//    			 	timer:1500
+    			}) 
 
                   idCheck = 1;
                }
                else if ($.trim(inputedId).length != 0 && data.count == 0 && (regex_id.test(uid))){ 
-                  alert("사용가능");
+            		Swal.fire({
+          				type: 'success',
+          				title: '사용가능',
+         			 	text: '',
+//         			 	timer:1500
+          		
+        				}) 
                   
                
                   idCheck = 0;
@@ -256,7 +284,12 @@ $(function() {
                
                else if ($.trim(inputedId).length != 0 && data.count == 0 && !(regex_id.test(uid))) {
                   
-                  alert("사용불가. 유효하지 않은 형식 입니다.");
+               	Swal.fire({
+    				type: 'error',
+    				title: '',
+    			 	text: '유효하지않은 형식입니다.',
+//    			 	timer:1500
+    			}) 
 
                   idCheck = 1;
                }
@@ -285,25 +318,46 @@ $(function() {
           success:function(data){
              
                if ( $.trim(inputedNick).length == 0 ) {            
-                  alert("닉네임을 입력해주세요.");
+                 	Swal.fire({
+        				type: 'error',
+        				title: '',
+        			 	text: '닉네임을 입력하세요.',
+ //       			 	timer:1500
+        			}) 
                
                   nickCheck = 1;
                   
                } else if (data.nickCount > 0) {
-                  alert("사용불가");
+                	Swal.fire({
+        				type: 'error',
+        				title: '',
+        			 	text: '이미 존재하는 닉네임입니다.',
+ //       			 	timer:1500
+        			}) 
                
                   nickCheck = 1;
                   
                }
                else if ($.trim(inputedNick).length != 0 && data.nickCount == 0 && regex_nick.test(nickName)){ 
-                  alert("사용가능");
+           		Swal.fire({
+      				type: 'success',
+      				title: '사용가능',
+     			 	text: '',
+//     			 	timer:1500
+      		
+    				}) 
    
                   nickCheck = 0;
                   
                }
                else if ($.trim(inputedNick).length != 0 && data.nickCount == 0 && !(regex_nick.test(nickName))) {
                   
-                  alert("사용불가. 유효하지 않은 형식 입니다.");
+               	Swal.fire({
+    				type: 'error',
+    				title: '',
+    			 	text: '유효하지않은 형식입니다.',
+//    			 	timer:1500
+    			}) 
                
                   nickCheck = 1;
 
@@ -317,7 +371,7 @@ $(function() {
                
           },
           error:function(error) {
-             alert("error: " + error)
+        	  Swal.fire("error: " + error)
           }
        });
     }); 
@@ -326,30 +380,60 @@ $(function() {
           $('#signup').on('click', function(){
           rePw = document.getElementById("repassword").value;
        
-        if(!(idCheck ==0 && nickCheck == 0 && (pw == repw) && uid != "" && pw != "" && repw != "" && name != "" && gender != "" && email != "" && phoneNumber != "" && birth != "")) {
-            alert("미입력 부분을 입력하세요.");
+          if(!(uid != "" && pw != "" && rePw != "" && name != "" && gender != "" && email != "" && phoneNumber != "" && birth != "")){
+//          if(!(idCheck ==0 && nickCheck == 0 && (pw == rePw) && uid != "" && pw != "" && rePw != "" && name != "" && gender != "" && email != "" && phoneNumber != "" && birth != "")) {
+/*         	Swal.fire("미입력 부분을 입력하세요."); */
+				
+/*         	  */
+				
+
+        	
+ /*        	Swal.fire(  'Good job!',  'You clicked the button!',  'success' )  */
             for(i = 0; i < information.length; i++) {              
                     if(information[i].value == "") {
                         information[i].focus();
                         break;
                     }
             }
-        } else if (idCheck == 1) {
-          alert('아이디 중복체크를 해주세요.');
+        } else if (idCheck > 0) {
+
+        	Swal.fire({
+				type: 'error',
+				title: '',
+			 	text: '아이디 중복체크를 해주세요.',
+//			 	timer:1500
+			})  
            document.getElementById("id").focus();
-       } else if(nickCheck == 1) {
-          alert('닉네임 중복체크를 해주세요.');
+       } else if(nickCheck > 0) {
+
+        	Swal.fire({
+			type: 'error',
+			title: '',
+		 	text: '닉네임 중복체크를 해주세요.',
+//		 	timer:1500
+		}) 
           document.getElementById("nickname").focus();
        }
        else if (pw != rePw) {
-          alert("패스워드를 확인해주세요.");          
+ 
+       	Swal.fire({
+			type: 'error',
+			title: '',
+		 	text: '패스워드를 확인해주세요.',
+//		 	timer:1500
+		})          
           document.getElementById("password").focus();
        }
-       else if (idCheck ==0 && nickCheck == 0 && (pw == repw) && uid != "" && pw != "" && repw != "" && name != "" && gender != "" && email != "" && phoneNumber != "" && birth != "") {
+       else if (idCheck ==0 && nickCheck == 0 && (pw == rePw) && uid != "" && pw != "" && rePw != "" && name != "" && gender != "" && email != "" && phoneNumber != "" && birth != "") {
           $("#repassword").remove();    // repassword삭제.
           $("#email1").remove();
           $("#email2").remove();
-          alert("회원가입을 축하합니다.");
+      	Swal.fire({
+				type: 'success',
+				title: '회원가입을 축하합니다.',
+			 	text: '',
+			 	timer:1500
+			}) 
           $("#memberjoin").submit();
        }
        
@@ -373,22 +457,7 @@ $(function() {
       var messageBox = document.getElementsByClassName("member");
       
       
-         var regex_id="";
-         var regex_pw="";
-         var regex_name = "";
-         var regex_nick ="";
-         var regex_phone="";
-         var regexArr = [regex_id, regex_pw, regex_name, regex_nick];
-      
-          var uid;
-          var pw;
-          var rePw;
-          var name;
-          var birth;
-          var nickName;
-          var phoneNumber;
-          var gender;
-          var email;
+
           
             function check_Id() {
             uid = document.getElementById("id").value;
@@ -462,17 +531,17 @@ $(function() {
       
       function check_Name() {
        
-       repw = document.getElementById("repassword").value;
+       rePw = document.getElementById("repassword").value;
        name = document.getElementById("name").value;
        regex_name = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]$/
              
-       if(name==="" && repw != ""){
+       if(name==="" && rePw != ""){
                // document.getElementById("password").focus();
             	  document.getElementById("enterName").innerHTML="이름을 입력하세요";
             	  document.getElementById("enterName").style.color = "#f30e0e";
              	}
               
-       else if ( !(regex_name.test(name)) && repw !== "" ) {
+       else if ( !(regex_name.test(name)) && rePw !== "" ) {
                 document.getElementById("enterName").innerHTML = "한글로 입력해주세요.";
                 document.getElementById("enterName").style.color = "#f30e0e";
              	} else if ( regex_name.test(name)) {         
@@ -506,7 +575,7 @@ $(function() {
           nickName = document.getElementById("nickname").value;
           regex_nick = /^[a-z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,21}$/
              
-              if ( nickName == "" && (birth === "" || birth === null)) {
+              if ( nickName == "" && (birth != "" || birth != null)) {
                   //document.getElementById("id").focus();
                   document.getElementById("enterNick").innerHTML = "닉네임을 입력해주세요."; 
                   document.getElementById("enterNick").style.color = "#f30e0e";

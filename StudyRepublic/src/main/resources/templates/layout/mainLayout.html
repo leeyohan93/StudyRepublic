@@ -490,10 +490,10 @@ a {
 	   
 	   var ws = new SockJS("/StudyEcho"); 
 	    socket = ws;
-	    console.log("소켓생성");
+	   
 	    
 	    ws.onopen = function () {
-	      console.log("소켓연결");  
+	    
 	    };
 
 	    ws.onmessage = function (event) {
@@ -524,7 +524,7 @@ a {
 
 	    ws.onclose = function (event) { 
 	       
-	    	console.log("소켓닫힘");
+	    
 	    };
 	    ws.onerror = function (err) { console.log('Error:', err); };
 	} 
