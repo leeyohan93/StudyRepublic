@@ -26,21 +26,19 @@
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
   	<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 </div>
-<style>
-
-  
-
-</style>
 </head>
 <body>
 	<nav layout:fragment="header-nav"><ul>
-						<li class="nav-item"><a href="#"> </a></li>
+						<li class="nav-item"><div id="studyTitleA"></div></li>
 					</ul></nav>
 	<nav id="menu" layout:fragment="menu"
 		></nav>
-	<div id="main" layout:fragment="main"
+	<div id="main" style="background-color: white;" layout:fragment="main"
 		><div class="inner"
 			><style>
+				#left{
+					    border-radius: 10px 0px 0px 10px;
+				}
 					#leftDown{
 						text-align:center;
 					}
@@ -122,6 +120,7 @@
 					font-size: 19px;
 				
 				}
+				
 					
 				</style><div id="left" layout:fragment="left"
 				>
@@ -324,6 +323,15 @@
 		        	//피신고자(스터디) ID배치
 		        	$("#reportStudyId").val(window.name);
 		        });
+		        
+		        var studyNameTitle;
+		        $.each(/*[[${session.studyNameAndStudyIdMap}]]*/, function(key, value){
+        			if(value==window.name){
+        				studyNameTitle = key;
+        				return;
+        			}
+        		});
+		        $("#studyTitleA").append('<h6 id="studyTitle" style="font-weight:600; color:dodgerblue;">'+studyNameTitle+'</h6>');
 		        /*]]>*/	
 		        
 		        $("#reportRegister").on("click", function(){

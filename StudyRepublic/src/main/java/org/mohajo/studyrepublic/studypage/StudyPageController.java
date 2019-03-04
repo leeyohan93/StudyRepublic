@@ -295,6 +295,7 @@ public class StudyPageController {
 		return s;
 	}
 	
+	//noticeboard reply 공지사항 덧글
 	@ResponseBody
 	@RequestMapping(value="/Noticeboard/replyshow", method = RequestMethod.POST)
 	public List<StudyNoticeboardReply> showStudyNoticeboardReply(/*@RequestBody String studyId*/@RequestBody StudyNoticeboard readBoardContent){
@@ -1082,12 +1083,28 @@ public class StudyPageController {
 		@PostMapping("/qnaBoardReplyDelete/{studyQnaboardReplyId}")
 		@ResponseBody
 		public int qnaBoardReplyDelete(@PathVariable int studyQnaboardReplyId) {
+			
+			String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 
 			log.info("=======================");
 			log.info("studyQnaboardReplyId:"+studyQnaboardReplyId);
 			log.info("=======================");
-			studyQnaboardReplyRepository.deleteById(studyQnaboardReplyId);
-			return studyQnaboardReplyId;
+			try {
+				StudyQnaboardReply studyQnaboardReply = 
+						studyQnaboardReplyRepository.findByIdAndStudyQnaboardReplyId(userId, studyQnaboardReplyId);
+				if(studyQnaboardReply==null) {
+					log.info("QnaBoardReplyDelete SQL 조회 결과 없음.");
+					return 0;
+				}else {
+					studyQnaboardReplyRepository.deleteById(studyQnaboardReplyId);
+					log.info("QnaBoardReplyDelete 성공");
+					return studyQnaboardReplyId;
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				log.info("QnaBoardReplyDelete 예외 발생");
+				return 0;
+			}
 		}
 		
 		//파일 공유 게시판 댓글
@@ -1163,6 +1180,84 @@ public class StudyPageController {
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.info("fileshareBoardReplyDelete 예외 발생");
+				return 0;
+			}
+			
+		}
+		
+		//공지사항 게시판 댓글
+		@PostMapping("/noticeBoardReplyRegister")
+		@ResponseBody
+		public StudyNoticeboardReply noticeboardReplyRegister(int studyNoticeBoardId, String studyId, String content, int replyGroup, int replystep) {
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			String id = auth.getName();
+		 log.info(""+studyNoticeBoardId);
+		 StudyNoticeboardReply studyNoticeboardReplyDesc;
+		 try {
+			  studyNoticeboardReplyDesc = studyNoticeboardReplyRepository.findStudyNoticeboardReplyByStudyNoticeIdOrderbyGroupDecsLimit1(studyNoticeBoardId);
+			  if(studyNoticeboardReplyDesc == null) {
+				  studyNoticeboardReplyDesc = new StudyNoticeboardReply();
+					studyNoticeboardReplyDesc.setReplyGroup(0);
+			  }
+		 }catch(Exception e){
+			 studyNoticeboardReplyDesc = new StudyNoticeboardReply();
+			 studyNoticeboardReplyDesc.setReplyGroup(0);
+		 }
+		 StudyNoticeboardReply studyNoticeboardReply = new StudyNoticeboardReply();
+		
+		 studyNoticeboardReply.setStudyNoticeboardId(studyNoticeBoardId);
+		 studyNoticeboardReply.setStudyId(studyId);
+		 studyNoticeboardReply.setContent(content);
+		 studyNoticeboardReply.setReplyGroup(studyNoticeboardReplyDesc.getReplyGroup()+1);
+		 studyNoticeboardReply.setReplyStep(replystep);
+		 studyNoticeboardReply.setId(id);
+		
+			return studyNoticeboardReplyRepository.save(studyNoticeboardReply);
+
+		}
+		//댓글리스트
+		@GetMapping("/noticeBoardReplyList")
+		@ResponseBody
+		public List<StudyNoticeboardReply> noticeBoardReplyList(int studyNoticeBoardId) {
+			
+			log.info("studyNoticeBoardId:" + studyNoticeBoardId);
+		
+			log.info("=================");
+			 //StudyQnaboard studyQnaboard = studyQnaboardRepository.findById(studyQnaBoardId).get();
+			List<StudyNoticeboardReply> studyNoticeboardReply = studyNoticeboardReplyRepository.findStudyNoticeReplyByStudyNoticeIdOrderbyGroup(studyNoticeBoardId);
+			/* log.info("왜안되냐고!!!:"+studyQnaboard.toString());
+			 log.info(studyQnaboard.getStudyQnaboardReply().toString());
+			*/
+			return studyNoticeboardReply;
+			
+			
+		}
+		//댓글삭제
+		@PostMapping("/noticeBoardReplyDelete/{studyNoticeboardReplyId}")
+		@ResponseBody
+		public int noticeBoardReplyDelete(@PathVariable int studyNoticeboardReplyId) {
+
+			String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+			
+			log.info("=======================");
+			log.info("studyNoticeboardReplyId:"+studyNoticeboardReplyId);
+			log.info("=======================");
+			log.info(userId + "/" + studyNoticeboardReplyId);
+			try {
+				StudyNoticeboardReply studyNoticeboardReply = 
+						studyNoticeboardReplyRepository.findByIdAndStudyNoticeboardReplyId(userId, studyNoticeboardReplyId);
+				if(studyNoticeboardReply==null) {
+					log.info("noticeBoardReplyDelete SQL 조회 결과 없음.");
+					return 0;
+				}else {
+					studyNoticeboardReplyRepository.deleteById(studyNoticeboardReplyId);
+					log.info("noticeBoardReplyDelete 성공");
+					return studyNoticeboardReplyId;
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				log.info("noticeBoardReplyDelete 예외 발생");
 				return 0;
 			}
 			

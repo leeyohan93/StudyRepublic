@@ -189,7 +189,7 @@
 						<input type="hidden" th:id="${fasf.number}">
 						<div class="content" th:utext="${fasf.content}">
 						</div>
-						댓글 
+						<!-- 댓글 --> 
 						<div class="contentReplyForm"
 							>
 							<div class="contentReply">
@@ -364,9 +364,9 @@
 							                 }
 							                 a += '</div><div class="commentContent'+value.studyFileshareboardReplyId+'"> <p> '+value.content +'</p>';
 							                 a += '</div></div>';
- 							             $("#commentList"+cssId).html(a);
  							             //댓글 목록
 							             }); 
+							              $("#commentList"+cssId).html(a);
 							           
 							         },
 							         error : function(data){

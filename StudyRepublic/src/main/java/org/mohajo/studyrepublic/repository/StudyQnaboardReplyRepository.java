@@ -20,4 +20,10 @@ public interface StudyQnaboardReplyRepository extends JpaRepository<StudyQnaboar
 			"where study_qnaboard_id = :qnaboardId\r\n" + 
 			"order by replygroup desc limit 1", nativeQuery=true)
 	StudyQnaboardReply findStudyQnadboardReplyByStudyQnaBoardIdOrderbyGroupDecsLimit1(@Param(value="qnaboardId") int qnaboardId);
+	
+	@Query(value="select *\r\n" + 
+			"from study_qnaboard_reply\r\n" + 
+			"where id = :userId and study_qnaboard_reply_id = :studyQnaboardReplyId", nativeQuery=true)
+	StudyQnaboardReply findByIdAndStudyQnaboardReplyId(@Param(value="userId") String userId,
+			@Param(value="studyQnaboardReplyId") int studyQnaboardReplyId);
 }
