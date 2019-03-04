@@ -451,7 +451,7 @@
 				                 if(value.id==/*[[${session.userid}]]*/){
 				                	 a += '<a onclick="commentDeleteQ('+value.studyQnaboardReplyId+',\''+value.studyqnaboardId+'\','+ cssId +');"> 삭제 </a>';
 				                 }
-				                 a += '</div><div class="commentContent'+value.studyQnaboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
+				                 a += '</div><div class="commentContent'+value.studyQnaboardReplyId+'"> <p>'+value.content +'</p>';
 				                 a += '</div></div>';
 				             });
 				              $("#commentListQ"+cssId).html(a);
@@ -481,7 +481,7 @@
 				                 if(value.id==/*[[${session.userid}]]*/){
 				                	 a += '<a onclick="commentDelete('+value.studyNoticeboardReplyId+',\''+value.studyNoticeboardId+'\','+ cssId +');"> 삭제 </a>';
 				                 }
-				                 a += '</div><div class="commentContent'+value.studyNoticeboardReplyId+'"> <p> 내용 : '+value.content +'</p>';
+				                 a += '</div><div class="commentContent'+value.studyNoticeboardReplyId+'"> <p>'+value.content +'</p>';
 				                 a += '</div></div>';
 				             }); 
 				              $("#commentList"+cssId).html(a);

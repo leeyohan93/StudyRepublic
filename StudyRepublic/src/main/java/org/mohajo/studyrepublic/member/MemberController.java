@@ -284,7 +284,6 @@ public class MemberController {
 		   		member = memberrepository.findById(member.getId()).get();
 		   
 		   	     session.setAttribute("userid", member.getId());
-
 		   		 session.setAttribute("nickname", member.getNickname());
 		         session.setAttribute("memberimg", member.getProfileSaveName());
 		         
@@ -334,6 +333,7 @@ public class MemberController {
 		         
 		        member = memberrepository.findById(id).get();
 		         
+	
 		         session.setAttribute("nickname", member.getNickname());
 		         session.setAttribute("memberimg", member.getProfileSaveName());
 		      

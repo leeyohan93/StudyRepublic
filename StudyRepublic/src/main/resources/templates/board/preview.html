@@ -51,7 +51,7 @@ padding-top: 10px;
 	height: 441px;
 }
 #closePreview{
-	background-color: rgb(66, 161, 226);
+	background-color: rgb(19,134,211);
 	color: white;
 	text-align: center;
 	display: inline-block;
@@ -98,18 +98,21 @@ padding-top: 10px;
  
  var pvContent = opener.document.getElementById("smarteditor").value;
 
- 
+
+ pvContent = pvContent.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
+
+
 
   $("#previewTitle").text(pvTitle);
   $("#previewWriter").text(pvId);
   $("#previewContent").text(pvContent);
   
        
+    	
+  })
   $("#closePreview").click(function(){
 	
     	window.close(); 
-    	
-  })
  });
 
  </script>

@@ -8,7 +8,9 @@ package org.mohajo.studyrepublic.message;
  * -기능3 추가
  */
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -355,6 +357,20 @@ public class MessageController {
 	      
 		}
 		
+		@RequestMapping("/message/receiveIdAuth")
+		@ResponseBody
+		public Map<String,Integer> chk_id(@RequestParam String receiveId){
+			System.out.println("아이디체크..");
+			 int idCount = 0;
+			 String id = receiveId;
+			   Map<String,Integer> map = new HashMap<String,Integer>();
+			   idCount = mbr.checkId(id);
+			   System.out.println("아이디체크.." + id + idCount);
+			   map.put("idCount", idCount);
+			
+			return map;
+			
+		}
 		
 }
 		

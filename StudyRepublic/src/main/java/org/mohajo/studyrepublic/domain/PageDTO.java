@@ -1,9 +1,8 @@
+
 /**
  * 
  */
 package org.mohajo.studyrepublic.domain;
-
-
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,12 +57,21 @@ public class PageDTO {
             Sort.Order.desc(freeBoardId)));
    }
    
+   public Pageable profilePageable(int direction, int size, String... props2) {
+
+	      Sort.Direction dir = direction == 0 ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+	      return PageRequest.of(this.page - 1, size, dir, props2);
+	   }
+   
    public Pageable studyMakePageable(int direction, int size, String... props) {
 
       Sort.Direction dir = direction == 0 ? Sort.Direction.DESC : Sort.Direction.ASC;
 
       return PageRequest.of(this.page - 1, size, dir, props);
    }
+   
+   
 
 
    public int getPage() {
@@ -116,9 +124,4 @@ public class PageDTO {
       return "PageDTO [page=" + page + ", size=" + size + ", keyword=" + keyword + ", searchType=" + searchType
             + ", searchPeriod=" + searchPeriod + "]";
    }
-
-
-
-
-
 }

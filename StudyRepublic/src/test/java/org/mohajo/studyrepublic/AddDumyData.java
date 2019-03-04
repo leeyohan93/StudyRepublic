@@ -6,24 +6,25 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mohajo.studyrepublic.domain.GradeCD;
+import org.mohajo.studyrepublic.domain.Interest1CD;
+import org.mohajo.studyrepublic.domain.Interest2CD;
+import org.mohajo.studyrepublic.domain.InterestLocation;
 import org.mohajo.studyrepublic.domain.Member;
+import org.mohajo.studyrepublic.domain.MemberInterest;
 import org.mohajo.studyrepublic.domain.MemberPoint;
 import org.mohajo.studyrepublic.domain.MemberRoles;
+import org.mohajo.studyrepublic.domain.MemberStatusCD;
 import org.mohajo.studyrepublic.repository.MemberPointRepository;
 import org.mohajo.studyrepublic.repository.MemberRepository;
+import org.mohajo.studyrepublic.repository.MemberRolesRepository;
+import org.mohajo.studyrepublic.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,10 +38,16 @@ public class AddDumyData {
 	BCryptPasswordEncoder bcryptpasswordencoder = new BCryptPasswordEncoder();
 	
 	@Autowired
-	MemberRepository memberrepository;
+	private MemberRepository memberrepository;
 	
 	@Autowired
 	private MemberPointRepository memberpointrepository;
+	
+	@Autowired
+	private TutorRepository tutorrepository;
+	
+	@Autowired
+	private MemberRolesRepository memberrolerepository;
 	
 	private static final String ROLE_PREFIX = "ROLE_";
 	
@@ -82,9 +89,9 @@ public class AddDumyData {
 	@Test
 	public void addInsertMember() throws ParseException {
 		
-		for(int i = 501; i <= 520; i++) {	// 501번부터 이용가능
+		for(int i = 421; i <= 600; i++) {	// 601번부터 이용가능
 			Member member = new Member();
-			member.setId("mohajo" + i);
+			member.setId("bit" + i);
 			member.setPassword(bcryptpasswordencoder.encode("123"));
 			
 			MemberRoles memberroles = new MemberRoles();
@@ -101,7 +108,7 @@ public class AddDumyData {
 				member.setGender("여");
 				}
 			
-			LocalDate randomDate = createRandomDate(1900, 2000);
+			LocalDate randomDate = createRandomDate(1980, 2000);
 			member.setBirth(randomDate+"");
 			
 
@@ -118,28 +125,28 @@ public class AddDumyData {
 			member.setProfileOriginName("default_img.png");
 			member.setProfileSaveName("default_img.png");
 						
-			String sdate = createRandomDate(2014, 2018).toString();
+			String sdate = createRandomDate(2019, 2019).toString();
 			SimpleDateFormat dt1 = new SimpleDateFormat("yyyyy-mm-dd");
 			Date date = dt1.parse(sdate);
 			member.setRegistrationDate(date);
 			
-		/*	member.setGradeCD(new GradeCD("N"));
-			member.setMemberStatusCD(new MemberStatusCD("N"));*/
+			member.setGradeCD(new GradeCD("N"));
+			member.setMemberStatusCD(new MemberStatusCD("N"));
 			
-/*			InterestLocation intloc = new InterestLocation();
-			intloc.setInterestLocation("서울강남구역삼동");
-			member.setInterestlocation(Arrays.asList((intloc)));
-			
-			MemberInterest memint = new MemberInterest();
-			Interest2CD int2 = new Interest2CD();
-			int2.setCodeValueKorean("오라클");
-			int2.setInterest2Code("D02");
-			Interest1CD int1 = new Interest1CD();
-			int1.setCodeValueKorean("데이터베이스");
-			int1.setInterest1Code("D");
-			int2.setInterest1cd(int1);
-			memint.setInterest2cd(int2);
-			member.setMemberInterest(Arrays.asList((memint)));*/
+//			InterestLocation intloc = new InterestLocation();
+//			intloc.setInterestLocation("서울강남구역삼동");
+//			member.setInterestlocation(Arrays.asList((intloc)));
+//			
+//			MemberInterest memint = new MemberInterest();
+//			Interest2CD int2 = new Interest2CD();
+//			int2.setCodeValueKorean("오라클");
+//			int2.setInterest2Code("D02");
+//			Interest1CD int1 = new Interest1CD();
+//			int1.setCodeValueKorean("데이터베이스");
+//			int1.setInterest1Code("D");
+//			int2.setInterest1cd(int1);
+//			memint.setInterest2cd(int2);
+//			member.setMemberInterest(Arrays.asList((memint)));
 			
 
 			memberrepository.save(member);
@@ -154,11 +161,70 @@ public class AddDumyData {
 						
 			
 		} 
-		
-		
-		
-		
-		
+				
 	}
+	
+	public String suffleEducationList() {	
+		List<String> randomEducation = Arrays.asList("A","B","D","E","M");
+		Collections.shuffle(randomEducation);
+		return randomEducation.get(0);
+	}
+	
+	
+	
+/*	@Test
+	public void addInsertTutor() {
+			
+		for ( int i = 1; i <= 50; i++ ) {
+			
+			Tutor tutor = new Tutor();
+			Member member = memberrepository.findById("mohajo"+i).get();
+			tutor.setMember(member);
+			tutor.setIntroduction("안녕하세요. " + member.getName() + " 이라고 합니다.");
+			
+			EducationCD educd = new EducationCD();
+			educd.setEducationCode(suffleEducationList());
+			
+			tutor.setEducationCD(educd);
+			
+			
+			//
+			
+//			MemberInterest memint = new MemberInterest();
+			TutorInterest tutint = new TutorInterest();
+			Interest2CD int2 = new Interest2CD();
+			int2.setCodeValueKorean("오라클");
+			int2.setInterest2Code("D02");
+			Interest1CD int1 = new Interest1CD();
+			int1.setCodeValueKorean("데이터베이스");
+			int1.setInterest1Code("D");
+			int2.setInterest1cd(int1);
+			tutint.setInterest2CD(int2);
+			tutor.setTutorinterest(Arrays.asList((tutint)));
+			
+			TutorCareer  tutorcareer = new TutorCareer();
+			CareerCD careerCD = new CareerCD();
+			careerCD.setCareerCode("DA");
+			tutorcareer.setCareerCD(careerCD);
+			tutor.setTutorcareer(Arrays.asList((tutorcareer)));
+			
+			//
+			tutorrepository.save(tutor);
+					
+			List<MemberRoles> roles = memberrolerepository.findByRole(member.getId());
+			MemberRoles memberroles = new MemberRoles();
+			memberroles.setRoleName("W");
+			roles.add(memberroles);
+			member.setGradeCD(new GradeCD("W"));
+			member.setRoles(roles);
+			
+			memberrepository.save(member);
+			
+			
+		}
+		
+	}*/
+	
+	
 	
 }
