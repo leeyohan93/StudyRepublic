@@ -243,7 +243,7 @@
                                           </div>
                                   		 </div>
                                   		 
-                                  		 <span>   <a class="btn" id="memberexit" th:href="@{/mypage/memberexit}" role="button" style="background-color:black; color:white;">탈퇴하기</a></span>
+                                  		 <span>   <a class="btn" id="memberexit" role="button" style="background-color:black; color:white;">탈퇴하기</a></span>
 											<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
 											<span>   <a class="btn" id="complete" role="button" style="background-color:black; color:white; margin-left:50px;">완료</a></span>
                                   		                             
@@ -339,12 +339,12 @@ $(document).ready(function(){
               contentType:false,
               processData:false
           }).done(function(response){
-              alert("프로필변경이 완료되었습니다.");
+        	  Swal.fire("프로필변경이 완료되었습니다.");
        
                location.reload();
           });
         }else{
-           alert("파일이 첨부되지 않았습니다.");
+        	Swal.fire("파일이 첨부되지 않았습니다.");
         }
    });
 
@@ -355,6 +355,7 @@ $(document).ready(function(){
    $("#emailcheck").click(function(){
       data.email = $("#email").val();
       data.url = "./emailAuth";
+      
       sendServer(data);
    });
    
@@ -368,9 +369,9 @@ $(document).ready(function(){
 	         success:function(success){
 	            console.log(success);
 	            if(success.emailCount == 0){
-	               alert("사용가능한 이메일입니다.");
+	            	Swal.fire("사용가능한 이메일입니다.");
 	            }else{
-	               alert("이미사용중인 이메일입니다.");
+	            	Swal.fire("이미사용중인 이메일입니다.");
 	            }
 	         },
 	         error:function(error){
@@ -381,7 +382,11 @@ $(document).ready(function(){
 	};
 	
 	$("#memberexit").click(function(){
-		confirm("정말 탈퇴하시겠습니까?");
+		var result = confirm("정말 탈퇴하시겠습니까?");
+		if(result){
+			location.href="/mypage/memberexit";
+			Swal.fire("그동안 이용해주셔서 감사합니다. 탈퇴가 완료되었습니다.");
+		}
 	});
    
 });
@@ -389,7 +394,7 @@ $(document).ready(function(){
    $("#complete").click(function(){
     var result = confirm("회원정보를 수정하시겠습니까?");
 	   if(result){
-		   alert("완료되었습니다.");
+		   Swal.fire("완료되었습니다.");
            document.form1.submit();
         } 
            

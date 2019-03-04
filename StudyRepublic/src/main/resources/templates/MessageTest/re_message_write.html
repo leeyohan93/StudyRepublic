@@ -101,12 +101,35 @@
 <script type="text/javascript">
 
 $('#sendbtn').click(function(){
+	var data = {};
+	data.receiveId= $('#receiveId').val();
+ 
 	
-	Swal.fire("쪽지 전송이 완료되었습니다.");
-
-	
-});
-                                   
+	if($('#receiveId').val() == ''){
+		Swal.fire("아이디를 입력해주새요.");
+	}else if($('#messageContent').val() == ''){
+		Swal.fire("내용을 입력해주새요");
+	}else{
+		$.ajax({
+			type:"GET",
+			data:data,
+			datatype:"JSON",
+			url:"/message/receiveIdAuth",
+			success:function(success){
+				if(success.idCount == 0){
+					Swal.fire("존재하지않는 회원입니다.");
+				}else{
+					$("#messageForm").submit();
+					Swal.fire("쪽지 전송이 완료되었습니다.");
+				}
+			},
+			error:function(error){
+				Swal.fire("올바른방식이 아닙니다.");
+			}
+		});
+	}
+  });
+                         
 </script>
         
 </div>
