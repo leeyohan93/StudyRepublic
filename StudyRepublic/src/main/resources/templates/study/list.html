@@ -8,7 +8,7 @@
 <meta id="_csrf_header" name="_csrf_header"
    th:content="${_csrf.headerName}" />
 <meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
-<title>Study List View</title>
+<title>스터디 목록 보기</title>
 <style layout:fragment="customCss">
 .heading {
 	font-size: 0.9vm;
@@ -45,9 +45,15 @@ h2 {
 .page-item.active .page-link {
 	background-color: rgb(19,134,211) !important;
 	border-color: rgb(19,134,211) !important;
+	/* background-color: rgb(179,220,248) !important; */
+	/* border-color: rgb(179,220,248) !important; */
 	color: white !important;
 }
-
+.profile_box img{
+	max-width:100%;
+	height:auto;
+	border: none !important;
+}
 </style>
 </head>
 <body>
@@ -73,7 +79,7 @@ h2 {
 							</div>
 							<div class="profile_box">
 								<div class="user">
-									<img class="img-circle" src="/images/pic02.jpg" />
+									<img class="img-circle"  th:src="@{'/member_image/' + ${study.member.profileSaveName}}" />
 								</div>
 								<th:block th:if="${typeCode} eq 'p'">
 									<p class="profession" th:text="${study.member.name}" style="margin-bottom: 2px; font-weight: bold;">CEO</p>
@@ -86,9 +92,9 @@ h2 {
 							<h6 class="name" th:text="${study.name}">John Marvel</h6>
 							<div class="content">
 								<div class="main">
-									<p class="text-center" th:text="${typeCode} eq 'p'?|￦${study.price.price}" style="color: #ff005a; font-weight: bold;"></p><br>
+									<p class="text-center" th:text="${typeCode} eq 'p'?|${#numbers.formatInteger(study.price.price, 0, 'COMMA')}P|" style="color: #ff005a; font-weight: bold;"></p><br>
 									<p class="text-center" th:text="|${study.startDate}~${study.endDate}|+' '+${study.dayCode.codeValueKorean}"></p>
-									<p class="text-center" th:text="'관심분야 : '+${study.studyInterest[0].interest2code.codeValueKorean}+' / 레벨 : '+${study.levelCode.codeValueKorean}"></p>
+									<p class="text-center" th:text="'분야 : '+${study.studyInterest[0].interest2code.codeValueKorean}+' / 레벨 : '+${study.levelCode.codeValueKorean}"></p>
 									<i class="tag btn-primary" th:text="|${study.studyStatusCode.codeValueKorean}&nbsp|" style="color: white; float: right; background: #ff7600;"></i>									
 								</div>
 							</div>
@@ -183,7 +189,7 @@ h2 {
                 <input type="hidden" name="interest" th:value="${inter}">
                </th:block>
             </form>
-            </th:block>::
+            </th:block>
             
             <th:block th:unless="${search}!=null">
             <form id="pageForm" th:action="@{'/study/list/' + ${typeCode}}" method="get">
@@ -239,8 +245,12 @@ h2 {
 					var userId = document.getElementById('loggedInUserId').value;
 
 					if (joinBtn.dataset.userType == "anonymous") {
-						alert("로그인 후 신청할 수 있어요!");
-						location = "/study/pleaseLogin/?pathname=" + pathname;
+	            		Swal.fire({
+	          				type: 'error',
+	          				title: '',
+	         			 	text: '로그인 후 신청할 수 있어요!',
+	        				}) 
+	        			location = "/study/pleaseLogin/?pathname=" + pathname;
 						window.location.href = originUrl + location;
 //	 					location = "/login";
 //	 					window.location.replace = originUrl + location;					
@@ -262,11 +272,9 @@ h2 {
 							timeout : 600000,
 							success : function(data) {
 								console.log("Success: " + data);
-								
 								if (!data) {
 									var answer = confirm("이 스터디에 가입하시겠어요?");
 									if(answer) {
-										
 										console.log("socket: "+ socket)
 						      			if (socket) {
 						      				// websocket에 보내기 (study,댓글작성자,게시글작성자,글번호)
@@ -287,15 +295,27 @@ h2 {
 
 								switch (studyMemberStatusCode) {
 									case "WA":
-										alert("승인 대기중인 스터디입니다.");
-										return;
+			                   			Swal.fire({
+			                  				type: 'error',
+			                  				title: '',
+			                 			 	text: "승인 대기중인 스터디입니다.",
+			                				}) 
+			                			return;
 									case "ME":
 									case "LE":
-										alert("이미 가입된 스터디입니다.");
+			                  			Swal.fire({
+			                  				type: 'error',
+			                  				title: '',
+			                 			 	text:  "이미 가입된 스터디입니다.",
+			               				}) 
 										return;
 									case "EX":
 									case "DE":
-										alert("가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.");
+			                 			Swal.fire({
+			                  				type: 'error',
+			                  				title: '',
+			                 			 	text: "가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.",
+			               				}) 
 										return;
 								}
 							},

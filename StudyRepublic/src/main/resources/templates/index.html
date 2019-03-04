@@ -2,7 +2,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{/layout/mainLayout}">
 <head>
-<title>Main Page</title>
+<title>Study Republic</title>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
 <meta id="_csrf_header" name="_csrf_header"
@@ -92,7 +92,11 @@ padding-left: 45px;
     border-color: rgb(66, 161, 226) !important;
  }
 
+.card .user img {
+	height: auto;
+    border: none !important;
 
+}
 </style>
 </head>
 <body>
@@ -768,9 +772,9 @@ padding-left: 45px;
 						        	 
 						        		
 						        		if($('#receiveId').val() == ''){
-						        			Swal.fire("아이디를 입력해주새요.");
+						        			Swal.fire("아이디를 입력해주세요.");
 						        		}else if($('#messageContent').val() == ''){
-						        			Swal.fire("내용을 입력해주새요");
+						        			Swal.fire("내용을 입력해주세요");
 						        		}else{
 						        			$.ajax({
 						        				type:"GET",
@@ -890,7 +894,11 @@ padding-left: 45px;
 											var userId = document.getElementById('loggedInUserId').value;
 
 											if (joinBtn.dataset.userType == "anonymous") {
-												alert("로그인 후 신청할 수 있어요!");
+								          		Swal.fire({
+								      				type: 'error',
+								      				title: '',
+								     			 	text: '로그인 후 신청할 수 있어요!',
+								    				}) 
 												location = "/study/pleaseLogin/?pathname=" + pathname;
 												window.location.href = originUrl + location;
 //							 					location = "/login";
@@ -930,15 +938,27 @@ padding-left: 45px;
 
 														switch (studyMemberStatusCode) {
 															case "WA":
-																alert("승인 대기중인 스터디입니다.");
+									                   			Swal.fire({
+									                  				type: 'error',
+									                  				title: '',
+									                 			 	text: "승인 대기중인 스터디입니다.",
+									                				}) 
 																return;
 															case "ME":
 															case "LE":
-																alert("이미 가입된 스터디입니다.");
+									                  			Swal.fire({
+									                  				type: 'error',
+									                  				title: '',
+									                 			 	text:  "이미 가입된 스터디입니다.",
+									               				}) 
 																return;
 															case "EX":
 															case "DE":
-																alert("가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.");
+									                 			Swal.fire({
+									                  				type: 'error',
+									                  				title: '',
+									                 			 	text: "가입이 거절되거나 탈퇴한 스터디는 다시 신청할 수 없습니다.",
+									               				}) 
 																return;
 														}
 													},

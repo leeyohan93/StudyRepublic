@@ -13,6 +13,11 @@ layout:decorate="~{/layout/mainLayout}"><head>
 		    letter-spacing: 3px;
     		padding: 0.5em;
 		}
+		
+		#main h5 {
+		    margin-top: 2rem;
+		
+		}
 
 		/* 출처:	https://tiblog.tistory.com/42 */
 		.sns-go {text-align:center; padding: 20px 0;}
@@ -68,6 +73,9 @@ layout:decorate="~{/layout/mainLayout}"><head>
 			padding: unset !important;
 		}
 		
+		.page-description {
+		    text-align: center;
+		}	
 		
 		
 	</style>
@@ -98,7 +106,8 @@ layout:decorate="~{/layout/mainLayout}"><head>
 				<div class="page-footer">
 					
 					<div class="page-go">
-						<a class="href-btn join-form-btn" href="/activityinfo">신청 상태 확인하기</a>
+						<a class="href-btn join-form-btn" th:if="${#strings.substring(studyId, 0, 1)} == 'B'" href="/activity/basicstudylist">신청 상태 확인하기</a>
+						<a class="href-btn join-form-btn" th:if="${#strings.substring(studyId, 0, 1)} == 'P'" href="/activity/premiumstudylist">신청 상태 확인하기</a>
 						<a class="href-btn join-form-btn" th:href="'/study/detail/' + ${studyId}">스터디 상세 페이지로 이동</a>
 					</div>
 					

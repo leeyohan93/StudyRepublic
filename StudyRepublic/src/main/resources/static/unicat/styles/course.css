@@ -2274,7 +2274,8 @@ section
 {
 	content: "";
     position: absolute;
-    left: 46.6%;
+    left: 47.3%;
+    /* left: 46.6%; */
     text-align: center;
     bottom: -5px;
     height: 2px;

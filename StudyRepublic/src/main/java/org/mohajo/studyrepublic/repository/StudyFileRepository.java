@@ -26,7 +26,7 @@ public interface StudyFileRepository extends JpaRepository<StudyFile, Integer>{
 	@Query(value = "select * from study_file where studyfile_fullurl = :studyfileFullUrl", nativeQuery = true)
 	StudyFile findByStudyFilePreview(String studyfileFullUrl);
 
-	StudyFile findByStudyId(String studyId);
+	List<StudyFile> findByStudyId(String studyId);
 	
 	
 }

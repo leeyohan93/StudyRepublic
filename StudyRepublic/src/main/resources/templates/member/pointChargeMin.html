@@ -68,6 +68,7 @@ body {
 
 form {
 	margin: 0 !important;
+	padding: 2rem !important; 
 }
 
 hr {
@@ -86,6 +87,14 @@ hr {
 .imp-dialog.pc.payment-kakaopay .imp-frame-kakaopay {
     height: 600px !important;
 }
+
+.inner {
+    padding: unset !important;
+}
+
+.imp-dialog.pc.payment-kakaopay .imp-frame-kakaopay {
+    height: 580px !important;
+   }
 
 </style>
 
@@ -274,6 +283,9 @@ hr {
 	    $(document).ajaxSend(function(e, xhr, options) {
 	        xhr.setRequestHeader(header, token);
 	    });
+	    
+	    $('.imp-dialog.pc.payment-kakaopay .imp-frame-kakaopay').css("height", "580px !important");
+	    
 	});
 	
 	var checkBox = document.getElementsByClassName("input-checkbox100");
