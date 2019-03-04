@@ -1144,10 +1144,17 @@
 					                <div class="col-md-10 input-content" style="font-size: 0">
 				                        <label th:each="typeCode : ${typeCode}"><input type="radio" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode.typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label>
 	<!-- <label th:each="typeCode : ${typeCode}"><input type="text" class="none-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" name="typeCode" th:value="${typeCode.typeCode}"><span class="btn-radio" th:classappend="${typeCode.typeCode}=='P'?'type-p'" th:text="${typeCode.codeValueKorean}"></span></label> -->
-					                    <span class="input-study-type-alert" style="display:none">알림!
+					                   
+					                    <span class="input-study-type-alert1" style="display:none">알림!
 					                        프리미엄 스터디는 유료로 진행되는 강의형 스터디로, 인증 절차를 <br/>
 					                        완료한 강사 등급의 회원만 개설할 수 있습니다.<br/>
 					                        <a th:href="@{/tutor/signup}">강사 등급 신청하기</a>
+					                    </span>
+					                    
+					                    <br>
+					          <span class="input-study-type-alert2" style="display:none">알림!
+					                      현재 프리미엄 등급 신청 심사 중 입니다.
+					                    
 					                    </span>
 					                </div>
 					            </div>
@@ -1947,7 +1954,6 @@
 	        
 	        /********************************** leveltest - Script 끝 **********************************/
 	
-	        
    	        /********************************** basicInfo - Script 시작 **********************************/
    	        
 	        // type, onoff 선택에 따라, 입력 폼의 상태를 visible 로 바꾸는 함수
@@ -1959,7 +1965,14 @@
 	            $('#basicInfoArea .input-field-type input').on('click', function() {
 	                if(this.value == "P") {
 	                    if($('#input-study-member-gradeCode').val() != "T") {
-	                        $('#basicInfoArea .input-study-type-alert').css("display", "block");
+	                        
+	                    	if($('#input-study-member-gradeCode').val() == "N") {
+	                    		$('#basicInfoArea .input-study-type-alert1').css("display", "block");
+	                    		
+	                    	} else if($('#input-study-member-gradeCode').val() == "W") {
+	                    		$('#basicInfoArea .input-study-type-alert2').css("display", "block");
+	                    		//	                    		alert("아니라고!!!");
+	                    	}
 	                        $("#basicInfoArea input[name='typeCode.typeCode'][value='P']").prop('checked', false);
 							$("#basicInfoArea .type-p").addClass("disable");
 	                        $('#basicInfoArea .input:not(.input-field-type)').hide();
@@ -1988,7 +2001,7 @@
 	                $('#basicInfoArea [blinded]').hide();
 	                $('#basicInfoArea .input:not([blinded])').show();
 	            });
-	        }        
+	        }               
 	
 	        // datepicker 기능 시작. ////////////////////////////////////////////////////////////////////////////////////////////////
 	        
