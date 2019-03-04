@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.mohajo.studyrepublic.domain.StudyMember;
 import org.mohajo.studyrepublic.domain.StudyMemberId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -17,14 +19,13 @@ import org.springframework.data.repository.query.Param;
  */
 public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyMemberId>, QuerydslPredicateExecutor<StudyMember>{
 	
-	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code in ('LE', 'ME') order by study.endDate DESC")
+	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code in ('LE', 'ME') and sm.study.studyStatusCode != 'D' order by study.endDate DESC")
 	List<StudyMember> findStudyActivityById(String id);
 //	List<StudyMember> findStudyActivityByStudyMemberId(StudyMemberId studyMemberId);
 
-	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code = 'LE'")
+	@Query(value = "select sm from StudyMember sm where sm.id = ?1 and study_member_status_code = 'LE' and sm.study.studyStatusCode != 'D' order by study.endDate DESC")
 	List<StudyMember> findTutorActivityById(String id);
 //	List<StudyMember> findTutorActivityByStudyMemberId(StudyMemberId studyMemberId);
-
 
 	/*스터디가 일반스터디이고 진행중이며, 스터디 리더거나, 멤버일때 스터디 정보 가져오기 */
 	@Query(value="select * from (select * from study_member where id=:id AND (study_member_status_code = 'ME' || study_member_status_code = 'LE')) a1 join study s1 using (study_id) where s1.study_status_code='G'",nativeQuery=true)
@@ -48,10 +49,10 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, StudyM
 	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.id = :id and sv.type_code='P' order by start_date DESC",nativeQuery=true)
 	List<StudyMember> findPremiumStudylist(String id);
 	/*스터디 정보 가져오는데 일반스터디 이고 진행중인 스터디 상위 1개 가져오기(가져오는갯수 수정가능) 마이페이지 메인에서 사용 */
-	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'B' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 3",nativeQuery=true)
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'B' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 2",nativeQuery=true)
 	List<StudyMember> findstudyall(String id);
 	/*스터디 정보 가져오는데 프리미엄 이고 진행중인 스터디 상위 1개 가져오기(가져오는갯수 수정가능) 마이페이지 메인에서 사용 */
-	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'P' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 3",nativeQuery=true)
+	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.study_member_status_code in ('LE', 'ME') and sm.id = :id  and sv.type_code = 'P' AND sv.STUDY_STATUS_CODE='G' order by enroll_date DESC limit 2",nativeQuery=true)
 	List<StudyMember> findstudyall2(String id);
 	/*위에꺼에 맴버상태넣지않은것*/
 	@Query(value="select * from study_member sm left outer join study_view sv on sm.study_id = sv.study_id where sm.id = :id",nativeQuery=true)

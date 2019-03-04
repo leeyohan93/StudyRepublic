@@ -5,16 +5,51 @@ layout:decorate="~{/layout/mainLayout}">
 <head>
 <meta charset="UTF-8" />
 <title>accessDeniedPage</title>
+ <link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
+ 
+ <style>
+
+
+
+ </style>
+ 
+ 
 </head>
 <body>
 
 
 <div id = "wrapper">
 <div id = "main" layout:fragment = "main">
-<div class = "inner">
-<h2>미안하지만 넌 권한 없다?</h2>
+<div class = "inner" style= "background-color: white; width:800px; height:600px">
 
-로그인페이지로 이동하려면 <a th:href="@{/login}">여기를 클릭하렴</a>
+<div style = "margin:auto; width:150px;margin:auto; padding-top:50px">
+<img src = "images/warning.jpg" style = "width:150px;height:150px;">
+</div>
+				<br>
+				
+               <span th:if="${param.logout == null}"class="login100-form-title p-b-43">
+                  Access Denied
+               </span>
+               
+               <hr>
+               
+               <br>
+               <span class="login100-form-title p-b-43" style  = "font-size:16px; font-weight:bold">
+                 	 요청하신 페이지를 보실 권한이 없습니다.
+               </span>
+               
+                <br>
+               <span class="login100-form-title p-b-43" style  = "font-size:13px; width:400px; margin:auto">
+                 	 권한이 있는 회원이 아니시라면 먼저 운영자에게 문의하여 <br> 사용권한을 얻으신 후 페이지를 보실 수 있습니다. 
+               </span>
+               
+               <br><br><br>
+                <div class="container-login100-form-btn" style= "width:200px; margin:auto">
+                  <button type="button" class="login100-form-btn" onclick="window.location.href='/index'" style= "width:200px;">
+                     home
+                  </button>
+               </div>
+
 </div>
 </div>
 </div>

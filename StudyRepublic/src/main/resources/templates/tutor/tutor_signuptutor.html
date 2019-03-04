@@ -44,7 +44,8 @@
 <link rel="stylesheet" type="text/css" href="/Login_v18/css/util.css">
 <link rel="stylesheet" type="text/css" href="/Login_v18/css/main.css">
 <!--===============================================================================================-->
-
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js"
+	charset="utf-8"></script>
 <style>
 #edu {
 	display: none
@@ -99,7 +100,7 @@
 								<img id="img_profile"
 									th:src="@{'/member_image/'+${md.profileSaveName}}"
 									style="width: 200px; height: 240px; border-radius:100%;"  /> <br> <label
-									style="width: 120px; margin: 0 0 10px 40px;"> 프로필사진등록하기
+									style="width: 140px; margin: 0 0 10px 26px;"> 프로필사진등록하기
 									<input name="sourceFile" id="sourceFile" type="file">
 								</label>
 
@@ -288,11 +289,14 @@
 							</div>
 						</div>
 
-						<div class="join-input100"
-							style="width: 100%; height: 500px; align-items: baseline">
-							<textarea class="input100" name="introduction" form="tutorjoin"
-								autofocus required wrap="hard" placeholder="리더페이지에 소개될 내용입니다."
-								style="padding: 20px; width: 830px; height: 500px"></textarea>
+						<div id = "introduction" class="join-input100" style="width: 100%; align-items: baseline; height:500px;border:none;">
+							
+					<div id="editor" style = "width:100%;">
+					<div>
+						<textarea name="introduction" id="smarteditor" rows="10" cols="100"></textarea>
+					</div>
+				</div>
+						
 						</div>
 
 
@@ -338,7 +342,7 @@
 
 							<div class="join-form-btn"
 								style="display: inline-block; width: auto; height: auto; margin: auto;">
-								<button type="submit" id="signup">신청</button>
+								<button type="button" id="signup">신청</button>
 							</div>
 						</div>
 
@@ -376,6 +380,7 @@
 			<script src="/Login_v18/vendor/countdowntime/countdowntime.js"></script>
 			<!--===============================================================================================-->
 			<script src="/Login_v18/js/main.js"></script>
+			
 
 			<script
 				src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -608,7 +613,7 @@
 								// ajax
 								$.ajax({
 
-									url : '/attachments',
+									url : '/mypage/attachments',
 
 									type : 'POST',
 									data : fileData,
@@ -624,6 +629,48 @@
 								alert("파일이 첨부되지 않았습니다.");
 							}
 						});
+				
+
+
+			 	var editor_object = [];
+			     
+			    nhn.husky.EZCreator.createInIFrame({
+			        oAppRef: editor_object,
+			        elPlaceHolder: "smarteditor",
+			        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+			        htParams : {
+			            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseToolbar : true,            
+			            // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseVerticalResizer : true,    
+			            // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+			            bUseModeChanger : true,
+			            // 기본 글꼴 설정
+			            SE2M_FontName: {
+			    			htMainFont: {'id': '굴림','name': '굴림','size': '14','url': '','cssUrl': ''} 
+			    		}
+			        }
+			    
+
+			    });
+			     
+			    //전송버튼 클릭이벤트
+			    $("#signup").click(function(){
+			        //id가 smarteditor인 textarea에 에디터에서 대입
+			        editor_object.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+			        
+			        
+//			        var boardTitle = $('#boardTitle').val();
+			        var smarteditor = $("#smarteditor").val();
+//			        var boardType = $('#boardType').val();
+
+
+			        $("#tutorjoin").submit();     
+			    
+			    }); 
+				
+				
+				
 			</script>
 
 

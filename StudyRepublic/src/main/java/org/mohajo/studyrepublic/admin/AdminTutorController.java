@@ -135,7 +135,7 @@ public class AdminTutorController {
 			Tutor tutor = tutorRepository.findByTutor(receiveId);
 			tutorRepository.deleteById(tutor.getTutorNumber());
 			
-			tutorcontroller.changeGrade("N",receiveId);
+//			tutorcontroller.changeGrade("N",receiveId);
 			
 			System.out.println("튜터: " + tutor);
 			System.out.println("튜터넘버: " + tutor.getTutorNumber());

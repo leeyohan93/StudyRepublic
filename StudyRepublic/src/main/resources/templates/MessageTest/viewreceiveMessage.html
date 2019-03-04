@@ -100,6 +100,12 @@ height: 90px !important;
     border: 1px solid #ccc;
     margin-left: 10px;
 }
+ .btn-danger{
+ background-color: white;
+    color: rgb(66, 161, 226) !important;
+    border-color: rgb(66, 161, 226) !important;
+ }
+
 </style>	
 	
 
@@ -215,7 +221,7 @@ height: 90px !important;
 
 
     </div>
-	</div>
+	
 
 
 
@@ -243,7 +249,7 @@ $('#reportModal').on('show.bs.modal', function(e) {
 
 //신고하기
 $('#reportRegister').click(function(){
-	  console.log("되냐요?");
+	  
 	 
        var reportData = $("#reportForm").serialize(); 
 	  console.log("reportData:" + reportData);
@@ -280,14 +286,15 @@ $('#reportRegister').click(function(){
 		});  
 };  
 
-		$('#deletebtn').click(function(){
-			alert("삭제가 완료되었습니다.");
-		});
+$('#deletebtn').click(function(){
+	
+	Swal.fire("삭제가 완료되었습니다.");
+});
 
 		
 		</script>
 	
-	
+	</div>
 	</div>
 	
 

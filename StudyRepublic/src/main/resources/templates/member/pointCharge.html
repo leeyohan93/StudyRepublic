@@ -91,11 +91,11 @@ border-bottom:none
 				<input type = "number" id  = "nowPoint" th:value = "${memberpoint.point}" style= "display:none">
 					
 			 <div class = "wrap-input100_label" id = "customLabel">
-					<span class="label-input100_label" id = "custom_span" style="width: auto;" th:text = "'보유포인트 : ' + ${memberpoint.point} +' P'"> </span>
+					<span class="label-input100_label" id = "custom_span" style="width: auto; font-size:17px" th:text = "'보유포인트 : ' + ${memberpoint.point} +' P'"> </span>
 				</div>   
 				
 				 <div class = "wrap-input100_label" id = "customLabel" style = "margin-bottom:80px">
-					<span class="label-input100_label" id = "custom_span_after" style="width: auto;" th:text = "'충전 후 포인트 : ' + ${memberpoint.point} +' P'" > </span>
+					<span class="label-input100_label" id = "custom_span_after" style="width: auto; font-size:17px" th:text = "'충전 후 포인트 : ' + ${memberpoint.point} +' P'" > </span>
 				</div>    	      
                         
                   <div class="flex-sb-m w-full p-t-3 p-b-32">
@@ -189,7 +189,7 @@ border-bottom:none
 
 							<div class="join-form-btn"
 								style="display: inline-block; width: auto; height: auto; margin: auto;">
-								<button type="button" onclick="location.href='/index'">
+								<button type="button" onclick="payClose()">
 									돌아가기</button>
 							</div>
 							
@@ -325,7 +325,14 @@ border-bottom:none
 					
 					success:function(data) {
 /* 						alert(data); */
-						alert(data.chargingPoint + "원 충전이 완료되었습니다. "); 				
+//						alert(); 
+		           		Swal.fire({
+		      				type: 'success',
+		      				title: '충전완료',
+		     			 	text: '',
+//		     			 	timer:1500
+		      		
+		    				}) 
 					},
 					error:function(error) {
 						alert("error: " + error);
@@ -344,12 +351,16 @@ border-bottom:none
 					msg += '에러내용 : ' + rsp.error_msg;
 				}
 
-				alert(msg);
+//				alert(msg);
 				window.location.href = '/member/point/charge';
 			});
 		
 		}
 		}
+		
+	  function payClose(){
+		  window.close;
+	  }	
 	</script>
 
 </div>

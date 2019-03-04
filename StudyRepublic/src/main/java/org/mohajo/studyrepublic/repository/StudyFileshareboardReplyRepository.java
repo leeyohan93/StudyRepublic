@@ -21,4 +21,10 @@ public interface StudyFileshareboardReplyRepository extends JpaRepository<StudyF
 			"where study_fileshareboard_id = :fileshareboardId\r\n" + 
 			"order by replygroup desc limit 1", nativeQuery=true)
 	StudyFileshareboardReply findStudyFileshareboardReplyByStudyFileshareIdOrderbyGroupDecsLimit1(@Param(value="fileshareboardId") int studyFileshareBoardId);
+
+	@Query(value="select *\r\n" + 
+			"from study_fileshareboard_reply\r\n" + 
+			"where id = :userId and study_fileshareboard_reply_id = :studyFileshareboardReplyId", nativeQuery=true)
+	StudyFileshareboardReply findByIdAndStudyFileshareboardReplyId(@Param(value="userId") String userId,
+			@Param(value="studyFileshareboardReplyId") int studyFileshareboardReplyId);
 }

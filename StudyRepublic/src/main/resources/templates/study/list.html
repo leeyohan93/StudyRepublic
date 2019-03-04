@@ -43,8 +43,8 @@ h2 {
 }
 
 .page-item.active .page-link {
-	background-color: rgb(179,220,248) !important;
-	border-color: rgb(179,220,248) !important;
+	background-color: rgb(19,134,211) !important;
+	border-color: rgb(19,134,211) !important;
 	color: white !important;
 }
 
@@ -183,7 +183,7 @@ h2 {
                 <input type="hidden" name="interest" th:value="${inter}">
                </th:block>
             </form>
-            </th:block>
+            </th:block>::
             
             <th:block th:unless="${search}!=null">
             <form id="pageForm" th:action="@{'/study/list/' + ${typeCode}}" method="get">
