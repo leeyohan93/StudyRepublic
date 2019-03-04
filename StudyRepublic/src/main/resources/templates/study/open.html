@@ -2045,7 +2045,9 @@
 	            	console.log('startDate onSelect()...');
 	            	
 	            	var day = date.getDay();
-	            	$("select[name='dayCode.dayCode'] option:eq(" + day + ")").attr("selected", "selected");
+	            	console.log(day);
+	            	$("select[name='dayCode.dayCode'] option").removeAttr("selected");
+	            	$("select[name='dayCode.dayCode'] option:eq(" + (day + 1) + ")").attr("selected", "selected");
 			    	
 	            	var endDatepicker = $('#input-study-endDate').datepicker().data('datepicker');
 	            	endDatepicker.update({
@@ -2649,7 +2651,7 @@
 				function deleteFile(num) {
 
 					$('#lifile' + num).remove();
-
+					fileCount = 0;
 				}
 
 			

@@ -422,7 +422,7 @@ public class StudyController {
 	public String register(@ModelAttribute Study study,/* @RequestParam String id,*/ 
 			@ModelAttribute StudyPrice studyPrice, @ModelAttribute StudyHelper studyHelper, @RequestParam(value="dayCode.dayCode", required=false) int dayCode, 
 			MultipartHttpServletRequest mhsRequest, HttpServletResponse response, 
-			@RequestParam MultipartFile file, 
+			@RequestParam(required=false) MultipartFile file, 
 			@ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 //	public String register(@ModelAttribute StudyView study, @ModelAttribute StudyHelper studyHelper, MultipartHttpServletRequest mhsRequest, @RequestParam MultipartFile file, @ModelAttribute LeveltestList leveltests, Model model) throws ParseException, IOException {
 		
