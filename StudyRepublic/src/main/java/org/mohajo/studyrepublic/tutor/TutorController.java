@@ -502,12 +502,6 @@ public class TutorController implements Serializable {
 		List<TutorCareer> selectedtutorcareer = tutorcareerrepository.selectedtutorcareer(tutor_number);
 		model.addAttribute("selectedtutorcareer", selectedtutorcareer);
 		
-/*		Pageable page = pageDto.profilePageable(0, 10, "post_date");
-		Page<Study> list = sr.findStudy(id, page);
-		
-		model.addAttribute("pagedList", new PageMaker<>(list));
-		model.addAttribute("typeCode", typeCode);*/
-			
 		return "tutor/tutor_profile";
 		
 	}
